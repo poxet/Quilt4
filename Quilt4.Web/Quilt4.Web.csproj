@@ -195,6 +195,7 @@
     <Compile Include="Business\IAccountBusiness.cs" />
     <Compile Include="CastleControllerFactory.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">

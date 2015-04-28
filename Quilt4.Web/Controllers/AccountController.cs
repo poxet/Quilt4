@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Quilt4.Interface;
+using Quilt4.MongoDBRepository;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -187,11 +189,8 @@ namespace Quilt4.Web.Controllers
                 return View("Error");
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var result = await UserManager.ConfirmEmailAsync(userId, code);
-            //return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            var result = await _accountBusiness.ConfirmEmailAsync(userId, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
         //
@@ -211,22 +210,19 @@ namespace Quilt4.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //TODO: Use IAccountBusiness for this...
-                throw new NotImplementedException();
+                var user = await _accountBusiness.FindByNameAsync(model.Email);
+                if (user == null || !(await _accountBusiness.IsEmailConfirmedAsync(user.Id)))
+                {
+                    // Don't reveal that the user does not exist or is not confirmed
+                    return View("ForgotPasswordConfirmation");
+                }
 
-                //var user = await UserManager.FindByNameAsync(model.Email);
-                //if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-                //{
-                //    // Don't reveal that the user does not exist or is not confirmed
-                //    return View("ForgotPasswordConfirmation");
-                //}
-
-                //// For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                //// Send an email with this link
-                //// string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                //// var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                //// await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                //// return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -261,22 +257,19 @@ namespace Quilt4.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var user = await UserManager.FindByNameAsync(model.Email);
-            //if (user == null)
-            //{
-            //    // Don't reveal that the user does not exist
-            //    return RedirectToAction("ResetPasswordConfirmation", "Account");
-            //}
-            //var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            //if (result.Succeeded)
-            //{
-            //    return RedirectToAction("ResetPasswordConfirmation", "Account");
-            //}
-            //AddErrors(result);
-            //return View();
+            var user = await _accountBusiness.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            var result = await _accountBusiness.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            AddErrors(result);
+            return View();
         }
 
         //
@@ -303,17 +296,14 @@ namespace Quilt4.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var userId = await SignInManager.GetVerifiedUserIdAsync();
-            //if (userId == null)
-            //{
-            //    return View("Error");
-            //}
-            //var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
-            //var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            //return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            var userId = await _accountBusiness.GetVerifiedUserIdAsync();
+            if (userId == null)
+            {
+                return View("Error");
+            }
+            var userFactors = await _accountBusiness.GetValidTwoFactorProvidersAsync(userId);
+            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         //
@@ -328,15 +318,12 @@ namespace Quilt4.Web.Controllers
                 return View();
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //// Generate the token and send it
-            //if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
-            //{
-            //    return View("Error");
-            //}
-            //return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            // Generate the token and send it
+            if (!await _accountBusiness.SendTwoFactorCodeAsync(model.SelectedProvider))
+            {
+                return View("Error");
+            }
+            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
         //
@@ -350,26 +337,23 @@ namespace Quilt4.Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //// Sign in the user with this external login provider if the user already has a login
-            //var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            //switch (result)
-            //{
-            //    case SignInStatus.Success:
-            //        return RedirectToLocal(returnUrl);
-            //    case SignInStatus.LockedOut:
-            //        return View("Lockout");
-            //    case SignInStatus.RequiresVerification:
-            //        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-            //    case SignInStatus.Failure:
-            //    default:
-            //        // If the user does not have an account, then prompt the user to create an account
-            //        ViewBag.ReturnUrl = returnUrl;
-            //        ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-            //        return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-            //}
+            // Sign in the user with this external login provider if the user already has a login
+            var result = await _accountBusiness.ExternalSignInAsync(loginInfo, isPersistent: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                case SignInStatus.Failure:
+                default:
+                    // If the user does not have an account, then prompt the user to create an account
+                    ViewBag.ReturnUrl = returnUrl;
+                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+            }
         }
 
         //
@@ -393,21 +377,18 @@ namespace Quilt4.Web.Controllers
                     return View("ExternalLoginFailure");
                 }
 
-                //TODO: Use IAccountBusiness for this...
-                throw new NotImplementedException();
-
                 //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                //var result = await UserManager.CreateAsync(user);
-                //if (result.Succeeded)
-                //{
-                //    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                //    if (result.Succeeded)
-                //    {
-                //        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                //        return RedirectToLocal(returnUrl);
-                //    }
-                //}
-                //AddErrors(result);
+                var result = await _accountBusiness.CreateAsync(model.Email, model.Email);
+                if (result.Item1.Succeeded)
+                {
+                    var result2 = await _accountBusiness.AddLoginAsync(result.Item2.Id, info.Login);
+                    if (result2.Succeeded)
+                    {
+                        await _accountBusiness.SignInAsync(result.Item2, isPersistent: false, rememberBrowser: false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
+                AddErrors(result.Item1);
             }
 
             ViewBag.ReturnUrl = returnUrl;

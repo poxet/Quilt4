@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -65,11 +66,12 @@ namespace Quilt4.Web.Controllers
         // GET: /Manage/RemoveLogin
         public ActionResult RemoveLogin()
         {
+            var linkedAccounts = _accountBusiness.GetLogins(User.Identity.GetUserId());
+            ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
+
             //TODO: Use IAccountBusiness for this...
             throw new NotImplementedException();
-
-            //var linkedAccounts = UserManager.GetLogins(User.Identity.GetUserId());
-            //ViewBag.ShowRemoveButton = HasPassword() || linkedAccounts.Count > 1;
+            
             //return System.Web.UI.WebControls.View(linkedAccounts);
         }
 
@@ -79,25 +81,22 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //ManageMessageId? message;
-            //var result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
-            //if (result.Succeeded)
-            //{
-            //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //    if (user != null)
-            //    {
-            //        await SignInAsync(user, isPersistent: false);
-            //    }
-            //    message = ManageMessageId.RemoveLoginSuccess;
-            //}
-            //else
-            //{
-            //    message = ManageMessageId.Error;
-            //}
-            //return RedirectToAction("ManageLogins", new { Message = message });
+            ManageMessageId? message;
+            var result = await _accountBusiness.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
+            if (result.Succeeded)
+            {
+                var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInAsync(user, isPersistent: false);
+                }
+                message = ManageMessageId.RemoveLoginSuccess;
+            }
+            else
+            {
+                message = ManageMessageId.Error;
+            }
+            return RedirectToAction("ManageLogins", new { Message = message });
         }
 
         //
@@ -113,25 +112,22 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
-            //// Generate the token and send it
-            //var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
-            //if (UserManager.SmsService != null)
-            //{
-            //    var message = new IdentityMessage
-            //    {
-            //        Destination = model.Number,
-            //        Body = "Your security code is: " + code
-            //    };
-            //    await UserManager.SmsService.SendAsync(message);
-            //}
-            //return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            // Generate the token and send it
+            var code = await _accountBusiness.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
+            if (_accountBusiness.SmsService != null)
+            {
+                var message = new IdentityMessage
+                {
+                    Destination = model.Number,
+                    Body = "Your security code is: " + code
+                };
+                await _accountBusiness.SmsService.SendAsync(message);
+            }
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
         }
 
         //
@@ -139,16 +135,13 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EnableTwoFactorAuthentication()
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), true);
-            //var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //if (user != null)
-            //{
-            //    await SignInAsync(user, isPersistent: false);
-            //}
-            //return RedirectToAction("Index", "Manage");
+            await _accountBusiness.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), true);
+            var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                await SignInAsync(user, isPersistent: false);
+            }
+            return RedirectToAction("Index", "Manage");
         }
 
         //
@@ -156,28 +149,22 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), false);
-            //var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //if (user != null)
-            //{
-            //    await SignInAsync(user, isPersistent: false);
-            //}
-            //return RedirectToAction("Index", "Manage");
+            await _accountBusiness.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), false);
+            var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                await SignInAsync(user, isPersistent: false);
+            }
+            return RedirectToAction("Index", "Manage");
         }
 
         //
         // GET: /Manage/VerifyPhoneNumber
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
-            //// Send an SMS through the SMS provider to verify the phone number
-            //return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+            var code = await _accountBusiness.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
+            // Send an SMS through the SMS provider to verify the phone number
+            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
         //
@@ -191,42 +178,36 @@ namespace Quilt4.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
-            //if (result.Succeeded)
-            //{
-            //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //    if (user != null)
-            //    {
-            //        await SignInAsync(user, isPersistent: false);
-            //    }
-            //    return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
-            //}
-            //// If we got this far, something failed, redisplay form
-            //ModelState.AddModelError("", "Failed to verify phone");
-            //return View(model);
+            var result = await _accountBusiness.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
+            if (result.Succeeded)
+            {
+                var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInAsync(user, isPersistent: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
+            }
+            // If we got this far, something failed, redisplay form
+            ModelState.AddModelError("", "Failed to verify phone");
+            return View(model);
         }
 
         //
         // GET: /Manage/RemovePhoneNumber
         public async Task<ActionResult> RemovePhoneNumber()
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var result = await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
-            //if (!result.Succeeded)
-            //{
-            //    return RedirectToAction("Index", new { Message = ManageMessageId.Error });
-            //}
-            //var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //if (user != null)
-            //{
-            //    await SignInAsync(user, isPersistent: false);
-            //}
-            //return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
+            var result = await _accountBusiness.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.Error });
+            }
+            var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+            if (user != null)
+            {
+                await SignInAsync(user, isPersistent: false);
+            }
+            return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
         //
@@ -247,21 +228,18 @@ namespace Quilt4.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            //if (result.Succeeded)
-            //{
-            //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //    if (user != null)
-            //    {
-            //        await SignInAsync(user, isPersistent: false);
-            //    }
-            //    return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
-            //}
-            //AddErrors(result);
-            //return View(model);
+            var result = await _accountBusiness.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await SignInAsync(user, isPersistent: false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+            }
+            AddErrors(result);
+            return View(model);
         }
 
         //
@@ -279,21 +257,17 @@ namespace Quilt4.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                //TODO: Use IAccountBusiness for this...
-                throw new NotImplementedException();
-
-                //var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
-                //if (result.Succeeded)
-                //{
-                //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                //    if (user != null)
-                //    {
-                //        await SignInAsync(user, isPersistent: false);
-                //    }
-                //    return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
-                //}
-                //AddErrors(result);
+                var result = await _accountBusiness.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                if (result.Succeeded)
+                {
+                    var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+                    if (user != null)
+                    {
+                        await SignInAsync(user, isPersistent: false);
+                    }
+                    return RedirectToAction("Index", new { Message = ManageMessageId.SetPasswordSuccess });
+                }
+                AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -309,22 +283,19 @@ namespace Quilt4.Web.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : "";
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-            //if (user == null)
-            //{
-            //    return View("Error");
-            //}
-            //var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId());
-            //var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
-            //ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
-            //return View(new ManageLoginsViewModel
-            //{
-            //    CurrentLogins = userLogins,
-            //    OtherLogins = otherLogins
-            //});
+            var user = await _accountBusiness.FindByIdAsync(User.Identity.GetUserId());
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var userLogins = await _accountBusiness.GetLoginsAsync(User.Identity.GetUserId());
+            var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
+            ViewBag.ShowRemoveButton = user.PasswordHash != null || userLogins.Count > 1;
+            return View(new ManageLoginsViewModel
+            {
+                CurrentLogins = userLogins,
+                OtherLogins = otherLogins
+            });
         }
 
         //
@@ -347,11 +318,8 @@ namespace Quilt4.Web.Controllers
                 return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
-            //return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
+            var result = await _accountBusiness.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
+            return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
 #region Helpers
@@ -368,23 +336,22 @@ namespace Quilt4.Web.Controllers
 
         //TODO: Use IAccountBusiness for this...
 
-        //private async Task SignInAsync(ApplicationUser user, bool isPersistent)
-        //{
-        //    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
-        //    AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, await user.GenerateUserIdentityAsync(UserManager));
-        //}
+        private async Task SignInAsync(IApplicationUser user, bool isPersistent)
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);
+            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = isPersistent }, await user.GenerateUserIdentityAsync(_accountBusiness));
+        }
 
-        //private void AddErrors(IdentityResult result)
-        //{
-        //    foreach (var error in result.Errors)
-        //    {
-        //        ModelState.AddModelError("", error);
-        //    }
-        //}
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
 
         private bool HasPassword()
         {
-            //var user = UserManager.FindById(User.Identity.GetUserId());
             var user = _accountBusiness.FindById(User.Identity.GetUserId());
             if (user != null)
             {
