@@ -8,7 +8,8 @@ namespace Quilt4.Web
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+            var factory = MvcApplication.Container.Resolve<IRepositoryFactory>();
+            ConfigureAuth(app, factory);
         }
     }
 }

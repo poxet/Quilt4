@@ -14,6 +14,15 @@ namespace Quilt4.Web
 {
     public class MvcApplication : HttpApplication
     {
+        private readonly static WindsorContainer _container;
+
+        static MvcApplication()
+        {
+            _container = new WindsorContainer();
+        }
+
+        public static WindsorContainer Container { get { return _container; } }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -22,11 +31,16 @@ namespace Quilt4.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            var container = new WindsorContainer();
-            container.Install(new ApplicationCastleInstaller());
+            RegisterWindsor();
+        }
+
+        private static void RegisterWindsor()
+        {
+            //_container = new WindsorContainer();
+            _container.Install(new ApplicationCastleInstaller());
 
             // Create the Controller Factory
-            var castleControllerFactory = new CastleControllerFactory(container);
+            var castleControllerFactory = new CastleControllerFactory(_container);
 
             // Add the Controller Factory into the MVC web request pipeline
             ControllerBuilder.Current.SetControllerFactory(castleControllerFactory);
@@ -44,6 +58,8 @@ namespace Quilt4.Web
             // container.Register(Component.For().LifestylePerWebRequest());
 
             container.Register(Classes.FromThisAssembly().InNamespace("Eplicta.MediaMapper.Web.Agents").WithService.DefaultInterfaces().LifestyleTransient());
+
+            container.Register(Component.For<IRepositoryFactory>().ImplementedBy<SqlRepositoryFactory>());
 
             // Register all the MVC controllers in the current executing assembly
             var contollers = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.BaseType == typeof(Controller) || x.BaseType == typeof(ApiController)).ToList();
