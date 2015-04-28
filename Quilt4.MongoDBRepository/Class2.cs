@@ -11,7 +11,7 @@ using MongoDB.Driver;
 
 namespace Quilt4.MongoDBRepository
 {
-    public class IdentityUser : IUser
+    public class IdentityUser : IUser<string>
     {
         /// <summary>
         /// Unique key for the user
@@ -137,9 +137,11 @@ namespace Quilt4.MongoDBRepository
     ///     Class UserStore.
     /// </summary>
     /// <typeparam name="TUser">The type of the t user.</typeparam>
-    public class UserStore<TUser> : IUserLoginStore<TUser>, IUserClaimStore<TUser>, IUserRoleStore<TUser>,
+    public class UserStore<TUser> 
+        : IUserLoginStore<TUser>, IUserClaimStore<TUser>, IUserRoleStore<TUser>,
         IUserPasswordStore<TUser>, IUserSecurityStampStore<TUser>, IUserStore<TUser>, IUserEmailStore<TUser>,
         IUserPhoneNumberStore<TUser>, IUserTwoFactorStore<TUser, string>
+        , IUserLockoutStore<TUser, string>
         where TUser : IdentityUser
     {
         #region Private Methods & Variables
@@ -791,6 +793,41 @@ namespace Quilt4.MongoDBRepository
                 throw new ArgumentNullException("user");
 
             return db.GetCollection<TUser>(collectionName).ReplaceOneAsync(x => x.Id == user.Id, user);
+        }
+
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset lockoutEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ResetAccessFailedCountAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> GetAccessFailedCountAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(TUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetLockoutEnabledAsync(TUser user, bool enabled)
+        {
+            throw new NotImplementedException();
         }
     }
 }
