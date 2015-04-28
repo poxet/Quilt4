@@ -1,7 +1,9 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using Quilt4.Interface;
+using Quilt4.Web;
 
-[assembly: OwinStartupAttribute(typeof(Quilt4.Web.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 namespace Quilt4.Web
 {
     public partial class Startup
