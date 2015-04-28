@@ -48,20 +48,17 @@ namespace Quilt4.Web.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+                : string.Empty;
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //var model = new IndexViewModel
-            //{
-            //    HasPassword = HasPassword(),
-            //    PhoneNumber = await UserManager.GetPhoneNumberAsync(User.Identity.GetUserId()),
-            //    TwoFactor = await UserManager.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
-            //    Logins = await UserManager.GetLoginsAsync(User.Identity.GetUserId()),
-            //    BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId())
-            //};
-            //return View(model);
+            var model = new IndexViewModel
+            {
+                HasPassword = HasPassword(),
+                PhoneNumber = await _accountBusiness.GetPhoneNumberAsync(User.Identity.GetUserId()),
+                TwoFactor = await _accountBusiness.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
+                Logins = await _accountBusiness.GetLoginsAsync(User.Identity.GetUserId()),
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId())
+            };
+            return View(model);
         }
 
         //
@@ -385,15 +382,16 @@ namespace Quilt4.Web.Controllers
         //    }
         //}
 
-        //private bool HasPassword()
-        //{
-        //    var user = UserManager.FindById(User.Identity.GetUserId());
-        //    if (user != null)
-        //    {
-        //        return user.PasswordHash != null;
-        //    }
-        //    return false;
-        //}
+        private bool HasPassword()
+        {
+            //var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = _accountBusiness.FindById(User.Identity.GetUserId());
+            if (user != null)
+            {
+                return user.PasswordHash != null;
+            }
+            return false;
+        }
 
         //private bool HasPhoneNumber()
         //{
