@@ -239,7 +239,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -293,9 +295,9 @@
       <Project>{8B34B62E-DA87-42EE-A727-50DBA06F07E7}</Project>
       <Name>Quilt4.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Quilt4.SQLRepository\Quilt4.SQLRepository.csproj">
-      <Project>{E59A9ECF-EF1A-4864-9483-3C9414FEAFBF}</Project>
-      <Name>Quilt4.SQLRepository</Name>
+    <ProjectReference Include="..\Quilt4.MongoDBRepository\Quilt4.MongoDBRepository.csproj">
+      <Project>{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF}</Project>
+      <Name>Quilt4.MongoDBRepository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

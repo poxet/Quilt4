@@ -6,8 +6,10 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Quilt4.Interface;
-using Quilt4.SQLRepository;
-using Quilt4.SQLRepository.Business;
+using Quilt4.MongoDBRepository;
+
+//using Quilt4.SQLRepository;
+//using Quilt4.SQLRepository.Business;
 
 namespace Quilt4.Web
 {
@@ -27,7 +29,8 @@ namespace Quilt4.Web
             //container.Register(Classes.FromThisAssembly().InNamespace("Quilt4.Web.Business").WithService.DefaultInterfaces().LifestyleTransient());
             //container.Register(Classes.FromThisAssembly().InNamespace("Quilt4.SQLRepository.Business").WithService.DefaultInterfaces().LifestyleTransient());
             //TODO: Switch between SQLDatabase and MontoDB by only using configuration
-            container.Register(Component.For<IRepositoryFactory>().ImplementedBy<SqlRepositoryFactory>());
+            //container.Register(Component.For<IRepositoryFactory>().ImplementedBy<SqlRepositoryFactory>());
+            container.Register(Component.For<IRepositoryFactory>().ImplementedBy<MongoDbRepositoryFactory>());
             container.Register(Component.For<IAccountBusiness>().ImplementedBy<AccountBusiness>());
 
             // Register all the MVC controllers in the current executing assembly
