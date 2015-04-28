@@ -94,22 +94,19 @@ namespace Quilt4.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //// Require that the user has already logged in via username/password or external login
+            // Require that the user has already logged in via username/password or external login
             //if (!await SignInManager.HasBeenVerifiedAsync())
-            //{
-            //    return View("Error");
-            //}
+            if (!await _accountBusiness.HasBeenVerifiedAsync())
+            {
+                return View("Error");
+            }
 
-            //var user = await _accountBusiness.FindByIdAsync(await SignInManager.GetVerifiedUserIdAsync());
-            ////var user = await UserManager.FindByIdAsync(await SignInManager.GetVerifiedUserIdAsync());
-            //if (user != null)
-            //{
-            //    var code = await UserManager.GenerateTwoFactorTokenAsync(user.Id, provider);
-            //}
-            //return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            var user = await _accountBusiness.FindByIdAsync(await _accountBusiness.GetVerifiedUserIdAsync());
+            if (user != null)
+            {
+                var code = await _accountBusiness.GenerateTwoFactorTokenAsync(user.Id, provider);
+            }
+            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
         //
@@ -124,25 +121,22 @@ namespace Quilt4.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Use IAccountBusiness for this...
-            throw new NotImplementedException();
-
-            //// The following code protects for brute force attacks against the two factor codes. 
-            //// If a user enters incorrect codes for a specified amount of time then the user account 
-            //// will be locked out for a specified amount of time. 
-            //// You can configure the account lockout settings in IdentityConfig
-            //var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
-            //switch (result)
-            //{
-            //    case SignInStatus.Success:
-            //        return RedirectToLocal(model.ReturnUrl);
-            //    case SignInStatus.LockedOut:
-            //        return View("Lockout");
-            //    case SignInStatus.Failure:
-            //    default:
-            //        ModelState.AddModelError("", "Invalid code.");
-            //        return View(model);
-            //}
+            // The following code protects for brute force attacks against the two factor codes. 
+            // If a user enters incorrect codes for a specified amount of time then the user account 
+            // will be locked out for a specified amount of time. 
+            // You can configure the account lockout settings in IdentityConfig
+            var result = await _accountBusiness.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(model.ReturnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid code.");
+                    return View(model);
+            }
         }
 
         //

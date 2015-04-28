@@ -8,6 +8,8 @@ namespace Quilt4.SQLRepository
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
+        public static event EventHandler<ApplicationUserManagerCreatedEventArgs> ApplicationUserManagerCreatedEvent;
+
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
@@ -54,10 +56,18 @@ namespace Quilt4.SQLRepository
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
+
+            InvokeApplicationUserManagerCreatedEvent(manager);
+
             return manager;
+        }
+
+        private static void InvokeApplicationUserManagerCreatedEvent(ApplicationUserManager manager)
+        {
+            var handler = ApplicationUserManagerCreatedEvent;
+            if (handler != null) handler(null, new ApplicationUserManagerCreatedEventArgs(manager));
         }
     }
 }

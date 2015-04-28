@@ -186,7 +186,6 @@
     <Compile Include="..\Build\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Agents\IOwinContextAgent.cs" />
     <Compile Include="ApplicationCastleInstaller.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -282,6 +281,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Agents\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
