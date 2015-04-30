@@ -76,17 +76,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationDbContext.cs" />
-    <Compile Include="ApplicationSignInManager.cs" />
-    <Compile Include="ApplicationSignInManagerCreatedEventArgs.cs" />
-    <Compile Include="ApplicationUser.cs" />
-    <Compile Include="ApplicationUserManager.cs" />
-    <Compile Include="ApplicationUserManagerCreatedEventArgs.cs" />
+    <Compile Include="Membership\ApplicationDbContext.cs" />
+    <Compile Include="Membership\ApplicationSignInManager.cs" />
+    <Compile Include="Membership\ApplicationSignInManagerCreatedEventArgs.cs" />
+    <Compile Include="Membership\ApplicationUser.cs" />
+    <Compile Include="Membership\ApplicationUserManager.cs" />
+    <Compile Include="Membership\ApplicationUserManagerCreatedEventArgs.cs" />
     <Compile Include="AccountRepository.cs" />
     <Compile Include="RepositoryHandler.cs" />
-    <Compile Include="EmailService.cs" />
+    <Compile Include="Membership\EmailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmsService.cs" />
+    <Compile Include="Membership\SmsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quilt4.Interface\Quilt4.Interface.csproj">

@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Quilt4.Interface;
+using Quilt4.SQLRepository.Membership;
 
 namespace Quilt4.SQLRepository
 {

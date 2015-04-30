@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNet.Identity;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Membership
 {
     internal class ApplicationUserManager : UserManager<ApplicationUser>
     {

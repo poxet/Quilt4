@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Membership
 {
     //TODO: This is duplicate from Quilt4.SQLRepository
     internal class ApplicationSignInManager : SignInManager<ApplicationUser, string>

@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Membership
 {
     /// <summary>
     /// Class IdentityUserClaim.

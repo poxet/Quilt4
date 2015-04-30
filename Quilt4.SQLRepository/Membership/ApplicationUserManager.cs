@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 
-namespace Quilt4.SQLRepository
+namespace Quilt4.SQLRepository.Membership
 {
     internal class ApplicationUserManager : UserManager<ApplicationUser>
     {

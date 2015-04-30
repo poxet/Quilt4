@@ -75,15 +75,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplicationSignInManager.cs" />
-    <Compile Include="ApplicationSignInManagerCreatedEventArgs.cs" />
-    <Compile Include="ApplicationUser.cs" />
-    <Compile Include="ApplicationUserManager.cs" />
-    <Compile Include="ApplicationUserManagerCreatedEventArgs.cs" />
+    <Compile Include="Membership\ApplicationSignInManager.cs" />
+    <Compile Include="Membership\ApplicationSignInManagerCreatedEventArgs.cs" />
+    <Compile Include="Membership\ApplicationUser.cs" />
+    <Compile Include="Membership\ApplicationUserManager.cs" />
+    <Compile Include="Membership\ApplicationUserManagerCreatedEventArgs.cs" />
     <Compile Include="AccountRepository.cs" />
-    <Compile Include="UserStore.cs" />
-    <Compile Include="IdentityUser.cs" />
-    <Compile Include="IdentityUserClaim.cs" />
+    <Compile Include="Membership\UserStore.cs" />
+    <Compile Include="Membership\IdentityUser.cs" />
+    <Compile Include="Membership\IdentityUserClaim.cs" />
     <Compile Include="RepositoryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

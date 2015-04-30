@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Quilt4.Interface;
+using Quilt4.SQLRepository.Membership;
 
 namespace Quilt4.SQLRepository
 {

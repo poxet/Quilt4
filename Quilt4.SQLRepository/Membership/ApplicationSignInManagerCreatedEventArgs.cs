@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.SQLRepository.Membership
 {
-    //TODO: This is duplicate from Quilt4.SQLRepository
     internal class ApplicationSignInManagerCreatedEventArgs : EventArgs
     {
         private readonly ApplicationSignInManager _applicationSignInManager;

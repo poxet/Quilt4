@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
-namespace Quilt4.SQLRepository
+namespace Quilt4.SQLRepository.Membership
 {
     public class SmsService : IIdentityMessageService
     {

@@ -1,8 +1,7 @@
-using System;
+﻿using System;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.SQLRepository.Membership
 {
-    //TODO: This is duplicate from Quilt4.SQLRepository
     internal class ApplicationUserManagerCreatedEventArgs : EventArgs
     {
         private readonly ApplicationUserManager _manager;

@@ -1,11 +1,11 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Quilt4.Interface;
 
-namespace Quilt4.SQLRepository
+namespace Quilt4.MongoDBRepository.Membership
 {
+    //TODO: This is duplicate from Quilt4.SQLRepository
     internal class ApplicationUser : IdentityUser, IApplicationUser
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

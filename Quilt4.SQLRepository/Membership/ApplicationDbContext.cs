@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Quilt4.SQLRepository
+namespace Quilt4.SQLRepository.Membership
 {
     internal class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

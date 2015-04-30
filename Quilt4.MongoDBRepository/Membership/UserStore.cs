@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using MongoDB.Driver;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Membership
 {
     /// <summary>
     ///     Class UserStore.

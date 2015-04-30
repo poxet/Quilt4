@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
-namespace Quilt4.SQLRepository
+namespace Quilt4.SQLRepository.Membership
 {
     internal class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {

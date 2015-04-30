@@ -3,7 +3,7 @@ using Microsoft.AspNet.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Membership
 {
     internal class IdentityUser : IUser<string>
     {
