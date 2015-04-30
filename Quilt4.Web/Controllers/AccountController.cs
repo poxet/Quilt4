@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -7,7 +6,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Quilt4.Interface;
-using Quilt4.MongoDBRepository;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -16,30 +14,11 @@ namespace Quilt4.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountBusiness _accountBusiness;
-        //private ApplicationUserManager _userManager;
 
         public AccountController(IAccountBusiness accountBusiness)
         {
             _accountBusiness = accountBusiness;
         }
-
-        //public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
-        //{
-        //    UserManager = userManager;
-        //    SignInManager = signInManager;
-        //}
-
-        //public ApplicationUserManager UserManager
-        //{
-        //    get
-        //    {
-        //        return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-        //    }
-        //    private set
-        //    {
-        //        _userManager = value;
-        //    }
-        //}
 
         //
         // GET: /Account/Login
@@ -49,17 +28,6 @@ namespace Quilt4.Web.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
-        //private ApplicationSignInManager _signInManager;
-
-        //public ApplicationSignInManager SignInManager
-        //{
-        //    get
-        //    {
-        //        return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-        //    }
-        //    private set { _signInManager = value; }
-        //}
 
         //
         // POST: /Account/Login

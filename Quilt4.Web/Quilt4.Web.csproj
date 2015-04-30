@@ -297,8 +297,12 @@
       <Name>Quilt4.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Quilt4.MongoDBRepository\Quilt4.MongoDBRepository.csproj">
-      <Project>{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF}</Project>
+      <Project>{8eb22e5d-f1d6-45f4-990d-5b23e2585fcf}</Project>
       <Name>Quilt4.MongoDBRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Quilt4.SQLRepository\Quilt4.SQLRepository.csproj">
+      <Project>{e59a9ecf-ef1a-4864-9483-3c9414feafbf}</Project>
+      <Name>Quilt4.SQLRepository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

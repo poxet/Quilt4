@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Quilt4.Interface;
 
-namespace Quilt4.SQLRepository.Business
+namespace Quilt4.SQLRepository
 {
     public class AccountBusiness : IAccountBusiness
     {
