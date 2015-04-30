@@ -95,7 +95,7 @@ namespace Quilt4.Interface
     }
 
     //TODO: This is supposed to be the different repositories for SQL and MongoDB
-    public interface IRepository2
+    public interface IRepository
     {
         void AddInitiative(IInitiative initiative);
         void UpdateInitiative(IInitiative initiative);
@@ -144,16 +144,6 @@ namespace Quilt4.Interface
 
         IEnumerable<ISession> GetSessionStatistics(DateTime from, DateTime to);
         IEnumerable<IIssue> GetIssueStatistics(DateTime from, DateTime to);
-
-        //IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId);
-        //IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint);
-        //IInitiative GetInitiativeByApplication(Guid applicationId);
-        //void AddApplicationVersion(IApplicationVersion applicationVersion);
-        //IApplicationVersion UpdateApplicationVersionId(string applicationVersionFingerprint, Guid applicationId);
-        //void UpdateApplicationVersion(IApplicationVersion applicationVersion);
-        //void DeleteApplicationVersion(string applicationVersionFingerprint);
-        //IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName);
-        //IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> applicationIds);
     }
 
     public interface IDeveloperRole

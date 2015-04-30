@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quilt4.SQLRepository", "Qui
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quilt4.MongoDBRepository", "Quilt4.MongoDBRepository\Quilt4.MongoDBRepository.csproj", "{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quilt4.BusinessEntities", "Quilt4.BusinessEntities\Quilt4.BusinessEntities.csproj", "{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CI|Any CPU = CI|Any CPU
@@ -67,6 +69,12 @@ Global
 		{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}.CI|Any CPU.ActiveCfg = Release|Any CPU
+		{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}.CI|Any CPU.Build.0 = Release|Any CPU
+		{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

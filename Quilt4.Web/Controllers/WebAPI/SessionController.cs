@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
 using Quilt4.Web.BusinessEntities;

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+using Microsoft.Owin.Security.Provider;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
 using Quilt4.Web.BusinessEntities;
@@ -16,11 +18,28 @@ namespace Quilt4.Web.Controllers.WebAPI
 {
     public static class Converters
     {
-        public static Quilt4.Web.BusinessEntities.Session ToSession(this Tharga.Quilt4Net.DataTransfer.Session item, Fingerprint applicationVersionId, Guid applicationId, DateTime serverStartTime, DateTime? serverEndTime, DateTime? serverLastKnown, string callerIp)
+        public static Quilt4.BusinessEntities.Session ToSession(this Tharga.Quilt4Net.DataTransfer.Session item, Fingerprint applicationVersionId, Guid applicationId, DateTime serverStartTime, DateTime? serverEndTime, DateTime? serverLastKnown, string callerIp)
         {
             var machineId = (Fingerprint)item.Machine.Fingerprint;
             var userId = (Fingerprint)item.User.Fingerprint;
-            return new Quilt4.Web.BusinessEntities.Session(item.SessionGuid, applicationVersionId, item.Environment, applicationId, machineId, userId, item.ClientStartTime, serverStartTime, serverEndTime, serverLastKnown, callerIp);
+            return new Quilt4.BusinessEntities.Session(item.SessionGuid, applicationVersionId, item.Environment, applicationId, machineId, userId, item.ClientStartTime, serverStartTime, serverEndTime, serverLastKnown, callerIp);
+        }
+    }
+
+    public class StatusResponse
+    {
+        public string X { get; set; }
+    }
+
+    public class StatusController : ApiController
+    {
+        // POST api/status
+        [HttpGet]
+        [AllowAnonymous]
+        public StatusResponse Get()
+        {
+            //TODO: Return something meaningful
+            return new StatusResponse { X = "A" };
         }
     }
 
@@ -35,16 +54,16 @@ namespace Quilt4.Web.Controllers.WebAPI
         private readonly IMachineBusiness _machineBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
 
-        public IssueController(IIssueBusiness issueBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness) //, , , IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISettingsBusiness settingsBusiness)
+        public IssueController(IIssueBusiness issueBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISettingsBusiness settingsBusiness)
         {
             _issueBusiness = issueBusiness;
             _membershipAgent = membershipAgent;
             _applicationVersionBusiness = applicationVersionBusiness;
-            //_initiativeBusiness = initiativeBusiness;
-            //_sessionBusiness = sessionBusiness;
-            //_userBusiness = userBusiness;
-            //_machineBusiness = machineBusiness;
-            //_settingsBusiness = settingsBusiness;
+            _initiativeBusiness = initiativeBusiness;
+            _sessionBusiness = sessionBusiness;
+            _userBusiness = userBusiness;
+            _machineBusiness = machineBusiness;
+            _settingsBusiness = settingsBusiness;
         }
 
         // POST api/issue/register
@@ -182,7 +201,7 @@ namespace Quilt4.Web.Controllers.WebAPI
                     issueTypeTicket = lastIssueTypeTicket + 1;
                     var inner = ToInnerIssueType(request.IssueType.Inner);
 
-                    issueType = new Quilt4.Web.BusinessEntities.IssueType(request.IssueType.ExceptionTypeName, request.IssueType.Message, request.IssueType.StackTrace ?? string.Empty, request.IssueType.IssueLevel.ToIssueLevel(), inner, new List<IIssue>(), issueTypeTicket, null);
+                    issueType = new Quilt4.BusinessEntities.IssueType(request.IssueType.ExceptionTypeName, request.IssueType.Message, request.IssueType.StackTrace ?? string.Empty, request.IssueType.IssueLevel.ToIssueLevel(), inner, new List<IIssue>(), issueTypeTicket, null);
                     applicationVersion.Add(issueType);
                 }
                 else
@@ -196,7 +215,7 @@ namespace Quilt4.Web.Controllers.WebAPI
                 var lastIssueTicket = issues.Any() ? issues.Max(x => x.Ticket) : 0;
                 issueTicket = lastIssueTicket + 1;
 
-                var issue = new Quilt4.Web.BusinessEntities.Issue(request.Id, request.ClientTime, DateTime.UtcNow, request.VisibleToUser, request.Data, request.IssueThreadGuid, request.UserHandle, request.UserInput, issueTicket, session.Id);
+                var issue = new Quilt4.BusinessEntities.Issue(request.Id, request.ClientTime, DateTime.UtcNow, request.VisibleToUser, request.Data, request.IssueThreadGuid, request.UserHandle, request.UserInput, issueTicket, session.Id);
                 issueType.Add(issue);
 
                 //_compositeRoot.Repository.UpdateApplicationVersion(applicationVersion);
