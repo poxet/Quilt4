@@ -172,6 +172,9 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
+    <Reference Include="Tharga.Quilt4Net">
+      <HintPath>..\packages\Tharga.Quilt4Net.1.4.0.251\lib\net45\Tharga.Quilt4Net.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -186,18 +189,25 @@
     <Compile Include="..\Build\AssemblyVersionInfo.cs">
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Agents\ILogAgent.cs" />
     <Compile Include="ApplicationCastleInstaller.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Business\IAccountBusiness.cs" />
+    <Compile Include="BusinessEntities\Class1.cs" />
+    <Compile Include="Business\ICompatibilityBusiness.cs" />
     <Compile Include="CastleControllerFactory.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\WebAPI\CompatibilityController.cs" />
+    <Compile Include="Controllers\WebAPI\IssueController.cs" />
+    <Compile Include="Controllers\WebAPI\SessionController.cs" />
+    <Compile Include="Controllers\WebAPI\WebApiCallLogHandler.cs" />
+    <Compile Include="Extensions\DynamicExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -284,7 +294,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Agents\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

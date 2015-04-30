@@ -9,7 +9,7 @@ using Quilt4.Interface;
 namespace Quilt4.MongoDBRepository
 {
     //TODO: This class is very similar to the one in SQLRepo. If we are using interfaces it could be the same
-    public class AccountBusiness : IAccountBusiness
+    public class AccountBusiness : IAccountBusiness //TODO: This should probably be IAccountRepository
     {
         private ApplicationSignInManager _applicationSignInManager;
         private ApplicationUserManager _applicationUserManager;

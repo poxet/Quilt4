@@ -22,8 +22,7 @@ namespace Quilt4.Web
             //container.Register(Classes.FromThisAssembly().InNamespace("Eplicta.MediaMapper.Web.Agents").WithService.DefaultInterfaces().LifestyleTransient());
             //container.Register(Component.For<IOwinContextAgent>().ImplementedBy<OwinContextAgent>());            
 
-            //container.Register(Classes.FromThisAssembly().InNamespace("Quilt4.Web.Business").WithService.DefaultInterfaces().LifestyleTransient());
-            //container.Register(Classes.FromThisAssembly().InNamespace("Quilt4.SQLRepository.Business").WithService.DefaultInterfaces().LifestyleTransient());
+            container.Register(Classes.FromThisAssembly().InNamespace("Quilt4.Web.Business").WithService.DefaultInterfaces().LifestyleTransient());
 
             var repository = System.Configuration.ConfigurationManager.AppSettings["Repository"];
             RegisterRepository(container, repository);
