@@ -6,7 +6,7 @@ using Microsoft.Owin;
 
 namespace Quilt4.SQLRepository
 {
-    public class ApplicationUserManager : UserManager<ApplicationUser>
+    internal class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public static event EventHandler<ApplicationUserManagerCreatedEventArgs> ApplicationUserManagerCreatedEvent;
 

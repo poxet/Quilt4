@@ -3,6 +3,25 @@ using System.Collections.Generic;
 
 namespace Quilt4.Interface
 {
+    public interface IIssueBusiness
+    {
+        ILogResponse RegisterIssue(Exception exception, IssueLevel warning);
+        ISession GetSession(Guid id);
+        void UpdateApplicationVersion(IApplicationVersion applicationVersion);
+        IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint);
+        IInitiative GetInitiativeByApplication(Guid applicationId);
+    }
+
+    public interface ISettingsBusiness
+    {
+        T GetSetting<T>(string name);
+    }
+
+    public interface ICompatibilityBusiness
+    {
+        void RegisterToolkitCompability(Version version, DateTime utcNow, string supportToolkitNameVersion, object o);
+    }
+
     public interface ISessionBusiness
     {
         void RegisterSession(ISession session);
@@ -75,6 +94,7 @@ namespace Quilt4.Interface
         IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId);
     }
 
+    //TODO: This is supposed to be the different repositories for SQL and MongoDB
     public interface IRepository2
     {
         void AddInitiative(IInitiative initiative);

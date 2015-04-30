@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Quilt4.Web.Business;
+using Quilt4.Interface;
+using Tharga.Quilt4Net;
 
-//using Tharga.Quilt4Net.Web.Business;
-
-namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
+namespace Quilt4.Web.Controllers.WebAPI
 {
     public class WebApiCallLogHandler : DelegatingHandler
     {
@@ -23,7 +22,6 @@ namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
             if (request.Content != null)
             {
                 requestContent = await request.Content.ReadAsStringAsync();
-                //if (Settings.LogAllRequests())
                 if (_settingsBusiness.GetSetting<bool>("LogAllRequests"))
                     Issue.Register("Web API Request", Issue.MessageIssueLevel.Information, data: new Dictionary<string, string> { { "Request", requestContent } });
             }
@@ -31,7 +29,6 @@ namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
             var response = await base.SendAsync(request, cancellationToken);
             if (response.Content != null)
             {
-                //if (Settings.LogAllResponses())
                 if (_settingsBusiness.GetSetting<bool>("LogAllResponses"))
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();

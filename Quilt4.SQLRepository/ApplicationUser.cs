@@ -6,7 +6,7 @@ using Quilt4.Interface;
 
 namespace Quilt4.SQLRepository
 {
-    public class ApplicationUser : IdentityUser, IApplicationUser
+    internal class ApplicationUser : IdentityUser, IApplicationUser
     {
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

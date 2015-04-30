@@ -10,12 +10,13 @@ namespace Quilt4.Web
     public partial class Startup
     {
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
-        public void ConfigureAuth(IAppBuilder app, IRepositoryFactory factory)
+        public void ConfigureAuth(IAppBuilder app, IRepositoryHandler factory)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            factory.RegisterApplicationDbContext(app);
-            factory.RegisterApplicationUserManager(app);
-            factory.RegisterApplicationSignInManager(app);
+            //factory.RegisterApplicationDbContext(app);
+            //factory.RegisterApplicationUserManager(app);
+            //factory.RegisterApplicationSignInManager(app);
+            factory.Register(app);
 
             //app.CreatePerOwinContext()
 

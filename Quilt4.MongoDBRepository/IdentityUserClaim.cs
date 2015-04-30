@@ -6,7 +6,7 @@ namespace Quilt4.MongoDBRepository
     /// <summary>
     /// Class IdentityUserClaim.
     /// </summary>
-    public class IdentityUserClaim
+    internal class IdentityUserClaim
     {
         /// <summary>
         /// Gets or sets the identifier.

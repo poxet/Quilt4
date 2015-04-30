@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Quilt4.MongoDBRepository
 {
-    public class IdentityUser : IUser<string>
+    internal class IdentityUser : IUser<string>
     {
         /// <summary>
         /// Unique key for the user

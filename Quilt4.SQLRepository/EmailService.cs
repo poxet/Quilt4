@@ -3,7 +3,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Quilt4.SQLRepository
 {
-    public class EmailService : IIdentityMessageService
+    internal class EmailService : IIdentityMessageService
     {
         public Task SendAsync(IdentityMessage message)
         {

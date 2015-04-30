@@ -8,12 +8,12 @@ using Quilt4.Interface;
 
 namespace Quilt4.SQLRepository
 {
-    public class AccountBusiness : IAccountBusiness
+    public class AccountRepository : IAccountRepository
     {
         private ApplicationSignInManager _applicationSignInManager;
         private ApplicationUserManager _applicationUserManager;
 
-        public AccountBusiness()
+        public AccountRepository()
         {
             ApplicationSignInManager.ApplicationSignInManagerCreatedEvent += ApplicationSignInManagerCreatedEvent;
             ApplicationUserManager.ApplicationUserManagerCreatedEvent += ApplicationUserManagerCreatedEvent;

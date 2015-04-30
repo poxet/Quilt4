@@ -67,9 +67,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IssueLevel.cs" />
-    <Compile Include="IAccountBusiness.cs" />
+    <Compile Include="IAccountRepository.cs" />
     <Compile Include="IApplicationUser.cs" />
-    <Compile Include="IRepositoryFactory.cs" />
+    <Compile Include="IRepositoryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

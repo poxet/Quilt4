@@ -7,7 +7,7 @@ using Microsoft.Owin.Security;
 
 namespace Quilt4.SQLRepository
 {
-    public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
+    internal class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
         public static event EventHandler<ApplicationSignInManagerCreatedEventArgs> ApplicationSignInManagerCreatedEvent;
 

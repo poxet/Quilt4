@@ -2,7 +2,7 @@
 
 namespace Quilt4.SQLRepository
 {
-    public class ApplicationUserManagerCreatedEventArgs : EventArgs
+    internal class ApplicationUserManagerCreatedEventArgs : EventArgs
     {
         private readonly ApplicationUserManager _manager;
 

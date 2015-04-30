@@ -7,7 +7,7 @@ namespace Quilt4.Web.Controllers
 {
     public static class ApplicationUserExtensions
     {
-        public static async Task<ClaimsIdentity> GenerateUserIdentityAsync(this IApplicationUser user, IAccountBusiness manager)
+        public static async Task<ClaimsIdentity> GenerateUserIdentityAsync(this IApplicationUser user, IAccountRepository manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);

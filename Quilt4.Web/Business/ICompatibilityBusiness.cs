@@ -6,23 +6,40 @@ using Quilt4.Interface;
 
 namespace Quilt4.Web.Business
 {
-    public interface IIssueBusiness
+    public class IssueBusiness : IIssueBusiness
     {
-        ILogResponse RegisterIssue(Exception exception, IssueLevel warning);
-        ISession GetSession(Guid id);
-        void UpdateApplicationVersion(IApplicationVersion applicationVersion);
-        IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint);
-        IInitiative GetInitiativeByApplication(Guid applicationId);
+        public ILogResponse RegisterIssue(Exception exception, IssueLevel warning)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISession GetSession(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateApplicationVersion(IApplicationVersion applicationVersion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitiative GetInitiativeByApplication(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public interface ISettingsBusiness
+    public class SettingsBusiness : ISettingsBusiness
     {
-        T GetSetting<T>(string name);
-    }
-
-    public interface ICompatibilityBusiness
-    {
-        void RegisterToolkitCompability(Version version, DateTime utcNow, string supportToolkitNameVersion, object o);
+        public T GetSetting<T>(string name)
+        {
+            return default(T);
+        }
     }
 
     static class HelperExtension

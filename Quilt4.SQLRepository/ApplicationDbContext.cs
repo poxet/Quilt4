@@ -2,7 +2,7 @@
 
 namespace Quilt4.SQLRepository
 {
-    class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    internal class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("SqlServer", throwIfV1Schema: false)

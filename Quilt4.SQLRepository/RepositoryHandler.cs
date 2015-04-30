@@ -7,21 +7,28 @@ using Quilt4.Interface;
 
 namespace Quilt4.SQLRepository
 {
-    public class SqlRepositoryFactory : IRepositoryFactory
+    public class RepositoryHandler : IRepositoryHandler
     {
-        public void RegisterApplicationUserManager(IAppBuilder app)
+        private void RegisterApplicationUserManager(IAppBuilder app)
         {
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
         }
 
-        public void RegisterApplicationDbContext(IAppBuilder app)
+        private void RegisterApplicationDbContext(IAppBuilder app)
         {
             app.CreatePerOwinContext(ApplicationDbContext.Create);
         }
 
-        public void RegisterApplicationSignInManager(IAppBuilder app)
+        private void RegisterApplicationSignInManager(IAppBuilder app)
         {
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+        }
+
+        public void Register(IAppBuilder app)
+        {
+            RegisterApplicationDbContext(app);
+            RegisterApplicationUserManager(app);
+            RegisterApplicationSignInManager(app);
         }
 
         public Func<CookieValidateIdentityContext, Task> OnValidateIdentity()

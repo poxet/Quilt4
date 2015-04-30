@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Quilt4.Interface
 {
-    public interface IAccountBusiness
+    public interface IAccountRepository
     {
         Task<SignInStatus> PasswordSignInAsync(string email, string password, bool rememberMe, bool shouldLockout);
         Task<bool> HasBeenVerifiedAsync();

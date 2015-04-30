@@ -2,7 +2,7 @@
 
 namespace Quilt4.SQLRepository
 {
-    public class ApplicationSignInManagerCreatedEventArgs : EventArgs
+    internal class ApplicationSignInManagerCreatedEventArgs : EventArgs
     {
         private readonly ApplicationSignInManager _applicationSignInManager;
 

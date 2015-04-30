@@ -4,22 +4,19 @@ using System.Linq;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Script.Serialization;
-//using Tharga.Quilt4Net.BusinessEntities;
-//using Tharga.Quilt4Net.BusinessLogics;
-using Tharga.Quilt4Net.DataTransfer;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
-using Quilt4.Web.Business;
 using Quilt4.Web.BusinessEntities;
+using Tharga.Quilt4Net;
+using Tharga.Quilt4Net.DataTransfer;
+using Tharga.Quilt4Net.Web;
+using IssueType = Tharga.Quilt4Net.DataTransfer.IssueType;
 
-//using Tharga.Quilt4Net.Web.Business;
-//using Tharga.Quilt4Net.Web.Models;
-
-namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
+namespace Quilt4.Web.Controllers.WebAPI
 {
     public static class Converters
     {
-        public static Quilt4.Web.BusinessEntities.Session ToSession(this DataTransfer.Session item, Fingerprint applicationVersionId, Guid applicationId, DateTime serverStartTime, DateTime? serverEndTime, DateTime? serverLastKnown, string callerIp)
+        public static Quilt4.Web.BusinessEntities.Session ToSession(this Tharga.Quilt4Net.DataTransfer.Session item, Fingerprint applicationVersionId, Guid applicationId, DateTime serverStartTime, DateTime? serverEndTime, DateTime? serverLastKnown, string callerIp)
         {
             var machineId = (Fingerprint)item.Machine.Fingerprint;
             var userId = (Fingerprint)item.User.Fingerprint;
@@ -38,16 +35,16 @@ namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
         private readonly IMachineBusiness _machineBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
 
-        public IssueController(IIssueBusiness issueBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISettingsBusiness settingsBusiness)
+        public IssueController(IIssueBusiness issueBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness) //, , , IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISettingsBusiness settingsBusiness)
         {
             _issueBusiness = issueBusiness;
             _membershipAgent = membershipAgent;
             _applicationVersionBusiness = applicationVersionBusiness;
-            _initiativeBusiness = initiativeBusiness;
-            _sessionBusiness = sessionBusiness;
-            _userBusiness = userBusiness;
-            _machineBusiness = machineBusiness;
-            _settingsBusiness = settingsBusiness;
+            //_initiativeBusiness = initiativeBusiness;
+            //_sessionBusiness = sessionBusiness;
+            //_userBusiness = userBusiness;
+            //_machineBusiness = machineBusiness;
+            //_settingsBusiness = settingsBusiness;
         }
 
         // POST api/issue/register
@@ -289,7 +286,7 @@ namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
             return ud;
         }
 
-        private static IInnerIssueType ToInnerIssueType(DataTransfer.IssueType issueType)
+        private static IInnerIssueType ToInnerIssueType(IssueType issueType)
         {
             if (issueType == null)
                 return null;

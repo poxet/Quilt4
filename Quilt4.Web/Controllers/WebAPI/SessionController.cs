@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Web.Http;
 using System.Web.Script.Serialization;
-//using Tharga.Quilt4Net.BusinessEntities;
-//using Tharga.Quilt4Net.BusinessLogics;
-using Tharga.Quilt4Net.DataTransfer;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
-using Quilt4.Web.Business;
 using Quilt4.Web.BusinessEntities;
+using Tharga.Quilt4Net;
+using Tharga.Quilt4Net.DataTransfer;
+using Tharga.Quilt4Net.Web;
 
-namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
+namespace Quilt4.Web.Controllers.WebAPI
 {
     public class SessionController : ApiController
     {
@@ -31,13 +30,6 @@ namespace Tharga.Quilt4Net.Web.Controllers.WebAPI
             _machineBusiness = machineBusiness;
             _sessionBusiness = sessionBusiness;
         }
-
-        //private readonly ICompositeRoot _compositeRoot;
-
-        //public SessionController(ICompositeRoot compositeRoot)
-        //{
-        //    _compositeRoot = compositeRoot;
-        //}
 
         // GET api/session/register
         [HttpPost]

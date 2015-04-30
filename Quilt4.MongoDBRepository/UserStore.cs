@@ -13,7 +13,7 @@ namespace Quilt4.MongoDBRepository
     ///     Class UserStore.
     /// </summary>
     /// <typeparam name="TUser">The type of the t user.</typeparam>
-    public class UserStore<TUser> 
+    internal class UserStore<TUser> 
         : IUserLoginStore<TUser>, IUserClaimStore<TUser>, IUserRoleStore<TUser>,
         IUserPasswordStore<TUser>, IUserSecurityStampStore<TUser>, IUserStore<TUser>, IUserEmailStore<TUser>,
         IUserPhoneNumberStore<TUser>, IUserTwoFactorStore<TUser, string>

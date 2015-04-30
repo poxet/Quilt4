@@ -82,8 +82,8 @@
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="ApplicationUserManager.cs" />
     <Compile Include="ApplicationUserManagerCreatedEventArgs.cs" />
-    <Compile Include="AccountBusiness.cs" />
-    <Compile Include="SqlRepositoryFactory.cs" />
+    <Compile Include="AccountRepository.cs" />
+    <Compile Include="RepositoryHandler.cs" />
     <Compile Include="EmailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmsService.cs" />
