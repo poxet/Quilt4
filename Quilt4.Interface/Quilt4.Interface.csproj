@@ -66,10 +66,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ECompatibility.cs" />
+    <Compile Include="IApplication.cs" />
+    <Compile Include="IApplicationGroup.cs" />
+    <Compile Include="IApplicationVersion.cs" />
+    <Compile Include="IApplicationVersionBusiness.cs" />
+    <Compile Include="IClientToken.cs" />
+    <Compile Include="ICompatibilityBusiness.cs" />
+    <Compile Include="IDeveloperRole.cs" />
+    <Compile Include="IFingerprint.cs" />
+    <Compile Include="IInitiative.cs" />
+    <Compile Include="IInitiativeBusiness.cs" />
+    <Compile Include="IInnerIssueType.cs" />
+    <Compile Include="IInviteApproval.cs" />
+    <Compile Include="IIssue.cs" />
+    <Compile Include="IIssueBusiness.cs" />
+    <Compile Include="IIssueType.cs" />
+    <Compile Include="ILogResponse.cs" />
+    <Compile Include="IMachine.cs" />
+    <Compile Include="IMachineBusiness.cs" />
+    <Compile Include="IMembershipUser.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="ISession.cs" />
+    <Compile Include="ISessionBusiness.cs" />
+    <Compile Include="ISettingsBusiness.cs" />
     <Compile Include="IssueLevel.cs" />
     <Compile Include="IAccountRepository.cs" />
     <Compile Include="IApplicationUser.cs" />
     <Compile Include="IRepositoryHandler.cs" />
+    <Compile Include="IToolkitCompatibilities.cs" />
+    <Compile Include="IUser.cs" />
+    <Compile Include="IUserBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

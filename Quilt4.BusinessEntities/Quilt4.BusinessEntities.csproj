@@ -39,8 +39,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="ApplicationGroup.cs" />
+    <Compile Include="ApplicationVersion.cs" />
+    <Compile Include="RandomUtility.cs" />
+    <Compile Include="DeveloperRole.cs" />
+    <Compile Include="Fingerprint.cs" />
+    <Compile Include="FingerprintException.cs" />
+    <Compile Include="Initiative.cs" />
+    <Compile Include="InnerIssueType.cs" />
+    <Compile Include="Issue.cs" />
+    <Compile Include="IssueType.cs" />
+    <Compile Include="Machine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quilt4.Interface\Quilt4.Interface.csproj">

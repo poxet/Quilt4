@@ -196,7 +196,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="BusinessEntities\Class1.cs" />
+    <Compile Include="BusinessEntities\ApplicationVersionBusiness.cs" />
+    <Compile Include="BusinessEntities\ClientToken.cs" />
+    <Compile Include="BusinessEntities\InitiativeBusiness.cs" />
+    <Compile Include="BusinessEntities\InviteApproval.cs" />
+    <Compile Include="BusinessEntities\IssueLevelExtensions.cs" />
+    <Compile Include="BusinessEntities\IssueTypeExtensions.cs" />
+    <Compile Include="BusinessEntities\MachineBusiness.cs" />
+    <Compile Include="BusinessEntities\MachineExtensions.cs" />
+    <Compile Include="BusinessEntities\SessionBusiness.cs" />
+    <Compile Include="BusinessEntities\UserBusiness.cs" />
     <Compile Include="Business\ICompatibilityBusiness.cs" />
     <Compile Include="CastleControllerFactory.cs" />
     <Compile Include="Controllers\AccountController.cs" />
