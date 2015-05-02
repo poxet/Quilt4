@@ -190,6 +190,9 @@
       <Link>Properties\AssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Agents\ILogAgent.cs" />
+    <Compile Include="Agents\IMembershipAgent.cs" />
+    <Compile Include="Agents\LogAgent.cs" />
+    <Compile Include="Agents\MembershipAgent.cs" />
     <Compile Include="ApplicationCastleInstaller.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -214,6 +217,7 @@
     <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\WebAPI\CompatibilityController.cs" />
     <Compile Include="Controllers\WebAPI\Converters.cs" />
@@ -305,6 +309,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Help\Details.cshtml" />
+    <Content Include="Views\Initiative\Index.cshtml" />
+    <Content Include="Views\Initiative\Create.cshtml" />
+    <Content Include="Views\Initiative\Details.cshtml" />
+    <Content Include="Views\Initiative\Edit.cshtml" />
+    <Content Include="Views\Initiative\Delete.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
