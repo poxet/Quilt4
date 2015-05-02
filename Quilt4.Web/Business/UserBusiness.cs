@@ -3,7 +3,7 @@ using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 
-namespace Quilt4.Web.BusinessEntities
+namespace Quilt4.Web.Business
 {
     public class UserBusiness : IUserBusiness
     {

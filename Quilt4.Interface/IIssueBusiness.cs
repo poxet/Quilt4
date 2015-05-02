@@ -1,13 +1,11 @@
 ﻿using System;
+using Tharga.Quilt4Net.DataTransfer;
 
 namespace Quilt4.Interface
 {
     public interface IIssueBusiness
     {
-        ILogResponse RegisterIssue(Exception exception, IssueLevel warning);
-        ISession GetSession(Guid id);
-        void UpdateApplicationVersion(IApplicationVersion applicationVersion);
-        IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint);
-        IInitiative GetInitiativeByApplication(Guid applicationId);
+        ILogResponse RegisterIssue(Exception exception, IssueLevel issueLevel);        
+        RegisterIssueResponse RegisterIssue(RegisterIssueRequest data);
     }
 }

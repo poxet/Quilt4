@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Web.Http;
 using Quilt4.Interface;
-using Quilt4.Web.Business;
 using Tharga.Quilt4Net.DataTransfer;
 
 namespace Quilt4.Web.Controllers.WebAPI

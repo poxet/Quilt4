@@ -1,4 +1,5 @@
 ﻿using System;
+using Tharga.Quilt4Net.DataTransfer;
 
 namespace Quilt4.Interface
 {
@@ -6,5 +7,6 @@ namespace Quilt4.Interface
     {
         void RegisterSession(ISession session);
         void EndSession(Guid sessionId);
+        void RegisterSessionEx(RegisterSessionRequest data);
     }
 }

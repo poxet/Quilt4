@@ -2,7 +2,7 @@ using Quilt4.Interface;
 
 namespace Quilt4.Web.BusinessEntities
 {
-    static class MachineExtensions
+    internal static class MachineExtensions
     {
         public static bool AreEqual(this IMachine item, IMachine other)
         {

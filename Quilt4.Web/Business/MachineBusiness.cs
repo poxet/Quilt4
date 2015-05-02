@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.Web.BusinessEntities;
 
-namespace Quilt4.Web.BusinessEntities
+namespace Quilt4.Web.Business
 {
     public class MachineBusiness : IMachineBusiness
     {
