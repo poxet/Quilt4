@@ -69,7 +69,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Tharga.Quilt4Net">
-      <HintPath>..\packages\Tharga.Quilt4Net.1.4.0.251\lib\net45\Tharga.Quilt4Net.dll</HintPath>
+      <HintPath>..\packages\Tharga.Quilt4Net.1.5.14\lib\net45\Tharga.Quilt4Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

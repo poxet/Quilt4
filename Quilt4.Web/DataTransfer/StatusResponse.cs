@@ -1,4 +1,4 @@
-namespace Quilt4.Web.Controllers.WebAPI
+namespace Quilt4.Web.DataTransfer
 {
     public class StatusResponse
     {
