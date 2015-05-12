@@ -50,9 +50,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tharga.Quilt4Net">
-      <HintPath>..\packages\Tharga.Quilt4Net.1.5.14\lib\net45\Tharga.Quilt4Net.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Tharga.Quilt4Net, Version=1.6.0.40, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Tharga.Quilt4Net.1.6.0.40\lib\net45\Tharga.Quilt4Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

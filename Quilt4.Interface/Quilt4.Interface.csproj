@@ -68,8 +68,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Tharga.Quilt4Net">
-      <HintPath>..\packages\Tharga.Quilt4Net.1.5.14\lib\net45\Tharga.Quilt4Net.dll</HintPath>
+    <Reference Include="Tharga.Quilt4Net, Version=1.6.0.40, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Tharga.Quilt4Net.1.6.0.40\lib\net45\Tharga.Quilt4Net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +81,7 @@
     <Compile Include="IApplicationVersionBusiness.cs" />
     <Compile Include="IClientToken.cs" />
     <Compile Include="ICompatibilityBusiness.cs" />
+    <Compile Include="ICounterBusiness.cs" />
     <Compile Include="IDeveloperRole.cs" />
     <Compile Include="IFingerprint.cs" />
     <Compile Include="IInitiative.cs" />
