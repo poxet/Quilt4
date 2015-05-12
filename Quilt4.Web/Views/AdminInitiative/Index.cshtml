@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Quilt4.Web.Models.Initiative>
+@{
+    ViewBag.Title = "Admin Initiatives";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="dataTable">
+    <tr>
+        <th>Name</th>
+        <th>ClientToken</th>
+        <th>Owner</th>
+        @*<th>Members</th>
+        <th>Applications</th>
+        <th>&nbsp;</th>*@
+    </tr>
+    @foreach (var initiative in Model)
+    {
+        <tr>
+            <td>@Html.Raw(initiative.Name ?? "Default")</td>
+            <td>@initiative.ClientToken</td>
+            <td>@initiative.OwnerDeveloperName</td>
+            @*<td>@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
+            <td>@initiative.ApplicationCount</td>
+            <td>@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>*@
+        </tr>
+    }
+</table>
