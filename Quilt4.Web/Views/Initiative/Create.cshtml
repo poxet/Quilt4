@@ -1,8 +1,27 @@
-﻿
+﻿@model Quilt4.Web.Models.CreateInitiative
+
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create new Initiative";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
 
+    <fieldset>
+        <p>
+            Initiative name
+            @Html.TextBoxFor(x => x.Name)
+        </p>
+
+        <p class="submitSection">
+            <input type="submit" value="Create" /> | @Html.ActionLink("Cancel", "Index")
+        </p>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

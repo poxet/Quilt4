@@ -1,9 +1,24 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
+using Quilt4.Interface;
+using Quilt4.Web.Agents;
+using Quilt4.Web.Business;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
 {
+    [Authorize]
     public class InitiativeController : Controller
     {
+        private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly IMembershipAgent _membershipAgent;
+
+        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent)
+        {
+            _initiativeBusiness = initiativeBusiness;
+            _membershipAgent = membershipAgent;
+        }
+
         // GET: Initiative
         public ActionResult Index()
         {
@@ -24,16 +39,20 @@ namespace Quilt4.Web.Controllers
 
         // POST: Initiative/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(CreateInitiative createInitiative)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (createInitiative == null) throw new ArgumentNullException("createInitiative");
+
+                var developer = _membershipAgent.GetDeveloper();
+                _initiativeBusiness.Create(developer.DeveloperName, createInitiative.Name);
 
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception exception)
             {
+                ViewBag.Message = exception.Message;
                 return View();
             }
         }
