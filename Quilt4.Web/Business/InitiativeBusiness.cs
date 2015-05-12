@@ -46,6 +46,15 @@ namespace Quilt4.Web.Business
             return initiatives;
         }
 
+        public IEnumerable<IInitiative> GetInitiativesByDeveloperHead(string developerName)
+        {
+            //var ib = new InitiativeBusiness(_repository);
+            var initiatives = GetAllHeadsByDeveloper(developerName).ToArray();
+            //var response = initiatives.OrderBy(x => x.Name).Select(initiative => initiative.ToViewModel(new List<ISession>(), new List<IApplicationVersion>()));
+            //var response = initiatives.OrderBy(x => x.Name).Select(x => new Initiative(x.Id, x.Name, x.ClientToken, x.OwnerDeveloperName, x.DeveloperRoles, x.ApplicationGroups));
+            var response = initiatives.OrderBy(x => x.Name);
+            return response;
+        }
 
         private string GenerateClientToken()
         {

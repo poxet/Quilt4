@@ -235,7 +235,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Class1.cs" />
+    <Compile Include="Models\Constants.cs" />
+    <Compile Include="Models\Initiative.cs" />
+    <Compile Include="Models\CreateInitiative.cs" />
+    <Compile Include="Models\Initiatives.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

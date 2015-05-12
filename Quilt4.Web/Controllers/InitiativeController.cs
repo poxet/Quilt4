@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
-using Quilt4.Web.Business;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -22,11 +23,40 @@ namespace Quilt4.Web.Controllers
         // GET: Initiative
         public ActionResult Index()
         {
-            return View();
+            try
+            {
+                //var currentDeveloper = _compositeRoot.MembershipAgent.GetDeveloper();
+
+                //var service = new Service.WebService(_compositeRoot.Repository);
+                //var initiatives = service.GetInitiativesByDeveloperHead(currentDeveloper.DeveloperName);                
+                var developerName = User.Identity.Name;
+                var ins = _initiativeBusiness.GetInitiativesByDeveloperHead(developerName);
+
+                //var ib = new InitiativeBusiness(_compositeRoot.Repository);
+
+                //var pending = ib.GetPendingApprovals(currentDeveloper.EMail);
+
+                var initiatives = new Initiatives
+                {
+                    InitiativeInfos = ins.Select(x => new Initiative{ Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName}),
+                //    IsEMailConfirmed = _compositeRoot.MembershipAgent.IsEMailConfirmed(currentDeveloper.DeveloperName),
+                //    InviteEMail = currentDeveloper.EMail,
+                //    Invitations = pending,
+                //    SingleInitiative = false,
+                };
+                //return View("Index", m);
+                return View(initiatives);
+            }
+            catch (Exception exception)
+            {
+                ViewBag.Message = exception.Message;
+                //return View("Index", new Initiatives { InitiativeInfos = new List<Service.Model.Initiative>(), Invitations = new List<IInviteApproval>() });
+                return View();
+            }
         }
 
         // GET: Initiative/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string name)
         {
             return View();
         }
@@ -45,8 +75,8 @@ namespace Quilt4.Web.Controllers
             {
                 if (createInitiative == null) throw new ArgumentNullException("createInitiative");
 
-                var developer = _membershipAgent.GetDeveloper();
-                _initiativeBusiness.Create(developer.DeveloperName, createInitiative.Name);
+                var developerName = User.Identity.GetUserName();
+                _initiativeBusiness.Create(developerName, createInitiative.Name);
 
                 return RedirectToAction("Index");
             }

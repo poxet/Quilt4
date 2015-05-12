@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -10,9 +11,8 @@ namespace Quilt4.MongoDBRepository
 {
     public class MongoRepository : IRepository
     {
-        private static readonly object SyncRoot = new object();
-
-        private string _databaseName;
+        //private static readonly object SyncRoot = new object();
+        //private string _databaseName;
         //private MongoServer _server;
         //private MongoDatabase _database;
 
@@ -37,25 +37,25 @@ namespace Quilt4.MongoDBRepository
             RequestDeleteEntityEvent += MongoRepository_RequestDeleteEntityEvent;
         }
 
-        public string DatabaseName 
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_databaseName))
-                {
-                    _databaseName = System.Configuration.ConfigurationManager.AppSettings["MongoDbName"];
-                    if (string.IsNullOrEmpty(_databaseName))
-                        _databaseName = "Quilt4Net";
-                }
-                return _databaseName;
-            }
-            set
-            {
-                if (!string.IsNullOrEmpty(_databaseName) && _databaseName != value)
-                    throw new InvalidOperationException("Cannot change database name once it has been set.");
-                _databaseName = value;
-            }
-        }
+        //public string DatabaseName 
+        //{
+        //    get
+        //    {
+        //        if (string.IsNullOrEmpty(_databaseName))
+        //        {
+        //            _databaseName = System.Configuration.ConfigurationManager.AppSettings["MongoDbName"];
+        //            if (string.IsNullOrEmpty(_databaseName))
+        //                _databaseName = "Quilt4Net";
+        //        }
+        //        return _databaseName;
+        //    }
+        //    set
+        //    {
+        //        if (!string.IsNullOrEmpty(_databaseName) && _databaseName != value)
+        //            throw new InvalidOperationException("Cannot change database name once it has been set.");
+        //        _databaseName = value;
+        //    }
+        //}
 
         //public MongoServer Server
         //{
@@ -79,10 +79,38 @@ namespace Quilt4.MongoDBRepository
         //    }
         //}
 
+        //TODO: Duplicate code
+        private MongoDatabase GetDatabaseFromUrl(MongoUrl url)
+        {
+            //var client = new MongoClient(url);
+            if (url.DatabaseName == null)
+            {
+                throw new Exception("No database name specified in connection string");
+            }
+            //return client.GetDatabase(,); // WriteConcern defaulted to Acknowledged
+            //return client.GetDatabase()
+            return new MongoDatabase(new MongoServer(new MongoServerSettings { Server = url.Server }), url.DatabaseName, new MongoDatabaseSettings { });
+        }
+
         private MongoDatabase Database
         {
             get
             {
+                var connectionNameOrUrl = "Mongo";
+
+                MongoDatabase db;
+                if (connectionNameOrUrl.ToLower().StartsWith("mongodb://"))
+                {
+                    db = GetDatabaseFromUrl(new MongoUrl(connectionNameOrUrl));
+                }
+                else
+                {
+                    var connStringFromManager = ConfigurationManager.ConnectionStrings[connectionNameOrUrl].ConnectionString;
+                    db = GetDatabaseFromUrl(new MongoUrl(connStringFromManager));
+                }
+
+                return db;
+
         //        if (_database != null)
         //            return _database;
 
@@ -162,11 +190,9 @@ namespace Quilt4.MongoDBRepository
             var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.Id == initiativeId).Select(y => y.ApplicationGroups);
             var applicationGroups = new List<IApplicationGroup>();
            
-
             foreach (var initiativePersist in initiativePersists)
             {
                 applicationGroups.AddRange(initiativePersist.Select(x => x.ToEntity()));
-                
             }
 
             return applicationGroups;

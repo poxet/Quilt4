@@ -5,21 +5,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm())
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Create", "Initiative", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <p>
-            Initiative name
-            @Html.TextBoxFor(x => x.Name)
-        </p>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
 
-        <p class="submitSection">
-            <input type="submit" value="Create" /> | @Html.ActionLink("Cancel", "Index")
-        </p>
-    </fieldset>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="OK" class="btn btn-default" />
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn  btn-default" })
+        </div>
+    </div>
 }
 
 @section Scripts {

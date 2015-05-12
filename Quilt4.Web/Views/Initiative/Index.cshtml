@@ -1,9 +1,14 @@
-﻿
+﻿@model Quilt4.Web.Models.Initiatives
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
-@Html.ActionLink("Create new Initiative", "Create")
+@foreach (var initiative in Model.InitiativeInfos)
+{
+    <div>@Html.ActionLink(initiative.Name ?? Quilt4.Web.Models.Constants.DefaultInitiativeName, "Details", new { Name = initiative.Name ?? initiative.ClientToken }, null)</div>
+}
+
+@Html.ActionLink("Create new Initiative", "Create", null, new { @class = "btn btn-default" })

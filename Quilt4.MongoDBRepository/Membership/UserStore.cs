@@ -90,11 +90,8 @@ namespace Quilt4.MongoDBRepository.Membership
             }
             else
             {
-                string connStringFromManager =
-                    ConfigurationManager.ConnectionStrings[connectionNameOrUrl].ConnectionString;
-
+                var connStringFromManager = ConfigurationManager.ConnectionStrings[connectionNameOrUrl].ConnectionString;
                 db = GetDatabaseFromUrl(new MongoUrl(connStringFromManager));
-
             }
         }
 
