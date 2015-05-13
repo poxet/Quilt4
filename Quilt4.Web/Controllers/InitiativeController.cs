@@ -56,7 +56,7 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Initiative/Details/5
-        public ActionResult Details(string name)
+        public ActionResult Details(string id)
         {
             return View();
         }
