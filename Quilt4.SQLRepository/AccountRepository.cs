@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -184,6 +185,11 @@ namespace Quilt4.SQLRepository
         public async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
         {
             return await _applicationSignInManager.ExternalSignInAsync(loginInfo, isPersistent);
+        }
+
+        public List<string> GetUsers()
+        {
+            return _applicationUserManager.Users.Select(x => x.Email).ToList();
         }
     }
 }

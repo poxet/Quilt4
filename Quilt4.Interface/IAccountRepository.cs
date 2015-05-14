@@ -40,5 +40,6 @@ namespace Quilt4.Interface
         Task<IList<string>> GetValidTwoFactorProvidersAsync(string userId);
         Task<bool> SendTwoFactorCodeAsync(string provider);
         Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent);
+        List<string> GetUsers();
     }
 }

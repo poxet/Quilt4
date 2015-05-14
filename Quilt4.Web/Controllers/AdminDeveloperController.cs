@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Controllers
 {
@@ -11,13 +12,18 @@ namespace Quilt4.Web.Controllers
     [Authorize]
     public class AdminDeveloperController : Controller
     {
-        public AdminDeveloperController()
+        private readonly IAccountRepository _accountRepository;
+
+        public AdminDeveloperController(IAccountRepository accountRepository)
         {
+            _accountRepository = accountRepository;
         }
 
         // GET: AdminDeveloper
         public ActionResult Index()
         {
+            var x = _accountRepository.GetUsers();
+
             //using (var ctx = new UsersContext())
             //{
             //    var developers = ctx.UserProfiles.ToList().Select(x => x.ToUser(null)).ToList();
