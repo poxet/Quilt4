@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 
@@ -22,15 +19,8 @@ namespace Quilt4.Web.Controllers
         // GET: AdminDeveloper
         public ActionResult Index()
         {
-            var x = _accountRepository.GetUsers();
-
-            //using (var ctx = new UsersContext())
-            //{
-            //    var developers = ctx.UserProfiles.ToList().Select(x => x.ToUser(null)).ToList();
-            //    return View(developers);
-            //}
-
-            return View();
+            var users = _accountRepository.GetUsers();
+            return View(users);
         }
 
         //// GET: AdminDeveloper/Details/5

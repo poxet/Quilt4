@@ -488,6 +488,11 @@ namespace Quilt4.MongoDBRepository.Membership
             return await db.GetCollection<TUser>(collectionName).Find(x => x.Email == email).FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<TUser>> GetAllUsersAsync()
+        {
+            return await db.GetCollection<TUser>(collectionName).Find(x => true).ToListAsync();
+        }
+
         /// <summary>
         /// Get email user asynchronous
         /// </summary>

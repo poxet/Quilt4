@@ -94,6 +94,7 @@
     <Compile Include="IClientToken.cs" />
     <Compile Include="ICompatibilityBusiness.cs" />
     <Compile Include="ICounterBusiness.cs" />
+    <Compile Include="IDeveloper.cs" />
     <Compile Include="IDeveloperRole.cs" />
     <Compile Include="IFingerprint.cs" />
     <Compile Include="IInitiative.cs" />

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.MongoDBRepository.Membership;
 
@@ -188,9 +189,13 @@ namespace Quilt4.MongoDBRepository
             return await _applicationSignInManager.ExternalSignInAsync(loginInfo, isPersistent);
         }
 
-        public List<string> GetUsers()
+        public IEnumerable<IDeveloper> GetUsers()
         {
-            return _applicationUserManager.Users.Select(x => x.Email).ToList();
+            var hasLocalAccount = true; //TODO: Fix
+            var creationDate = new DateTime(); //TODO: Fix
+            var lastActivityDate = new DateTime(); //TODO: Fix
+            var applicationUsers = _applicationUserManager.Users.ToArray();
+            return applicationUsers.Select(x => new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins != null ? x.Logins.Select(y => y.LoginProvider).ToArray() : new string[] { }, creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles != null ? x.Roles.ToArray() : new string[] { }));
         }
     }
 }

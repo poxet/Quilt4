@@ -1,5 +1,5 @@
-﻿@*@using Quilt4.BusinessEntities
-@model IEnumerable<User>*@
+﻿@using Quilt4.Interface
+@model IEnumerable<Quilt4.Interface.IDeveloper>
 @{
     ViewBag.Title = "Admin Developer";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -7,34 +7,34 @@
 
 <h2>@ViewBag.Title</h2>
 
-@*<table class="dataTable">
+<table class="dataTable">
     <tr>
         <th>Id</th>
         <th>Name</th>
         <th>Local</th>
         <th>Providers</th>
-        <th>Creation</th>
-        <th>Last Activity</th>
+        @*<th>Creation</th>
+        <th>Last Activity</th>*@
         <th>Last IP</th>
         <th>Email</th>
         <th>Confirmed</th>
         <th>Roles</th>
-        <th>&nbsp;</th>
+        @*<th>&nbsp;</th>*@
     </tr>
-    @foreach (User developer in Model)
+    @foreach (var developer in Model)
     {
         <tr>
             <td>@developer.UserId</td>
             <td>@developer.UserName</td>
             <td>@Html.Raw(developer.HasLocalAccount ? "Yes" : "No")</td>
             <td title="@Html.Raw(string.Join(", ", developer.ProviderNames))">@Html.Raw(developer.ProviderNames.Count() > 2 ? developer.ProviderNames.Count().ToString() : string.Join(", ", developer.ProviderNames))</td>
-            <td title="@developer.CreationDate.ToLocalDateTimeString()">@developer.CreationDate.ToTimeSpanString()</td>
-            <td title="@developer.LastActivityDate.ToLocalDateTimeString()">@developer.LastActivityDate.ToTimeSpanString()</td>
+            @*<td title="@developer.CreationDate.ToLocalDateTimeString()">@developer.CreationDate.ToTimeSpanString()</td>
+            <td title="@developer.LastActivityDate.ToLocalDateTimeString()">@developer.LastActivityDate.ToTimeSpanString()</td>*@
             <td><a href="@Html.Raw("http://www.geoiptool.com/en/?IP=" + developer.LastIpAddress)" target="_blank">@developer.LastIpAddress</a></td>
             <td>@developer.Email</td>
             <td>@Html.Raw(developer.EMailConfirmed ? "Yes" : "No")</td>
             <td>@Html.Raw(string.Join(", ", developer.Roles))</td>
-            <td>
+            @*<td>
                 @if (developer.Roles.All(x => string.Compare("Admin", x, StringComparison.InvariantCultureIgnoreCase) != 0))
                 {
                     @Html.ActionLink("Delete", "DeleteDeveloper", new { id = developer.UserId }, null)
@@ -44,7 +44,7 @@
                 {
                     @Html.ActionLink("Confirm", "ConfirmDeveloperEMail", new { id = developer.UserId }, null)
                 }
-            </td>
+            </td>*@
         </tr>
     }
-</table>*@
+</table>

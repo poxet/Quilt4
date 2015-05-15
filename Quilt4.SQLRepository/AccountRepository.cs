@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.SQLRepository.Membership;
 
@@ -187,9 +188,12 @@ namespace Quilt4.SQLRepository
             return await _applicationSignInManager.ExternalSignInAsync(loginInfo, isPersistent);
         }
 
-        public List<string> GetUsers()
+        public IEnumerable<IDeveloper> GetUsers()
         {
-            return _applicationUserManager.Users.Select(x => x.Email).ToList();
+            var hasLocalAccount = true; //TODO: Fix
+            var creationDate = new DateTime(); //TODO: Fix
+            var lastActivityDate = new DateTime(); //TODO: Fix
+            return _applicationUserManager.Users.Select(x => new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins.Select(y => y.LoginProvider).ToArray(), creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles.Select(y => y.RoleId).ToArray()));
         }
     }
 }
