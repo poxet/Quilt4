@@ -9,5 +9,7 @@ namespace Quilt4.Interface
     {
         void Register(IAppBuilder app);
         Func<CookieValidateIdentityContext, Task> OnValidateIdentity();
+        object GetApplicationSignInManager();
+        object GetApplicationUserManager();
     }
 }

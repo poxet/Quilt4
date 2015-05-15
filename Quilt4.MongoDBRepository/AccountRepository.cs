@@ -14,179 +14,170 @@ namespace Quilt4.MongoDBRepository
     //TODO: This class is very similar to the one in SQLRepo. If we are using interfaces it could be the same
     public class AccountRepository : IAccountRepository
     {
-        private ApplicationSignInManager _applicationSignInManager;
-        private ApplicationUserManager _applicationUserManager;
+        private readonly IRepositoryHandler _repositoryHandler;
 
-        public AccountRepository()
+        public AccountRepository(IRepositoryHandler repositoryHandler)
         {
-            ApplicationSignInManager.ApplicationSignInManagerCreatedEvent += ApplicationSignInManagerCreatedEvent;
-            ApplicationUserManager.ApplicationUserManagerCreatedEvent += ApplicationUserManagerCreatedEvent;
+            _repositoryHandler = repositoryHandler;
         }
 
-        private void ApplicationUserManagerCreatedEvent(object sender, ApplicationUserManagerCreatedEventArgs e)
-        {
-            _applicationUserManager = e.ApplicationUserManager;
-        }
-
-        private void ApplicationSignInManagerCreatedEvent(object sender, ApplicationSignInManagerCreatedEventArgs e)
-        {
-            _applicationSignInManager = e.ApplicationSignInManager;
-        }
+        private ApplicationSignInManager ApplicationSignInManager { get { return _repositoryHandler.GetApplicationSignInManager() as ApplicationSignInManager; } }
+        private ApplicationUserManager ApplicationUserManager { get { return _repositoryHandler.GetApplicationUserManager() as ApplicationUserManager; } }
 
         public async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
-            return await _applicationSignInManager.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
+            return await ApplicationSignInManager.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
         }
 
         public async Task<bool> HasBeenVerifiedAsync()
         {
-            return await _applicationSignInManager.HasBeenVerifiedAsync();
+            return await ApplicationSignInManager.HasBeenVerifiedAsync();
         }
 
         public async Task<IApplicationUser> FindByIdAsync(string userId)
         {
-            return await _applicationUserManager.FindByIdAsync(userId);
+            return await ApplicationUserManager.FindByIdAsync(userId);
         }
 
         public async Task<string> GetVerifiedUserIdAsync()
         {
-            return await _applicationSignInManager.GetVerifiedUserIdAsync();
+            return await ApplicationSignInManager.GetVerifiedUserIdAsync();
         }
 
         public async Task<string> GenerateTwoFactorTokenAsync(string userId, string twoFactorProvider)
         {
-            return await _applicationUserManager.GenerateTwoFactorTokenAsync(userId, twoFactorProvider);
+            return await ApplicationUserManager.GenerateTwoFactorTokenAsync(userId, twoFactorProvider);
         }
 
         public async Task<SignInStatus> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberBrowser)
         {
-            return await _applicationSignInManager.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
+            return await ApplicationSignInManager.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
         }
 
         public IApplicationUser FindById(string userId)
         {
-            return _applicationUserManager.FindById(userId);
+            return ApplicationUserManager.FindById(userId);
         }
 
         public async Task<string> GetPhoneNumberAsync(string userId)
         {
-            return await _applicationUserManager.GetPhoneNumberAsync(userId);
+            return await ApplicationUserManager.GetPhoneNumberAsync(userId);
         }
 
         public async Task<bool> GetTwoFactorEnabledAsync(string userId)
         {
-            return await _applicationUserManager.GetTwoFactorEnabledAsync(userId);
+            return await ApplicationUserManager.GetTwoFactorEnabledAsync(userId);
         }
 
         public async Task<IList<UserLoginInfo>> GetLoginsAsync(string userId)
         {
-            return await _applicationUserManager.GetLoginsAsync(userId);
+            return await ApplicationUserManager.GetLoginsAsync(userId);
         }
 
         public async Task<Tuple<IdentityResult, IApplicationUser>> CreateAsync(string userName, string email, string password)
         {
             var applicationUser = new ApplicationUser { UserName = userName, Email = email };
-            var item = await _applicationUserManager.CreateAsync(applicationUser, password);
+            var item = await ApplicationUserManager.CreateAsync(applicationUser, password);
             return new Tuple<IdentityResult, IApplicationUser>(item, applicationUser);
         }
 
         public async Task<Tuple<IdentityResult, IApplicationUser>> CreateAsync(string userName, string email)
         {
             var applicationUser = new ApplicationUser { UserName = userName, Email = email };
-            var item = await _applicationUserManager.CreateAsync(applicationUser);
+            var item = await ApplicationUserManager.CreateAsync(applicationUser);
             return new Tuple<IdentityResult, IApplicationUser>(item, applicationUser);
         }
 
         public async Task SignInAsync(IApplicationUser user, bool isPersistent, bool rememberBrowser)
         {
-            await _applicationSignInManager.SignInAsync(user as ApplicationUser, isPersistent, rememberBrowser);
+            await ApplicationSignInManager.SignInAsync(user as ApplicationUser, isPersistent, rememberBrowser);
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
         {
-            return await _applicationUserManager.ChangePasswordAsync(userId, oldPassword, newPassword);
+            return await ApplicationUserManager.ChangePasswordAsync(userId, oldPassword, newPassword);
         }
 
         public async Task<ClaimsIdentity> CreateIdentityAsync(IApplicationUser user, string applicationCookie)
         {
-            return await _applicationUserManager.CreateIdentityAsync(user as ApplicationUser, applicationCookie);
+            return await ApplicationUserManager.CreateIdentityAsync(user as ApplicationUser, applicationCookie);
         }
 
         public IList<UserLoginInfo> GetLogins(string userId)
         {
-            return _applicationUserManager.GetLogins(userId);
+            return ApplicationUserManager.GetLogins(userId);
         }
 
         public async Task<IdentityResult> RemoveLoginAsync(string userId, UserLoginInfo userLoginInfo)
         {
-            return await _applicationUserManager.RemoveLoginAsync(userId, userLoginInfo);
+            return await ApplicationUserManager.RemoveLoginAsync(userId, userLoginInfo);
         }
 
         public async Task<string> GenerateChangePhoneNumberTokenAsync(string userId, string number)
         {
-            return await _applicationUserManager.GenerateChangePhoneNumberTokenAsync(userId, number);
+            return await ApplicationUserManager.GenerateChangePhoneNumberTokenAsync(userId, number);
         }
 
-        public IIdentityMessageService SmsService { get { return _applicationUserManager.SmsService; } }
+        public IIdentityMessageService SmsService { get { return ApplicationUserManager.SmsService; } }
 
         public async Task SetTwoFactorEnabledAsync(string userId, bool enabled)
         {
-            await _applicationUserManager.SetTwoFactorEnabledAsync(userId, enabled);
+            await ApplicationUserManager.SetTwoFactorEnabledAsync(userId, enabled);
         }
 
         public async Task<IdentityResult> ChangePhoneNumberAsync(string userId, string phoneNumber, string code)
         {
-            return await _applicationUserManager.ChangePhoneNumberAsync(userId, phoneNumber, code);
+            return await ApplicationUserManager.ChangePhoneNumberAsync(userId, phoneNumber, code);
         }
 
         public async Task<IdentityResult> SetPhoneNumberAsync(string userId, string phoneNumber)
         {
-            return await _applicationUserManager.SetPhoneNumberAsync(userId, phoneNumber);
+            return await ApplicationUserManager.SetPhoneNumberAsync(userId, phoneNumber);
         }
 
         public async Task<IdentityResult> AddPasswordAsync(string userId, string phoneNumber)
         {
-            return await _applicationUserManager.AddPasswordAsync(userId, phoneNumber);
+            return await ApplicationUserManager.AddPasswordAsync(userId, phoneNumber);
         }
         
         public async Task<IdentityResult> AddLoginAsync(string userId, UserLoginInfo login)
         {
-            return await _applicationUserManager.AddLoginAsync(userId, login);
+            return await ApplicationUserManager.AddLoginAsync(userId, login);
         }
 
         public async Task<IdentityResult> ConfirmEmailAsync(string userId, string token)
         {
-            return await _applicationUserManager.ConfirmEmailAsync(userId, token);
+            return await ApplicationUserManager.ConfirmEmailAsync(userId, token);
         }
 
         public async Task<IApplicationUser> FindByNameAsync(string email)
         {
-            return await _applicationUserManager.FindByNameAsync(email);
+            return await ApplicationUserManager.FindByNameAsync(email);
         }
 
         public async Task<bool> IsEmailConfirmedAsync(string userId)
         {
-            return await _applicationUserManager.IsEmailConfirmedAsync(userId);
+            return await ApplicationUserManager.IsEmailConfirmedAsync(userId);
         }
 
         public async Task<IdentityResult> ResetPasswordAsync(string userId, string token, string newPassword)
         {
-            return await _applicationUserManager.ResetPasswordAsync(userId, token, newPassword);
+            return await ApplicationUserManager.ResetPasswordAsync(userId, token, newPassword);
         }
 
         public async Task<IList<string>> GetValidTwoFactorProvidersAsync(string userId)
         {
-            return await _applicationUserManager.GetValidTwoFactorProvidersAsync(userId);
+            return await ApplicationUserManager.GetValidTwoFactorProvidersAsync(userId);
         }
 
         public async Task<bool> SendTwoFactorCodeAsync(string provider)
         {
-            return await _applicationSignInManager.SendTwoFactorCodeAsync(provider);
+            return await ApplicationSignInManager.SendTwoFactorCodeAsync(provider);
         }
 
         public async Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent)
         {
-            return await _applicationSignInManager.ExternalSignInAsync(loginInfo, isPersistent);
+            return await ApplicationSignInManager.ExternalSignInAsync(loginInfo, isPersistent);
         }
 
         public IEnumerable<IDeveloper> GetUsers()
@@ -194,7 +185,7 @@ namespace Quilt4.MongoDBRepository
             var hasLocalAccount = true; //TODO: Fix
             var creationDate = new DateTime(); //TODO: Fix
             var lastActivityDate = new DateTime(); //TODO: Fix
-            var applicationUsers = _applicationUserManager.Users.ToArray();
+            var applicationUsers = ApplicationUserManager.Users.ToArray();
             return applicationUsers.Select(x => new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins != null ? x.Logins.Select(y => y.LoginProvider).ToArray() : new string[] { }, creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles != null ? x.Roles.ToArray() : new string[] { }));
         }
     }
