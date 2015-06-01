@@ -87,6 +87,7 @@
     <Compile Include="Membership\EmailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Membership\SmsService.cs" />
+    <Compile Include="SqlRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quilt4.Interface\Quilt4.Interface.csproj">

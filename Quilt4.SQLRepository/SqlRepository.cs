@@ -1,0 +1,209 @@
+using System;
+using System.Collections.Generic;
+using Quilt4.Interface;
+
+namespace Quilt4.SQLRepository
+{
+    public class SqlRepository : IRepository
+    {
+        public void AddInitiative(IInitiative initiative)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateInitiative(IInitiative initiative)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IInitiative> GetInitiativeHeadsByDeveloper(string developerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IInitiative> GetInitiatives()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitiative GetInitiative(Guid initiativeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitiative GetInitiativeByClientToken(string clientToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IInitiative GetInitiativeByApplication(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteInitiative(Guid initiativeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateApplicationVersion(IApplicationVersion applicationVersion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> applicationIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationVersion> GetApplicationVersionsForMachine(string machineId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateSessionUsage(Guid sessionId, DateTime serverLastKnown)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddApplicationVersion(IApplicationVersion applicationVersion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteApplicationVersion(string applicationVersionFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IApplicationVersion UpdateApplicationVersionId(string applicationVersionFingerprint, Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddSession(ISession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISession GetSession(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionsForApplicationVersion(string applicationVersionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionsForApplication(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionsForMachine(string machineFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndSession(Guid sessionId, DateTime serverEndTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IUser GetUser(string fingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddUser(IUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IUser> GetUsersByApplicationVersion(string applicationFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IMachine GetMachine(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddMachine(IMachine machine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IMachine> GetMachinesByApplicationVersion(string applicationFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IToolkitCompatibilities> GetToolkitCompability(Version version)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> initiativeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateMachine(IMachine machine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanConnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionStatistics(DateTime @from, DateTime to)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IIssue> GetIssueStatistics(DateTime @from, DateTime to)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

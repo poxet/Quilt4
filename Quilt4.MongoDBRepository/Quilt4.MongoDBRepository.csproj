@@ -87,7 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converter.cs" />
+    <Compile Include="Data\Converter.cs" />
     <Compile Include="Entities\ApplicationGroupPersist.cs" />
     <Compile Include="Entities\ApplicationPersist.cs" />
     <Compile Include="Entities\ApplicationVersionPersist.cs" />
@@ -112,8 +112,8 @@
     <Compile Include="MongoRepository.cs" />
     <Compile Include="RepositoryHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestDeleteEntityEventArgs.cs" />
-    <Compile Include="RequestUpdateEntityEventArgs.cs" />
+    <Compile Include="Data\RequestDeleteEntityEventArgs.cs" />
+    <Compile Include="Data\RequestUpdateEntityEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quilt4.BusinessEntities\Quilt4.BusinessEntities.csproj">
