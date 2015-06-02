@@ -331,6 +331,7 @@
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\AdminDeveloper\Index.cshtml" />
     <Content Include="Views\AdminInitiative\Index.cshtml" />
+    <Content Include="Views\Home\System.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

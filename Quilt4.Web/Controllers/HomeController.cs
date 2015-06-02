@@ -22,5 +22,10 @@ namespace Quilt4.Web.Controllers
 
             return View();
         }
+
+        public ActionResult System()
+        {
+            return View();
+        }
     }
 }
