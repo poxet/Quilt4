@@ -54,9 +54,9 @@ namespace Quilt4.MongoDBRepository
             return await ApplicationSignInManager.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
         }
 
-        public IApplicationUser FindById(string userId)
+        public IDeveloper FindById(string userId)
         {
-            return ApplicationUserManager.FindById(userId);
+            return ApplicationUserManager.FindById(userId).ToDeveloper();
         }
 
         public async Task<string> GetPhoneNumberAsync(string userId)
@@ -182,11 +182,39 @@ namespace Quilt4.MongoDBRepository
 
         public IEnumerable<IDeveloper> GetUsers()
         {
+            return ApplicationUserManager.Users.Select(x => x.ToDeveloper());
+        }
+
+        public void DeleteUser(string userId)
+        {
+            var user = ApplicationUserManager.FindById(userId);
+            ApplicationUserManager.Delete(user);
+        }
+
+        public void AssignRole(string userId, string roleName)
+        {
+            var developer = FindById(userId);
+
+            //const string RoleName = "Admin";
+            //if (!ApplicationSignInManager.Roles.RoleExists(RoleName))
+            //    ApplicationSignInManager.Roles.CreateRole(RoleName);
+
+            //if (!ApplicationSignInManager.Roles.IsUserInRole(developer.UserName, RoleName))
+            //    ApplicationSignInManager.Roles.AddUserToRole(developer.UserName, RoleName);
+
+            throw new NotImplementedException();
+        }
+    }
+
+    internal static class Converter2
+    {
+        public static IDeveloper ToDeveloper(this ApplicationUser x)
+        {
             var hasLocalAccount = true; //TODO: Fix
             var creationDate = new DateTime(); //TODO: Fix
             var lastActivityDate = new DateTime(); //TODO: Fix
-            var applicationUsers = ApplicationUserManager.Users.ToArray();
-            return applicationUsers.Select(x => new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins != null ? x.Logins.Select(y => y.LoginProvider).ToArray() : new string[] { }, creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles != null ? x.Roles.ToArray() : new string[] { }));
+            var developer = new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins != null ? x.Logins.Select(y => y.LoginProvider).ToArray() : new string[] { }, creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles != null ? x.Roles.ToArray() : new string[] { });
+            return developer;
         }
     }
 }

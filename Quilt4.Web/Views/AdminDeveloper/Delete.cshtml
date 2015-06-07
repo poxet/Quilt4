@@ -1,0 +1,17 @@
+﻿@model Quilt4.Interface.IDeveloper
+
+@{
+    ViewBag.Title = "Delete Developer";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<p>Are you sure you want to delete developer @Model.UserName?</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <p class="submitSection">
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Cancel", "Index")
+    </p>
+}

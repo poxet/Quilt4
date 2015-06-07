@@ -19,7 +19,7 @@
         <th>Email</th>
         <th>Confirmed</th>
         <th>Roles</th>
-        @*<th>&nbsp;</th>*@
+        <th>&nbsp;</th>
     </tr>
     @foreach (var developer in Model)
     {
@@ -34,17 +34,17 @@
             <td>@developer.Email</td>
             <td>@Html.Raw(developer.EMailConfirmed ? "Yes" : "No")</td>
             <td>@Html.Raw(string.Join(", ", developer.Roles))</td>
-            @*<td>
+            <td>
                 @if (developer.Roles.All(x => string.Compare("Admin", x, StringComparison.InvariantCultureIgnoreCase) != 0))
                 {
-                    @Html.ActionLink("Delete", "DeleteDeveloper", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Delete", "Delete", new { id = developer.UserId }, null)
                     @Html.ActionLink("Make admin", "MakeDeveloperAdmin", new { id = developer.UserId }, null)
                 }
                 @if (!developer.EMailConfirmed)
                 {
                     @Html.ActionLink("Confirm", "ConfirmDeveloperEMail", new { id = developer.UserId }, null)
                 }
-            </td>*@
+            </td>
         </tr>
     }
 </table>

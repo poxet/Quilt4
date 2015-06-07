@@ -39,5 +39,16 @@ namespace Quilt4.MongoDBRepository.Membership
                 return response;
             }            
         }
+
+        public override async Task<IdentityResult> ConfirmEmailAsync(string userId, string token)
+        {
+            if (token != null)
+                return await base.ConfirmEmailAsync(userId, token);
+
+            var user = await _store.FindByIdAsync(userId);
+            await _store.SetEmailConfirmedAsync(user, true);
+
+            return new IdentityResult();
+        }
     }
 }

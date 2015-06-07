@@ -335,11 +335,12 @@ namespace Quilt4.Web.Controllers
         private bool HasPassword()
         {
             var user = _accountRepository.FindById(User.Identity.GetUserId());
-            if (user != null)
-            {
-                return user.PasswordHash != null;
-            }
-            return false;
+            return user.HasLocalAccount;
+            //if (user != null)
+            //{
+            //    return user.PasswordHash != null;
+            //}
+            //return false;
         }
 
         //private bool HasPhoneNumber()

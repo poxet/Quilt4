@@ -53,9 +53,9 @@ namespace Quilt4.SQLRepository
             return await ApplicationSignInManager.TwoFactorSignInAsync(provider, code, isPersistent, rememberBrowser);
         }
 
-        public IApplicationUser FindById(string userId)
+        public IDeveloper FindById(string userId)
         {
-            return ApplicationUserManager.FindById(userId);
+            return ApplicationUserManager.FindById(userId).ToDeveloper();
         }
 
         public async Task<string> GetPhoneNumberAsync(string userId)
@@ -184,7 +184,39 @@ namespace Quilt4.SQLRepository
             var hasLocalAccount = true; //TODO: Fix
             var creationDate = new DateTime(); //TODO: Fix
             var lastActivityDate = new DateTime(); //TODO: Fix
-            return ApplicationUserManager.Users.Select(x => new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins.Select(y => y.LoginProvider).ToArray(), creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles.Select(y => y.RoleId).ToArray()));
+            return ApplicationUserManager.Users.Select(x => x.ToDeveloper());
+        }
+
+        public void DeleteUser(string userId)
+        {
+            var user = ApplicationUserManager.FindById(userId);
+            ApplicationUserManager.Delete(user);
+        }
+
+        public void AssignRole(string userId, string roleName)
+        {
+            var developer = FindById(userId);
+
+            //const string RoleName = "Admin";
+            //if (!ApplicationSignInManager.Roles.RoleExists(RoleName))
+            //    ApplicationSignInManager.Roles.CreateRole(RoleName);
+
+            //if (!ApplicationSignInManager.Roles.IsUserInRole(developer.UserName, RoleName))
+            //    ApplicationSignInManager.Roles.AddUserToRole(developer.UserName, RoleName);
+
+            throw new NotImplementedException();
+        }
+    }
+
+    internal static class Converter2
+    {
+        public static IDeveloper ToDeveloper(this ApplicationUser x)
+        {
+            var hasLocalAccount = true; //TODO: Fix
+            var creationDate = new DateTime(); //TODO: Fix
+            var lastActivityDate = new DateTime(); //TODO: Fix
+            var developer = new Developer(x.Id, x.UserName, hasLocalAccount, x.Logins.Select(y => y.LoginProvider).ToArray(), creationDate, lastActivityDate, null, x.Email, x.EmailConfirmed, x.Roles.Select(y => y.RoleId).ToArray());
+            return developer;
         }
     }
 }

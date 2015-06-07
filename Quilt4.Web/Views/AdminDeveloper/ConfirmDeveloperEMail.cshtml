@@ -1,0 +1,17 @@
+﻿@model Quilt4.Interface.IDeveloper
+
+@{
+    ViewBag.Title = "Confirm Developer EMail";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<p>Are you sure you want to mark developer @Model.UserName EMail address @Model.Email as confirmed?</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <p class="submitSection">
+        <input type="submit" value="Confirm" /> |
+        @Html.ActionLink("Cancel", "Index")
+    </p>
+}
