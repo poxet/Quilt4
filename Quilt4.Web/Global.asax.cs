@@ -31,7 +31,7 @@ namespace Quilt4.Web
 
             RegisterWindsor();
 
-            GlobalConfiguration.Configuration.MessageHandlers.Add(new WebApiCallLogHandler(new SettingsBusiness())); //TODO: Resolve the SettingsBusiness instead
+            //GlobalConfiguration.Configuration.MessageHandlers.Add(new WebApiCallLogHandler(new SettingsBusiness())); //TODO: Resolve the SettingsBusiness instead
         }
 
         private static void RegisterWindsor()
