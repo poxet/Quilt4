@@ -16,9 +16,12 @@ namespace Quilt4.Web.Controllers
         {
             _systemBusiness = systemBusiness;
         }
+
         // GET: Admin
         public ActionResult Index()
         {
+
+
             return View();
         }
 
@@ -33,6 +36,18 @@ namespace Quilt4.Web.Controllers
             adminViewModel.DBOnline = dbinfo.Online;
             adminViewModel.DBName = dbinfo.Name;
             adminViewModel.DBServer = dbinfo.Server;
+
+            var supportEmailAdress = ConfigurationManager.AppSettings["SupportEmailAddress"];
+            var smtpServerAdress = ConfigurationManager.AppSettings["SmtpServerAddress"];
+            var smtpServerPort = ConfigurationManager.AppSettings["SmtpServerPort"];
+            var sendEMailEnabled = ConfigurationManager.AppSettings["SendEMailEnabled"];
+            var eMailConfirmationEnabled = ConfigurationManager.AppSettings["EMailConfirmationEnabled"];
+            adminViewModel.SupportEmailAdress = supportEmailAdress;
+            adminViewModel.SmtpServerAdress = smtpServerAdress;
+            adminViewModel.SmtpServerPort = smtpServerPort;
+            adminViewModel.SendEMailEnabled = sendEMailEnabled;
+            adminViewModel.EMailConfirmationEnabled = eMailConfirmationEnabled;
+
 
             return View(adminViewModel);
         }
