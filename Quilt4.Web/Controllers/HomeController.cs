@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Reflection;
 
 namespace Quilt4.Web.Controllers
 {
@@ -25,6 +26,9 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult System()
         {
+            
+            ViewBag.Version = Assembly.GetAssembly(typeof(HomeController)).GetName().Version.ToString();
+
             return View();
         }
     }

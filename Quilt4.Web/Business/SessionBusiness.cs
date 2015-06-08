@@ -20,9 +20,8 @@ namespace Quilt4.Web.Business
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IUserBusiness _userBusiness;
         private readonly IMachineBusiness _machineBusiness;
-        private readonly ISessionBusiness _sessionBusiness;
 
-        public SessionBusiness(IRepository repository, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISessionBusiness sessionBusiness)
+        public SessionBusiness(IRepository repository, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness)
         {
             _repository = repository;
             _membershipAgent = membershipAgent;
@@ -30,7 +29,6 @@ namespace Quilt4.Web.Business
             _initiativeBusiness = initiativeBusiness;
             _userBusiness = userBusiness;
             _machineBusiness = machineBusiness;
-            _sessionBusiness = sessionBusiness;
         }
 
         public void RegisterSession(ISession session)
@@ -120,7 +118,7 @@ namespace Quilt4.Web.Business
                 throw new ArgumentException("No value for machine fingerprint provided. A globally unique identifier should be provided, perhaps a DeviceId, SID or a hash of unique data that does not change.");
             }
 
-            _sessionBusiness.RegisterSession(request.Session.ToSession(applicationVersion.Id, application.Id, DateTime.UtcNow, null, null, callerIp));
+            RegisterSession(request.Session.ToSession(applicationVersion.Id, application.Id, DateTime.UtcNow, null, null, callerIp));
         }
 
         public IEnumerable<ISession> GetSessionsForApplicationVersion(string applicationVersionId)
