@@ -202,6 +202,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BusinessEntities\DataBaseInfo.cs" />
     <Compile Include="Business\ApplicationVersionBusiness.cs" />
     <Compile Include="BusinessEntities\ClientToken.cs" />
     <Compile Include="Business\CounterBusiness.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Business\MachineBusiness.cs" />
     <Compile Include="BusinessEntities\MachineExtensions.cs" />
     <Compile Include="Business\SessionBusiness.cs" />
+    <Compile Include="Business\SystemBusiness.cs" />
     <Compile Include="Business\UserBusiness.cs" />
     <Compile Include="Business\HelperExtension.cs" />
     <Compile Include="Business\IssueBusiness.cs" />
