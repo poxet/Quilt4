@@ -338,6 +338,7 @@
     <Content Include="Views\Home\System.cshtml" />
     <Content Include="Views\AdminDeveloper\ConfirmDeveloperEMail.cshtml" />
     <Content Include="Views\Admin\System.cshtml" />
+    <Content Include="Views\Admin\Email.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

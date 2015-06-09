@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -18,4 +19,12 @@ namespace Quilt4.Web.Models
         public string SendEMailEnabled { get; set; }
         public string EMailConfirmationEnabled { get; set; }
     }
+
+    public class SendEmailViewModel
+    {
+        [EmailAddress]
+        public string ToEmail { get; set; }
+
+    }
+
 }

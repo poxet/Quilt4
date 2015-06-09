@@ -1,0 +1,16 @@
+﻿@model Quilt4.Web.Models.SendEmailViewModel
+
+@{
+    ViewBag.Title = "Email";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Email</h2>
+<p>This page can send test emails</p>
+
+@using (@Html.BeginForm("SendEmail", "Admin"))
+{
+    @Html.TextBoxFor(m => m.ToEmail)
+    <input type="submit" value="Send"/>
+}
+
