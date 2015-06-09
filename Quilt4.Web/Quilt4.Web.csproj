@@ -206,6 +206,7 @@
     <Compile Include="Business\ApplicationVersionBusiness.cs" />
     <Compile Include="BusinessEntities\ClientToken.cs" />
     <Compile Include="Business\CounterBusiness.cs" />
+    <Compile Include="Business\EmailBusiness.cs" />
     <Compile Include="Business\InitiativeBusiness.cs" />
     <Compile Include="BusinessEntities\InviteApproval.cs" />
     <Compile Include="BusinessEntities\IssueLevelExtensions.cs" />
@@ -339,6 +340,7 @@
     <Content Include="Views\AdminDeveloper\ConfirmDeveloperEMail.cshtml" />
     <Content Include="Views\Admin\System.cshtml" />
     <Content Include="Views\Admin\Email.cshtml" />
+    <None Include="Views\Admin\EmailHistory.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -97,6 +97,8 @@
     <Compile Include="IDataBaseInfo.cs" />
     <Compile Include="IDeveloper.cs" />
     <Compile Include="IDeveloperRole.cs" />
+    <Compile Include="IEmail.cs" />
+    <Compile Include="IEmailBusiness.cs" />
     <Compile Include="IFingerprint.cs" />
     <Compile Include="IInitiative.cs" />
     <Compile Include="IInitiativeBusiness.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
 {
@@ -22,9 +23,17 @@ namespace Quilt4.Web.Models
 
     public class SendEmailViewModel
     {
-        [EmailAddress]
         public string ToEmail { get; set; }
 
+    }
+
+    public class EmailViewModel : IEmail
+    {
+        public string FromEmail { get; set; }
+        public string ToEmail { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public DateTime DateSent { get; set; }
     }
 
 }
