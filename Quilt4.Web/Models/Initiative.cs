@@ -9,6 +9,9 @@ namespace Quilt4.Web.Models
         public string ClientToken { get; set; }
         public string OwnerDeveloperName { get; set; }
         public DeveloperRole[] DeveloperRoles { get; set; }
+        public string ApplicationCount { get; set; }
+        public string Sessions { get; set; }
+        public string Issues { get; set; }
         //public ApplicationGroup[] ApplicationGroups { get; set; }
     }
 

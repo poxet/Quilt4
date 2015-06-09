@@ -7,21 +7,30 @@
 <h2>@ViewBag.Title</h2>
 
 <table class="dataTable">
-    <tr>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th>Name</th>
         <th>Owner</th>
-        @*<th>Members</th>
+        <th>Members</th>
         <th>Applications</th>
-        <th>&nbsp;</th>*@
+        <th>Sessions</th>
+        <th>Issues</th>
+        <th>Counters</th>
+        <th>CreateDate</th>
+        <th>Last Session</th>
     </tr>
     @foreach (var initiative in Model)
     {
-        <tr>
-            <td>@Html.Raw(initiative.Name ?? "Default")</td>
-            <td>@initiative.OwnerDeveloperName</td>
-            <td>@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
-            @*<td>@initiative.ApplicationCount</td>
-    <td>@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>*@
-        </tr>
+    <tr>
+        <td>@Html.Raw(initiative.Name ?? "Default")</td>
+        <td>@initiative.OwnerDeveloperName</td>
+        <td>@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
+        <td>@initiative.ApplicationCount</td>
+        <td>@initiative.Sessions</td>
+        <td><!--Issues--></td>
+        <td><!--Counters--></td>
+        <td><!--CreateDate--></td>
+        <td><!--LastSession--></td>
+        <!--<td>@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>-->
+    </tr>
     }
 </table>
