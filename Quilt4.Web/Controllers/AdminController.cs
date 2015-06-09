@@ -25,6 +25,13 @@ namespace Quilt4.Web.Controllers
             return View();
         }
 
+        public ActionResult Email()
+        {
+            var emailModel = new EmailModels();
+
+            return View();
+        }
+
         public ActionResult System() 
         {
             var adminViewModel = new AdminViewModels();
