@@ -244,7 +244,6 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\Constants.cs" />
-    <Compile Include="Models\EmailModels.cs" />
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\CreateInitiative.cs" />
     <Compile Include="Models\Initiatives.cs" />
