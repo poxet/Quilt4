@@ -28,6 +28,10 @@ namespace Quilt4.Web.Controllers
         {
             
             ViewBag.Version = Assembly.GetAssembly(typeof(HomeController)).GetName().Version.ToString();
+            ViewBag.Environment = Tharga.Quilt4Net.Information.Environment;
+            ViewBag.SessionStarter = Tharga.Quilt4Net.Session.ClientStartTime.ToLocalTime();
+            ViewBag.RegisteredOnServer = Tharga.Quilt4Net.Session.RegisteredOnServer;
+
 
             return View();
         }

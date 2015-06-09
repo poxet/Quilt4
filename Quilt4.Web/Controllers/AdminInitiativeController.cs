@@ -17,10 +17,19 @@ namespace Quilt4.Web.Controllers
                 Name = item.Name,
                 ClientToken = item.ClientToken,
                 OwnerDeveloperName = item.OwnerDeveloperName,
-                //DeveloperRoles = item.DeveloperRoles,
+                DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
                 //ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count()
             };
             return response;
+        }
+
+        public static Models.DeveloperRole ToModel(this IDeveloperRole item)
+        {
+ 
+            return new Models.DeveloperRole
+            {
+                DeveloperName = item.DeveloperName
+            };
         }
     }
 
