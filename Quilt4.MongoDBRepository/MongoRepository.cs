@@ -37,6 +37,25 @@ namespace Quilt4.MongoDBRepository
             RequestDeleteEntityEvent += MongoRepository_RequestDeleteEntityEvent;
         }
 
+        public IDataBaseInfo GetDatabaseStatus()
+        {
+            var dbInfo = new DataBaseInfoEntity();
+
+            if (Database.Server.State != MongoServerState.Connected)
+            {
+                dbInfo.Online = false;
+            }
+            else
+            {
+                dbInfo.Online = true;
+            }
+
+            dbInfo.Name = Database.Name;
+            dbInfo.Server = Database.Server.Settings.Server.Host + ":" + Database.Server.Settings.Server.Port;
+
+            return dbInfo;
+        }
+
         //public string DatabaseName 
         //{
         //    get

@@ -205,5 +205,10 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public IDataBaseInfo GetDatabaseStatus()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -52,5 +52,7 @@ namespace Quilt4.Interface
 
         IEnumerable<ISession> GetSessionStatistics(DateTime from, DateTime to);
         IEnumerable<IIssue> GetIssueStatistics(DateTime from, DateTime to);
+
+        IDataBaseInfo GetDatabaseStatus();
     }
 }
