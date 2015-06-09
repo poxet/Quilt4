@@ -8,7 +8,12 @@ namespace Quilt4.Web.Models
         public string Name { get; set; }
         public string ClientToken { get; set; }
         public string OwnerDeveloperName { get; set; }
-        //public DeveloperRole[] DeveloperRoles { get; set; }
+        public DeveloperRole[] DeveloperRoles { get; set; }
         //public ApplicationGroup[] ApplicationGroups { get; set; }
+    }
+
+    public class DeveloperRole
+    {
+        public string DeveloperName { get; set; }
     }
 }

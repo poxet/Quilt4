@@ -10,5 +10,6 @@ namespace Quilt4.Interface
         string InviteEMail { get; }
         DateTime InviteTime { get; }
         //string InviteMessage { get; } // TODO: Add this property
+
     }
 }

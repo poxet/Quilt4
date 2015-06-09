@@ -5,5 +5,37 @@
 }
 
 <h2>System</h2>
-<p>@ViewBag.Version</p>
-
+<table>
+    <tr>
+        <th style="padding-right: 20px;">Version </th>
+        <td>@ViewBag.Version</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px;">Environment</th>
+        <td>@ViewBag.Environment</td>
+    </tr>
+    <tr style="border-top-color: black; border-top-style: solid;">
+        <th style="padding-right: 20px;">Session Started</th>
+        <td>@ViewBag.SessionStarter</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px;">Session Registered on Server</th>
+        <td>@ViewBag.RegisteredOnServer</td>
+    </tr>
+    <tr style="border-top-color: black; border-top-style: solid;">
+        <th style="padding-right: 20px;">Browser</th>
+        <td>@Request.Browser.Type</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px;">Webserver date format</th>
+        <td>@DateTime.Now</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px;">Webserver number format</th>
+        <td>@(1234.56M)</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px;">Javascript</th>
+        <td><script>document.write("Enabled")</script><noscript>Disabled</noscript></td>
+    </tr>
+</table>
