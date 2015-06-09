@@ -7,12 +7,45 @@
 <h2>System</h2>
 <p>This page shows config information for admins.</p>
 
-<p>Database Type: @Model.DBType</p>
-<p>Database Online: @Model.DBOnline</p>
-<p>Database Name: @Model.DBName</p>
-<p>Database Server: @Model.DBServer</p>
-<p>Support Email Adress: @Model.SupportEmailAdress</p>
-<p>SMTP Server Adress: @Model.SmtpServerAdress</p>
-<p>SMTP Server Port: @Model.SmtpServerPort</p>
-<p>Send Email Enabled: @Model.SendEMailEnabled</p>
-<p>Email Confirmation Enabled: @Model.EMailConfirmationEnabled</p>
+<br/><br/>
+
+<table>
+    <tr>
+        <th style="padding-right: 20px">Database Type</th>
+        <td>@Model.DBType</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">Database Online</th>
+        <td>@Model.DBOnline</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">Database Name</th>
+        <td>@Model.DBName</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">Database Server</th>
+        <td>@Model.DBServer</td>
+    </tr>
+
+    <tr style="border-top: 2px solid #000;">
+        <th style="padding-right: 20px">SMTP Server Adress</th>
+        <td>@Model.SmtpServerAdress</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">SMTP Server Port</th>
+        <td>@Model.SmtpServerPort</td>
+    </tr>
+
+    <tr style="border-top: 2px solid #000;">
+        <th style="padding-right: 20px">Support Email Adress</th>
+        <td>@Model.SupportEmailAdress</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">Send Email Enabled</th>
+        <td>@Model.SendEMailEnabled</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">Email Confirmation Enabled</th>
+        <td>@Model.EMailConfirmationEnabled</td>
+    </tr>
+</table>
