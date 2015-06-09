@@ -156,7 +156,12 @@ namespace Quilt4.Web.Business
 
         public IEnumerable<IInitiative> GetInitiatives()
         {
-            return _repository.GetIntiiatives();
+            return _repository.GetInitiatives();
+        }
+
+        public IEnumerable<IIssue> GetIssueStatistics(DateTime fromDate, DateTime toDate)
+        {
+            return _repository.GetIssueStatistics(fromDate, toDate);
         }
 
         public IEnumerable<IInviteApproval> GetPendingApprovals(string developerEMail)

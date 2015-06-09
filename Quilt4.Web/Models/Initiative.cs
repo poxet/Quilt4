@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
 {
@@ -12,6 +14,9 @@ namespace Quilt4.Web.Models
         public string ApplicationCount { get; set; }
         public string Sessions { get; set; }
         public string Issues { get; set; }
+        public IEnumerable<Guid> ApplicationsIds { get; set; }
+        public IEnumerable<IApplication> Applications { get; set; }
+
         //public ApplicationGroup[] ApplicationGroups { get; set; }
     }
 

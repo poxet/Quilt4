@@ -19,8 +19,10 @@ namespace Quilt4.Web.Controllers
                 ClientToken = item.ClientToken,
                 OwnerDeveloperName = item.OwnerDeveloperName,
                 DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
-                ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count(),
-                Sessions = item.ApplicationGroups.SelectMany(x => x.Applications.SelectMany(y => y.))
+                ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count().ToString(),
+                Applications = item.ApplicationGroups.SelectMany(x => x.Applications),
+                ApplicationsIds = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.Id),
+
             };
             return response;
         }
@@ -40,17 +42,40 @@ namespace Quilt4.Web.Controllers
     public class AdminInitiativeController : Controller
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly ISessionBusiness _sessionBusiness;
+        private readonly IIssueBusiness _issueBusiness;
 
-        public AdminInitiativeController(IInitiativeBusiness initiativeBusiness)
+        public AdminInitiativeController(IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IIssueBusiness issueBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
+            _sessionBusiness = sessionBusiness;
+            _issueBusiness = issueBusiness;
         }
 
         // GET: AdminInitiative
         public ActionResult Index()
         {
             //var ub = new InitiativeBusiness(_compositeRoot.Repository);
-            var initiatives = _initiativeBusiness.GetInitiatives().Select(x => x.ToModel());
+            var initiatives = _initiativeBusiness.GetInitiatives().Select(x => x.ToModel()).ToList();
+
+            var issues = _initiativeBusiness.GetIssueStatistics(new DateTime(1900, 01, 01), DateTime.Now);
+
+            foreach (var initiative in initiatives)
+            {
+                var sessions = _sessionBusiness.GetSessionsForApplications(initiative.ApplicationsIds).ToArray();
+                var sessionIds = sessions.Select(x => x.Id);
+                
+                var list = new List<IIssue>();
+
+                foreach (var sessionId in sessionIds)
+                {
+                    var sessionIssues = issues.Where(x => x.SessionId == sessionId);
+                    list.AddRange(sessionIssues);
+                }
+
+                initiative.Sessions = sessions.Count().ToString();
+                initiative.Issues = list.Count().ToString();
+            }
             
             return View(initiatives);
         }
