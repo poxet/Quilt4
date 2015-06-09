@@ -81,7 +81,7 @@ namespace Quilt4.MongoDBRepository
 
         public static IApplication ToEntity(this ApplicationPersist item)
         {
-            return new Application(item.Id, item.Name, item.FirstRegistered, item.TicketPrefix);
+            return new Application(ite.mId, item.Name, item.FirstRegistered, item.TicketPrefix);
         }
 
         public static ISession ToEntity(this SessionPersist item)

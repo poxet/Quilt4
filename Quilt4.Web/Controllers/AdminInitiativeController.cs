@@ -4,28 +4,29 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
 {
     public static class Conv
     {
-        public static Models.Initiative ToModel(this IInitiative item)
+        public static Initiative ToModel(this IInitiative item)
         {
-            var response = new Models.Initiative
+            var response = new Initiative
             {
                 Id = item.Id,
                 Name = item.Name,
                 ClientToken = item.ClientToken,
                 OwnerDeveloperName = item.OwnerDeveloperName,
                 DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
-                //ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count()
+                ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count(),
+                Sessions = item.ApplicationGroups.SelectMany(x => x.Applications.SelectMany(y => y.))
             };
             return response;
         }
 
         public static Models.DeveloperRole ToModel(this IDeveloperRole item)
-        {
- 
+        { 
             return new Models.DeveloperRole
             {
                 DeveloperName = item.DeveloperName
@@ -50,6 +51,7 @@ namespace Quilt4.Web.Controllers
         {
             //var ub = new InitiativeBusiness(_compositeRoot.Repository);
             var initiatives = _initiativeBusiness.GetInitiatives().Select(x => x.ToModel());
+            
             return View(initiatives);
         }
 
