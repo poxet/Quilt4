@@ -8,6 +8,11 @@
 <h2>Email</h2>
 <p>This page can send test emails</p>
 
+@if(!@Model.EmailEnabled) {
+    <p><b>No emails will be sent, check config</b></p>
+}
+
+
 @using (@Html.BeginForm("SendEmail", "Admin"))
 {
     @Html.TextBoxFor(m => m.ToEmail)

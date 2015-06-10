@@ -24,6 +24,9 @@ namespace Quilt4.Web.Business
             var smtpServerAdress = ConfigurationManager.AppSettings["SmtpServerAddress"];
             var smtpServerPort = ConfigurationManager.AppSettings["SmtpServerPort"];
             var mailFrom = ConfigurationManager.AppSettings["SupportEmailAddress"];
+            var sendEmailEnabled = ConfigurationManager.AppSettings["SendEMailEnabled"];
+
+            bool emailEnabled = Convert.ToBoolean(sendEmailEnabled);
 
             int portNumber;
             int.TryParse(smtpServerPort, out portNumber);
@@ -32,14 +35,22 @@ namespace Quilt4.Web.Business
             
             smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
 
-            foreach (var to in tos)
+            if (emailEnabled)
             {
-                var mailMessage = new MailMessage(mailFrom, to, subject, body);
-
-                _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now);
-
-                smtpClient.Send(mailMessage);
+                foreach (var to in tos)
+                {
+                    var mailMessage = new MailMessage(mailFrom, to, subject, body);
+                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now);
+                    smtpClient.Send(mailMessage);
+                }
             }
+            else
+            { 
+                //send error message
+            }
+
+
+            
         }
 
         public IEnumerable<IEmail> GetLastHundredEmails()

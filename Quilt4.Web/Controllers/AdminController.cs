@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Quilt4.Web.Models;
 using System.Configuration;
@@ -44,6 +45,8 @@ namespace Quilt4.Web.Controllers
         public ActionResult Email()
         {
             var model = new SendEmailViewModel();
+
+            model.EmailEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["SendEMailEnabled"]);
 
             return View(model);
         }

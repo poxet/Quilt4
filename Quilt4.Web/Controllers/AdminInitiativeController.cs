@@ -14,13 +14,13 @@ namespace Quilt4.Web.Controllers
         {
             var response = new Initiative
             {
-                Id = item.Id,
+                /*Id = item.Id,
                 Name = item.Name,
                 ClientToken = item.ClientToken,
                 OwnerDeveloperName = item.OwnerDeveloperName,
                 DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
                 ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count(),
-                Sessions = item.ApplicationGroups.SelectMany(x => x.Applications.SelectMany(y => y.))
+                Sessions = item.ApplicationGroups.SelectMany(x => x.Applications.SelectMany(y => y.))*/
             };
             return response;
         }
