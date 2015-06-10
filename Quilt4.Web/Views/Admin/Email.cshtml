@@ -7,15 +7,15 @@
 
 <h2>Email</h2>
 <p>This page can send test emails</p>
+<br /><br />
 
-@if(!@Model.EmailEnabled) {
-    <p><b>No emails will be sent, check config</b></p>
-}
-
-
-@using (@Html.BeginForm("SendEmail", "Admin"))
+@using (@Html.BeginForm("SendTestEmail", "Admin"))
 {
     @Html.TextBoxFor(m => m.ToEmail)
-    <input type="submit" value="Send"/>
+    <input type="submit" value="Send" />
 }
 
+@if (!@Model.EmailEnabled)
+{
+    <br /><p><b>No emails will be sent, check config</b></p><br />
+}

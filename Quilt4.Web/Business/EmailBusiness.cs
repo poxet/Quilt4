@@ -8,6 +8,7 @@ using System.Web;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
+
 namespace Quilt4.Web.Business
 {
     public class EmailBusiness : IEmailBusiness
@@ -38,15 +39,15 @@ namespace Quilt4.Web.Business
             if (emailEnabled)
             {
                 foreach (var to in tos)
-                {
+                {                    
                     var mailMessage = new MailMessage(mailFrom, to, subject, body);
                     _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now);
-                    smtpClient.Send(mailMessage);
+                    smtpClient.Send(mailMessage);                                    
                 }
             }
             else
             { 
-                //send error message
+                //send error message emails not enabled
             }
 
 

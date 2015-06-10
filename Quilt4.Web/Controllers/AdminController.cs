@@ -51,7 +51,7 @@ namespace Quilt4.Web.Controllers
             return View(model);
         }
 
-        public ActionResult SendEmail(SendEmailViewModel model)
+        public ActionResult SendTestEmail(SendEmailViewModel model)
         {
             _emailBusiness.SendEmail(new List<string>{model.ToEmail}, "Test", "Testar");
 
