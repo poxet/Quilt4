@@ -34,23 +34,24 @@ namespace Quilt4.Web.Business
             
             smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
 
-            if (emailEnabled)
+            if (!emailEnabled) return;
+
+            foreach (var to in tos)
             {
-                foreach (var to in tos)
+                var status = false;
+
+                try
                 {
-                    bool status = true;
                     var mailMessage = new MailMessage(mailFrom, to, subject, body);
-                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status);
-                    smtpClient.Send(mailMessage);                                    
+                    smtpClient.Send(mailMessage);
+                    status = true;
                 }
-            }
-            else
-            { 
-                //send error message emails not enabled
-            }
+                finally
+                {
+                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status);
+                }
 
-
-            
+            }
         }
 
         public IEnumerable<IEmail> GetLastHundredEmails()

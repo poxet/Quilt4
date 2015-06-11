@@ -11,6 +11,7 @@
 
 @using (@Html.BeginForm("SendTestEmail", "Admin"))
 {
+    @Html.HiddenFor(x => x.EmailEnabled)
     @Html.TextBoxFor(m => m.ToEmail)
     <input type="submit" value="Send" />
 }
@@ -18,4 +19,9 @@
 @if (!@Model.EmailEnabled)
 {
     <br /><p><b>No emails will be sent, check config</b></p><br />
+}
+
+@if (string.IsNullOrEmpty(ViewBag.ErrorMessage) == false)
+{
+    <p>@ViewBag.ErrorMessage</p>
 }

@@ -53,9 +53,22 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult SendTestEmail(SendEmailViewModel model)
         {
-            _emailBusiness.SendEmail(new List<string>{model.ToEmail}, "Test", "Testar");
+            try
+            {
+                _emailBusiness.SendEmail(new List<string> { model.ToEmail }, "Test", "Testar");
+            }
+            catch (FormatException e)
+            {
 
-            return Redirect("Email");
+                ViewBag.ErrorMessage = "Fel format på E-Posten!";
+
+            }
+            catch (SmtpException e)
+            {
+                ViewBag.ErrorMessage = "Servern kan inte nås";
+            }
+
+            return View("Email", model);
         }
 
         public ActionResult System() 
