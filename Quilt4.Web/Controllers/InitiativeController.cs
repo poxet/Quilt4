@@ -55,9 +55,16 @@ namespace Quilt4.Web.Controllers
             }
         }
 
-        public ActionResult Member(Guid initiativeId)
+        public ActionResult Member(string initiativeId)
         {
-            return View();
+            Guid id;
+            Guid.TryParse(initiativeId, out id);
+
+            var initiative = _initiativeBusiness.GetInitiative(id);
+
+            var members = initiative.DeveloperRoles;
+
+            return View(members);
         }
 
         // GET: Initiative/Details/5
