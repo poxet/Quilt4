@@ -7,15 +7,21 @@
 
 <h2>Senaste 100 mailen</h2>
 
+<table>
+    <tr style="border-bottom: 1px solid #000">
+        <th style="padding-right: 20px;">Date</th>
+        <th style="padding-right: 20px;">To</th>
+        <th style="padding-right: 20px;">Subject</th>
+        <th>Sent</th>
+    </tr>
 
-@foreach (var mail in @Model)
-{
-    <p>@mail.ToEmail</p>
-    <p>@mail.FromEmail</p>
-    <p>@mail.Subject</p>
-    <p>@mail.Body</p>
-    <p>@mail.DateSent</p>
-    <br />
-    <br/>
-    
-}
+    @foreach (var mail in @Model)
+    {
+        <tr style="margin-top: 5px;">
+            <td style="padding-right: 20px;">@mail.DateSent</td>
+            <td style="padding-right: 20px;">@mail.ToEmail</td>
+            <td style="padding-right: 20px;">@mail.Subject</td>
+            <td>@mail.Status</td>
+        </tr>
+    }
+</table>

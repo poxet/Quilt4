@@ -56,7 +56,7 @@ namespace Quilt4.MongoDBRepository
             return dbInfo;
         }
 
-        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent)
+        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status)
         {
             var emailLog = new EmailLogPersist();
 
@@ -66,6 +66,7 @@ namespace Quilt4.MongoDBRepository
             emailLog.Subject = subject;
             emailLog.Body = body;
             emailLog.DateSent = dateSent;
+            emailLog.Status = status;
 
             Database.GetCollection("EmailLog").Save(emailLog, WriteConcern.Acknowledged);
 
@@ -73,7 +74,7 @@ namespace Quilt4.MongoDBRepository
 
         public IEnumerable<IEmail> GetLastHundredEmails()
         {
-            var emails = Database.GetCollection("EmailLog").FindAllAs<EmailLogPersist>().OrderBy(x => x.DateSent).Take(100);
+            var emails = Database.GetCollection("EmailLog").FindAllAs<EmailLogPersist>().OrderByDescending(x => x.DateSent).Take(100);
 
             return emails;
         }

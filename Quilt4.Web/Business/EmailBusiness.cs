@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Web;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -36,22 +34,24 @@ namespace Quilt4.Web.Business
             
             smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
 
-            if (emailEnabled)
+            if (!emailEnabled) return;
+
+            foreach (var to in tos)
             {
-                foreach (var to in tos)
-                {                    
+                var status = false;
+
+                try
+                {
                     var mailMessage = new MailMessage(mailFrom, to, subject, body);
-                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now);
-                    smtpClient.Send(mailMessage);                                    
+                    smtpClient.Send(mailMessage);
+                    status = true;
                 }
-            }
-            else
-            { 
-                //send error message emails not enabled
-            }
+                finally
+                {
+                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status);
+                }
 
-
-            
+            }
         }
 
         public IEnumerable<IEmail> GetLastHundredEmails()
@@ -78,6 +78,7 @@ namespace Quilt4.Web.Business
                     Subject = item.Subject,
                     Body = item.Body,
                     DateSent = item.DateSent,
+                    Status = item.Status
                 };
             }
         }
