@@ -8,29 +8,29 @@
 
 <table class="dataTable">
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th>Name</th>
-        <th>Owner</th>
-        <th>Members</th>
-        <th>Applications</th>
-        <th>Sessions</th>
-        <th>Issues</th>
-        <th>Counters</th>
-        <th>CreateDate</th>
-        <th>Last Session</th>
+        <th style="padding: 0 5px;">Name</th>
+        <th style="padding: 0 5px;">Owner</th>
+        <th style="padding: 0 5px;">Members</th>
+        <th style="padding: 0 5px;">Applications</th>
+        <th style="padding: 0 5px;">Sessions</th>
+        <th style="padding: 0 5px;">Issues</th>
+        <th style="padding: 0 5px;">Counters</th>
+        <th style="padding: 0 5px;">CreateDate</th>
+        <th style="padding: 0 5px;">Last Session</th>
     </tr>
     @foreach (var initiative in Model)
     {
     <tr>
-        <td>@Html.Raw(initiative.Name ?? "Default")</td>
-        <td>@initiative.OwnerDeveloperName</td>
-        <td>@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
-        <td>@initiative.ApplicationCount</td>
-        <td>@initiative.Sessions</td>
-        <td><!--Issues--></td>
-        <td><!--Counters--></td>
-        <td><!--CreateDate--></td>
-        <td><!--LastSession--></td>
-        <!--<td>@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>-->
+        <td style="padding: 0 5px;">@Html.Raw(initiative.Name ?? "Default")</td>
+        <td style="padding: 0 5px;">@initiative.OwnerDeveloperName</td>
+        <td style="padding: 0 5px;">@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
+        <td style="padding: 0 5px;">@initiative.ApplicationCount</td>
+        <td style="padding: 0 5px;">@initiative.Sessions</td>
+        <td style="padding: 0 5px;">@initiative.Issues</td>
+        <td style="padding: 0 5px;"><!--Counters--></td>
+        <td style="padding: 0 5px;">@initiative.CreateDate</td>
+        <td style="padding: 0 5px;">@initiative.LastSession</td>
+        <!--<td style="padding: 0 5px;">@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>-->
     </tr>
     }
 </table>
