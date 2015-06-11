@@ -1,0 +1,33 @@
+﻿@model Quilt4.Interface.IInitiative
+
+@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit Initiative</h2>
+
+<table>
+    <tr>
+        <th style="padding-right: 10px;">Name</th>
+        <td style="padding-right: 10px;">@Model.Name</td>
+    </tr> 
+    <tr>
+        <th style="padding-right: 10px;">ClientToken</th>
+        <td style="padding-right: 10px;">@Model.ClientToken</td>
+    </tr>   
+    <tr>
+        <th style="padding-right: 10px;">Owner</th>
+        <td style="padding-right: 10px;">@Model.OwnerDeveloperName</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 10px;">Members</th>
+        <td style="padding-right: 10px;">
+            @foreach (var member in Model.DeveloperRoles)
+            {
+                @Html.Raw(member.DeveloperName + ", ")
+            }
+        </td>
+    </tr>
+</table>
+
