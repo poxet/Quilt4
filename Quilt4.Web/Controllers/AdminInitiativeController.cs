@@ -90,6 +90,17 @@ namespace Quilt4.Web.Controllers
             return View(initiatives);
         }
 
+
+        public ActionResult Initiative(Guid? id)
+        {
+            if (id == null)
+                return Redirect("Index");
+
+            var initiative = _initiativeBusiness.GetInitiative((Guid)id);
+
+            return View(initiative);
+        }
+
         //// GET: AdminInitiative/Details/5
         //public ActionResult Details(int id)
         //{
