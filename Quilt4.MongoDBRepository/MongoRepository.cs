@@ -74,7 +74,7 @@ namespace Quilt4.MongoDBRepository
 
         public IEnumerable<IEmail> GetLastHundredEmails()
         {
-            var emails = Database.GetCollection("EmailLog").FindAllAs<EmailLogPersist>().OrderBy(x => x.DateSent).Take(100);
+            var emails = Database.GetCollection("EmailLog").FindAllAs<EmailLogPersist>().OrderByDescending(x => x.DateSent).Take(100);
 
             return emails;
         }
