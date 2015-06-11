@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -12,18 +13,19 @@ namespace Quilt4.Web.Controllers
     {
         public static Initiative ToModel(this IInitiative item)
         {
+            var dateCreated = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.FirstRegistered).OrderBy(z => z.Date).FirstOrDefault();
+            
             var response = new Initiative
             {
-                /*Id = item.Id,
+                Id = item.Id,
                 Name = item.Name,
                 ClientToken = item.ClientToken,
                 OwnerDeveloperName = item.OwnerDeveloperName,
                 DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
                 ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count().ToString(),
-                Applications = item.ApplicationGroups.SelectMany(x => x.Applications),
-                Sessions = item.ApplicationGroups.SelectMany(x => x.Applications.SelectMany(y => y.)),
-                ApplicationsIds = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.Id),
-
+                Sessions = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.Id).ToString(),
+                CreateDate = dateCreated == new DateTime() ? "N/A" : dateCreated.ToShortDateString() + " " + dateCreated.ToShortTimeString(),
+                
             };
             return response;
         }
@@ -60,6 +62,9 @@ namespace Quilt4.Web.Controllers
             var initiatives = _initiativeBusiness.GetInitiatives().Select(x => x.ToModel()).ToList();
 
             var issues = _initiativeBusiness.GetIssueStatistics(new DateTime(1900, 01, 01), DateTime.Now);
+            
+            var dateTime = new DateTime();
+
 
             foreach (var initiative in initiatives)
             {
@@ -76,6 +81,10 @@ namespace Quilt4.Web.Controllers
 
                 initiative.Sessions = sessions.Count().ToString();
                 initiative.Issues = list.Count().ToString();
+                var lastSessionDate = sessions.OrderBy(x => x.ServerStartTime).Select(y => y.ServerStartTime).FirstOrDefault();
+                initiative.LastSession = lastSessionDate == dateTime ? "N/A" : lastSessionDate.ToString("yyyy-MM-dd hh:mm:ss");
+
+
             }
             
             return View(initiatives);
