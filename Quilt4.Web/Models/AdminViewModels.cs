@@ -35,6 +35,7 @@ namespace Quilt4.Web.Models
         public string Subject { get; set; }
         public string Body { get; set; }
         public DateTime DateSent { get; set; }
+        public bool Status { get; set; }
     }
 
 }

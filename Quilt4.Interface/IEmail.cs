@@ -9,5 +9,6 @@ namespace Quilt4.Interface
         string Subject { get; set; }
         string Body { get; set; }
         DateTime DateSent { get; set; }
+        bool Status { get; set; }
     }
 }

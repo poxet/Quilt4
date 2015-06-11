@@ -15,5 +15,6 @@ namespace Quilt4.MongoDBRepository.Entities
         public string Body { get; set; }
         public DateTime DateSent { get; set; }
         public Guid Id { get; set; }
+        public bool Status { get; set; }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Web;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -39,9 +37,10 @@ namespace Quilt4.Web.Business
             if (emailEnabled)
             {
                 foreach (var to in tos)
-                {                    
+                {
+                    bool status = true;
                     var mailMessage = new MailMessage(mailFrom, to, subject, body);
-                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now);
+                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status);
                     smtpClient.Send(mailMessage);                                    
                 }
             }
@@ -78,6 +77,7 @@ namespace Quilt4.Web.Business
                     Subject = item.Subject,
                     Body = item.Body,
                     DateSent = item.DateSent,
+                    Status = item.Status
                 };
             }
         }

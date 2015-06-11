@@ -211,7 +211,7 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent)
+        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status)
         {
             throw new NotImplementedException();
         }
