@@ -340,7 +340,7 @@
     <Content Include="Views\AdminDeveloper\ConfirmDeveloperEMail.cshtml" />
     <Content Include="Views\Admin\System.cshtml" />
     <Content Include="Views\Admin\Email.cshtml" />
-    <None Include="Views\Admin\EmailHistory.cshtml" />
+    <Content Include="Views\Admin\EmailHistory.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
