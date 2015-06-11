@@ -250,13 +250,13 @@ intellisense.annotate(jQuery, {
   },
   'map': function() {
     /// <signature>
-    ///   <summary>Translate all items in an array or object to new array of items.</summary>
+    ///   <summary>Translate all emails in an array or object to new array of emails.</summary>
     ///   <param name="array" type="Array">The Array to translate.</param>
     ///   <param name="callback(elementOfArray, indexInArray)" type="Function">The function to process each item against.  The first argument to the function is the array item, the second argument is the index in array The function can return any value. Within the function, this refers to the global (window) object.</param>
     ///   <returns type="Array" />
     /// </signature>
     /// <signature>
-    ///   <summary>Translate all items in an array or object to new array of items.</summary>
+    ///   <summary>Translate all emails in an array or object to new array of emails.</summary>
     ///   <param name="arrayOrObject" type="">The Array or Object to translate.</param>
     ///   <param name="callback( value, indexOrKey )" type="Function">The function to process each item against.  The first argument to the function is the value; the second argument is the index or key of the array or object property. The function can return any value to add to the array. A returned array will be flattened into the resulting array. Within the function, this refers to the global (window) object.</param>
     ///   <returns type="Array" />
@@ -1030,7 +1030,7 @@ intellisense.annotate(jQuery.fn, {
   },
   'clearQueue': function() {
     /// <signature>
-    ///   <summary>Remove from the queue all items that have not yet been run.</summary>
+    ///   <summary>Remove from the queue all emails that have not yet been run.</summary>
     ///   <param name="queueName" type="String">A string containing the name of the queue. Defaults to fx, the standard effects queue.</param>
     ///   <returns type="jQuery" />
     /// </signature>
@@ -1145,7 +1145,7 @@ intellisense.annotate(jQuery.fn, {
   },
   'delay': function() {
     /// <signature>
-    ///   <summary>Set a timer to delay execution of subsequent items in the queue.</summary>
+    ///   <summary>Set a timer to delay execution of subsequent emails in the queue.</summary>
     ///   <param name="duration" type="Number">An integer indicating the number of milliseconds to delay execution of the next item in the queue.</param>
     ///   <param name="queueName" type="String">A string containing the name of the queue. Defaults to fx, the standard effects queue.</param>
     ///   <returns type="jQuery" />
@@ -1153,14 +1153,14 @@ intellisense.annotate(jQuery.fn, {
   },
   'delegate': function() {
     /// <signature>
-    ///   <summary>Attach a handler to one or more events for all elements that match the selector, toDate or in the future, based on a specific set of root elements.</summary>
+    ///   <summary>Attach a handler to one or more events for all elements that match the selector, now or in the future, based on a specific set of root elements.</summary>
     ///   <param name="selector" type="String">A selector to filter the elements that trigger the event.</param>
     ///   <param name="eventType" type="String">A string containing one or more space-separated JavaScript event types, such as "click" or "keydown," or custom event names.</param>
     ///   <param name="handler(eventObject)" type="Function">A function to execute at the time the event is triggered.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
-    ///   <summary>Attach a handler to one or more events for all elements that match the selector, toDate or in the future, based on a specific set of root elements.</summary>
+    ///   <summary>Attach a handler to one or more events for all elements that match the selector, now or in the future, based on a specific set of root elements.</summary>
     ///   <param name="selector" type="String">A selector to filter the elements that trigger the event.</param>
     ///   <param name="eventType" type="String">A string containing one or more space-separated JavaScript event types, such as "click" or "keydown," or custom event names.</param>
     ///   <param name="eventData" type="Object">An object containing data that will be passed to the event handler.</param>
@@ -1168,7 +1168,7 @@ intellisense.annotate(jQuery.fn, {
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
-    ///   <summary>Attach a handler to one or more events for all elements that match the selector, toDate or in the future, based on a specific set of root elements.</summary>
+    ///   <summary>Attach a handler to one or more events for all elements that match the selector, now or in the future, based on a specific set of root elements.</summary>
     ///   <param name="selector" type="String">A selector to filter the elements that trigger the event.</param>
     ///   <param name="events" type="PlainObject">A plain object of one or more event types and functions to execute for them.</param>
     ///   <returns type="jQuery" />
@@ -1682,20 +1682,20 @@ intellisense.annotate(jQuery.fn, {
   },
   'live': function() {
     /// <signature>
-    ///   <summary>Attach an event handler for all elements which match the current selector, toDate and in the future.</summary>
+    ///   <summary>Attach an event handler for all elements which match the current selector, now and in the future.</summary>
     ///   <param name="events" type="String">A string containing a JavaScript event type, such as "click" or "keydown." As of jQuery 1.4 the string can contain multiple, space-separated event types or custom event names.</param>
     ///   <param name="handler(eventObject)" type="Function">A function to execute at the time the event is triggered.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
-    ///   <summary>Attach an event handler for all elements which match the current selector, toDate and in the future.</summary>
+    ///   <summary>Attach an event handler for all elements which match the current selector, now and in the future.</summary>
     ///   <param name="events" type="String">A string containing a JavaScript event type, such as "click" or "keydown." As of jQuery 1.4 the string can contain multiple, space-separated event types or custom event names.</param>
     ///   <param name="data" type="PlainObject">An object containing data that will be passed to the event handler.</param>
     ///   <param name="handler(eventObject)" type="Function">A function to execute at the time the event is triggered.</param>
     ///   <returns type="jQuery" />
     /// </signature>
     /// <signature>
-    ///   <summary>Attach an event handler for all elements which match the current selector, toDate and in the future.</summary>
+    ///   <summary>Attach an event handler for all elements which match the current selector, now and in the future.</summary>
     ///   <param name="events" type="PlainObject">A plain object of one or more JavaScript event types and functions to execute for them.</param>
     ///   <returns type="jQuery" />
     /// </signature>

@@ -56,6 +56,28 @@ namespace Quilt4.MongoDBRepository
             return dbInfo;
         }
 
+        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent)
+        {
+            var emailLog = new EmailLogPersist();
+
+            emailLog.Id = Guid.NewGuid();
+            emailLog.FromEmail = fromEmail;
+            emailLog.ToEmail = to;
+            emailLog.Subject = subject;
+            emailLog.Body = body;
+            emailLog.DateSent = dateSent;
+
+            Database.GetCollection("EmailLog").Save(emailLog, WriteConcern.Acknowledged);
+
+        }
+
+        public IEnumerable<IEmail> GetLastHundredEmails()
+        {
+            var emails = Database.GetCollection("EmailLog").FindAllAs<EmailLogPersist>().OrderBy(x => x.DateSent).Take(100);
+
+            return emails;
+        }
+
         //public string DatabaseName 
         //{
         //    get

@@ -105,6 +105,7 @@
     <Compile Include="Entities\ApplicationVersionPersist.cs" />
     <Compile Include="Entities\DataBaseInfoEntity.cs" />
     <Compile Include="Entities\DeveloperRolePersist.cs" />
+    <Compile Include="Entities\EmailLogPersist.cs" />
     <Compile Include="Entities\InitiativePersist.cs" />
     <Compile Include="Entities\InnerIssueTypePersist.cs" />
     <Compile Include="Entities\IssuePersist.cs" />

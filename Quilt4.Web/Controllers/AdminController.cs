@@ -1,9 +1,13 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using Quilt4.Web.Models;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using Quilt4.Interface;
 using Quilt4.Web.Business;
 
 namespace Quilt4.Web.Controllers
@@ -14,10 +18,12 @@ namespace Quilt4.Web.Controllers
     public class AdminController : Controller
     {
         private readonly SystemBusiness _systemBusiness;
+        private readonly IEmailBusiness _emailBusiness;
 
-        public AdminController(SystemBusiness systemBusiness)
+        public AdminController(SystemBusiness systemBusiness, IEmailBusiness emailBusiness)
         {
             _systemBusiness = systemBusiness;
+            _emailBusiness = emailBusiness;
         }
 
         // GET: Admin
@@ -28,27 +34,26 @@ namespace Quilt4.Web.Controllers
             return View();
         }
 
+        public ActionResult EmailHistory()
+        {
+            var emails = _emailBusiness.GetLastHundredEmails();
+
+            return View(emails);
+        }
+
+
         public ActionResult Email()
         {
             var model = new SendEmailViewModel();
 
+            model.EmailEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["SendEMailEnabled"]);
+
             return View(model);
         }
 
-        public ActionResult SendEmail(SendEmailViewModel model)
+        public ActionResult SendTestEmail(SendEmailViewModel model)
         {
-            var smtpServerAdress = ConfigurationManager.AppSettings["SmtpServerAddress"];
-            var smtpServerPort = ConfigurationManager.AppSettings["SmtpServerPort"];
-            var mailFrom = ConfigurationManager.AppSettings["SupportEmailAddress"];
-
-            int portNumber;
-            int.TryParse(smtpServerPort, out portNumber);
-
-            var smtpClient = new SmtpClient(smtpServerAdress, portNumber);
-            var mailMessage = new MailMessage(mailFrom, model.ToEmail, "Test", "Test");
-
-            smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
-            smtpClient.Send(mailMessage);
+            _emailBusiness.SendEmail(new List<string>{model.ToEmail}, "Test", "Testar");
 
             return Redirect("Email");
         }
