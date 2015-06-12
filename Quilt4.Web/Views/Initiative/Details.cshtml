@@ -1,4 +1,4 @@
-﻿@model Quilt4.Interface.IInitiative
+﻿@model Quilt4.Interface.IApplication
 
 @{
     ViewBag.Title = "Details";
@@ -7,5 +7,11 @@
 
 <h2>Details</h2>
 
-@Html.ActionLink("Members", "Member/" + Model.Id, "Initiative")
+@foreach (var application in Model)
+{
+    @Model.Name
+} 
+
+
+
 

@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
 using Quilt4.Web.Models;
+using System.Collections;
 
 namespace Quilt4.Web.Controllers
 {
@@ -71,9 +72,15 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id)
         {
             var initiative = _initiativeBusiness.GetInitiativesByDeveloperHead(User.Identity.GetUserName()).Single(x => x.Name == id);
+            var applications = initiative.ApplicationGroups.SelectMany(x => x.Applications);
+           
+            return View(applications);
+            //var applications = initiative.ApplicationGroups.
+            
+
             //_initiativeBusiness.GetInitiative(,)
 
-            return View(initiative);
+             
         }
 
         // GET: Initiative/Create
