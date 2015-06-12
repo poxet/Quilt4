@@ -58,6 +58,11 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult Member(string initiativeId)
         {
+            if (string.IsNullOrEmpty(initiativeId))
+            {
+                return Redirect("Index");
+            }
+                
             Guid id;
             Guid.TryParse(initiativeId, out id);
 
@@ -72,9 +77,9 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id)
         {
             var initiative = _initiativeBusiness.GetInitiativesByDeveloperHead(User.Identity.GetUserName()).Single(x => x.Name == id);
-            var applications = initiative.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
-           
-            return View(applications); 
+
+
+            return View(initiative); 
         }
 
         // GET: Initiative/Create
