@@ -1,8 +1,27 @@
-﻿
+﻿@model IEnumerable<Quilt4.Interface.IApplication>
+
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
+
+@if (Model == null || Model.Count() == 0)
+{ 
+    @Html.Raw("No applications found!")
+}
+else
+{
+
+    foreach (var applications in Model)
+    {
+        @applications.Name
+    }
+}
+
+
+
+
+
 

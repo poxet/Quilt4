@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Quilt4.Interface.IDeveloperRole>
+
+@{
+    ViewBag.Title = "Member";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Member</h2>
+@foreach (var member in Model)
+{
+    @Html.Raw("<br />" + member.DeveloperName);
+}

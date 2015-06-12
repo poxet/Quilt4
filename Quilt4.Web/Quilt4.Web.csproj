@@ -358,8 +358,10 @@
     <Content Include="Views\AdminDeveloper\ConfirmDeveloperEMail.cshtml" />
     <Content Include="Views\Admin\System.cshtml" />
     <Content Include="Views\Admin\Email.cshtml" />
+    <Content Include="Views\AdminInitiative\Initiative.cshtml" />
     <Content Include="Views\Admin\EmailHistory.cshtml" />
     <Content Include="Views\Shared\_NewAdminLayout.cshtml" />
+    <Content Include="Views\Initiative\Member.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
