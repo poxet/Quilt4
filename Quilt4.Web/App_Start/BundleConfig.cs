@@ -22,9 +22,23 @@ namespace Quilt4.Web
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/admin").Include(
+                      "~/Scripts/Admin/jquery.min.js",
+                      "~/Scripts/Admin/bootstrap.min.js",
+                      "~/Scripts/Admin/metisMenu.min.js",
+                      "~/Scripts/Admin/sb-admin-2.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Admin/css").Include(
+                      "~/Content/Admin/bootstrap.min.css",
+                      "~/Content/Admin/metisMenu.css",
+                      "~/Content/timeline.css",
+                      "~/Content/Admin/sb-admin-2.css",
+                      "~/Content/Admin/morris.css",
+                      "~/Content/Admin/font-awesome.min.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
