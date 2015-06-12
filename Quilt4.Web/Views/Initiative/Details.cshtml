@@ -1,8 +1,17 @@
-﻿
+﻿@model Quilt4.Interface.IApplication
+
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
+
+@foreach (var application in Model)
+{
+    @Model.Name
+} 
+
+
+
 

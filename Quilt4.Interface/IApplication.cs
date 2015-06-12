@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace Quilt4.Interface
 {
     public interface IApplication
