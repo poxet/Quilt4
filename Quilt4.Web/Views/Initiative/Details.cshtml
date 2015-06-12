@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Quilt4.Interface.IApplication>
+﻿@model Quilt4.Interface.IInitiative
 
 @{
     ViewBag.Title = "Details";
@@ -7,16 +7,25 @@
 
 <h2>Details</h2>
 
-@if (Model == null || Model.Count() == 0)
+@Html.ActionLink("Members", "Member", new { initiativeId = @Model.Id }, null)
+<br/>
+
+@{
+
+    var applications = Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
+}
+
+
+@if (Model == null || applications.Count() == 0)
 { 
     @Html.Raw("No applications found!")
 }
 else
 {
 
-    foreach (var applications in Model)
+    foreach (var application in applications)
     {
-        @applications.Name
+        @application.Name
     }
 }
 
