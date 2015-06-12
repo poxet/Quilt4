@@ -71,10 +71,9 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id)
         {
             var initiative = _initiativeBusiness.GetInitiativesByDeveloperHead(User.Identity.GetUserName()).Single(x => x.Name == id);
-
             //_initiativeBusiness.GetInitiative(,)
 
-            return View();
+            return View(initiative);
         }
 
         // GET: Initiative/Create
