@@ -23,6 +23,7 @@ namespace Quilt4.Web.Controllers
                 OwnerDeveloperName = item.OwnerDeveloperName,
                 DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
                 ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count().ToString(),
+                ApplicationsIds = item.ApplicationGroups.SelectMany(x => x.Applications).Select(y => y.Id),
                 Sessions = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.Id).ToString(),
                 CreateDate = dateCreated == new DateTime() ? "N/A" : dateCreated.ToShortDateString() + " " + dateCreated.ToShortTimeString(),
                 

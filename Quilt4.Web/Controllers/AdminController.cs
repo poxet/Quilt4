@@ -19,19 +19,32 @@ namespace Quilt4.Web.Controllers
     {
         private readonly SystemBusiness _systemBusiness;
         private readonly IEmailBusiness _emailBusiness;
+        private readonly IInitiativeBusiness _initiativeBusiness;
 
-        public AdminController(SystemBusiness systemBusiness, IEmailBusiness emailBusiness)
+        public AdminController(SystemBusiness systemBusiness, IEmailBusiness emailBusiness, IInitiativeBusiness initiativeBusiness)
         {
             _systemBusiness = systemBusiness;
             _emailBusiness = emailBusiness;
+            _initiativeBusiness = initiativeBusiness;
         }
 
         // GET: Admin
         public ActionResult Index()
         {
+            var initiativeCount = _initiativeBusiness.GetInitiativeCount();
+            var applicationCount = _initiativeBusiness.GetApplicationCount();
+            var issueTypeCount = _initiativeBusiness.GetIssueTypeCount();
+            var issueCount = _initiativeBusiness.GetIssueCount();
 
+            var adminIndexViewModel = new AdminIndexViewModel
+            {
+                InitiativeCount = initiativeCount,
+                ApplicationCount = applicationCount,
+                IssueTypeCount = issueTypeCount,
+                IssueCount = issueCount
+            };
 
-            return View();
+            return View(adminIndexViewModel);
         }
 
         public ActionResult EmailHistory()

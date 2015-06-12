@@ -220,5 +220,25 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public int GetInitiativeCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetApplicationCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetIssueTypeCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetIssueCount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
