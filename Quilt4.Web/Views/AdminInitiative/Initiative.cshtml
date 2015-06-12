@@ -1,4 +1,4 @@
-﻿@model Quilt4.Interface.IInitiative
+﻿@model Quilt4.Web.Models.Initiative
 
 @{
     ViewBag.Title = "title";
@@ -9,20 +9,22 @@
 
 <table>
     <tr>
-        <th style="padding-right: 10px;">Name</th>
-        <td style="padding-right: 10px;">@Model.Name</td>
+        <th style="padding: 0 10px 10px 0;">Name</th>
+        @Html.TextBoxFor(m => m.Name)
     </tr> 
     <tr>
-        <th style="padding-right: 10px;">ClientToken</th>
-        <td style="padding-right: 10px;">@Model.ClientToken</td>
+        <th style="padding: 0 10px 10px 0;">ClientToken</th>
+        <td style="padding: 0 10px 10px 0;">@Model.ClientToken</td>
+        <td><input type="text" name="clientToken" placeholder="Change Client Token" style="margin: 0 10px 10px 0;"></td>
     </tr>   
     <tr>
-        <th style="padding-right: 10px;">Owner</th>
-        <td style="padding-right: 10px;">@Model.OwnerDeveloperName</td>
+        <th style="padding: 0 10px 10px 0;">Owner</th>
+        <td style="padding: 0 10px 10px 0;">@Model.OwnerDeveloperName</td>
+        <td><input type="text" name="owner" placeholder="Change Owner" style="margin: 0 10px 10px 0;"></td>
     </tr>
     <tr>
-        <th style="padding-right: 10px;">Members</th>
-        <td style="padding-right: 10px;">
+        <th style="padding: 0 10px 10px 0;">Members</th>
+        <td style="padding: 0 10px 10px 0;">
             @foreach (var member in Model.DeveloperRoles)
             {
                 @Html.Raw(member.DeveloperName + ", ")

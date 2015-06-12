@@ -96,10 +96,12 @@ namespace Quilt4.Web.Controllers
             if (id == null)
                 return Redirect("Index");
 
-            var initiative = _initiativeBusiness.GetInitiative((Guid)id);
+            var initiative = _initiativeBusiness.GetInitiative((Guid)id).ToModel();
 
             return View(initiative);
         }
+
+        
 
         //// GET: AdminInitiative/Details/5
         //public ActionResult Details(int id)
@@ -173,4 +175,6 @@ namespace Quilt4.Web.Controllers
         //    }
         //}
     }
+
+   
 }
