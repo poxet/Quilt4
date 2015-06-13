@@ -17,7 +17,8 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // GET api/compatibility/register
         [HttpPost]
-        [ActionName("register")]
+        //[ActionName("register")]
+        [Route("api/compatibility/register")]
         [AllowAnonymous]
         public void RegisterCompatibility([FromBody] RegisterCompatibilityRequest request)
         {

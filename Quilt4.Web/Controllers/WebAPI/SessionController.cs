@@ -21,7 +21,8 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // GET api/session/register
         [HttpPost]
-        [ActionName("register")]
+        //[ActionName("register")]
+        [Route("api/session/register")]
         [AllowAnonymous]
         public void RegisterSession([FromBody] object request)
         {
@@ -68,11 +69,12 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // GET api/session/end
         [HttpPost]
-        [ActionName("end")]
+        //[ActionName("end")]
+        [Route("api/session/end")]
         [AllowAnonymous]
-        public void EndSession([FromBody]Guid sessionId)
+        public void EndSession([FromBody]object sessionId)
         {
-            _sessionBusiness.EndSession(sessionId);
+            _sessionBusiness.EndSession(Guid.Parse(sessionId.ToString()));
         }
     }
 }

@@ -21,7 +21,8 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // POST api/issue/register
         [HttpPost]
-        [ActionName("register")]
+        //[ActionName("register")]
+        [Route("api/issue/register")]
         [AllowAnonymous]
         public RegisterIssueResponse RegisterIssue([FromBody] object request)
         {

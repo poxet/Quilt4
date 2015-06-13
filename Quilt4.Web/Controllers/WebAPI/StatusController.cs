@@ -7,6 +7,7 @@ namespace Quilt4.Web.Controllers.WebAPI
     {
         // POST api/status
         [HttpGet]
+        [Route("api/status")]
         [AllowAnonymous]
         public StatusResponse Get()
         {
