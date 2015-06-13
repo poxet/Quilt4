@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
+using Quilt4.Interface;
 using Quilt4.Web.Business;
 using Quilt4.Web.Controllers.WebAPI;
 
@@ -45,7 +46,6 @@ namespace Quilt4.Web
 
             // Add the Controller Factory into the MVC web request pipeline
             ControllerBuilder.Current.SetControllerFactory(castleControllerFactory);
-
 
             //TODO: Is this line needed for web api calls?
             GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerActivator), new WindsorCompositionRoot(_container));
