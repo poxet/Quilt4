@@ -5,7 +5,6 @@ using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
 using Quilt4.Web.Models;
-using System.Collections;
 
 namespace Quilt4.Web.Controllers
 {
@@ -14,11 +13,13 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IMembershipAgent _membershipAgent;
+        private readonly IApplicationVersionBusiness _applicationVersionBusiness;
 
-        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent)
+        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _membershipAgent = membershipAgent;
+            _applicationVersionBusiness = applicationVersionBusiness;
         }
 
         // GET: Initiative
@@ -31,7 +32,7 @@ namespace Quilt4.Web.Controllers
                 //var service = new Service.WebService(_compositeRoot.Repository);
                 //var initiatives = service.GetInitiativesByDeveloperHead(currentDeveloper.DeveloperName);                
                 var developerName = User.Identity.Name;
-                var ins = _initiativeBusiness.GetInitiativesByDeveloperHead(developerName);
+                var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName);
 
                 //var ib = new InitiativeBusiness(_compositeRoot.Repository);
 
@@ -76,7 +77,9 @@ namespace Quilt4.Web.Controllers
         // GET: Initiative/Details/5
         public ActionResult Details(string id)
         {
-            var initiative = _initiativeBusiness.GetInitiativesByDeveloperHead(User.Identity.GetUserName()).Single(x => (x.Name ?? Models.Constants.DefaultInitiativeName) == id);
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
 
             return View(initiative); 
         }
