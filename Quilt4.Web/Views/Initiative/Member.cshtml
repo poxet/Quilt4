@@ -1,0 +1,34 @@
+﻿@using Castle.Core.Internal
+@model IEnumerable<Quilt4.Interface.IDeveloperRole>
+
+@{
+    ViewBag.Title = "Member";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Members</h2>
+<table>
+    <tr>
+        <th>Member</th>
+        <th>Role</th>
+        <th>Status</th>
+    </tr>
+
+    @if (Model.IsNullOrEmpty())
+    {
+        @Html.Raw("<tr><td>No members</td></tr>")
+    }
+
+    @foreach (var member in Model)
+    {
+        @Html.Raw("<tr> <td>" + member.DeveloperName + "</td> <td>" + member.RoleName + "</td> <td>Senast aktiv..</td> </tr>")
+        
+        @Html.Raw(member.DeveloperName + " " + member.RoleName + "<br />");
+    }
+
+</table>
+
+<hr/>
+<p>Invite member</p>
+
+

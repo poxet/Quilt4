@@ -205,5 +205,40 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public IDataBaseInfo GetDatabaseStatus()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IEmail> GetLastHundredEmails()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetInitiativeCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetApplicationCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetIssueTypeCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetIssueCount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

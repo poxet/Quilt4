@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Quilt4.Interface
 {
@@ -8,5 +10,12 @@ namespace Quilt4.Interface
         IEnumerable<IInitiative> GetInitiativesByDeveloperHead(string developerName);
         IApplication RegisterApplication(IClientToken clientToken, string applicationName, string applicationVersionFingerprint);
         IEnumerable<IInitiative> GetInitiatives();
+        IEnumerable<IIssue> GetIssueStatistics(DateTime fromDate, DateTime toDate);
+        IInitiative GetInitiative(Guid id);
+        int GetInitiativeCount();
+        int GetApplicationCount();
+        int GetIssueTypeCount();
+        int GetIssueCount();
     }
+
 }

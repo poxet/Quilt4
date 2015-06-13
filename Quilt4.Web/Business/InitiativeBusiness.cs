@@ -75,6 +75,27 @@ namespace Quilt4.Web.Business
             return _repository.GetInitiative(initiativeId);
         }
 
+        public int GetInitiativeCount()
+        {
+
+            return _repository.GetInitiativeCount();
+        }
+
+        public int GetApplicationCount()
+        {
+            return _repository.GetApplicationCount();
+        }
+
+        public int GetIssueTypeCount()
+        {
+            return _repository.GetIssueTypeCount();
+        }
+
+        public int GetIssueCount()
+        {
+            return _repository.GetIssueCount();
+        }
+
         public IInitiative GetInitiativeByApplication(Guid applicationId)
         {
             return _repository.GetInitiativeByApplication(applicationId);
@@ -157,6 +178,11 @@ namespace Quilt4.Web.Business
         public IEnumerable<IInitiative> GetInitiatives()
         {
             return _repository.GetInitiatives();
+        }
+
+        public IEnumerable<IIssue> GetIssueStatistics(DateTime fromDate, DateTime toDate)
+        {
+            return _repository.GetIssueStatistics(fromDate, toDate);
         }
 
         public IEnumerable<IInviteApproval> GetPendingApprovals(string developerEMail)

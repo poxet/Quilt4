@@ -37,6 +37,76 @@ namespace Quilt4.MongoDBRepository
             RequestDeleteEntityEvent += MongoRepository_RequestDeleteEntityEvent;
         }
 
+        public IDataBaseInfo GetDatabaseStatus()
+        {
+            var dbInfo = new DataBaseInfoEntity();
+
+            if (Database.Server.State != MongoServerState.Connected)
+            {
+                dbInfo.Online = false;
+            }
+            else
+            {
+                dbInfo.Online = true;
+            }
+
+            dbInfo.Name = Database.Name;
+            dbInfo.Server = Database.Server.Settings.Server.Host + ":" + Database.Server.Settings.Server.Port;
+
+            return dbInfo;
+        }
+
+        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status)
+        {
+            var emailLog = new EmailLogPersist();
+
+            emailLog.Id = Guid.NewGuid();
+            emailLog.FromEmail = fromEmail;
+            emailLog.ToEmail = to;
+            emailLog.Subject = subject;
+            emailLog.Body = body;
+            emailLog.DateSent = dateSent;
+            emailLog.Status = status;
+
+            Database.GetCollection("EmailLog").Save(emailLog, WriteConcern.Acknowledged);
+
+        }
+
+        public IEnumerable<IEmail> GetLastHundredEmails()
+        {
+            var emails = Database.GetCollection("EmailLog").FindAllAs<EmailLogPersist>().OrderByDescending(x => x.DateSent).Take(100);
+
+            return emails;
+        }
+
+        public int GetInitiativeCount()
+        {
+            var initiativeCount = (int)Database.GetCollection("Initiative").Count();
+
+            return initiativeCount;
+        }
+
+        public int GetApplicationCount()
+        {
+            var applicationCount = (int)Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().SelectMany(y => y.ApplicationGroups).Select(z => z.Applications).Count();
+
+            return applicationCount;
+        }
+
+        public int GetIssueTypeCount()
+        {
+            var issueTypeCount = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().Select(y => y.IssueTypes).Count();
+
+            return issueTypeCount;
+        }
+
+        public int GetIssueCount()
+        {
+            var issueCount = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().SelectMany(y => y.IssueTypes).Select(z => z.Issues).Count();
+
+            return issueCount;
+        }
+
         //public string DatabaseName 
         //{
         //    get

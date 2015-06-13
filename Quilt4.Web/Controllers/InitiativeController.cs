@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
 using Quilt4.Web.Models;
+using System.Collections;
 
 namespace Quilt4.Web.Controllers
 {
@@ -55,10 +56,30 @@ namespace Quilt4.Web.Controllers
             }
         }
 
+        public ActionResult Member(string initiativeId)
+        {
+            if (string.IsNullOrEmpty(initiativeId))
+            {
+                return Redirect("Index");
+            }
+                
+            Guid id;
+            Guid.TryParse(initiativeId, out id);
+
+            var initiative = _initiativeBusiness.GetInitiative(id);
+
+            var members = initiative.DeveloperRoles;
+
+            return View(members);
+        }
+
         // GET: Initiative/Details/5
         public ActionResult Details(string id)
         {
-            return View();
+            var initiative = _initiativeBusiness.GetInitiativesByDeveloperHead(User.Identity.GetUserName()).Single(x => x.Name == id);
+
+
+            return View(initiative); 
         }
 
         // GET: Initiative/Create

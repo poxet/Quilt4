@@ -8,7 +8,7 @@
 
 @foreach (var initiative in Model.InitiativeInfos)
 {
-    <div>@Html.ActionLink(initiative.Name ?? Quilt4.Web.Models.Constants.DefaultInitiativeName, "Details", new { id = initiative.Name ?? initiative.ClientToken }, null)</div>
+    <div>@Html.ActionLink(initiative.Name ?? Quilt4.Web.Models.Constants.DefaultInitiativeName, "Details", new { id = initiative.Name ?? Quilt4.Web.Models.Constants.DefaultInitiativeName }, null)</div>
     <div>ClientToken: @Html.Raw(initiative.ClientToken)</div>
 }
 
