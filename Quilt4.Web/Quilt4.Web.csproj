@@ -241,6 +241,7 @@
     <Compile Include="DataTransfer\StatusResponse.cs" />
     <Compile Include="Controllers\WebAPI\WebApiCallLogHandler.cs" />
     <Compile Include="Extensions\DynamicExtensions.cs" />
+    <Compile Include="Extensions\MenuExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -266,9 +266,7 @@
                             </div>
                             <!-- /input-group -->
                         </li>
-                        <li>
-                            <a href="@Url.Action("Index", "Admin")"><i class="fa fa-dashboard fa-fw"></i> Admin</a>
-                        </li>
+                        @Html.MenuItem("Admin", "fa fa-dashboard fa-fw", "Index", "Admin")
                         <li>
                             <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
