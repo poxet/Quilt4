@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Reflection;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
@@ -33,6 +34,15 @@ namespace Quilt4.Web
             RegisterWindsor();
 
             //GlobalConfiguration.Configuration.MessageHandlers.Add(new WebApiCallLogHandler(new SettingsBusiness())); //TODO: Resolve the SettingsBusiness instead
+
+            Tharga.Quilt4Net.Session.RegisterCompleteEvent += Session_RegisterCompleteEvent;
+            Tharga.Quilt4Net.Session.BeginRegister(Assembly.GetAssembly(typeof(MvcApplication)));
+        }
+
+        void Session_RegisterCompleteEvent(object sender, Tharga.Quilt4Net.Session.RegisterCompleteEventArgs e)
+        {
+            System.Diagnostics.Debug.Write(e.Success);
+            //TODO: Log problems to the event log
         }
 
         private static void RegisterWindsor()
