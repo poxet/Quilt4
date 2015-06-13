@@ -24,6 +24,12 @@ namespace Quilt4.Web
             //);
 
             //config.Filters.Add(new ExceptionHandlingAttribute());
+
+            //config.Routes.MapHttpRoute(
+            //    name: "MethodTwo",
+            //    routeTemplate: "api/{controller}/methodtwo/{directory}/{report}",
+            //    defaults: new { directory = RouteParameter.Optional, report = RouteParameter.Optional }
+            //);
         }
     }
 }

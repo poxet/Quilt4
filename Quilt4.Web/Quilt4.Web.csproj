@@ -225,11 +225,14 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminDeveloperController.cs" />
     <Compile Include="Controllers\AdminInitiativeController.cs" />
+    <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\Converter.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
+    <Compile Include="Controllers\IssueTypeController.cs" />
+    <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="Extensions\InitiativeExtensions.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\WebAPI\CompatibilityController.cs" />
@@ -365,6 +368,9 @@
     <Content Include="Views\Admin\EmailHistory.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Initiative\Member.cshtml" />
+    <Content Include="Views\Application\Details.cshtml" />
+    <Content Include="Views\Version\Details.cshtml" />
+    <Content Include="Views\IssueType\Details.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

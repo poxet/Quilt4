@@ -14,6 +14,17 @@ namespace Quilt4.Web
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Details",
+                url: "{controller}/{action}/{id}/{application}/{version}/{issueType}",
+                defaults: new
+                {
+                    application = UrlParameter.Optional,
+                    version = UrlParameter.Optional,
+                    issueType = UrlParameter.Optional,
+                }
+            );
         }
     }
 }
