@@ -225,6 +225,11 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AdminDeveloperController.cs" />
     <Compile Include="Controllers\AdminInitiativeController.cs" />
+    <Compile Include="Controllers\Admin\DashboardController.cs" />
+    <Compile Include="Controllers\Admin\DeveloperController.cs" />
+    <Compile Include="Controllers\Admin\EmailController.cs" />
+    <Compile Include="Controllers\Admin\IndexController.cs" />
+    <Compile Include="Controllers\Admin\InitiativeController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\Converter.cs" />
@@ -356,21 +361,22 @@
     <Content Include="Views\Initiative\Details.cshtml" />
     <Content Include="Views\Initiative\Edit.cshtml" />
     <Content Include="Views\Initiative\Delete.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\AdminDeveloper\Index.cshtml" />
-    <Content Include="Views\AdminInitiative\Index.cshtml" />
-    <Content Include="Views\AdminDeveloper\Delete.cshtml" />
+    <Content Include="Views\Admin\Developer\Index.cshtml" />
+    <Content Include="Views\Admin\Developer\Delete.cshtml" />
     <Content Include="Views\Home\System.cshtml" />
-    <Content Include="Views\AdminDeveloper\ConfirmDeveloperEMail.cshtml" />
-    <Content Include="Views\Admin\System.cshtml" />
-    <Content Include="Views\Admin\Email.cshtml" />
-    <Content Include="Views\AdminInitiative\Initiative.cshtml" />
-    <Content Include="Views\Admin\EmailHistory.cshtml" />
+    <Content Include="Views\Admin\Developer\ConfirmDeveloperEMail.cshtml" />
+    <Content Include="Views\Admin\Dashboard\System.cshtml" />
+    <Content Include="Views\Admin\Email\Email.cshtml" />
+    <Content Include="Views\Admin\Initiative\Details.cshtml" />
+    <Content Include="Views\Admin\Email\EmailHistory.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Initiative\Member.cshtml" />
     <Content Include="Views\Application\Details.cshtml" />
     <Content Include="Views\Version\Details.cshtml" />
     <Content Include="Views\IssueType\Details.cshtml" />
+    <Content Include="Views\Admin\Initiative\Index.cshtml" />
+    <Content Include="Views\Admin\Email\Index.cshtml" />
+    <Content Include="Views\Admin\Dashboard\Index.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

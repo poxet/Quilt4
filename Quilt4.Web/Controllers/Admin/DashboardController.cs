@@ -1,34 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Configuration;
 using System.Web.Mvc;
-using Quilt4.Web.Models;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
 using Quilt4.Interface;
 using Quilt4.Web.Business;
+using Quilt4.Web.Models;
 
-namespace Quilt4.Web.Controllers
+namespace Quilt4.Web.Controllers.Admin
 {
-    //TODO: Roles
     //[Authorize(Roles = "Admin")]
     [Authorize]
-    public class AdminController : Controller
+    public class DashboardController : Controller
     {
         private readonly SystemBusiness _systemBusiness;
-        private readonly IEmailBusiness _emailBusiness;
         private readonly IInitiativeBusiness _initiativeBusiness;
 
-        public AdminController(SystemBusiness systemBusiness, IEmailBusiness emailBusiness, IInitiativeBusiness initiativeBusiness)
+        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness)
         {
             _systemBusiness = systemBusiness;
-            _emailBusiness = emailBusiness;
             _initiativeBusiness = initiativeBusiness;
         }
 
-        // GET: Admin
+        // GET: Admin/Dashboard/Index
         public ActionResult Index()
         {
             var initiativeCount = _initiativeBusiness.GetInitiativeCount();
@@ -44,56 +35,11 @@ namespace Quilt4.Web.Controllers
                 IssueCount = issueCount
             };
 
-            return View(adminIndexViewModel);
+            return View("~/Views/Admin/Dashboard/Index.cshtml", adminIndexViewModel);
         }
 
-        public ActionResult EmailHistory()
-        {
-            var emails = _emailBusiness.GetLastHundredEmails();
-
-            return View(emails);
-        }
-
-
-        public ActionResult Email()
-        {
-            var model = new SendEmailViewModel();
-
-            model.EmailEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["SendEMailEnabled"]);
-
-            return View(model);
-        }
-
-        public ActionResult SendTestEmail(SendEmailViewModel model)
-        {
-            var success = true;
-            try
-            {
-                _emailBusiness.SendEmail(new List<string> { model.ToEmail }, "Test", "Testar");
-            }
-            catch (FormatException e)
-            {
-
-                ViewBag.ErrorMessage = "Fel format på E-Posten!";
-                success = false;
-
-            }
-            catch (SmtpException e)
-            {
-                ViewBag.ErrorMessage = "Servern kan inte nås";
-                success = false;
-            }
-
-
-            if (success)
-            {
-                return Redirect("Email");
-            }
-
-            return View("Email", model);
-        }
-
-        public ActionResult System() 
+        // GET: Admin/Dashboard/System
+        public ActionResult System()
         {
             var adminViewModel = new AdminViewModels();
 
@@ -116,8 +62,7 @@ namespace Quilt4.Web.Controllers
             adminViewModel.SendEMailEnabled = sendEMailEnabled;
             adminViewModel.EMailConfirmationEnabled = eMailConfirmationEnabled;
 
-
-            return View(adminViewModel);
+            return View("~/Views/Admin/Dashboard/System.cshtml", adminViewModel);
         }
     }
 }

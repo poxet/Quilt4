@@ -1,0 +1,64 @@
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Quilt4.Interface;
+
+namespace Quilt4.Web.Controllers.Admin
+{
+    //[Authorize(Roles = "Admin")]
+    [Authorize]
+    public class InitiativeController : Controller
+    {
+        private readonly IInitiativeBusiness _initiativeBusiness;
+
+        public InitiativeController(IInitiativeBusiness initiativeBusiness)
+        {
+            _initiativeBusiness = initiativeBusiness;
+        }
+
+        // GET: Admin/Initiative/Index
+        public ActionResult Index()
+        {
+            //var ub = new InitiativeBusiness(_compositeRoot.Repository);
+            var initiatives = _initiativeBusiness.GetInitiatives().Select(x => x.ToModel()).ToList();
+
+            //TODO: This code is too slow, we need to do something about that
+            //var issues = _initiativeBusiness.GetIssueStatistics(new DateTime(1900, 01, 01), DateTime.Now);
+
+            //var dateTime = new DateTime();
+
+
+            //foreach (var initiative in initiatives)
+            //{
+            //    var sessions = _sessionBusiness.GetSessionsForApplications(initiative.ApplicationsIds).ToArray();
+            //    var sessionIds = sessions.Select(x => x.Id);
+
+            //    var list = new List<IIssue>();
+
+            //    foreach (var sessionId in sessionIds)
+            //    {
+            //        var sessionIssues = issues.Where(x => x.SessionId == sessionId);
+            //        list.AddRange(sessionIssues);
+            //    }
+
+            //    initiative.Sessions = sessions.Count().ToString();
+            //    initiative.Issues = list.Count().ToString();
+            //    var lastSessionDate = sessions.OrderBy(x => x.ServerStartTime).Select(y => y.ServerStartTime).FirstOrDefault();
+            //    initiative.LastSession = lastSessionDate == dateTime ? "N/A" : lastSessionDate.ToString("yyyy-MM-dd hh:mm:ss");
+            //}
+
+            return View("~/Views/Admin/Initiative/Index.cshtml", initiatives);
+        }
+
+        // GET: Admin/Initiative/Details/5
+        public ActionResult Details(Guid? id)
+        {
+            if (id == null)
+                return Redirect("Index");
+
+            var initiative = _initiativeBusiness.GetInitiative(id.Value).ToModel();
+
+            return View("~/Views/Admin/Initiative/Details.cshtml", initiative);
+        }
+    }
+}

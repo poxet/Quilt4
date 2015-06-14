@@ -153,10 +153,5 @@ namespace Quilt4.Web.Controllers
                 return View();
             }
         }
-
-        public ActionResult View(string id, string applicationName, string version, string issueTypeNo)
-        {
-            return View();
-        }
     }
 }

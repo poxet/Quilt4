@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "AdminInitiative")">
+            <a href="@Url.Action("Index", "Initiative")">
                 <div class="panel-footer">
                     <span class="pull-left">View @initiativeText</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "AdminInitiative")">
+            <a href="@Url.Action("Index", "Initiative")">
                 <div class="panel-footer">
                     <span class="pull-left">View @initiativeText</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -60,7 +60,7 @@
             </a>
         </div>
     </div>
-    
+
     @*IssueTypeCount*@
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-yellow">
@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "AdminInitiative")">
+            <a href="@Url.Action("Index", "Initiative")">
                 <div class="panel-footer">
                     <span class="pull-left">View @initiativeText</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -84,7 +84,7 @@
             </a>
         </div>
     </div>
-    
+
     @*IssueCount*@
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-red">
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <a href="@Url.Action("Index", "AdminInitiative")">
+            <a href="@Url.Action("Index", "Initiative")">
                 <div class="panel-footer">
                     <span class="pull-left">View @initiativeText</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -112,17 +112,17 @@
 </div>
 
 
-    <p>This is the administration section.</p>
+<p>This is the administration section.</p>
 
-    <h3>Shortcuts</h3>
-    <ol>
-        <li>@Html.ActionLink("Developers", "Index", "AdminDeveloper")</li>
-        <li>@Html.ActionLink("System Information", "System", "Admin")</li>
-        <li>@Html.ActionLink("Send Test Email", "Email", "Admin")</li>
-        <li>@Html.ActionLink("Email History", "EmailHistory", "Admin")</li>
-    </ol>
+<h3>Shortcuts</h3>
+<ol>
+    <li>@Html.ActionLink("Developers", "Index", "Developer")</li>
+    <li>@Html.ActionLink("System Information", "System", "Dashboard")</li>
+    <li>@Html.ActionLink("Send Test Email", "SendTestEmail", "Email")</li>
+    <li>@Html.ActionLink("Email History", "EmailHistory", "Email")</li>
+</ol>
 
-    <br /><br />
-    <a href="https://www.google.com/analytics/web/?authuser=0#report/visitors-overview/a49281453w80996805p83821649/" target="_blank">Google Analytics</a><br />
-    <a href="http://www.twitter.com/quilt4net">Twitter</a><br />
-    <a href="http://nugetmusthaves.azurewebsites.net/Package/Tharga.Quilt4Net">Nuget statistics</a>
+<br /><br />
+<a href="https://www.google.com/analytics/web/?authuser=0#report/visitors-overview/a49281453w80996805p83821649/" target="_blank">Google Analytics</a><br />
+<a href="http://www.twitter.com/quilt4net">Twitter</a><br />
+<a href="http://nugetmusthaves.azurewebsites.net/Package/Tharga.Quilt4Net">Nuget statistics</a>
