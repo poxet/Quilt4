@@ -8,23 +8,23 @@
 
 <h2>Edit Initiative</h2>
 
+
 <table>
     <tr>
-        <th style="padding: 0 10px 10px 0;">Name</th>
+        <th>Name</th>
         <td>@Html.TextBoxFor(m => m.Name)</td>
-    </tr> 
-    <tr>
-        <th style="padding: 0 10px 10px 0;">ClientToken</th>
-        <td>@Html.TextBoxFor(m => m.ClientToken)
-    </tr>   
-    <tr>
-        <th style="padding: 0 10px 10px 0;">Owner</th>
-        <td style="padding: 0 10px 10px 0;">@Model.OwnerDeveloperName</td>
-        <td><input type="text" name="owner" placeholder="Change Owner" style="margin: 0 10px 10px 0;"></td>
     </tr>
     <tr>
-        <th style="padding: 0 10px 10px 0;">Members</th>
-        <td style="padding: 0 10px 10px 0;">
+        <th>ClientToken</th>
+        <td>@Html.TextBoxFor(m => m.ClientToken)
+    </tr>
+    <tr>
+        <th>Owner</th>
+        <td> @Html.TextBoxFor(m => m.OwnerDeveloperName)</td>
+    </tr>
+    <tr>
+        <th>Members</th>
+        <td>
             @foreach (var member in Model.DeveloperRoles)
             {
                 @Html.Raw(member.DeveloperName + ", ")
@@ -32,3 +32,6 @@
         </td>
     </tr>
 </table>
+
+<input type="submit" value="Save" />
+<input type="submit" value="Cancel" />
