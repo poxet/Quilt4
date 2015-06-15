@@ -10,5 +10,6 @@ namespace Quilt4.Interface
         string Body { get; set; }
         DateTime DateSent { get; set; }
         bool Status { get; set; }
+        string ErrorMessage { get; set; }
     }
 }

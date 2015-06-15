@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Quilt4.Interface.IEmail>
+﻿@model System.Collections.Generic.IEnumerable<Quilt4.Interface.IEmail>
 
 @{
     ViewBag.Title = "title";
@@ -12,7 +12,8 @@
         <th style="padding-right: 20px;">Date</th>
         <th style="padding-right: 20px;">To</th>
         <th style="padding-right: 20px;">Subject</th>
-        <th>Sent</th>
+        <th style="padding-right: 20px;">Sent</th>
+        <th>Error Message</th>
     </tr>
 
     @foreach (var mail in @Model)
@@ -21,7 +22,8 @@
             <td style="padding-right: 20px;">@mail.DateSent</td>
             <td style="padding-right: 20px;">@mail.ToEmail</td>
             <td style="padding-right: 20px;">@mail.Subject</td>
-            <td>@mail.Status</td>
+            <td style="padding-right: 20px;">@mail.Status</td>
+            <td>@mail.ErrorMessage</td>
         </tr>
     }
 </table>

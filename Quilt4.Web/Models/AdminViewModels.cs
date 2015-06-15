@@ -40,6 +40,7 @@ namespace Quilt4.Web.Models
         public string Body { get; set; }
         public DateTime DateSent { get; set; }
         public bool Status { get; set; }
+        public string ErrorMessage { get; set; }
     }
 
 }

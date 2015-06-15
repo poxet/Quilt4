@@ -56,7 +56,7 @@ namespace Quilt4.MongoDBRepository
             return dbInfo;
         }
 
-        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status)
+        public void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status, string errorMessage)
         {
             var emailLog = new EmailLogPersist();
 
@@ -67,6 +67,7 @@ namespace Quilt4.MongoDBRepository
             emailLog.Body = body;
             emailLog.DateSent = dateSent;
             emailLog.Status = status;
+            emailLog.ErrorMessage = errorMessage;
 
             Database.GetCollection("EmailLog").Save(emailLog, WriteConcern.Acknowledged);
 

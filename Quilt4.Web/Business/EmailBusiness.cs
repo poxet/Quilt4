@@ -33,6 +33,8 @@ namespace Quilt4.Web.Business
             
             smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
 
+            string errorMessage = "";
+
             if (!emailEnabled) return;
 
             foreach (var to in tos)
@@ -45,9 +47,17 @@ namespace Quilt4.Web.Business
                     smtpClient.Send(mailMessage);
                     status = true;
                 }
+                catch (FormatException exception)
+                {
+                    errorMessage = exception.Message;
+                }
+                catch (SmtpException exception)
+                {
+                    errorMessage = exception.Message;
+                }
                 finally
                 {
-                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status);
+                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status, errorMessage);
                 }
             }
         }
@@ -74,7 +84,8 @@ namespace Quilt4.Web.Business
                     Subject = item.Subject,
                     Body = item.Body,
                     DateSent = item.DateSent,
-                    Status = item.Status
+                    Status = item.Status,
+                    ErrorMessage = item.ErrorMessage,
                 };
             }
         }

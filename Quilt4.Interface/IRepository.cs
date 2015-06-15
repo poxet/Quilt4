@@ -54,7 +54,7 @@ namespace Quilt4.Interface
         IEnumerable<IIssue> GetIssueStatistics(DateTime from, DateTime to);
 
         IDataBaseInfo GetDatabaseStatus();
-        void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status);
+        void LogEmail(string fromEmail, string to, string subject, string body, DateTime dateSent, bool status, string errorMessage);
         IEnumerable<IEmail> GetLastHundredEmails();
         int GetInitiativeCount();
         int GetApplicationCount();
