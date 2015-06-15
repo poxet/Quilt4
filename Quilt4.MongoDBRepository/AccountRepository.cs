@@ -202,7 +202,6 @@ namespace Quilt4.MongoDBRepository
             //if (!ApplicationSignInManager.Roles.IsUserInRole(developer.UserName, RoleName))
             //    ApplicationSignInManager.Roles.AddUserToRole(developer.UserName, RoleName);
 
-            throw new NotImplementedException();
         }
     }
 

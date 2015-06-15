@@ -16,6 +16,11 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
+        public void UpdateInitiative(Guid id, string name, string sessionToken, string owner)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
         {
             throw new NotImplementedException();

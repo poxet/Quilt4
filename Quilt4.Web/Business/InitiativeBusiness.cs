@@ -11,6 +11,7 @@ namespace Quilt4.Web.Business
     public class InitiativeBusiness : IInitiativeBusiness
     {
         private readonly IRepository _repository;
+        
 
         public InitiativeBusiness(IRepository repository)
         {
@@ -27,6 +28,11 @@ namespace Quilt4.Web.Business
                 _repository.AddInitiative(defaultInitiative);
             }
             return initiatives;
+        }
+
+        public void UpdateInitiative(Guid id, string name, string sessionToken, string owner)
+        {
+            _repository.UpdateInitiative(id, name, sessionToken, owner);
         }
 
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)

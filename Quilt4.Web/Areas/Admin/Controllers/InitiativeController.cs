@@ -62,5 +62,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
             return View(initiative);
         }
+        [HttpPost]
+        public ActionResult Edit(Quilt4.Web.Models.Initiative model)
+        {
+            _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
+            return Redirect("Index");
+;
+        }
     }
 }

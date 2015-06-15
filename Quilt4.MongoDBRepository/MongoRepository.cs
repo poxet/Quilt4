@@ -37,6 +37,17 @@ namespace Quilt4.MongoDBRepository
             RequestDeleteEntityEvent += MongoRepository_RequestDeleteEntityEvent;
         }
 
+        public void UpdateInitiative(Guid id, string name, string sessionToken, string owner)
+        {
+            var initiative = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().FirstOrDefault(x => x.Id == id);
+
+            initiative.Name = name;
+            initiative.ClientToken = sessionToken;
+            initiative.OwnerDeveloperName = owner;
+
+            Database.GetCollection("Initiative").Save(initiative);
+
+        }
         public IDataBaseInfo GetDatabaseStatus()
         {
             var dbInfo = new DataBaseInfoEntity();
