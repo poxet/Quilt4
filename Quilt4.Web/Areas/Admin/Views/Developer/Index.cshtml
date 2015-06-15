@@ -1,4 +1,4 @@
-﻿@using Quilt4.Interface
+﻿@using System.Web.Mvc.Html
 @model IEnumerable<Quilt4.Interface.IDeveloper>
 @{
     ViewBag.Title = "Admin Developer";
@@ -37,12 +37,12 @@
             <td>
                 @if (developer.Roles.All(x => string.Compare("Admin", x, StringComparison.InvariantCultureIgnoreCase) != 0))
                 {
-                    @Html.ActionLink("Delete", "Delete", new { id = developer.UserId }, null)
-                    @Html.ActionLink("Make admin", "MakeDeveloperAdmin", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Delete", "Delete", "Developer", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Make admin", "MakeDeveloperAdmin", "Developer", new { id = developer.UserId }, null)
                 }
                 @if (!developer.EMailConfirmed)
                 {
-                    @Html.ActionLink("Confirm", "ConfirmDeveloperEMail", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Confirm", "ConfirmDeveloperEMail", "Developer", new { id = developer.UserId }, null)
                 }
             </td>
         </tr>

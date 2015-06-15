@@ -1,0 +1,37 @@
+﻿@using System.Web.Mvc.Html
+@model IEnumerable<Quilt4.Web.Models.Initiative>
+@{
+    ViewBag.Title = "Admin Initiatives";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="dataTable">
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Name</th>
+        <th style="padding: 0 5px;">Owner</th>
+        <th style="padding: 0 5px;">Member</th>
+        <th style="padding: 0 5px;">Applications</th>
+        <th style="padding: 0 5px;">Sessions</th>
+        <th style="padding: 0 5px;">Issues</th>
+        <th style="padding: 0 5px;">Counters</th>
+        <th style="padding: 0 5px;">CreateDate</th>
+        <th style="padding: 0 5px;">Last Session</th>
+    </tr>
+    @foreach (var initiative in Model)
+    {
+        <tr>
+            <td style="padding: 0 5px;">@Html.ActionLink(initiative.Name ?? "Default", "Details", "Initiative", new { id = initiative.Id }, null)</td>
+            <td style="padding: 0 5px;">@initiative.OwnerDeveloperName</td>
+            <td style="padding: 0 5px;">@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
+            <td style="padding: 0 5px;">@initiative.ApplicationCount</td>
+            <td style="padding: 0 5px;">@*@initiative.Sessions*@</td>
+            <td style="padding: 0 5px;">@initiative.Issues</td>
+            <td style="padding: 0 5px;"><!--Counters--></td>
+            <td style="padding: 0 5px;">@initiative.CreateDate</td>
+            <td style="padding: 0 5px;">@initiative.LastSession</td>
+            @*<!--<td style="padding: 0 5px;">@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>-->*@
+        </tr>
+    }
+</table>

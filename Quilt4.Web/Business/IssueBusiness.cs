@@ -21,8 +21,9 @@ namespace Quilt4.Web.Business
         private readonly IUserBusiness _userBusiness;
         private readonly IMachineBusiness _machineBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
+        private readonly IRepository _repository;
 
-        public IssueBusiness(IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISettingsBusiness settingsBusiness)
+        public IssueBusiness(IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ISettingsBusiness settingsBusiness, IRepository repository)
         {
             _membershipAgent = membershipAgent;
             _applicationVersionBusiness = applicationVersionBusiness;
@@ -31,6 +32,7 @@ namespace Quilt4.Web.Business
             _userBusiness = userBusiness;
             _machineBusiness = machineBusiness;
             _settingsBusiness = settingsBusiness;
+            _repository = repository;
         }
 
         public ILogResponse RegisterIssue(Exception exception, IssueLevel issueLevel)
@@ -41,22 +43,22 @@ namespace Quilt4.Web.Business
 
         private ISession GetSession(Guid id)
         {
-            throw new NotImplementedException();
+            return _repository.GetSession(id);
         }
 
         private void UpdateApplicationVersion(IApplicationVersion applicationVersion)
         {
-            throw new NotImplementedException();
+            _repository.UpdateApplicationVersion(applicationVersion);
         }
 
         private IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint)
         {
-            throw new NotImplementedException();
+            return _repository.GetApplicationVersion(applicationVersionFingerprint);
         }
 
         private IInitiative GetInitiativeByApplication(Guid applicationId)
         {
-            throw new NotImplementedException();
+            return _repository.GetInitiativeByApplication(applicationId);
         }
 
         public RegisterIssueResponse RegisterIssue(RegisterIssueRequest request)

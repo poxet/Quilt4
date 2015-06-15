@@ -79,6 +79,34 @@ namespace Quilt4.MongoDBRepository
             return emails;
         }
 
+        public int GetInitiativeCount()
+        {
+            var initiativeCount = (int)Database.GetCollection("Initiative").Count();
+
+            return initiativeCount;
+        }
+
+        public int GetApplicationCount()
+        {
+            var applicationCount = (int)Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().SelectMany(y => y.ApplicationGroups).Select(z => z.Applications).Count();
+
+            return applicationCount;
+        }
+
+        public int GetIssueTypeCount()
+        {
+            var issueTypeCount = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().Select(y => y.IssueTypes).Count();
+
+            return issueTypeCount;
+        }
+
+        public int GetIssueCount()
+        {
+            var issueCount = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().SelectMany(y => y.IssueTypes).Select(z => z.Issues).Count();
+
+            return issueCount;
+        }
+
         //public string DatabaseName 
         //{
         //    get

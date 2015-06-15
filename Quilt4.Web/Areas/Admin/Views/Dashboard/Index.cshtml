@@ -1,0 +1,129 @@
+﻿@using System.Web.Mvc.Html
+@model Quilt4.Web.Models.AdminIndexViewModel
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="row">
+    @{
+        var initiativeText = Model.InitiativeCount != 1 ? "Initaitives" : "Initaitive";
+        var applicationText = Model.ApplicationCount != 1 ? "Applications" : "Application";
+        var issueTypesText = Model.IssueTypeCount != 1 ? "Issue types" : "Issue type";
+        var issueText = Model.IssueCount != 1 ? "Issues" : "Issue";
+    }
+    @*Initiatives*@
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.InitiativeCount.ToString()</div>
+                        <div>@initiativeText</div>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Index", "Initiative")">
+                <div class="panel-footer">
+                    <span class="pull-left">View @initiativeText</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    @*Applications*@
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-desktop fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.ApplicationCount.ToString()</div>
+                        <div>@applicationText</div>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Index", "Initiative")">
+                <div class="panel-footer">
+                    <span class="pull-left">View @initiativeText</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    @*IssueTypeCount*@
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-info fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.IssueTypeCount.ToString()</div>
+                        <div>@issueTypesText</div>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Index", "Initiative")">
+                <div class="panel-footer">
+                    <span class="pull-left">View @initiativeText</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    @*IssueCount*@
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-exclamation-triangle fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.IssueCount.ToString()</div>
+                        <div>@issueText</div>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Index", "Initiative")">
+                <div class="panel-footer">
+                    <span class="pull-left">View @initiativeText</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+<p>This is the administration section.</p>
+
+<h3>Shortcuts</h3>
+<ol>
+    <li>@Html.ActionLink("Developers", "Index", "Developer")</li>
+    <li>@Html.ActionLink("System Information", "System", "Dashboard")</li>
+    <li>@Html.ActionLink("Send Test Email", "SendTestEmail", "Email")</li>
+    <li>@Html.ActionLink("Email History", "EmailHistory", "Email")</li>
+</ol>
+
+<br /><br />
+<a href="https://www.google.com/analytics/web/?authuser=0#report/visitors-overview/a49281453w80996805p83821649/" target="_blank">Google Analytics</a><br />
+<a href="http://www.twitter.com/quilt4net">Twitter</a><br />
+<a href="http://nugetmusthaves.azurewebsites.net/Package/Tharga.Quilt4Net">Nuget statistics</a>

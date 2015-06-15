@@ -12,7 +12,25 @@ namespace Quilt4.Web
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new
+                {
+                    controller = "Home",
+                    action = "Index",
+                    id = UrlParameter.Optional
+                },
+                namespaces: new[] { "Quilt4.Web.Controllers" }
+            );
+
+            routes.MapRoute(
+                name: "Details",
+                url: "{controller}/{action}/{id}/{application}/{version}/{issueType}",
+                defaults: new
+                {
+                    application = UrlParameter.Optional,
+                    version = UrlParameter.Optional,
+                    issueType = UrlParameter.Optional,
+                },
+                namespaces: new[] { "Quilt4.Web.Controllers" }
             );
         }
     }

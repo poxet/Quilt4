@@ -4,6 +4,7 @@ using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.Web.BusinessEntities;
+using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Business
 {
@@ -34,7 +35,7 @@ namespace Quilt4.Web.Business
             return initiatives;
         }
 
-        public IEnumerable<IInitiative> GetAllHeadsByDeveloper(string developerName)
+        private IEnumerable<IInitiativeHead> GetAllHeadsByDeveloper(string developerName)
         {
             var initiatives = _repository.GetInitiativeHeadsByDeveloper(developerName).ToList();
             if (!initiatives.Any())
@@ -46,7 +47,7 @@ namespace Quilt4.Web.Business
             return initiatives;
         }
 
-        public IEnumerable<IInitiative> GetInitiativesByDeveloperHead(string developerName)
+        public IEnumerable<IInitiativeHead> GetInitiativesByDeveloper(string developerName)
         {
             //var ib = new InitiativeBusiness(_repository);
             var initiatives = GetAllHeadsByDeveloper(developerName).ToArray();
@@ -73,6 +74,63 @@ namespace Quilt4.Web.Business
         public IInitiative GetInitiative(Guid initiativeId)
         {
             return _repository.GetInitiative(initiativeId);
+        }
+
+        public IInitiative GetInitiative(string developerName, string initiativeIdentifier)
+        {
+            //The initiativeIdentifier can be the name, id or client token of the initiative.
+
+            var initiativesByDeveloper = _repository.GetInitiativesByDeveloper(developerName).ToArray();
+
+            var initiativeId = Guid.Empty;
+
+            //Try the name as identifier
+            var initiativeHeads = initiativesByDeveloper.Where(x => (x.Name ?? Models.Constants.DefaultInitiativeName) == initiativeIdentifier).ToArray();
+            if (initiativeHeads.Count() == 1)
+                initiativeId = initiativeHeads.Single().Id;
+
+            //Try the id as identifier
+            if (initiativeId == Guid.Empty)
+            {
+                initiativeHeads = initiativesByDeveloper.Where(x => x.Id.ToString() == initiativeIdentifier).ToArray();
+                if (initiativeHeads.Count() == 1)
+                    initiativeId = initiativeHeads.Single().Id;
+            }
+
+            //Try the clientToken as identifier
+            if (initiativeId == Guid.Empty)
+            {
+                initiativeHeads = initiativesByDeveloper.Where(x => x.ClientToken == initiativeIdentifier).ToArray();
+                if (initiativeHeads.Count() == 1)
+                    initiativeId = initiativeHeads.Single().Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+                throw new InvalidOperationException("Cannot find a single initiative with the provided identifier for the developer.").AddData("developerName", developerName).AddData("initiativeIdentifier", initiativeIdentifier);
+
+            var initiative = GetInitiative(initiativeId);
+            return initiative;
+        }
+
+        public int GetInitiativeCount()
+        {
+
+            return _repository.GetInitiativeCount();
+        }
+
+        public int GetApplicationCount()
+        {
+            return _repository.GetApplicationCount();
+        }
+
+        public int GetIssueTypeCount()
+        {
+            return _repository.GetIssueTypeCount();
+        }
+
+        public int GetIssueCount()
+        {
+            return _repository.GetIssueCount();
         }
 
         public IInitiative GetInitiativeByApplication(Guid applicationId)

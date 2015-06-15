@@ -21,7 +21,8 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // POST api/counter/register
         [HttpPost]
-        [ActionName("register")]
+        //[ActionName("register")]
+        [Route("api/counter/register")]
         [AllowAnonymous]
         public RegisterCounterResponse RegisterCounter([FromBody] object request)
         {

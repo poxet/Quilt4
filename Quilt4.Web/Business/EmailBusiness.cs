@@ -6,7 +6,6 @@ using System.Net.Mail;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
-
 namespace Quilt4.Web.Business
 {
     public class EmailBusiness : IEmailBusiness
@@ -50,7 +49,6 @@ namespace Quilt4.Web.Business
                 {
                     _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status);
                 }
-
             }
         }
 
@@ -60,8 +58,6 @@ namespace Quilt4.Web.Business
 
             return emails.ToEmails();
         }
-
-
     }
 
     public static class EmailExtensions
@@ -82,9 +78,5 @@ namespace Quilt4.Web.Business
                 };
             }
         }
-
-
     }
-
-
 }

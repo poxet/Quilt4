@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using Quilt4.Interface;
@@ -20,14 +21,15 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // POST api/issue/register
         [HttpPost]
-        [ActionName("register")]
+        //[ActionName("register")]
+        [Route("api/issue/register")]
         [AllowAnonymous]
         public RegisterIssueResponse RegisterIssue([FromBody] object request)
         {
             //TODO: Move this logics to the business class
             if (request == null)
                 throw new ArgumentNullException("request", "No request object provided.");
-
+            
             try
             {
                 var data = GetData(request);
