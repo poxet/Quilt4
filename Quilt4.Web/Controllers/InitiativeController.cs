@@ -4,7 +4,9 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
+using System.Collections;
 using Quilt4.Web.Models;
+using System.Collections.Generic;
 
 namespace Quilt4.Web.Controllers
 {
@@ -14,12 +16,14 @@ namespace Quilt4.Web.Controllers
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IMembershipAgent _membershipAgent;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+        private readonly IEmailBusiness _emailBusiness;
 
-        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness)
+        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IEmailBusiness emailBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _membershipAgent = membershipAgent;
             _applicationVersionBusiness = applicationVersionBusiness;
+            _emailBusiness = emailBusiness;
         }
 
         // GET: Initiative
@@ -56,7 +60,7 @@ namespace Quilt4.Web.Controllers
                 return View();
             }
         }
-
+        //Get
         public ActionResult Member(string initiativeId)
         {
             if (string.IsNullOrEmpty(initiativeId))
@@ -71,7 +75,18 @@ namespace Quilt4.Web.Controllers
 
             var members = initiative.DeveloperRoles;
 
-            return View(members);
+            var invite = new Quilt4.Web.Areas.Admin.Models.InviteModel();
+
+            return View(members/*new Tuple<IEnumarable<IDeveloperRole>, Quilt4.Web.Areas.Admin.Models.InviteModel>(members, invite)*/);
+        }
+
+        //Post
+        [HttpPost]
+        public ActionResult Invite(Quilt4.Web.Areas.Admin.Models.InviteModel model)
+        {
+            _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, "Invite", "Invite");
+
+            return null;
         }
 
         // GET: Initiative/Details/5

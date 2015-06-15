@@ -204,6 +204,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Models\InviteModel.cs" />
     <Compile Include="BusinessEntities\DataBaseInfo.cs" />
     <Compile Include="Business\ApplicationVersionBusiness.cs" />
     <Compile Include="BusinessEntities\ClientToken.cs" />
@@ -381,7 +382,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\Admin_x\Controllers\" />
     <Folder Include="Content\fonts\" />
