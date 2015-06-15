@@ -2,6 +2,7 @@
 {
     public interface ISettingsBusiness
     {
-        T GetSetting<T>(string name);
+        T GetConfigSetting<T>(string name);
+        T GetDatabaseSetting<T>(string name);
     }
 }

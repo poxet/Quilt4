@@ -27,12 +27,12 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult System()
         {
-            
             ViewBag.Version = Assembly.GetAssembly(typeof(HomeController)).GetName().Version.ToString();
             ViewBag.Environment = Tharga.Quilt4Net.Information.Environment;
-            ViewBag.SessionStarter = Tharga.Quilt4Net.Session.ClientStartTime.ToLocalTime();
-            ViewBag.RegisteredOnServer = Tharga.Quilt4Net.Session.RegisteredOnServer;
-
+            ViewBag.Quilt4SessionStarter = Tharga.Quilt4Net.Session.ClientStartTime.ToLocalTime();
+            ViewBag.Quilt4RegisteredOnServer = Tharga.Quilt4Net.Session.RegisteredOnServer;
+            ViewBag.Quilt4HasClientToken = !string.IsNullOrEmpty(Tharga.Quilt4Net.Configuration.ClientToken);
+            ViewBag.Quilt4IsEnabled = Tharga.Quilt4Net.Configuration.Enabled;
 
             return View();
         }

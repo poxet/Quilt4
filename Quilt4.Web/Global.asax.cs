@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
+using Quilt4.Web.Business;
 using Tharga.Quilt4Net;
 
 namespace Quilt4.Web
@@ -34,8 +36,23 @@ namespace Quilt4.Web
 
             //GlobalConfiguration.Configuration.MessageHandlers.Add(new WebApiCallLogHandler(new SettingsBusiness())); //TODO: Resolve the SettingsBusiness instead
 
-            Tharga.Quilt4Net.Session.RegisterCompleteEvent += Session_RegisterCompleteEvent;
-            Tharga.Quilt4Net.Session.BeginRegister(Assembly.GetAssembly(typeof(MvcApplication)));
+            RegisterQuilt4Session();
+        }
+
+        private void RegisterQuilt4Session()
+        {
+            var sb = new SettingsBusiness(); //TODO: Resolve the SettingsBusiness instead
+            Configuration.ClientToken = sb.GetDatabaseSetting<string>("Quilt4ClientToken") ?? String.Empty;
+
+            if (!string.IsNullOrEmpty(Configuration.ClientToken))
+            {
+                Tharga.Quilt4Net.Session.RegisterCompleteEvent += Session_RegisterCompleteEvent;
+                Tharga.Quilt4Net.Session.BeginRegister(Assembly.GetAssembly(typeof(MvcApplication)));
+            }
+            else
+            {
+                Configuration.Enabled = false;
+            }
         }
 
         void Session_RegisterCompleteEvent(object sender, Session.RegisterCompleteEventArgs e)

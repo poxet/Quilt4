@@ -22,14 +22,14 @@ namespace Quilt4.Web.Controllers.WebAPI
             if (request.Content != null)
             {
                 requestContent = await request.Content.ReadAsStringAsync();
-                if (_settingsBusiness.GetSetting<bool>("LogAllRequests"))
+                if (_settingsBusiness.GetConfigSetting<bool>("LogAllRequests"))
                     Issue.Register("Web API Request", Issue.MessageIssueLevel.Information, data: new Dictionary<string, string> { { "Request", requestContent } });
             }
 
             var response = await base.SendAsync(request, cancellationToken);
             if (response.Content != null)
             {
-                if (_settingsBusiness.GetSetting<bool>("LogAllResponses"))
+                if (_settingsBusiness.GetConfigSetting<bool>("LogAllResponses"))
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
                     Issue.Register("Web API Response", Issue.MessageIssueLevel.Information, data: new Dictionary<string, string> { { "Response", responseContent }, { "Request", requestContent } });

@@ -162,9 +162,9 @@ namespace Quilt4.Web.Business
             }
 
             var response = new RegisterIssueResponse { //IssueTypeTicket = application.TicketPrefix + Settings.IssueTypeTicketPrefix + issueTypeTicket,
-                IssueTypeTicket = application.TicketPrefix + _settingsBusiness.GetSetting<string>("IssueTypeTicketPrefix") + issueTypeTicket,
+                IssueTypeTicket = application.TicketPrefix + _settingsBusiness.GetConfigSetting<string>("IssueTypeTicketPrefix") + issueTypeTicket,
                 //IssueInstanceTicket = application.TicketPrefix + Settings.IssueTicketPrefix + issueTicket,
-                IssueInstanceTicket = application.TicketPrefix + _settingsBusiness.GetSetting<string>("IssueTicketPrefix") + issueTicket, ResponseMessage = applicationVersion.ResponseMessage ?? issueTypeResponseMessage, IsOfficial = applicationVersion.IsOfficial, };
+                IssueInstanceTicket = application.TicketPrefix + _settingsBusiness.GetConfigSetting<string>("IssueTicketPrefix") + issueTicket, ResponseMessage = applicationVersion.ResponseMessage ?? issueTypeResponseMessage, IsOfficial = applicationVersion.IsOfficial, };
             return response;
         }
 
