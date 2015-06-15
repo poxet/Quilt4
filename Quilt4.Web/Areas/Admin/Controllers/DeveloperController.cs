@@ -2,10 +2,11 @@
 using System.Web.Mvc;
 using Quilt4.Interface;
 
-namespace Quilt4.Web.Controllers.Admin
+namespace Quilt4.Web.Areas.Admin.Controllers
 {
     //[Authorize(Roles = "Admin")]
     [Authorize]
+    [RouteArea("Admin")]
     public class DeveloperController : Controller
     {
         private readonly IAccountRepository _accountRepository;
@@ -19,7 +20,7 @@ namespace Quilt4.Web.Controllers.Admin
         public ActionResult Index()
         {
             var users = _accountRepository.GetUsers();
-            return View("~/Views/Admin/Developer/Index.cshtml", users);
+            return View(users);
         }
 
         // GET: Admin/Developer/MakeDeveloperAdmin
@@ -56,7 +57,7 @@ namespace Quilt4.Web.Controllers.Admin
         // GET: Admin/Developer/Delete/5
         public ActionResult Delete(int id)
         {
-            return View("~/Views/Admin/Developer/Delete.cshtml");
+            return View();
         }
 
         // POST: Admin/Developer/Delete/5
@@ -71,7 +72,7 @@ namespace Quilt4.Web.Controllers.Admin
             }
             catch
             {
-                return View("~/Views/Admin/Developer/Delete.cshtml");
+                return View();
             }
         }
     }

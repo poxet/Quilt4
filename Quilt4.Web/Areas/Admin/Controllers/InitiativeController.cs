@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
+using Quilt4.Web.Controllers;
 
-namespace Quilt4.Web.Controllers.Admin
+namespace Quilt4.Web.Areas.Admin.Controllers
 {
     //[Authorize(Roles = "Admin")]
     [Authorize]
+    [RouteArea("Admin")]
     public class InitiativeController : Controller
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
@@ -47,7 +49,7 @@ namespace Quilt4.Web.Controllers.Admin
             //    initiative.LastSession = lastSessionDate == dateTime ? "N/A" : lastSessionDate.ToString("yyyy-MM-dd hh:mm:ss");
             //}
 
-            return View("~/Views/Admin/Initiative/Index.cshtml", initiatives);
+            return View(initiatives);
         }
 
         // GET: Admin/Initiative/Details/5
@@ -58,7 +60,7 @@ namespace Quilt4.Web.Controllers.Admin
 
             var initiative = _initiativeBusiness.GetInitiative(id.Value).ToModel();
 
-            return View("~/Views/Admin/Initiative/Details.cshtml", initiative);
+            return View(initiative);
         }
     }
 }

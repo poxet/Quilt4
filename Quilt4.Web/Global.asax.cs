@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
@@ -6,9 +7,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
-using Quilt4.Interface;
-using Quilt4.Web.Business;
-using Quilt4.Web.Controllers.WebAPI;
+using Tharga.Quilt4Net;
 
 namespace Quilt4.Web
 {
@@ -39,9 +38,9 @@ namespace Quilt4.Web
             Tharga.Quilt4Net.Session.BeginRegister(Assembly.GetAssembly(typeof(MvcApplication)));
         }
 
-        void Session_RegisterCompleteEvent(object sender, Tharga.Quilt4Net.Session.RegisterCompleteEventArgs e)
+        void Session_RegisterCompleteEvent(object sender, Session.RegisterCompleteEventArgs e)
         {
-            System.Diagnostics.Debug.Write(e.Success);
+            Debug.Write(e.Success);
             //TODO: Log problems to the event log
         }
 

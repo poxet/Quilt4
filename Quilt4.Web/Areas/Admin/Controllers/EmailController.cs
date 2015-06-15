@@ -6,10 +6,11 @@ using System.Web.Mvc;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
-namespace Quilt4.Web.Controllers.Admin
+namespace Quilt4.Web.Areas.Admin.Controllers
 {
     //[Authorize(Roles = "Admin")]
     [Authorize]
+    [RouteArea("Admin")]
     public class EmailController : Controller
     {
         private readonly IEmailBusiness _emailBusiness;
@@ -24,7 +25,7 @@ namespace Quilt4.Web.Controllers.Admin
         {
             var emails = _emailBusiness.GetLastHundredEmails();
 
-            return View("~/Views/Admin/Email/emailhistory.cshtml", emails);
+            return View(emails);
         }
 
         // GET: Admin/Email/SendTestEmail
@@ -34,7 +35,7 @@ namespace Quilt4.Web.Controllers.Admin
 
             model.EmailEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["SendEMailEnabled"]);
 
-            return View("~/Views/Admin/Email/email.cshtml", model);
+            return View(model);
         }
 
         // POST: Admin/Email/SendTestEmail
@@ -64,7 +65,7 @@ namespace Quilt4.Web.Controllers.Admin
                 return Redirect("SendTestEmail");
             }
 
-            return View("~/Views/Admin/Email/email.cshtml", model);
+            return View(model);
         }
     }
 }

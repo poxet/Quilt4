@@ -4,10 +4,11 @@ using Quilt4.Interface;
 using Quilt4.Web.Business;
 using Quilt4.Web.Models;
 
-namespace Quilt4.Web.Controllers.Admin
+namespace Quilt4.Web.Areas.Admin.Controllers
 {
     //[Authorize(Roles = "Admin")]
     [Authorize]
+    [RouteArea("Admin")]
     public class DashboardController : Controller
     {
         private readonly SystemBusiness _systemBusiness;
@@ -35,7 +36,7 @@ namespace Quilt4.Web.Controllers.Admin
                 IssueCount = issueCount
             };
 
-            return View("~/Views/Admin/Dashboard/Index.cshtml", adminIndexViewModel);
+            return View(adminIndexViewModel);
         }
 
         // GET: Admin/Dashboard/System
@@ -62,7 +63,7 @@ namespace Quilt4.Web.Controllers.Admin
             adminViewModel.SendEMailEnabled = sendEMailEnabled;
             adminViewModel.EMailConfirmationEnabled = eMailConfirmationEnabled;
 
-            return View("~/Views/Admin/Dashboard/System.cshtml", adminViewModel);
+            return View(adminViewModel);
         }
     }
 }

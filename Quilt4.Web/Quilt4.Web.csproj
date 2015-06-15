@@ -203,6 +203,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="BusinessEntities\DataBaseInfo.cs" />
     <Compile Include="Business\ApplicationVersionBusiness.cs" />
     <Compile Include="BusinessEntities\ClientToken.cs" />
@@ -222,14 +223,10 @@
     <Compile Include="Business\SettingsBusiness.cs" />
     <Compile Include="CastleControllerFactory.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AdminDeveloperController.cs" />
-    <Compile Include="Controllers\AdminInitiativeController.cs" />
-    <Compile Include="Controllers\Admin\DashboardController.cs" />
-    <Compile Include="Controllers\Admin\DeveloperController.cs" />
-    <Compile Include="Controllers\Admin\EmailController.cs" />
-    <Compile Include="Controllers\Admin\IndexController.cs" />
-    <Compile Include="Controllers\Admin\InitiativeController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DeveloperController.cs" />
+    <Compile Include="Areas\Admin\Controllers\EmailController.cs" />
+    <Compile Include="Areas\Admin\Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\Converter.cs" />
@@ -290,6 +287,8 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Areas\Admin_x\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\web.config" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\Admin\bootstrap.min.js" />
@@ -361,28 +360,30 @@
     <Content Include="Views\Initiative\Details.cshtml" />
     <Content Include="Views\Initiative\Edit.cshtml" />
     <Content Include="Views\Initiative\Delete.cshtml" />
-    <Content Include="Views\Admin\Developer\Index.cshtml" />
-    <Content Include="Views\Admin\Developer\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Developer\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Developer\Delete.cshtml" />
     <Content Include="Views\Home\System.cshtml" />
-    <Content Include="Views\Admin\Developer\ConfirmDeveloperEMail.cshtml" />
-    <Content Include="Views\Admin\Dashboard\System.cshtml" />
-    <Content Include="Views\Admin\Email\Email.cshtml" />
-    <Content Include="Views\Admin\Initiative\Details.cshtml" />
-    <Content Include="Views\Admin\Email\EmailHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\Developer\ConfirmDeveloperEMail.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\System.cshtml" />
+    <Content Include="Areas\Admin\Views\Email\SendTestEmail.cshtml" />
+    <Content Include="Areas\Admin\Views\Initiative\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Email\EmailHistory.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Initiative\Member.cshtml" />
     <Content Include="Views\Application\Details.cshtml" />
     <Content Include="Views\Version\Details.cshtml" />
     <Content Include="Views\IssueType\Details.cshtml" />
-    <Content Include="Views\Admin\Initiative\Index.cshtml" />
-    <Content Include="Views\Admin\Email\Index.cshtml" />
-    <Content Include="Views\Admin\Dashboard\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Initiative\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\Admin_x\Controllers\" />
     <Folder Include="Content\fonts\" />
   </ItemGroup>
   <ItemGroup>
