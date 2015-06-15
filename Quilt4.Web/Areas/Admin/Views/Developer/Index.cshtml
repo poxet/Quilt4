@@ -8,41 +8,41 @@
 <h2>@ViewBag.Title</h2>
 
 <table class="dataTable">
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Local</th>
-        <th>Providers</th>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Id</th>
+        <th style="padding: 0 5px;">Name</th>
+        <th style="padding: 0 5px;">Local</th>
+        <th style="padding: 0 5px;">Providers</th>
         @*<th>Creation</th>
         <th>Last Activity</th>*@
-        <th>Last IP</th>
-        <th>Email</th>
-        <th>Confirmed</th>
-        <th>Roles</th>
-        <th>&nbsp;</th>
+        <th style="padding: 0 5px;">Last IP</th>
+        <th style="padding: 0 5px;">Email</th>
+        <th style="padding: 0 5px;">Confirmed</th>
+        <th style="padding: 0 5px;">Roles</th>
+        <th style="padding: 0 5px;">&nbsp;</th>
     </tr>
     @foreach (var developer in Model)
     {
         <tr>
-            <td>@developer.UserId</td>
-            <td>@developer.UserName</td>
-            <td>@Html.Raw(developer.HasLocalAccount ? "Yes" : "No")</td>
-            <td title="@Html.Raw(string.Join(", ", developer.ProviderNames))">@Html.Raw(developer.ProviderNames.Count() > 2 ? developer.ProviderNames.Count().ToString() : string.Join(", ", developer.ProviderNames))</td>
-            @*<td title="@developer.CreationDate.ToLocalDateTimeString()">@developer.CreationDate.ToTimeSpanString()</td>
-            <td title="@developer.LastActivityDate.ToLocalDateTimeString()">@developer.LastActivityDate.ToTimeSpanString()</td>*@
-            <td><a href="@Html.Raw("http://www.geoiptool.com/en/?IP=" + developer.LastIpAddress)" target="_blank">@developer.LastIpAddress</a></td>
-            <td>@developer.Email</td>
-            <td>@Html.Raw(developer.EMailConfirmed ? "Yes" : "No")</td>
-            <td>@Html.Raw(string.Join(", ", developer.Roles))</td>
-            <td>
+            <td style="padding: 0 5px;">@developer.UserId</td>
+            <td style="padding: 0 5px;">@developer.UserName</td>
+            <td style="padding: 0 5px;">@Html.Raw(developer.HasLocalAccount ? "Yes" : "No")</td>
+            <td style="padding: 0 5px;" title="@Html.Raw(string.Join(", ", developer.ProviderNames))">@Html.Raw(developer.ProviderNames.Count() > 2 ? developer.ProviderNames.Count().ToString() : string.Join(", ", developer.ProviderNames))</td>
+            @*<td style="padding: 0 5px;" title="@developer.CreationDate.ToLocalDateTimeString()">@developer.CreationDate.ToTimeSpanString()</td>
+        <td style="padding: 0 5px;" title="@developer.LastActivityDate.ToLocalDateTimeString()">@developer.LastActivityDate.ToTimeSpanString()</td>*@
+            <td style="padding: 0 5px;"><a href="@Html.Raw("http://www.geoiptool.com/en/?IP=" + developer.LastIpAddress)" target="_blank">@developer.LastIpAddress</a></td>
+            <td style="padding: 0 5px;">@developer.Email</td>
+            <td style="padding: 0 5px;">@Html.Raw(developer.EMailConfirmed ? "Yes" : "No")</td>
+            <td style="padding: 0 5px;">@Html.Raw(string.Join(", ", developer.Roles))</td>
+            <td style="padding: 0 5px;">
                 @if (developer.Roles.All(x => string.Compare("Admin", x, StringComparison.InvariantCultureIgnoreCase) != 0))
                 {
-                    @Html.ActionLink("Delete", "Delete", "Developer", new { id = developer.UserId }, null)
-                    @Html.ActionLink("Make admin", "MakeDeveloperAdmin", "Developer", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Delete ", "Delete", "Developer", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Make admin ", "MakeDeveloperAdmin", "Developer", new { id = developer.UserId }, null)
                 }
                 @if (!developer.EMailConfirmed)
                 {
-                    @Html.ActionLink("Confirm", "ConfirmDeveloperEMail", "Developer", new { id = developer.UserId }, null)
+                    @Html.ActionLink("Confirm ", "ConfirmDeveloperEMail", "Developer", new { id = developer.UserId }, null)
                 }
             </td>
         </tr>

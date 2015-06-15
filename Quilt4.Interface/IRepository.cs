@@ -7,6 +7,7 @@ namespace Quilt4.Interface
     {
         void AddInitiative(IInitiative initiative);
         void UpdateInitiative(IInitiative initiative);
+        void UpdateInitiative(Guid id, string name, string sessionToken, string owner);
 
         IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName);
         IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId);

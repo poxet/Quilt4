@@ -9,6 +9,9 @@
 <h2>Edit Initiative</h2>
 
 
+@using (Html.BeginForm("Edit", "Initiative", null, FormMethod.Post, null))
+{
+    @Html.HiddenFor(m => m.Id)
 <table>
     <tr>
         <th>Name</th>
@@ -34,4 +37,6 @@
 </table>
 
 <input type="submit" value="Save" />
-<input type="submit" value="Cancel" />
+@Html.ActionLink("Cancel", "Index")
+}
+
