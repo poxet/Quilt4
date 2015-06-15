@@ -24,7 +24,7 @@ namespace Quilt4.Web.Business
             var mailFrom = ConfigurationManager.AppSettings["SupportEmailAddress"];
             var sendEmailEnabled = ConfigurationManager.AppSettings["SendEMailEnabled"];
 
-            bool emailEnabled = Convert.ToBoolean(sendEmailEnabled);
+            var emailEnabled = Convert.ToBoolean(sendEmailEnabled);
 
             int portNumber;
             int.TryParse(smtpServerPort, out portNumber);
@@ -33,7 +33,7 @@ namespace Quilt4.Web.Business
             
             smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
 
-            string errorMessage = "";
+            var errorMessage = "";
 
             if (!emailEnabled) return;
 
@@ -50,6 +50,7 @@ namespace Quilt4.Web.Business
                 catch (Exception exception)
                 {
                     errorMessage = exception.Message;
+                    throw;
                 }
                 finally
                 {
