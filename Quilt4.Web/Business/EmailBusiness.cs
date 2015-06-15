@@ -55,6 +55,10 @@ namespace Quilt4.Web.Business
                 {
                     errorMessage = exception.Message;
                 }
+                catch (ArgumentNullException exception)
+                {
+                    errorMessage = exception.Message;
+                }
                 finally
                 {
                     _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status, errorMessage);
