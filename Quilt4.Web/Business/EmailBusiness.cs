@@ -47,15 +47,7 @@ namespace Quilt4.Web.Business
                     smtpClient.Send(mailMessage);
                     status = true;
                 }
-                catch (FormatException exception)
-                {
-                    errorMessage = exception.Message;
-                }
-                catch (SmtpException exception)
-                {
-                    errorMessage = exception.Message;
-                }
-                catch (ArgumentNullException exception)
+                catch (Exception exception)
                 {
                     errorMessage = exception.Message;
                 }
