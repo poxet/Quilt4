@@ -10,12 +10,11 @@
 <table>
     <tr>
         <th style="padding: 0 10px 10px 0;">Name</th>
-        @Html.TextBoxFor(m => m.Name)
+        <td>@Html.TextBoxFor(m => m.Name)</td>
     </tr> 
     <tr>
         <th style="padding: 0 10px 10px 0;">ClientToken</th>
-        <td style="padding: 0 10px 10px 0;">@Model.ClientToken</td>
-        <td><input type="text" name="clientToken" placeholder="Change Client Token" style="margin: 0 10px 10px 0;"></td>
+        <td>@Html.TextBoxFor(m => m.ClientToken)
     </tr>   
     <tr>
         <th style="padding: 0 10px 10px 0;">Owner</th>
