@@ -49,20 +49,28 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             }
             catch (FormatException e)
             {
-
-                ViewBag.ErrorMessage = "Fel format på E-Posten!";
+                ViewBag.ErrorMessage = "Email adress wrongly formatted";
                 success = false;
-
             }
             catch (SmtpException e)
             {
-                ViewBag.ErrorMessage = "Servern kan inte nås";
+                ViewBag.ErrorMessage = "Can not connect to SMTP server!";
+                success = false;
+            }
+            catch (ArgumentNullException e)
+            {
+                ViewBag.ErrorMessage = "Enter an email adress!";
+                success = false;
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorMessage = "Something went wrong!";
                 success = false;
             }
 
             if (success)
             {
-                return Redirect("SendTestEmail");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             return View(model);

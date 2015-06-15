@@ -10,7 +10,7 @@
 <p>This page can send test emails</p>
 <br /><br />
 
-@using (@Html.BeginForm("SendTestEmail", "Email", "EMail"))
+@using (@Html.BeginForm("SendTestEmail", "Email", "Email"))
 {
     @Html.HiddenFor(x => x.EmailEnabled)
     @Html.TextBoxFor(m => m.ToEmail)
