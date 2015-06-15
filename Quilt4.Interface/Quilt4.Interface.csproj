@@ -114,6 +114,7 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="ISessionBusiness.cs" />
+    <Compile Include="ISetting.cs" />
     <Compile Include="ISettingsBusiness.cs" />
     <Compile Include="IssueLevel.cs" />
     <Compile Include="IAccountRepository.cs" />

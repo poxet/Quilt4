@@ -61,5 +61,10 @@ namespace Quilt4.Interface
         int GetApplicationCount();
         int GetIssueTypeCount();
         int GetIssueCount();
+
+        ISetting GetSetting(string name);
+        T GetSetting<T>(string name, T defaultValue);
+        IEnumerable<ISetting> GetSettings();
+        void SetSetting(string name, string value, Type type);
     }
 }

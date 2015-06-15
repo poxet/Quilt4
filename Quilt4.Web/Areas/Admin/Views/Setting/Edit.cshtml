@@ -1,0 +1,46 @@
+﻿@model Quilt4.Interface.ISetting
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Edit</h2>
+
+@*@using (Html.BeginForm())*@
+@using (Html.BeginForm("Edit", "Setting", null, FormMethod.Post, null))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.Type)
+    
+    <table>
+        <tr>
+            <th>Name</th>
+            <td>@Html.ValueFor(m => m.Name)</td>
+        </tr>
+        <tr>
+            <th>Value</th>
+            <td>@Html.TextBoxFor(m => m.Value)</td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>@Html.ValueFor(m => m.Type)</td>
+        </tr>
+    </table>
+    
+        <div class="form-horizontal">
+            <h4>Setting</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>

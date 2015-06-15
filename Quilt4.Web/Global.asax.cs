@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
+using Quilt4.Interface;
 using Quilt4.Web.Business;
 using Tharga.Quilt4Net;
 
@@ -41,8 +42,9 @@ namespace Quilt4.Web
 
         private void RegisterQuilt4Session()
         {
-            var sb = new SettingsBusiness(); //TODO: Resolve the SettingsBusiness instead
-            Configuration.ClientToken = sb.GetDatabaseSetting<string>("Quilt4ClientToken") ?? String.Empty;
+            //var sb = new SettingsBusiness(); //TODO: Resolve the SettingsBusiness instead
+            var sb = _container.Resolve<ISettingsBusiness>();
+            Configuration.ClientToken = sb.GetDatabaseSetting<string>("Quilt4ClientToken", string.Empty);
 
             if (!string.IsNullOrEmpty(Configuration.ClientToken))
             {

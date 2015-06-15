@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Quilt4.Interface.ISetting>
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>Settings</h2>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Type</th>
+    </tr>
+@foreach (var setting in Model)
+{
+    <tr>
+        <td>@Html.ActionLink(setting.Name, "Edit", "Setting", new { id = setting.Name }, null)</td>
+        <td>@Html.Raw(setting.Value)</td>
+        <td>@Html.Raw(setting.Type)</td>
+    </tr>
+}
+</table>

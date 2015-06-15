@@ -67,7 +67,13 @@ namespace Quilt4.MongoDBRepository
             if (item == null) return null;
             var response = new Initiative(item.Id, item.Name, item.ClientToken, item.OwnerDeveloperName ?? "N/A", new List<IDeveloperRole>(), new List<ApplicationGroup>());
             return response;
-        }//item.DeveloperRoles != null ? item.DeveloperRoles.Select(x => x.ToEntity()) :
+        }
+
+        public static ISetting ToEntity(this SettingPersist item)
+        {
+            var result = new Setting(item.Id, item.Value, item.Type);
+            return result;
+        }
 
         public static IDeveloperRole ToEntity(this DeveloperRolePersist item)
         {

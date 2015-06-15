@@ -4,12 +4,12 @@ namespace Quilt4.Interface
 {
     public interface IEmail
     {
-        string FromEmail { get; set; }
-        string ToEmail { get; set; }
-        string Subject { get; set; }
-        string Body { get; set; }
-        DateTime DateSent { get; set; }
-        bool Status { get; set; }
-        string ErrorMessage { get; set; }
+        string FromEmail { get; }
+        string ToEmail { get; }
+        string Subject { get; }
+        string Body { get; }
+        DateTime DateSent { get; }
+        bool Status { get; }
+        string ErrorMessage { get; }
     }
 }

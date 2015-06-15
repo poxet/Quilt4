@@ -11,11 +11,8 @@ namespace Quilt4.MongoDBRepository
 {
     public class MongoRepository : IRepository
     {
-        //private static readonly object SyncRoot = new object();
-        //private string _databaseName;
-        //private MongoServer _server;
-        //private MongoDatabase _database;
-
+        private static readonly object SyncRoot = new object();
+        private MongoDatabase _database;
         internal static event EventHandler<RequestUpdateEntityEventArgs> RequestUpdateEntityEvent;
         internal static event EventHandler<RequestDeleteEntityEventArgs> RequestDeleteEntityEvent;
 
@@ -119,6 +116,45 @@ namespace Quilt4.MongoDBRepository
             return issueCount;
         }
 
+        public ISetting GetSetting(string name)
+        {
+            var query = Query.EQ("_id", name);
+            var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
+
+            if (item == null)
+                throw new InvalidOperationException("There is no database setting for provided type.");
+
+            var result = item.ToEntity();
+            return result;
+        }
+
+        public T GetSetting<T>(string name, T defaultValue)
+        {
+            var query = Query.EQ("_id", name);
+            var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
+
+            if (item == null)
+            {
+                Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() });
+                return defaultValue;
+            }
+
+            return (T)Convert.ChangeType(item.Value, typeof(T));
+        }
+
+        public IEnumerable<ISetting> GetSettings()
+        {
+            var items = Database.GetCollection("Setting").FindAllAs<SettingPersist>();
+            var result = items.Select(x => x.ToEntity());
+            return result;
+        }
+
+        public void SetSetting(string name, string value, Type type)
+        {
+            var settingPersist = new SettingPersist { Id = name, Value = value.ToString(), Type = type.ToString() };
+            Database.GetCollection("Setting").Save(settingPersist);
+        }
+
         //public string DatabaseName 
         //{
         //    get
@@ -178,20 +214,33 @@ namespace Quilt4.MongoDBRepository
         {
             get
             {
-                var connectionNameOrUrl = "Mongo";
+                if (_database != null)
+                    return _database;
 
-                MongoDatabase db;
-                if (connectionNameOrUrl.ToLower().StartsWith("mongodb://"))
+                lock (SyncRoot)
                 {
-                    db = GetDatabaseFromUrl(new MongoUrl(connectionNameOrUrl));
-                }
-                else
-                {
-                    var connStringFromManager = ConfigurationManager.ConnectionStrings[connectionNameOrUrl].ConnectionString;
-                    db = GetDatabaseFromUrl(new MongoUrl(connStringFromManager));
+                    if (_database == null)
+                    {
+                        var connectionNameOrUrl = "Mongo";
+
+                        MongoDatabase db;
+                        if (connectionNameOrUrl.ToLower().StartsWith("mongodb://"))
+                        {
+                            db = GetDatabaseFromUrl(new MongoUrl(connectionNameOrUrl));
+                        }
+                        else
+                        {
+                            var connStringFromManager = ConfigurationManager.ConnectionStrings[connectionNameOrUrl].ConnectionString;
+                            db = GetDatabaseFromUrl(new MongoUrl(connStringFromManager));
+                        }
+
+                        _database = db;
+
+                        //_database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
+                    }
                 }
 
-                return db;
+                return _database;
 
         //        if (_database != null)
         //            return _database;
@@ -224,7 +273,7 @@ namespace Quilt4.MongoDBRepository
         {
             var mongoServerAddress = new MongoServerAddress("localhost", 27017);
 
-            var mongoDbServerAddress = System.Configuration.ConfigurationManager.AppSettings["MongoDbServerAddress"];
+            var mongoDbServerAddress = ConfigurationManager.AppSettings["MongoDbServerAddress"];
             if (!string.IsNullOrEmpty(mongoDbServerAddress))
             {
                 var parts = mongoDbServerAddress.Split(':');

@@ -245,5 +245,25 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public ISetting GetSetting(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T GetSetting<T>(string name, T defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISetting> GetSettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetSetting(string name, string value, Type type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
