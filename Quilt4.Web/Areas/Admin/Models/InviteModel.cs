@@ -9,6 +9,7 @@ namespace Quilt4.Web.Areas.Admin.Models
     {
         public string InviteEmail { get; set; }
         public string InitiativeName { get; set; }
+        public IEnumerable<Quilt4.Interface.IDeveloperRole> Members { get; set; }
 
     }
 }

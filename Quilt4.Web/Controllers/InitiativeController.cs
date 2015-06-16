@@ -74,10 +74,11 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(id);
 
             var members = initiative.DeveloperRoles;
-
+            
             var invite = new Quilt4.Web.Areas.Admin.Models.InviteModel();
+            invite.Members = members;
 
-            return View(members/*new Tuple<IEnumarable<IDeveloperRole>, Quilt4.Web.Areas.Admin.Models.InviteModel>(members, invite)*/);
+            return View(invite);
         }
 
         //Post
@@ -86,7 +87,7 @@ namespace Quilt4.Web.Controllers
         {
             _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, "Invite", "Invite");
 
-            return null;
+            return Redirect("Index");
         }
 
         // GET: Initiative/Details/5

@@ -1,6 +1,5 @@
 ﻿@using Castle.Core.Internal
-@*@model Tuple<IEnumerable<Quilt4.Interface.IDeveloperRole>, Quilt4.Web.Areas.Admin.Models.InviteModel>*@
-@model IEnumerable<Quilt4.Interface.IDeveloperRole>
+@model Quilt4.Web.Areas.Admin.Models.InviteModel
 
 @{
     ViewBag.Title = "Member";
@@ -15,25 +14,24 @@
         <th>Status</th>
     </tr>
 
-    @if (Model == null || Model.Item1.IsNullOrEmpty())
+    @if (Model == null || Model.Members.IsNullOrEmpty())
     {
         @Html.Raw("<tr><td>No members</td></tr>")
     }
-
-    @foreach (var member in Model.Item1)
+    
+    @foreach (var member in Model.Members)
     {
         @Html.Raw("<tr> <td>" + member.DeveloperName + "</td> <td>" + member.RoleName + "</td> <td>Senast aktiv..</td> </tr>")
-        
+
         @Html.Raw(member.DeveloperName + " " + member.RoleName + "<br />");
     }
-
 </table>
-
 <hr/>
+
 <p>Invite member</p>
 @using (Html.BeginForm("Invite", "Initiative", null, FormMethod.Post, null))
 {
-    @Html.TextBoxFor(m => m.Item2.InviteEmail)
+    @Html.TextBoxFor(m => m.InviteEmail)
     <input type="submit" value="Invite"/>
 }
 
