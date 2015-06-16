@@ -116,9 +116,14 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel();
+            var initiativeNames = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.GetUserName()).Select(x => x.Name).ToList();
 
-            return View(initiative); 
+            return View(new InitiativeDetailsModel
+            {
+                Initiative = initiative,
+                AllInitiativeNames = initiativeNames
+            }); 
         }
 
         // GET: Initiative/Create

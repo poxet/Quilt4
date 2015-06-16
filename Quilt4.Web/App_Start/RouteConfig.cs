@@ -22,7 +22,28 @@ namespace Quilt4.Web
             );
 
             routes.MapRoute(
-                name: "Details",
+                name: "application",
+                url: "{controller}/{action}/{id}/{application}",
+                defaults: new
+                {
+                    application = UrlParameter.Optional,
+                },
+                namespaces: new[] { "Quilt4.Web.Controllers" }
+            );
+
+            routes.MapRoute(
+                name: "version",
+                url: "{controller}/{action}/{id}/{application}/{version}",
+                defaults: new
+                {
+                    application = UrlParameter.Optional,
+                    version = UrlParameter.Optional,
+                },
+                namespaces: new[] { "Quilt4.Web.Controllers" }
+            );
+
+            routes.MapRoute(
+                name: "issueType",
                 url: "{controller}/{action}/{id}/{application}/{version}/{issueType}",
                 defaults: new
                 {

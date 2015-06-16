@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 
 namespace Quilt4.Web.Controllers
@@ -25,15 +26,16 @@ namespace Quilt4.Web.Controllers
         // GET: Application/Details/5
         public ActionResult Details(string id, string application)
         {
-            Guid initiativeId;
-            if (!Guid.TryParse(id, out initiativeId) )
-            {
+            //Guid initiativeId;
+            //if (!Guid.TryParse(id, out initiativeId) )
+            //{
 
-            }
+            //}
 
             //Guid inititiveId = Guid.Parse(id);
             //var applicationId = _initiativeBusiness.GetApplicationGroups(initiativeId);
-            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            //var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel();
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             //var versions = _applicationVersionBusiness.GetApplicationVersions();
 
@@ -44,7 +46,7 @@ namespace Quilt4.Web.Controllers
         //public ActionResult Create()
         //{
         //    return View();
-        //}
+        //}C:\Dev\Tharga\Quilt4\Quilt4.Web\Controllers\ApplicationController.cs
 
         //// POST: Application/Create
         //[HttpPost]
