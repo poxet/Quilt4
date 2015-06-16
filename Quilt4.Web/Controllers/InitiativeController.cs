@@ -18,13 +18,15 @@ namespace Quilt4.Web.Controllers
         private readonly IMembershipAgent _membershipAgent;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly IEmailBusiness _emailBusiness;
+        private readonly ISettingsBusiness _settingsBusiness;
 
-        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IEmailBusiness emailBusiness)
+        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _membershipAgent = membershipAgent;
             _applicationVersionBusiness = applicationVersionBusiness;
             _emailBusiness = emailBusiness;
+            _settingsBusiness = settingsBusiness;
         }
 
         // GET: Initiative
@@ -82,26 +84,31 @@ namespace Quilt4.Web.Controllers
 
         //Post
         [HttpPost]
-        public ActionResult Invite(Quilt4.Web.Areas.Admin.Models.InviteModel model)
+        public ActionResult Invite(FormCollection collection)
         {
-            _initiativeBusiness.AddDeveloperToInitiative(model.Initiative.Id, model.InviteEmail);
-            
-            var enabled = Boolean.Parse(ConfigurationManager.AppSettings["EMailConfirmationEnabled"]);
+            var initiativeId = collection["InitiativeId"];
+
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
+            var invitationCode = initiative.AddDeveloperRolesInvitation(collection["InviteEmail"]);
+
+
+            var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
             if (enabled)
             {
-                //skicka mailet för att bekräfta
-                var subject = "Invitation to " + model.Initiative.Name + " at www.quilt4.com";
-                var message = model.Initiative.OwnerDeveloperName + "want to invite you to initiative " + model.Initiative.Name + "at Quilt4. ";
+            //    //skicka mailet för att bekräfta
+            //    var subject = "Invitation to " + model.Initiative.Name + " at www.quilt4.com";
+            //    var message = model.Initiative.OwnerDeveloperName + "want to invite you to initiative " + model.Initiative.Name + "at Quilt4. ";
                 
-                _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, subject, message);
+            //    _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, subject, message);
             }
-            else { 
-                //lägg till användaren
-            }
+            //else { 
+            //    //lägg till användaren
+            //}
 
             
 
-            return Redirect("Index");
+            //return Redirect("Index");
+            throw new NotImplementedException();
         }
 
         // GET: Initiative/Details/5

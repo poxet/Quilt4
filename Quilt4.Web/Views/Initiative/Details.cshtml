@@ -24,7 +24,8 @@ else
 {
     foreach (var application in applications)
     {
-        @application.Name<br/>
+        @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.Id, application = @application.Name }, null)
+        <br/>
     }
 }
 

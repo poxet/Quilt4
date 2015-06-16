@@ -1,10 +1,21 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Controllers
 {
     [Authorize]
     public class ApplicationController : Controller
     {
+        private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+
+        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness) 
+        {
+            _initiativeBusiness = initiativeBusiness;
+            _applicationVersionBusiness = applicationVersionBusiness;
+        }
         //// GET: Application
         //public ActionResult Index()
         //{
@@ -14,7 +25,17 @@ namespace Quilt4.Web.Controllers
         // GET: Application/Details/5
         public ActionResult Details(string id, string application)
         {
-            //id -> Initiative
+            Guid initiativeId;
+            if (!Guid.TryParse(id, out initiativeId) )
+            {
+
+            }
+
+            //Guid inititiveId = Guid.Parse(id);
+            //var applicationId = _initiativeBusiness.GetApplicationGroups(initiativeId);
+            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
+            //var versions = _applicationVersionBusiness.GetApplicationVersions();
 
             return View();
         }

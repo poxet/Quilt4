@@ -193,7 +193,7 @@ namespace Quilt4.MongoDBRepository
 
         public void AssignRole(string userId, string roleName)
         {
-            var developer = FindById(userId);
+            //var developer = FindById(userId);
 
             //const string RoleName = "Admin";
             //if (!ApplicationSignInManager.Roles.RoleExists(RoleName))
@@ -201,6 +201,10 @@ namespace Quilt4.MongoDBRepository
 
             //if (!ApplicationSignInManager.Roles.IsUserInRole(developer.UserName, RoleName))
             //    ApplicationSignInManager.Roles.AddUserToRole(developer.UserName, RoleName);
+
+            ApplicationUserManager.AddToRole(userId, roleName);
+
+            var x = ApplicationUserManager.IsInRole(userId,roleName);
 
         }
     }

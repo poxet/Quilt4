@@ -18,7 +18,5 @@ namespace Quilt4.Interface
         int GetIssueTypeCount();
         int GetIssueCount();
         void UpdateInitiative(Guid id, string name, string sessionToken, string owner);
-        void AddDeveloperToInitiative(Guid id, string inviteEmail);
     }
-
 }

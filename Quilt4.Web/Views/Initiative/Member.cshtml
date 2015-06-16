@@ -31,6 +31,7 @@
 <p>Invite member</p>
 @using (Html.BeginForm("Invite", "Initiative", null, FormMethod.Post, null))
 {
+    @Html.Hidden("InitiativeId", Model.Initiative.Id)
     @Html.TextBoxFor(m => m.InviteEmail)
     <input type="submit" value="Invite"/>
 }

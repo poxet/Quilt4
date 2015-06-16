@@ -18,10 +18,6 @@ namespace Quilt4.Web.Business
             _repository = repository;
         }
 
-        public void AddDeveloperToInitiative(Guid id, string inviteEmail) { 
-            
-        }
-
         public IEnumerable<IInitiative> GetAllByDeveloper(string developerName)
         {
             var initiatives = _repository.GetInitiativesByDeveloper(developerName).ToList();
