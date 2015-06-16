@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
-using System.Collections;
+using Quilt4.Web.Areas.Admin.Models;
 using Quilt4.Web.Models;
-using System.Collections.Generic;
 
 namespace Quilt4.Web.Controllers
 {
@@ -76,7 +74,7 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(id);
             
-            var invite = new Quilt4.Web.Areas.Admin.Models.InviteModel();
+            var invite = new InviteModel();
             invite.Initiative = initiative;
 
             return View(invite);

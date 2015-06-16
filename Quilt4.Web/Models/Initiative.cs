@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Quilt4.BusinessEntities;
-using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
 {
-    public class InitiativeDetailsModel
-    {
-        public Initiative Initiative { get; set; }
-        public List<string> AllInitiativeNames { get; set; }
-    }
-
     public class Initiative
     {
         public Guid Id { get; set; }
@@ -27,10 +19,5 @@ namespace Quilt4.Web.Models
         //public IEnumerable<IApplication> Applications { get; set; }
 
         public ApplicationGroup[] ApplicationGroups { get; set; }
-    }
-
-    public class DeveloperRole
-    {
-        public string DeveloperName { get; set; }
     }
 }

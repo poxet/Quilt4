@@ -102,6 +102,7 @@
     <Compile Include="IFingerprint.cs" />
     <Compile Include="IInitiative.cs" />
     <Compile Include="IInitiativeBusiness.cs" />
+    <Compile Include="IInitiativeHead.cs" />
     <Compile Include="IInnerIssueType.cs" />
     <Compile Include="IInviteApproval.cs" />
     <Compile Include="IIssue.cs" />

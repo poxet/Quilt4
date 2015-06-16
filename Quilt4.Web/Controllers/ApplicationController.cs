@@ -35,6 +35,8 @@ namespace Quilt4.Web.Controllers
             //Guid inititiveId = Guid.Parse(id);
             //var applicationId = _initiativeBusiness.GetApplicationGroups(initiativeId);
             //var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+
+            //Hej Jonas. Jag ändrade metod för att hitta initiativ. Den använder namn om det är unikt, annars en guid.
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel();
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             //var versions = _applicationVersionBusiness.GetApplicationVersions();

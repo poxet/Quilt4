@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Quilt4.Interface
 {
-    public interface IInitiativeHead
-    {
-        Guid Id { get; }
-        string Name { get; set; }
-        string ClientToken { get; }
-        string OwnerDeveloperName { get; set; }
-    }
-
     public interface IInitiative : IInitiativeHead
     {
         IEnumerable<IDeveloperRole> DeveloperRoles { get; }
