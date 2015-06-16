@@ -14,12 +14,12 @@
         <th>Status</th>
     </tr>
 
-    @if (Model == null || Model.Members.IsNullOrEmpty())
+    @if (Model == null || Model.Initiative.DeveloperRoles.IsNullOrEmpty())
     {
         @Html.Raw("<tr><td>No members</td></tr>")
     }
     
-    @foreach (var member in Model.Members)
+    @foreach (var member in Model.Initiative.DeveloperRoles)
     {
         @Html.Raw("<tr> <td>" + member.DeveloperName + "</td> <td>" + member.RoleName + "</td> <td>Senast aktiv..</td> </tr>")
 

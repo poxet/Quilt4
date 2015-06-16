@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -72,11 +73,9 @@ namespace Quilt4.Web.Controllers
             Guid.TryParse(initiativeId, out id);
 
             var initiative = _initiativeBusiness.GetInitiative(id);
-
-            var members = initiative.DeveloperRoles;
             
             var invite = new Quilt4.Web.Areas.Admin.Models.InviteModel();
-            invite.Members = members;
+            invite.Initiative = initiative;
 
             return View(invite);
         }
@@ -85,7 +84,22 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult Invite(Quilt4.Web.Areas.Admin.Models.InviteModel model)
         {
-            _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, "Invite", "Invite");
+            _initiativeBusiness.AddDeveloperToInitiative(model.Initiative.Id, model.InviteEmail);
+            
+            var enabled = Boolean.Parse(ConfigurationManager.AppSettings["EMailConfirmationEnabled"]);
+            if (enabled)
+            {
+                //skicka mailet för att bekräfta
+                var subject = "Invitation to " + model.Initiative.Name + " at www.quilt4.com";
+                var message = model.Initiative.OwnerDeveloperName + "want to invite you to initiative " + model.Initiative.Name + "at Quilt4. ";
+                
+                _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, subject, message);
+            }
+            else { 
+                //lägg till användaren
+            }
+
+            
 
             return Redirect("Index");
         }
