@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -97,17 +98,16 @@ namespace Quilt4.Web.Controllers
             var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
             if (enabled)
             {
-            //    //skicka mailet för att bekräfta
-            //    var subject = "Invitation to " + model.Initiative.Name + " at www.quilt4.com";
-            //    var message = model.Initiative.OwnerDeveloperName + "want to invite you to initiative " + model.Initiative.Name + "at Quilt4. ";
-                
-            //    _emailBusiness.SendEmail(new List<string> { model.InviteEmail }, subject, message);
-            }
-            //else { 
-            //    //lägg till användaren
-            //}
+                //skicka mailet för att bekräfta
+                var root = Request.Url.AbsoluteUri.Replace(Request.Url.AbsolutePath, "/");
+                var acceptlink = root + "Initiative/ConfirmInvite/" + initiativeId + "/" + invitationCode;
+                var declineLink = root + "Initiative/DeclineInvite/" + initiativeId + "/" + invitationCode;
 
-            
+                var subject = "Invitation to " + initiative.Name + " at www.quilt4.com";
+                var message = initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + "at Quilt4. </br></hr><a href='" + acceptlink + "'>Accept</a></br><a href='" + declineLink + "'>Decline</a>";
+
+                _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
+            }
 
             return Redirect("Index");
             //throw new NotImplementedException();

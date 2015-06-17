@@ -44,6 +44,7 @@ namespace Quilt4.Web.Business
                 try
                 {
                     var mailMessage = new MailMessage(mailFrom, to, subject, body);
+                    mailMessage.IsBodyHtml = true;
                     smtpClient.Send(mailMessage);
                     status = true;
                 }
