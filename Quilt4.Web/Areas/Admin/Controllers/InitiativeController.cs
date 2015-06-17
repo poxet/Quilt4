@@ -55,7 +55,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         public ActionResult Edit(Guid? id)
         {
             if (id == null)
-                return Redirect("Index");
+                return RedirectToAction("Index");
 
             var initiative = _initiativeBusiness.GetInitiative(id.Value).ToModel();
 
@@ -66,7 +66,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         public ActionResult Edit(Web.Models.Initiative model)
         {
             _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
-            return Redirect("Index");
+            return RedirectToAction("Index");
         }
     }
 }
