@@ -8,10 +8,10 @@
 
 <h2>Members</h2>
 <table>
-    <tr>
-        <th>Member</th>
-        <th>Role</th>
-        <th>Status</th>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Member</th>
+        <th style="padding: 0 5px;">Role</th>
+        <th style="padding: 0 5px;">Status</th>
     </tr>
 
     @if (Model == null || Model.Initiative.DeveloperRoles.IsNullOrEmpty())
@@ -21,7 +21,7 @@
     
     @foreach (var member in Model.Initiative.DeveloperRoles)
     {
-        @Html.Raw("<tr> <td>" + member.DeveloperName + "</td> <td>" + member.RoleName + "</td> <td>Senast aktiv..</td> </tr>")
+        @Html.Raw("<tr> <td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td> <td style='padding: 0 5px;'>Senast aktiv..</td> </tr>")
     }
 </table>
 <hr/>
