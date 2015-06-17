@@ -42,9 +42,9 @@ namespace Quilt4.MongoDBRepository
             initiative.ClientToken = sessionToken;
             initiative.OwnerDeveloperName = owner;
 
-            Database.GetCollection("Initiative").Save(initiative);
-
+            Database.GetCollection("Initiative").Save(initiative, WriteConcern.Acknowledged);
         }
+
         public IDataBaseInfo GetDatabaseStatus()
         {
             var dbInfo = new DataBaseInfoEntity();
@@ -135,7 +135,8 @@ namespace Quilt4.MongoDBRepository
 
             if (item == null)
             {
-                Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() });
+                var settingPersist = new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() };
+                Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
                 return defaultValue;
             }
 
@@ -151,8 +152,14 @@ namespace Quilt4.MongoDBRepository
 
         public void SetSetting(string name, string value, Type type)
         {
-            var settingPersist = new SettingPersist { Id = name, Value = value.ToString(), Type = type.ToString() };
-            Database.GetCollection("Setting").Save(settingPersist);
+            var settingPersist = new SettingPersist { Id = name, Value = value, Type = type.ToString() };
+            Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
+        }
+
+        public IEnumerable<ICounter> GetAllCounters(string counterName)
+        {
+            var query = Query.EQ("CounterName", counterName);
+            return Database.GetCollection("Setting").FindAs<ICounter>(query);
         }
 
         //public string DatabaseName 
@@ -236,25 +243,12 @@ namespace Quilt4.MongoDBRepository
 
                         _database = db;
 
-                        //_database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true)); 
+                        _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
                     }
                 }
 
                 return _database;
-
-        //        if (_database != null)
-        //            return _database;
-
-        //        lock (SyncRoot)
-        //        {
-        //            if (_database == null)
-        //            {
-        //                _database = Server.GetDatabase(DatabaseName);
-        //                _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true));
-        //            }
-        //        }
-        //        return _database;
-                throw new InvalidOperationException();
             }
         }
 
@@ -416,7 +410,7 @@ namespace Quilt4.MongoDBRepository
 
         public void UpdateMachine(IMachine machine)
         {
-            Database.GetCollection("Machine").Save(machine.ToPersist());
+            Database.GetCollection("Machine").Save(machine.ToPersist(), WriteConcern.Acknowledged);
         }
 
         public bool CanConnect()

@@ -125,7 +125,6 @@ namespace Quilt4.Web.Business
 
         public int GetInitiativeCount()
         {
-
             return _repository.GetInitiativeCount();
         }
 

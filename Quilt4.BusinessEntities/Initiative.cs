@@ -5,6 +5,30 @@ using Quilt4.Interface;
 
 namespace Quilt4.BusinessEntities
 {
+    public class Counter : ICounter
+    {
+        public Counter(string counterName, DateTime dateTime, int? duration, int count, string[] path, string[] data, string level, string environment)
+        {
+            CounterName = counterName;
+            DateTime = dateTime;
+            Duration = duration;
+            Count = count;
+            Path = path;
+            Data = data;
+            Level = level;
+            Environment = environment;
+        }
+
+        public string CounterName { get; private set; }
+        public DateTime DateTime { get; private set; }
+        public int? Duration { get; private set; }
+        public int Count { get; private set; }
+        public string[] Path { get; private set; }
+        public string[] Data { get; private set; }
+        public string Level { get; private set; }
+        public string Environment { get; private set; }
+    }
+
     public class Initiative : IInitiative
     {
         private readonly Guid _id;

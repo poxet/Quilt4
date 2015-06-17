@@ -265,5 +265,15 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<ICounter> GetAllCounters(string counterName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ICounter> GetAllCounters()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

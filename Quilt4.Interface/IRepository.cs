@@ -66,5 +66,7 @@ namespace Quilt4.Interface
         T GetSetting<T>(string name, T defaultValue);
         IEnumerable<ISetting> GetSettings();
         void SetSetting(string name, string value, Type type);
+
+        IEnumerable<ICounter> GetAllCounters(string counterName);
     }
 }

@@ -22,7 +22,7 @@
     @foreach (var initiative in Model)
     {
         <tr>
-            <td style="padding: 0 5px;">@Html.ActionLink(initiative.Name ?? "Default", "Details", "Initiative", new { id = initiative.Id }, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(initiative.Name ?? "Default", "Edit", "Initiative", new { id = initiative.Id }, null)</td>
             <td style="padding: 0 5px;">@initiative.OwnerDeveloperName</td>
             <td style="padding: 0 5px;">@string.Join(",", initiative.DeveloperRoles.Select(x => x.DeveloperName))</td>
             <td style="padding: 0 5px;">@initiative.ApplicationCount</td>
