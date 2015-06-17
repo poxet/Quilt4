@@ -22,8 +22,6 @@
     @foreach (var member in Model.Initiative.DeveloperRoles)
     {
         @Html.Raw("<tr> <td>" + member.DeveloperName + "</td> <td>" + member.RoleName + "</td> <td>Senast aktiv..</td> </tr>")
-
-        @Html.Raw(member.DeveloperName + " " + member.RoleName + "<br />");
     }
 </table>
 <hr/>

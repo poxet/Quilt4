@@ -85,9 +85,13 @@ namespace Quilt4.Web.Controllers
         public ActionResult Invite(FormCollection collection)
         {
             var initiativeId = collection["InitiativeId"];
+            var inviteEmail = collection["InviteEmail"];
 
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
-            var invitationCode = initiative.AddDeveloperRolesInvitation(collection["InviteEmail"]);
+            var invitationCode = initiative.AddDeveloperRolesInvitation(inviteEmail);
+            initiative.DeveloperRoles.Single(x => x.InviteEMail == inviteEmail).DeveloperName = inviteEmail;
+
+            _initiativeBusiness.UpdateInitiative(initiative);
 
 
             var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
@@ -105,8 +109,8 @@ namespace Quilt4.Web.Controllers
 
             
 
-            //return Redirect("Index");
-            throw new NotImplementedException();
+            return Redirect("Index");
+            //throw new NotImplementedException();
         }
 
         // GET: Initiative/Details/5

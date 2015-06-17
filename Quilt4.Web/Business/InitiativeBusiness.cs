@@ -35,6 +35,11 @@ namespace Quilt4.Web.Business
             _repository.UpdateInitiative(id, name, sessionToken, owner);
         }
 
+        public void UpdateInitiative(IInitiative initiative)
+        {
+            _repository.UpdateInitiative(initiative);
+        }
+
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
             var initiatives = _repository.GetApplicationGroups(initiativeId).ToList();
