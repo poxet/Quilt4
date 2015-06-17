@@ -16,7 +16,7 @@
         <th style="padding: 0 5px;">Sessions</th>
         <th style="padding: 0 5px;">Issues</th>
         <th style="padding: 0 5px;">Counters</th>
-        <th style="padding: 0 5px;">CreateDate</th>
+        <th style="padding: 0 5px;">First used</th>
         <th style="padding: 0 5px;">Last Session</th>
     </tr>
     @foreach (var initiative in Model)
@@ -29,7 +29,7 @@
             <td style="padding: 0 5px;">@*@initiative.Sessions*@</td>
             <td style="padding: 0 5px;">@*@initiative.Issues*@</td>
             <td style="padding: 0 5px;"><!--Counters--></td>
-            <td style="padding: 0 5px;">@initiative.CreateDate</td>
+            <td style="padding: 0 5px;">@initiative.FirstUsedDate</td>
             <td style="padding: 0 5px;">@*@initiative.LastSession*@</td>
             @*<!--<td style="padding: 0 5px;">@Html.ActionLink("Properties", "EditInitiative", new { id = initiative.Id }, null)</td>-->*@
         </tr>
