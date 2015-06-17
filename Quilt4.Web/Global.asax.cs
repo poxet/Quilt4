@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -9,7 +8,6 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Castle.Windsor;
 using Quilt4.Interface;
-using Quilt4.Web.Business;
 using Tharga.Quilt4Net;
 
 namespace Quilt4.Web

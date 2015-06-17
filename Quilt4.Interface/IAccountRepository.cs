@@ -19,7 +19,7 @@ namespace Quilt4.Interface
         Task<string> GetPhoneNumberAsync(string userId);
         Task<bool> GetTwoFactorEnabledAsync(string userId);
         Task<IList<UserLoginInfo>> GetLoginsAsync(string userId);
-        Task<Tuple<IdentityResult,IApplicationUser>> CreateAsync(string userName, string email, string password);
+        Task<Tuple<IdentityResult, IApplicationUser>> CreateAsync(string userName, string email, string password);
         Task<Tuple<IdentityResult, IApplicationUser>> CreateAsync(string userName, string email);
         Task SignInAsync(IApplicationUser user, bool isPersistent, bool rememberBrowser);
         Task<IdentityResult> ChangePasswordAsync(string userId, string oldPassword, string newPassword);

@@ -6,8 +6,7 @@ using Quilt4.Web.Controllers;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [RouteArea("Admin")]
     public class InitiativeController : Controller
     {

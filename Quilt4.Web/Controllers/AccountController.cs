@@ -47,6 +47,7 @@ namespace Quilt4.Web.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    //await SignInAsync(result.Item2, isPersistent: false);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -58,6 +59,20 @@ namespace Quilt4.Web.Controllers
                     return View(model);
             }
         }
+
+        //private async Task SignInAsync(IApplicationUser user, bool isPersistent)
+        //{
+        //    //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+
+        //    var identity = await _accountRepository.CreateIdentityAsync(
+        //       user, DefaultAuthenticationTypes.ApplicationCookie);
+
+        //    AuthenticationManager.SignIn(
+        //       new AuthenticationProperties()
+        //       {
+        //           IsPersistent = isPersistent
+        //       }, identity);
+        //}
 
         //
         // GET: /Account/VerifyCode

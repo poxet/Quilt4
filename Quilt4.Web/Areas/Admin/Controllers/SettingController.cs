@@ -4,6 +4,7 @@ using Quilt4.Interface;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SettingController : Controller
     {
         private readonly ISettingsBusiness _settingsBusiness;

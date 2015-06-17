@@ -8,8 +8,7 @@ using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [RouteArea("Admin")]
     public class EmailController : Controller
     {
@@ -33,6 +32,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         {
             var model = new SendEmailViewModel();
 
+            //TODO: Use setting business instead of ConfigurationManager
             model.EmailEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["SendEMailEnabled"]);
 
             return View(model);
