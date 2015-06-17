@@ -34,11 +34,20 @@ namespace Quilt4.MongoDBRepository.Membership
         {
             get
             {
-                var r = Task<IEnumerable<ApplicationUser>>.Factory.StartNew(() => _store.GetAllUsersAsync().Result);
-                var response = r.Result.AsQueryable();
+                var task = new Task<IEnumerable<ApplicationUser>>(() =>
+                    {
+                        if (!_store.GetAllUsersAsync().Wait(3000))
+                            if (!_store.GetAllUsersAsync().Wait(3000))
+                                throw new InvalidOperationException("Oups!");
+                        var result = _store.GetAllUsersAsync().Result;
+                        return result;
+                    });
+                task.Start();
+                task.Wait();
+                var response = task.Result.AsQueryable();
                 return response;
-            }            
-        }        
+            }
+        }
 
         public override async Task<IdentityResult> ConfirmEmailAsync(string userId, string token)
         {

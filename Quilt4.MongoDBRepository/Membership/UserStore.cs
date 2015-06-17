@@ -491,9 +491,11 @@ namespace Quilt4.MongoDBRepository.Membership
         public async Task<IEnumerable<TUser>> GetAllUsersAsync()
         {
             var users = db.GetCollection<TUser>(collectionName);
-            var selection = users.Find(x => true);
-            var response = selection.ToListAsync();
-            return await response;
+            var task = users.FindAsync(x => true);
+            if (!task.Wait(3000))
+                throw new InvalidOperationException("Took to long to get users from the database.");
+            var response = task.Result;
+            return await response.ToListAsync();
         }
 
         /// <summary>
