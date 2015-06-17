@@ -156,6 +156,12 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
         }
 
+        public IEnumerable<ICounter> GetAllCounters(string counterName)
+        {
+            var query = Query.EQ("CounterName", counterName);
+            return Database.GetCollection("Setting").FindAs<ICounter>(query);
+        }
+
         //public string DatabaseName 
         //{
         //    get
