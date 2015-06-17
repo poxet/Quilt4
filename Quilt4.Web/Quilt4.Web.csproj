@@ -372,7 +372,7 @@
     <Content Include="Areas\Admin\Views\Developer\ConfirmDeveloperEMail.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\System.cshtml" />
     <Content Include="Areas\Admin\Views\Email\SendTestEmail.cshtml" />
-    <Content Include="Areas\Admin\Views\Initiative\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Initiative\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Email\EmailHistory.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Initiative\Member.cshtml" />
