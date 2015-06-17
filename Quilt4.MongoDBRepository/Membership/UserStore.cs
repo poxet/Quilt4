@@ -490,7 +490,10 @@ namespace Quilt4.MongoDBRepository.Membership
 
         public async Task<IEnumerable<TUser>> GetAllUsersAsync()
         {
-            return await db.GetCollection<TUser>(collectionName).Find(x => true).ToListAsync();
+            var users = db.GetCollection<TUser>(collectionName);
+            var selection = users.Find(x => true);
+            var response = selection.ToListAsync();
+            return await response;
         }
 
         /// <summary>

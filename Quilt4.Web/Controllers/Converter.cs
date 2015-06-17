@@ -32,7 +32,7 @@ namespace Quilt4.Web.Controllers
                 ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count().ToString(),
                 //ApplicationsIds = item.ApplicationGroups.SelectMany(x => x.Applications).Select(y => y.Id),
                 Sessions = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.Id).ToString(),
-                CreateDate = dateCreated == new DateTime() ? "N/A" : dateCreated.ToShortDateString() + " " + dateCreated.ToShortTimeString(),
+                FirstUsedDate = dateCreated == new DateTime() ? "N/A" : dateCreated.ToShortDateString() + " " + dateCreated.ToShortTimeString(),
                 ApplicationGroups = item.ApplicationGroups.Select(x => x.ToModel()).ToArray()
             };
             return response;
