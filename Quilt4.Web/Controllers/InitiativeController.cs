@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
@@ -98,13 +99,18 @@ namespace Quilt4.Web.Controllers
             var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
             if (enabled)
             {
-                //skicka mailet för att bekräfta
                 var root = Request.Url.AbsoluteUri.Replace(Request.Url.AbsolutePath, "/");
                 var acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
                 var declineLink = root + "Initiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
 
+                var userMessage = "";
+                if (!collection["Message"].IsNullOrEmpty())
+                {
+                    userMessage = "Message: " + collection["Message"] + "<br/><br/>";
+                }
+
                 var subject = "Invitation to " + initiative.Name + " at www.quilt4.com";
-                var message = initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. </br></hr><a href='" + acceptlink + "'>Accept</a></br><a href='" + declineLink + "'>Decline</a>";
+                var message = initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/>" + userMessage + "<a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
 
                 _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
             }

@@ -26,11 +26,16 @@
 </table>
 <hr/>
 
-<p>Invite member</p>
+<h3>Invite member</h3>
 @using (Html.BeginForm("Invite", "Initiative", null, FormMethod.Post, null))
 {
     @Html.Hidden("InitiativeId", Model.Initiative.Id)
-    @Html.TextBoxFor(m => m.InviteEmail)
+    @Html.TextBoxFor(m => m.InviteEmail, new { placeholder = Html.DisplayNameFor(n => n.InviteEmail) })
+    <br/>
+    <br/>
+    @Html.TextAreaFor(m => m.Message, new { placeholder = Html.DisplayNameFor(n => n.Message), Style = "width: 300px; height: 70px;" })
+    <br/>
+    <br/>
     <input type="submit" value="Invite"/>
 }
 
