@@ -127,6 +127,7 @@
     <Compile Include="IToolkitCompatibilities.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IUserBusiness.cs" />
+    <Compile Include="Precision.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 
@@ -46,56 +46,83 @@ namespace Quilt4.Web.Business
         }
 
         //TODO: Make it possible to get more 'columns' specified by input parameters
-        //TODO: Make it possible to specify precision in time.
-        //Seconds
-        //Minutes
-        //Hours
-        //Days
-        //Weeks ???
-        //Months
-        //Years
         //TODO: Add empty padding values so that each 'strata' gets a value. (If there are no entry points at all)
         //var grouped = items.GroupBy(x => GetKey(x.DateTime));
-        public ICounterCollection GetAggregatedCount<TKey>(string counterName, Func<ICounter,TKey> grouping, Predicate<ICounter> selection = null)
+        public ICounterCollection GetAggregatedCount<TKey>(string counterName, Precision precision = Precision.Ticks, Func<ICounter,TKey> grouping = null, Predicate<ICounter> selection = null)
         {
-            var response = GetRawData(counterName, selection);
+            var response = GetRawData(counterName, selection).ToArray();
 
-            //TODO: How do I dynamically provide data to select what filters should be used            
-            //var g = new Func<ICounter, TKey>(() => { });
-            //var grouped = response.GroupBy(x => x.DateTime);
-            var grouped = response.GroupBy(grouping);
-            //var grouped = response.GroupBy(x => new { x.DateTime, x.Environment });
-            //var grouped = response.GroupBy(x => new { x.DateTime, grouping.Invoke(x) });
-
-            //var lambda = Expression.Lambda<Func<ICounter, object>>(body, arg); 
-
-            //Lambda for dateTime
-            //var arg = Expression.Parameter(typeof(ICounter), "transaction");
-            //var body = Expression.Convert(Expression.Property(arg, "DateTime"), typeof(object)); 
-            //var lambda = Expression.Lambda<Func<ICounter, object>>(body, arg); 
-            //var keySelector = lambda.Compile();
-
-
-            //Expression.Convert(,)
-            //Expression.() grouping
-
-            //var x = Expression.Lambda<Func<ICounter, bool>>(Expression.Not(expr.Body), expr.Parameters[0]);
-            //var body2 = Expression.AndAlso(body, expr2.Body);
-            //var lambda2 = Expression.Lambda<Func<ICounter, bool>>(body, expr1.Parameters[0]);
-
-            //var grouped = response.GroupBy(x => keySelector);
+            IEnumerable<IGrouping<DateTime, ICounter>> grouped;
+            switch (precision)
+            {
+                case Precision.Ticks:
+                    grouped = response.GroupBy(x => x.DateTime);
+                    break;
+                case Precision.Seconds:
+                    grouped = response.GroupBy(x => DateTime.Parse(x.DateTime.ToString("s")));
+                    break;
+                case Precision.Minutes:
+                    grouped = response.GroupBy(x => DateTime.Parse(x.DateTime.ToString("s").Substring(0,16)));
+                    break;
+                case Precision.Hours:
+                    grouped = response.GroupBy(x => DateTime.Parse(x.DateTime.ToString("s").Substring(0, 13) + ":00:00"));
+                    break;
+                case Precision.Days:
+                    grouped = response.GroupBy(x => DateTime.Parse(x.DateTime.ToString("yyyy-MM-dd")));
+                    break;
+                case Precision.Months:
+                    grouped = response.GroupBy(x => DateTime.Parse(x.DateTime.ToString("yyyy-MM") + "-01"));
+                    break;
+                case Precision.Years:
+                    grouped = response.GroupBy(x => DateTime.Parse(x.DateTime.ToString("yyyy") + "-01-01"));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(string.Format("Unknown precision {0}.", precision));
+            }
+            
+            var names = GetNames(grouping, response);
 
             var lines = new List<ICounterLine>();
 
             foreach (var item in grouped)
-            {
-                var key = item.Key.ToString();
-                var line = new CounterLine(key, new[] { item.Sum(x => x.Count) });
+            {                
+                var key = item.Key.ToString(CultureInfo.InvariantCulture);
+
+                var counts = new List<int> { item.Sum(x => x.Count) };
+                if (grouping != null)
+                {
+                    var subGroup = item.GroupBy(grouping).ToArray();
+                    foreach (var name in names)
+                    {
+                        var element = subGroup.SingleOrDefault(x => x.Key.ToString() == name);
+
+                        var value = 0;
+                        if (element != null)
+                        {
+                            value = element.Sum(x => x.Count);
+                        }
+                        counts.Add(value);
+                    }
+                }
+
+                var line = new CounterLine(key, counts.ToArray());
                 lines.Add(line);
             }
 
-            var counterCollection = new CounterCollection(new[] { "Total" }, lines.ToArray());
+            names.Insert(0, "Total");
+            var counterCollection = new CounterCollection(names.ToArray(), lines.ToArray());
             return counterCollection;
+        }
+
+        private static List<string> GetNames<TKey>(Func<ICounter, TKey> grouping, ICounter[] response)
+        {
+            var names = new List<string>();
+            if (grouping != null)
+            {
+                var gbp = response.GroupBy(grouping);
+                names.AddRange(gbp.Select(gb => gb.Key.ToString()));
+            }
+            return names;
         }
     }
 }

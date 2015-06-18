@@ -63,19 +63,23 @@ namespace Quilt4.Web.Tests.Business.CounterBusinessTests
             var now = DateTime.UtcNow;
             var fakeData = new List<ICounter>
                                {
-                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1),
-                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1),
+                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "A" && x.Level == "X"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "B" && x.Level == "Y"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(1) && x.Count == 1 && x.Environment == "A"),
                                };
             repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
             var counterBusiness = new CounterBusiness(repositoryMock.Object);
 
             //Act
-            var data = counterBusiness.GetAggregatedCount("Session", x => new { x.DateTime, x.Environment });
+            var data = counterBusiness.GetAggregatedCount("Session", Precision.Ticks, x => new { x.Environment });
+
+            //var skv = data.ToSkv();
 
             //Assert
-            Assert.That(data.Lines.Count(),Is.EqualTo(1));
-            Assert.That(data.Lines.Sum(x => x.Counts.Sum()), Is.EqualTo(2));
-            Assert.That(data.Names.Count(), Is.EqualTo(1));
+            Assert.That(data.Lines.Count(),Is.EqualTo(2));
+            Assert.That(data.Lines.Sum(x => x.Counts.First()), Is.EqualTo(3));
+            Assert.That(data.Lines.Sum(x => x.Counts.Sum()), Is.EqualTo(data.Lines.Sum(x => x.Counts.First()) * 2));
+            Assert.That(data.Names.Count(), Is.EqualTo(3));
         }
 
         [Test]
@@ -86,21 +90,225 @@ namespace Quilt4.Web.Tests.Business.CounterBusinessTests
             var now = DateTime.UtcNow;
             var fakeData = new List<ICounter>
                                {
-                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "A"),
-                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "B"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "A" && x.Level == "X"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "B" && x.Level == "Y"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(1) && x.Count == 1 && x.Environment == "A"),
                                };
             repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
             var counterBusiness = new CounterBusiness(repositoryMock.Object);
 
             //Act
-            var data = counterBusiness.GetAggregatedCount("Session", x => new { x.DateTime });
+            var data = counterBusiness.GetAggregatedCount<string>("Session");
 
             //var skv = data.ToSkv();
 
             //Assert
-            Assert.That(data.Lines.Count(),Is.EqualTo(1));
-            Assert.That(data.Lines.Sum(x => x.Counts.Sum()), Is.EqualTo(2));
+            Assert.That(data.Lines.Count(),Is.EqualTo(2));
+            Assert.That(data.Lines.Sum(x => x.Counts.First()), Is.EqualTo(3));
             Assert.That(data.Names.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Aggregated_when_using_ticks()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Ticks);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(8));
+        }
+
+        [Test]
+        public void Aggregated_when_using_seconds()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Seconds);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(7));
+        }
+
+        [Test]
+        public void Aggregated_when_using_minutes()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Minutes);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(6));
+        }
+
+        [Test]
+        public void Aggregated_when_using_hours()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Hours);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(5));
+        }
+
+        [Test]
+        public void Aggregated_when_using_days()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Days);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(4));
+        }
+
+        [Test]
+        public void Aggregated_when_using_months()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Months);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void Aggregated_when_using_years()
+        {
+            //Arrange
+            var repositoryMock = new Mock<IRepository>(MockBehavior.Strict);
+            var now = DateTime.UtcNow;
+            var fakeData = new List<ICounter>
+                               {
+                                   Mock.Of<ICounter>(x => x.DateTime == now),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddTicks(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddSeconds(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMinutes(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddHours(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddMonths(2)),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddYears(2)),
+                               };
+            repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
+            var counterBusiness = new CounterBusiness(repositoryMock.Object);
+
+            //Act
+            var data = counterBusiness.GetAggregatedCount<string>("Session", Precision.Years);
+
+            //var skv = data.ToSkv();
+
+            //Assert
+            Assert.That(data.Lines.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -111,21 +319,23 @@ namespace Quilt4.Web.Tests.Business.CounterBusinessTests
             var now = DateTime.UtcNow;
             var fakeData = new List<ICounter>
                                {
-                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "A"),
-                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "B"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "A" && x.Level == "X"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now && x.Count == 1 && x.Environment == "B" && x.Level == "Y"),
+                                   Mock.Of<ICounter>(x => x.DateTime == now.AddDays(1) && x.Count == 1 && x.Environment == "A"),
                                };
             repositoryMock.Setup(x => x.GetAllCounters("Session")).Returns(() => fakeData);
             var counterBusiness = new CounterBusiness(repositoryMock.Object);
 
             //Act
-            var data = counterBusiness.GetAggregatedCount("Session", x => new { x.DateTime, x.Environment });
+            var data = counterBusiness.GetAggregatedCount("Session", Precision.Ticks, x => new { x.Environment, x.Level });
 
-            var skv = data.ToSkv();
+            //var skv = data.ToSkv();
 
             //Assert
             Assert.That(data.Lines.Count(), Is.EqualTo(2));
-            Assert.That(data.Lines.Sum(x => x.Counts.Sum()), Is.EqualTo(2));
-            Assert.That(data.Names.Count(), Is.EqualTo(1));
+            Assert.That(data.Lines.Sum(x => x.Counts.First()), Is.EqualTo(3));
+            Assert.That(data.Lines.Sum(x => x.Counts.Sum()), Is.EqualTo(data.Lines.Sum(x => x.Counts.First()) * 2));
+            Assert.That(data.Names.Count(), Is.EqualTo(4));
         }
 
         private IEnumerable<ICounter> GivenSomeDifferentFakeCounters()
@@ -334,6 +544,8 @@ namespace Quilt4.Web.Tests.Business.CounterBusinessTests
 
                 foreach(var count in item.Counts)
                     sb.AppendFormat("\t{0}", count);
+
+                sb.AppendLine();
             }
 
             return sb.ToString();
