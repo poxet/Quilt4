@@ -123,7 +123,7 @@ namespace Quilt4.Web.Controllers
         public ActionResult ConfirmInvite(string id, string inviteCode)
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-            initiative.ConfirmInvitation(inviteCode, initiative.DeveloperRoles.Single(x => x.InviteCode == inviteCode).DeveloperName);
+            initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
             _initiativeBusiness.UpdateInitiative(initiative);
 
             return View();
