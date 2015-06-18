@@ -11,6 +11,7 @@
 @Html.ActionLink("Members", "Member", new { initiativeId = @Model.Initiative.Id }, null)
 <br/>
 
+<h3>Applications</h3>
 @{
     var applications = Model.Initiative.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
 }
