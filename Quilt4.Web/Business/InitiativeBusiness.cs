@@ -79,6 +79,8 @@ namespace Quilt4.Web.Business
             developerName = developerName ?? "*";
 
             var initiative = new Initiative(Guid.NewGuid(), initiativename, GenerateClientToken(), developerName, new List<IDeveloperRole>(), new List<ApplicationGroup>());
+            var code = initiative.AddDeveloperRolesInvitation(developerName);
+            initiative.ConfirmInvitation(code, developerName);
             _repository.AddInitiative(initiative);
         }
 
