@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
 {
@@ -39,9 +40,14 @@ namespace Quilt4.Web.Controllers
             //Hej Jonas. Jag ändrade metod för att hitta initiativ. Den använder namn om det är unikt, annars en guid.
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel();
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
-            //var versions = _applicationVersionBusiness.GetApplicationVersions();
+            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
+            
+            var model = new ApplicationModel();
+            model.Id = id;
+            model.Application = application;
+            model.Versions = versions;
 
-            return View();
+            return View(model);
         }
 
         //// GET: Application/Create

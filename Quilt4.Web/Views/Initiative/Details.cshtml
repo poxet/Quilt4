@@ -25,7 +25,7 @@ else
     foreach (var application in applications)
     {
         @*@Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.Initiative.GetUniqueIdentifier(@Model.AllInitiativeNames), application = @application.Name }, null)*@
-        <a href='~/Application/Details/@Html.Raw(Model.Initiative.GetUniqueIdentifier(Model.AllInitiativeNames))/@Html.Raw(application.Name)'>@application.Name</a>
+        <a href='~/Application/Details?id=@Html.Raw(Model.Initiative.GetUniqueIdentifier(Model.AllInitiativeNames))&application=@Html.Raw(application.Name)'>@application.Name</a>
         <br/>
     }
 }

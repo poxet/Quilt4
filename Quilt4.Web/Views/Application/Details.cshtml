@@ -1,8 +1,16 @@
-﻿
+﻿@model Quilt4.Web.Models.ApplicationModel
+
+
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
+
+<h3>Versions</h3>
+@foreach (var version in Model.Versions)
+{
+    <a href='~/Version/Details?id=@Model.Id&application=@Model.Application&version=@version.Version'>@version.Version</a><br/>
+}
 
