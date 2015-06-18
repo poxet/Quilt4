@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Areas.Admin.Models
 {
@@ -16,5 +17,6 @@ namespace Quilt4.Web.Areas.Admin.Models
         [Display(Name = "Additional message")]
         public string Message { get; set; }
 
+        public string RoleName { get; set; }
     }
 }

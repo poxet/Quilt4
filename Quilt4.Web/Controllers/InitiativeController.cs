@@ -78,6 +78,7 @@ namespace Quilt4.Web.Controllers
             
             var invite = new InviteModel();
             invite.Initiative = initiative;
+            invite.RoleName = invite.Initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName;
 
             return View(invite);
         }
