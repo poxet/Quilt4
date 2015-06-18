@@ -126,7 +126,7 @@ namespace Quilt4.Web.Controllers
             initiative.ConfirmInvitation(inviteCode, initiative.DeveloperRoles.Single(x => x.InviteCode == inviteCode).DeveloperName);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return Redirect("Index");
+            return View();
         }
 
         [AllowAnonymous]
@@ -137,7 +137,7 @@ namespace Quilt4.Web.Controllers
             _initiativeBusiness.UpdateInitiative(initiative);
 
 
-            return Redirect("Index");
+            return View();
         }
 
         // GET: Initiative/Details/5

@@ -381,6 +381,8 @@
     <Content Include="Views\IssueType\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Initiative\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Initiative\ConfirmInvite.cshtml" />
+    <Content Include="Views\Initiative\DeclineInvite.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
