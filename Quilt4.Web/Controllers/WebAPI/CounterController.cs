@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 using Quilt4.Interface;
@@ -65,7 +66,7 @@ namespace Quilt4.Web.Controllers.WebAPI
                 data = DynamicExtensions.ToRegisterIssueRequest(dataD);
             }
 
-            var counter = new Quilt4.BusinessEntities.Counter(data.Message, data.ClientTime, null, 1, new string[] { }, new string[] { }, null, null);
+            var counter = new Quilt4.BusinessEntities.Counter(data.Message, data.ClientTime, null, 1, new Dictionary<string, string>(), new Dictionary<string, string>(), null, null);
             return counter;
         }
     }

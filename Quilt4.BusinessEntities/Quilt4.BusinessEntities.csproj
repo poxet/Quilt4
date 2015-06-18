@@ -54,6 +54,9 @@
     <Compile Include="Application.cs" />
     <Compile Include="ApplicationGroup.cs" />
     <Compile Include="ApplicationVersion.cs" />
+    <Compile Include="Counter.cs" />
+    <Compile Include="CounterCollection.cs" />
+    <Compile Include="CounterLine.cs" />
     <Compile Include="Developer.cs" />
     <Compile Include="RandomUtility.cs" />
     <Compile Include="DeveloperRole.cs" />

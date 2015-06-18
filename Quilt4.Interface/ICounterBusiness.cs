@@ -6,7 +6,7 @@ namespace Quilt4.Interface
     public interface ICounterBusiness
     {
         void RegisterCounter(ICounter counter);
-        IEnumerable<ICounter> GetRawData(string counterName, Predicate<ICounter> predicate = null);
+        IEnumerable<ICounter> GetRawData(string counterName, Predicate<ICounter> selection = null);
         IEnumerable<ICounter> GetAggregatedData(string counterName, Predicate<ICounter> predicate = null);
     }
 }

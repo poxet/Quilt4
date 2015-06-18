@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Quilt4.Interface
 {
@@ -6,10 +7,10 @@ namespace Quilt4.Interface
     {
         string CounterName { get; } //(Ex. Application, IssueType, Logon)
         DateTime DateTime { get; } //(UTC time for the action)
-        int? Duration { get; } //(null, value of any optional unit)
+        decimal? Duration { get; } //(null, value of any optional unit)
         int Count { get; } //(1, or a larger number if aggregated, or -1 if decreasing, ie DELETE)
-        string[] Path { get; } //(Used to specify where the data belongs. Ex. { Initiative = 'ABC', Application='DEF', Version='1.2.3.4' })
-        string[] Data { get; } //(Used for any additional information. Ex. { Blah = 'a1', Blah2 = 'b2' })
+        Dictionary<string,string> Path { get; } //(Used to specify where the data belongs. Ex. { Initiative = 'ABC', Application='DEF', Version='1.2.3.4' })
+        Dictionary<string, string> Data { get; } //(Used for any additional information. Ex. { Blah = 'a1', Blah2 = 'b2' })
         string Level { get; } //(null, Information, Warning, Error)
         string Environment { get; } //(null, Name of the environment)
     }

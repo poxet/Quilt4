@@ -95,6 +95,8 @@
     <Compile Include="ICompatibilityBusiness.cs" />
     <Compile Include="ICounter.cs" />
     <Compile Include="ICounterBusiness.cs" />
+    <Compile Include="ICounterCollection.cs" />
+    <Compile Include="ICounterLine.cs" />
     <Compile Include="IDataBaseInfo.cs" />
     <Compile Include="IDeveloper.cs" />
     <Compile Include="IDeveloperRole.cs" />

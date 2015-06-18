@@ -114,6 +114,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Quilt4.BusinessEntities\Quilt4.BusinessEntities.csproj">
+      <Project>{EB65AFAB-C755-4FD8-8314-1EF60B30AA8E}</Project>
+      <Name>Quilt4.BusinessEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Quilt4.Interface\Quilt4.Interface.csproj">
       <Project>{8B34B62E-DA87-42EE-A727-50DBA06F07E7}</Project>
       <Name>Quilt4.Interface</Name>
