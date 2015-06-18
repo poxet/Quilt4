@@ -2,32 +2,29 @@
 @model Quilt4.Web.Models.Initiative
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Edit Initiative";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
-<h2>Edit Initiative</h2>
-
 
 @using (Html.BeginForm())
 {
     @Html.HiddenFor(m => m.Id)
 <table>
     <tr>
-        <th>Name</th>
-        <td>@Html.TextBoxFor(m => m.Name)</td>
+        <th style="padding: 5px;">Name</th>
+        <td style="padding: 5px;">@Html.TextBoxFor(m => m.Name)</td>
     </tr>
     <tr>
-        <th>ClientToken</th>
-        <td>@Html.TextBoxFor(m => m.ClientToken)
+        <th style="padding: 5px;">ClientToken</th>
+        <td style="padding: 5px;">@Html.TextBoxFor(m => m.ClientToken)
     </tr>
     <tr>
-        <th>Owner</th>
-        <td> @Html.TextBoxFor(m => m.OwnerDeveloperName)</td>
+        <th style="padding: 5px;">Owner</th>
+        <td style="padding: 5px;"> @Html.TextBoxFor(m => m.OwnerDeveloperName)</td>
     </tr>
     <tr>
-        <th>Members</th>
-        <td>
+        <th style="padding: 5px;">Members</th>
+        <td style="padding: 5px;">
             @foreach (var member in Model.DeveloperRoles)
             {
                 @Html.Raw(member.DeveloperName + ", ")
@@ -35,7 +32,7 @@
         </td>
     </tr>
 </table>
-
-<input type="submit" value="Save" />
+<br/>
+<input style="margin: 0 25px 0 5px" type="submit" value="Save" />
 @Html.ActionLink("Cancel", "Index")
 }
