@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
@@ -20,8 +21,9 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Initiative/Index
         public ActionResult Index()
         {
-            //var ub = new InitiativeBusiness(_compositeRoot.Repository);
-            var initiatives = _initiativeBusiness.GetInitiatives().Select(x => x.ToModel()).ToList();
+            var enumerable = _initiativeBusiness.GetInitiatives().ToArray();
+            var initiativeNames = enumerable.Select(x => x.Name);
+            var initiatives = enumerable.Select(x => x.ToModel(initiativeNames)).ToList();
 
             //TODO: This code is too slow, we need to do something about that
             //var issues = _initiativeBusiness.GetIssueStatistics(new DateTime(1900, 01, 01), DateTime.Now);
@@ -57,7 +59,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             if (id == null)
                 return RedirectToAction("Index");
 
-            var initiative = _initiativeBusiness.GetInitiative(id.Value).ToModel();
+            var initiative = _initiativeBusiness.GetInitiative(id.Value).ToModel(null);
 
             return View(initiative);
         }

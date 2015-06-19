@@ -5,6 +5,7 @@ namespace Quilt4.Web.Models
 {
     public class Initiative
     {
+        public string UniqueIdentifier { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string ClientToken { get; set; }

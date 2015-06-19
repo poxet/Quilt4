@@ -1,18 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Quilt4.Interface;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Extensions
 {
     public static class InitiativeExtensions
     {
-        public static string GetUniqueIdentifier(this Initiative item, IEnumerable<string> names)
+        public static string GetUniqueIdentifier(this IInitiativeHead item, IEnumerable<string> names)
         {
             //First use name if possible
-            if (names.Count(x => (x ?? Constants.DefaultInitiativeName) == (item.Name ?? Constants.DefaultInitiativeName)) == 1)
+            if (names != null && names.Count(x => (x ?? Constants.DefaultInitiativeName) == (item.Name ?? Constants.DefaultInitiativeName)) == 1)
+            {
                 return item.Name;
+            }
 
             return item.Id.ToString();
+        }
+
+        public static string GetUniqueIdentifier(this IApplicationVersion item, IEnumerable<string> versions)
+        {
+            //First use name if possible
+            if (versions != null && versions.Count(x => (x ?? Constants.DefaultInitiativeName) == (item.Version ?? Constants.DefaultInitiativeName)) == 1)
+            {
+                return item.Version;
+            }
+
+            return item.Id.Replace(":", "");
         }
     }
 }

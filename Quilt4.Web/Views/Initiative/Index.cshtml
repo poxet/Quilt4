@@ -10,7 +10,7 @@
 
 @foreach (var initiative in Model.InitiativeInfos)
 {
-    <div>@Html.ActionLink(initiative.Name ?? Constants.DefaultInitiativeName, "Details", new { id = initiative.GetUniqueIdentifier(Model.InitiativeInfos.Select(x => x.Name)) }, null)</div>
+    <div>@Html.ActionLink(initiative.Name ?? Constants.DefaultInitiativeName, "Details", new { id = initiative.UniqueIdentifier }, null)</div>
     <div>ClientToken: @Html.Raw(initiative.ClientToken)</div>
 }
 

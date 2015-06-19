@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.Web.Extensions;
 using Initiative = Quilt4.Web.Models.Initiative;
 
 namespace Quilt4.Web.Controllers
@@ -18,7 +20,7 @@ namespace Quilt4.Web.Controllers
             return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix);
         }
 
-        public static Initiative ToModel(this IInitiative item)
+        public static Initiative ToModel(this IInitiative item, IEnumerable<string> allInitiativeNames)
         {
             var dateCreated = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.FirstRegistered).OrderBy(z => z.Date).FirstOrDefault();
             
@@ -30,10 +32,10 @@ namespace Quilt4.Web.Controllers
                 OwnerDeveloperName = item.OwnerDeveloperName,
                 DeveloperRoles = item.DeveloperRoles.Select(x => x.ToModel()).ToArray(),
                 ApplicationCount = item.ApplicationGroups.SelectMany(x => x.Applications).Count().ToString(),
-                //ApplicationsIds = item.ApplicationGroups.SelectMany(x => x.Applications).Select(y => y.Id),
                 Sessions = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.Id).ToString(),
                 FirstUsedDate = dateCreated == new DateTime() ? "N/A" : dateCreated.ToShortDateString() + " " + dateCreated.ToShortTimeString(),
-                ApplicationGroups = item.ApplicationGroups.Select(x => x.ToModel()).ToArray()
+                ApplicationGroups = item.ApplicationGroups.Select(x => x.ToModel()).ToArray(),
+                UniqueIdentifier = item.GetUniqueIdentifier(allInitiativeNames),                
             };
             return response;
         }

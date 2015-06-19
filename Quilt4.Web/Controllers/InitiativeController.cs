@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
 using Quilt4.Web.Areas.Admin.Models;
+using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -34,35 +35,23 @@ namespace Quilt4.Web.Controllers
         {
             try
             {
-                //var currentDeveloper = _compositeRoot.MembershipAgent.GetDeveloper();
-
-                //var service = new Service.WebService(_compositeRoot.Repository);
-                //var initiatives = service.GetInitiativesByDeveloperHead(currentDeveloper.DeveloperName);                
                 var developerName = User.Identity.Name;
-                var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName);
-
-                //var ib = new InitiativeBusiness(_compositeRoot.Repository);
-
-                //var pending = ib.GetPendingApprovals(currentDeveloper.EMail);
+                var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
                 var initiatives = new Initiatives
                 {
-                    InitiativeInfos = ins.Select(x => new Initiative{ Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName}),
-                //    IsEMailConfirmed = _compositeRoot.MembershipAgent.IsEMailConfirmed(currentDeveloper.DeveloperName),
-                //    InviteEMail = currentDeveloper.EMail,
-                //    Invitations = pending,
-                //    SingleInitiative = false,
+                    InitiativeInfos = ins.Select(x => new Initiative { Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName, UniqueIdentifier = x.GetUniqueIdentifier(ins.Select(xx => xx.Name)) }),
+                    //InitiativeInfos = ins.Select(x =>x.ToModel())
                 };
-                //return View("Index", m);
                 return View(initiatives);
             }
             catch (Exception exception)
             {
                 ViewBag.Message = exception.Message;
-                //return View("Index", new Initiatives { InitiativeInfos = new List<Service.Model.Initiative>(), Invitations = new List<IInviteApproval>() });
                 return View();
             }
         }
+
         //Get
         public ActionResult Member(string initiativeId)
         {
@@ -95,7 +84,6 @@ namespace Quilt4.Web.Controllers
             initiative.DeveloperRoles.Single(x => x.InviteEMail == inviteEmail).DeveloperName = inviteEmail;
 
             _initiativeBusiness.UpdateInitiative(initiative);
-
 
             var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
             if (enabled)
@@ -136,7 +124,6 @@ namespace Quilt4.Web.Controllers
             initiative.DeclineInvitation(inviteCode);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-
             return View();
         }
 
@@ -145,14 +132,10 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel();
             var initiativeNames = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.GetUserName()).Select(x => x.Name).ToList();
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(initiativeNames);
 
-            return View(new InitiativeDetailsModel
-            {
-                Initiative = initiative,
-                AllInitiativeNames = initiativeNames
-            }); 
+            return View(initiative); 
         }
 
         // GET: Initiative/Create

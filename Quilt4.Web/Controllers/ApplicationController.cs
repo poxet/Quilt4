@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
+using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -18,34 +18,26 @@ namespace Quilt4.Web.Controllers
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
         }
-        //// GET: Application
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
 
         // GET: Application/Details/5
         public ActionResult Details(string id, string application)
         {
-            //Guid initiativeId;
-            //if (!Guid.TryParse(id, out initiativeId) )
-            //{
-
-            //}
-
-            //Guid inititiveId = Guid.Parse(id);
-            //var applicationId = _initiativeBusiness.GetApplicationGroups(initiativeId);
-            //var initiative = _initiativeBusiness.GetInitiative(initiativeId);
-
-            //Hej Jonas. Jag ändrade metod för att hitta initiativ. Den använder namn om det är unikt, annars en guid.
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel();
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
-            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
-            
-            var model = new ApplicationModel();
-            model.Id = id;
-            model.Application = application;
-            model.Versions = versions;
+            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
+
+            var versionNames = versions.Select(x => x.Version);
+
+            var model = new ApplicationModel
+            {
+                Initiative = id, 
+                Application = application,
+                Versions = versions.Select(x => new VersionModel
+                {
+                    Version = x.Version,
+                    UniqueIdentifier = x.GetUniqueIdentifier(versionNames)
+                })
+            };
 
             return View(model);
         }

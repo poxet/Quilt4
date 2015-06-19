@@ -260,7 +260,6 @@
     <Compile Include="Models\DeveloperRole.cs" />
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\CreateInitiative.cs" />
-    <Compile Include="Models\InitiativeDetailsModel.cs" />
     <Compile Include="Models\Initiatives.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
