@@ -268,16 +268,19 @@
                         </li>
                         @Html.MenuItem("Dashboard", "fa fa-dashboard fa-fw", "Index", "Dashboard")
 
-                        <li>
+                        @*<li>
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> Configuration<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
                                     @Html.ActionLink("Settings", "Index", "Setting")
                                 </li>
                             </ul>
-                        </li>
+                        </li>*@
 
-                                @*<li>
+
+                        @Html.MenuItem("Configuration", "fa fa-wrench fa-fw", new List<Link> {new Link("Settings", "Index", "Setting")})
+
+                        @*<li>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
