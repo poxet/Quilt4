@@ -1,8 +1,18 @@
-﻿
+﻿@using System.Web.Mvc.Html
+@using Quilt4.BusinessEntities
+@model Quilt4.Web.Models.IssueModel
+
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
+
+@foreach (var issue in Model.ExceptionTypeName)
+{
+    @Html.Raw(issue)
+    <a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issue">@issue</a>
+    <br/>
+}
 
