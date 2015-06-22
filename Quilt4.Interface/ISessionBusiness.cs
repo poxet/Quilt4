@@ -10,5 +10,6 @@ namespace Quilt4.Interface
         void EndSession(Guid sessionId);
         void RegisterSessionEx(RegisterSessionRequest data);
         IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds);
+        IEnumerable<ISession> GetSessionsForApplicationVersion(string applicationVersionId);
     }
 }

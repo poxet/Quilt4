@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
 {
@@ -10,11 +11,13 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+        private readonly ISessionBusiness _sessionBusiness;
 
-        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness)
+        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
+            _sessionBusiness = sessionBusiness;
         }
         //// GET: IssueType
         //public ActionResult Index()
@@ -26,14 +29,19 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id, string application, string version, string issueType)
         {
             //id -> Initiative
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
 
             var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId);
             var issueTypes = ver.Single(x => x.Version == version).IssueTypes;
-            var type = issueTypes.Select(x => x.ExceptionTypeName == issueType);
-            
-            return View(type);
+
+            var model = new IssueTypeModel
+            {
+                IssueType = issueTypes.Single(x => x.Ticket.ToString() == issueType), 
+                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(application)
+            };
+
+            return View(model);
         }
 
         //// GET: IssueType/Create
