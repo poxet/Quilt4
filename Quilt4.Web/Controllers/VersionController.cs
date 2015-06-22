@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
 {
@@ -10,7 +12,6 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
-
         public VersionController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
@@ -22,11 +23,17 @@ namespace Quilt4.Web.Controllers
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
-            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
+            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
 
-            return View();
+            var issue = new IssueModel();
+            issue.ExceptionTypeName = ver.IssueTypes.Select(x => x.ExceptionTypeName);
+            issue.InitiativeId = id;
+            issue.ApplicationName = application;
+            issue.Version = version;
+    
+            return View(issue);
         }
 
         //// GET: Version/Create
