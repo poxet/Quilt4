@@ -29,17 +29,17 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id, string application, string version, string issueType)
         {
             //id -> Initiative
-            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id);
-            var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
+            //var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id);
+            //var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
 
-            var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId);
-            var issueTypes = ver.Single(x => x.Version == version).IssueTypes;
+            //var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId);
+            //var issueTypes = ver.Single(x => x.Version == version).IssueTypes;
 
-            var model = new IssueTypeModel
-            {
-                IssueType = issueTypes.Single(x => x.Ticket.ToString() == issueType), 
-                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(application)
-            };
+            //var model = new IssueTypeModel
+            //{
+            //    IssueType = issueTypes.Single(x => x.Ticket.ToString() == issueType), 
+            //    Sessions = _sessionBusiness.GetSessionsForApplicationVersion(application)
+            //};
 
             return View(model);
         }
