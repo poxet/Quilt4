@@ -1,10 +1,21 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Controllers
 {
     [Authorize]
     public class IssueTypeController : Controller
     {
+        private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+
+        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness)
+        {
+            _initiativeBusiness = initiativeBusiness;
+            _applicationVersionBusiness = applicationVersionBusiness;
+        }
         //// GET: IssueType
         //public ActionResult Index()
         //{
@@ -15,8 +26,14 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id, string application, string version, string issueType)
         {
             //id -> Initiative
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
 
-            return View();
+            var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId);
+            var issueTypes = ver.Single(x => x.Version == version).IssueTypes;
+            var type = issueTypes.Select(x => x.ExceptionTypeName == issueType);
+            
+            return View(type);
         }
 
         //// GET: IssueType/Create
