@@ -1,6 +1,4 @@
-﻿@using System.Web.Mvc.Html
-@using Quilt4.BusinessEntities
-@model Quilt4.Web.Models.IssueModel
+﻿@model Quilt4.Web.Models.IssueModel
 
 @{
     ViewBag.Title = "Details";
@@ -9,10 +7,68 @@
 
 <h2>Details</h2>
 
-@foreach (var issue in Model.ExceptionTypeName)
-{
-    @Html.Raw(issue)
-    <a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issue">@issue</a>
-    <br/>
-}
 
+<h3>Issue Types</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Type</th>
+        <th style="padding: 0 5px;">Message</th>
+        <th style="padding: 0 5px;">Level</th>
+        <th style="padding: 0 5px;">Count</th>
+        <th style="padding: 0 5px;">Environment</th>
+        <th style="padding: 0 5px;">Ticket</th>
+    </tr>
+
+    @foreach (var issue in Model.IssueTypes)
+    {
+        <tr>
+            <td style="padding: 0 5px;"><a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issue.Ticket">@issue.ExceptionTypeName</a></td>
+            <td style="padding: 0 5px;">@issue.Message</td>
+            <td style="padding: 0 5px;">@issue.IssueLevel</td>
+            <td style="padding: 0 5px;">Count... TODO</td>
+            <td style="padding: 0 5px;">Environment... TODO</td>
+            <td style="padding: 0 5px;">@issue.Ticket</td>
+        </tr>
+    }
+
+    @*foreach (var name in Model.ExceptionTypeName) {
+    <tr>
+        <td style="padding: 0 5px;">
+            <a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@name">@name</a>
+        </td>
+        @foreach (var message in Model.Message){
+            <td style="padding: 0 5px;">
+                @message
+            </td>}
+        @foreach (var level in Model.Level){
+            <td style="padding: 0 5px;">
+                @level
+            </td>}
+        <td style="padding: 0 5px;">@*Count</td>
+        @foreach (var session in Model.Sessions){
+            <td style="padding: 0 5px;">@session.Environment</td>}
+        @foreach (var ticket in Model.Ticket){
+            <td style="padding: 0 5px;">@ticket</td>}
+    </tr>}
+    *@
+
+</table>
+
+<h3>Sessions</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Start</th>
+        <th style="padding: 0 5px;">Environment</th>
+        <th style="padding: 0 5px;">User</th>
+        <th style="padding: 0 5px;">Machine</th>
+        <th style="padding: 0 5px;">IP</th>
+    </tr>
+    @foreach (var session in Model.Sessions)
+    {
+        <tr>
+            <td>@session.ServerStartTime</td>
+            <td>@session.Environment</td>
+            <td>@Model.Users.Single(x => x.Id == session.UserFingerprint).UserName</td>
+        </tr>
+    }
+</table>
