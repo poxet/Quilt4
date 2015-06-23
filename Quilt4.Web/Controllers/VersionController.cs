@@ -16,13 +16,15 @@ namespace Quilt4.Web.Controllers
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly ISessionBusiness _sessionBusiness;
         private readonly IUserBusiness _userBusiness;
+        private readonly IMachineBusiness _machineBusiness;
 
-        public VersionController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness)
+        public VersionController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _sessionBusiness = sessionBusiness;
             _userBusiness = userBusiness;
+            _machineBusiness = machineBusiness;
         }
 
         // GET: Version/Details/5
@@ -51,6 +53,8 @@ namespace Quilt4.Web.Controllers
             var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
 
             issue.Users = users;
+
+            issue.Machines = _machineBusiness.GetMachinesByApplicationVersion(ver.Id);
     
             return View(issue);
         }

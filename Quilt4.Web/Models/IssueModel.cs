@@ -14,5 +14,7 @@ namespace Quilt4.Web.Models
         public IEnumerable<ISession> Sessions { get; set; }
         public IEnumerable<IUser> Users { get; set; }
         public IEnumerable<IIssueType> IssueTypes { get; set; }
+        public IEnumerable<IMachine> Machines { get; set; }
+ 
     }
 }

@@ -6,5 +6,6 @@ namespace Quilt4.Interface
     {
         void RegisterMachine(IFingerprint id, string name, IDictionary<string, string> data);
         IMachine GetMachine(string machineFingerprint);
+        IEnumerable<IMachine> GetMachinesByApplicationVersion(string applicationVersionId);
     }
 }
