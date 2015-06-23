@@ -52,6 +52,15 @@ namespace Quilt4.Web.Controllers
             }
         }
 
+        public ActionResult RemoveMember(string id, string developer)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            initiative.RemoveDeveloperRole(developer);
+            _initiativeBusiness.UpdateInitiative(initiative);
+
+            return RedirectToAction("Member", "Initiative", new { initiativeId = id});
+        }
+
         //Get
         public ActionResult Member(string initiativeId)
         {
@@ -104,8 +113,7 @@ namespace Quilt4.Web.Controllers
                 _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
             }
 
-            return Redirect("Index");
-            //throw new NotImplementedException();
+            return RedirectToAction("Member", "Initiative", new { initiativeId = collection["InitiativeId"] });
         }
 
         public ActionResult ConfirmInvite(string id, string inviteCode)
