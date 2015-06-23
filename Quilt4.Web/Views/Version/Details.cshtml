@@ -1,4 +1,5 @@
-﻿@model Quilt4.Web.Models.IssueModel
+﻿@using Castle.Core.Internal
+@model Quilt4.Web.Models.IssueModel
 
 @{
     ViewBag.Title = "Details";
@@ -28,6 +29,7 @@
             <td style="padding: 0 5px;">Count... TODO</td>
             <td style="padding: 0 5px;">Environment... TODO</td>
             <td style="padding: 0 5px;">@issue.Ticket</td>
+            
         </tr>
     }
 
@@ -78,11 +80,52 @@
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">User</th>
     </tr>
-   
-        @foreach (var user in Model.Users.Select(x => x.UserName).Distinct())
-        {
-            <tr>
-                <td style="padding: 0 5px;">@user</td>
-            </tr>
+
+    @foreach (var user in Model.Users.Select(x => x.UserName).Distinct())
+    {
+        <tr>
+            <td style="padding: 0 5px;">@user</td>
+        </tr>
+    }
+</table>
+
+<h3>Handles</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Handle</th>
+    </tr>
+    @foreach (var issue in Model.IssueTypes.SelectMany(y => y.Issues).Select(x => x.UserHandle).Distinct())
+    {
+        <tr>
+            @if (issue.IsNullOrEmpty())
+            {
+                <td style="padding: 0 5px;">@Html.Raw("N/A")</td>
+            }
+            else
+            {
+                <td style="padding: 0 5px;">@issue</td>
+            }
+
+        </tr>
+    }
+</table>
+
+<h3>Machines</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th>Machine</th>
+    </tr>
+@foreach (var machine in @Model.Machines.Select(x => x.Name).Distinct())
+{
+    <tr>
+        @if (machine.IsNullOrEmpty()) 
+        { 
+            <td style="padding: 0 5px;">@Html.Raw("N/A")</td>
         }
+        else
+        {
+            <td style="padding: 0 5px;">@machine</td>
+        }
+    </tr>
+}
 </table>
