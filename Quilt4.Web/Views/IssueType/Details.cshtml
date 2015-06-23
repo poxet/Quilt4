@@ -8,25 +8,25 @@
 <h2>Details</h2>
 
 <table>
-    <tr>
-        <th>Time</th>
-        <th>Threads</th>
-        <th>User</th>
-        <th>Handle</th>
-        <th>Visible</th>
-        <th>Environment</th>
-        <th>Ticket</th>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Time</th>
+        <th style="padding: 0 5px;">Threads</th>
+        <th style="padding: 0 5px;">User</th>
+        <th style="padding: 0 5px;">Handle</th>
+        <th style="padding: 0 5px;">Visible</th>
+        <th style="padding: 0 5px;">Environment</th>
+        <th style="padding: 0 5px;">Ticket</th>
     </tr>
     @foreach (var issue in Model.IssueType.Issues)
     {
         <tr>
-            <td>@issue.ServerTime</td>
-            <td>@issue.Data.Count()</td>
-            <td>@Model.Sessions.Single(x => x.Id == issue.SessionId).UserFingerprint</td>
-            <td>@issue.UserHandle</td>
-            <td>@issue.VisibleToUser</td>
-            <td>@Model.Sessions.Single(x => x.Id == issue.SessionId).Environment</td>
-            <td>@issue.Ticket</td>
+            <td style="padding: 0 5px;">@issue.ServerTime</td>
+            <td style="padding: 0 5px;">Thread To Do@*@issue.IssueThreadGuid*@</td>
+            <td style="padding: 0 5px;">User To Do@*@(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName == null ? Html.Raw("N/A") : Html.Raw(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName))*@</td>
+            <td style="padding: 0 5px;">@(issue.UserHandle == null ? Html.Raw("N/A") : Html.Raw(issue.UserHandle))</td>
+            <td style="padding: 0 5px;">@issue.VisibleToUser</td>
+            <td style="padding: 0 5px;">Environment To Do</td>
+            <td style="padding: 0 5px;">@issue.Ticket</td>
         </tr>
     }
 </table>

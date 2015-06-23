@@ -12,12 +12,14 @@ namespace Quilt4.Web.Controllers
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly ISessionBusiness _sessionBusiness;
+        private readonly IUserBusiness _userBusiness;
 
-        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness)
+        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _sessionBusiness = sessionBusiness;
+            _userBusiness = userBusiness;
         }
         //// GET: IssueType
         //public ActionResult Index()
@@ -28,20 +30,30 @@ namespace Quilt4.Web.Controllers
         // GET: IssueType/Details/5
         public ActionResult Details(string id, string application, string version, string issueType)
         {
+            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id);
+            var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
+            var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId).Single(x => x.Version == version);
+
+            var model = new IssueTypeModel
+            {
+                IssueType = ver.IssueTypes.Single(x => x.Ticket.ToString() == issueType), 
+                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(application)
+            };
+            model.Users = model.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
+            
+
+
             //id -> Initiative
             //var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id);
             //var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
-
             //var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId);
             //var issueTypes = ver.Single(x => x.Version == version).IssueTypes;
-
             //var model = new IssueTypeModel
             //{
             //    IssueType = issueTypes.Single(x => x.Ticket.ToString() == issueType), 
             //    Sessions = _sessionBusiness.GetSessionsForApplicationVersion(application)
             //};
-
-            return View(0 /*model*/);
+            return View(model);
         }
 
         //// GET: IssueType/Create
