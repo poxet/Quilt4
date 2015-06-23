@@ -68,7 +68,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         public ActionResult Edit(Web.Models.Initiative model)
         {
             _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
+            var initiative = _initiativeBusiness.GetInitiative(model.Id);
+            var code = initiative.AddDeveloperRolesInvitation(model.OwnerDeveloperName);
+            initiative.ConfirmInvitation(code, model.OwnerDeveloperName);
+            _initiativeBusiness.UpdateInitiative(initiative);
             return RedirectToAction("Index");
+
         }
     }
 }
