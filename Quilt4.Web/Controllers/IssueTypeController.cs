@@ -41,7 +41,7 @@ namespace Quilt4.Web.Controllers
             //    Sessions = _sessionBusiness.GetSessionsForApplicationVersion(application)
             //};
 
-            return View(model);
+            return View(0 /*model*/);
         }
 
         //// GET: IssueType/Create
