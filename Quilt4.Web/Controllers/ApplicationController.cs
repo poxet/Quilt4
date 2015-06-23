@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
@@ -12,11 +13,13 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+        private readonly IMachineBusiness _machineBusiness;
 
-        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness) 
+        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness) 
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
+            _machineBusiness = machineBusiness;
         }
 
         // GET: Application/Details/5
@@ -25,17 +28,23 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
-
             var versionNames = versions.Select(x => x.Version);
 
+            //var machinesList = new List<IEnumerable<IMachine>>();
+            //for(var i = 0; i < versions.Count(); i++)
+            //{
+            //    machinesList.Add(_machineBusiness.GetMachinesByApplicationVersion(versions.ElementAt(i).Id));
+            //}
+            
             var model = new ApplicationModel
             {
                 Initiative = id, 
                 Application = application,
+                //Machines = machinesList,
                 Versions = versions.Select(x => new VersionModel
                 {
                     Version = x.Version,
-                    UniqueIdentifier = x.GetUniqueIdentifier(versionNames)
+                    UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
                 })
             };
 

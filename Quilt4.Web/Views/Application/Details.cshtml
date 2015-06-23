@@ -8,9 +8,30 @@
 <a href='~/Initiative/Details/@Model.Initiative'>Go back to applications</a>
 
 <h3>Versions</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Version</th>
+        <th style="padding: 0 5px;">Build</th>
+        <th style="padding: 0 5px;">Machines</th>
+        <th style="padding: 0 5px;">Sessions</th>
+        <th style="padding: 0 5px;">Issue Types</th>
+        <th style="padding: 0 5px;">Issues</th>
+        <th style="padding: 0 5px;">First</th>
+        <th style="padding: 0 5px;">Last</th>
+        <th style="padding: 0 5px;">Environments</th>
+    </tr>
 @foreach (var version in Model.Versions)
 {
-    @Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)
-    <br />
+    <tr>
+        <td style="padding: 0 5px;">@Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)<br/></td>
+        <td style="padding: 0 5px;">Build</td>
+        <td style="padding: 0 5px;">Machines@*@Model.Machines*@</td>
+        <td style="padding: 0 5px;">Sessions</td>
+        <td style="padding: 0 5px;">Issue Types</td>
+        <td style="padding: 0 5px;">Issues</td>
+        <td style="padding: 0 5px;">First</td>
+        <td style="padding: 0 5px;">Last</td>
+        <td style="padding: 0 5px;">Environments</td>
+    </tr>
 }
-
+</table>

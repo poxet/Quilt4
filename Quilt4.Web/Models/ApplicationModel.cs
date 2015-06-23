@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
 {
@@ -7,6 +8,7 @@ namespace Quilt4.Web.Models
         public string Initiative { get; set; }
         public string Application { get; set; }
         public IEnumerable<VersionModel> Versions { get; set; }
+        public List<IEnumerable<IMachine>> Machines { get; set; }
     }
 
     public class VersionModel
