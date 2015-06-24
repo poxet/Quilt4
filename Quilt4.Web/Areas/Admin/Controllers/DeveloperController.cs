@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 
@@ -33,25 +34,18 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Developer/ConfirmDeveloperEMail
         public ActionResult ConfirmDeveloperEMail(string id)
         {
-            throw new NotImplementedException();
-            //var developer = _accountRepository.FindById(id);
-            //return View("", developer);
+            var model = _accountRepository.GetUsers().Single(x => x.UserId == id);
+
+            return View(model);
         }
 
         // POST: Admin/Developer/ConfirmDeveloperEMail
         [HttpPost]
         public ActionResult ConfirmDeveloperEMail(string id, FormCollection collection)
         {
-            throw new NotImplementedException();
-            //try
-            //{
-            //    _accountRepository.ConfirmEmailAsync(id, null);
-            //    return RedirectToAction("Index");
-            //}
-            //catch
-            //{
-            //    return View();
-            //}
+            _accountRepository.ConfirmEmailAsync(id, null);
+           
+            return RedirectToAction("Index", "Developer");
         }
 
         // GET: Admin/Developer/Delete/5
