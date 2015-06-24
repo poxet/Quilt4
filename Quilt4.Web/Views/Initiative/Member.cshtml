@@ -31,8 +31,7 @@
     }
 </table>
 
-
-@if (Model.RoleName == "Administrator")
+@if (@Model.IsAdministrator)
 {
     <hr />
     <h3>Invite member</h3>

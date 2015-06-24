@@ -75,10 +75,14 @@ namespace Quilt4.Web.Controllers
                 throw new InvalidOperationException("Cannot parse as Guid!").AddData("id", id);
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
-            
-            var invite = new InviteModel();
-            invite.Initiative = initiative;
-            invite.RoleName = "?1"; //invite.Initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName;
+
+            var currentUser = User.Identity.GetUserName();
+
+            var invite = new InviteModel
+            {
+                Initiative = initiative,
+                IsAdministrator = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator"
+            };
 
             return View(invite);
         }

@@ -76,7 +76,6 @@ namespace Quilt4.Web.Business
             {
                 yield return new EmailViewModel
                 {
-
                     ToEmail = item.ToEmail,
                     FromEmail = item.FromEmail,
                     Subject = item.Subject,
