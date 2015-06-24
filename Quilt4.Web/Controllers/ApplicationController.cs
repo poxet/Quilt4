@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -14,12 +15,16 @@ namespace Quilt4.Web.Controllers
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly IMachineBusiness _machineBusiness;
+        private readonly IIssueBusiness _issueBusiness;
+        private readonly ISessionBusiness _sessionBusiness;
 
-        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness) 
+        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness, IIssueBusiness issueBusiness, ISessionBusiness sessionBusiness) 
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _machineBusiness = machineBusiness;
+            _issueBusiness = issueBusiness;
+            _sessionBusiness = sessionBusiness;
         }
 
         // GET: Application/Details/5
@@ -29,22 +34,17 @@ namespace Quilt4.Web.Controllers
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
-
-            //var machinesList = new List<IEnumerable<IMachine>>();
-            //for(var i = 0; i < versions.Count(); i++)
-            //{
-            //    machinesList.Add(_machineBusiness.GetMachinesByApplicationVersion(versions.ElementAt(i).Id));
-            //}
             
             var model = new ApplicationModel
             {
                 Initiative = id, 
                 Application = application,
-                //Machines = machinesList,
                 Versions = versions.Select(x => new VersionModel
                 {
                     Version = x.Version,
+                    IssueTypes = x.IssueTypes,
                     UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
+                    Sessions = _sessionBusiness.GetSessionsForApplicationVersion(x.Id),
                 })
             };
 

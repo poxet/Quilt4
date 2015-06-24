@@ -27,11 +27,20 @@
         <td style="padding: 0 5px;">Build</td>
         <td style="padding: 0 5px;">Machines@*@Model.Machines*@</td>
         <td style="padding: 0 5px;">Sessions</td>
-        <td style="padding: 0 5px;">Issue Types</td>
-        <td style="padding: 0 5px;">Issues</td>
-        <td style="padding: 0 5px;">First</td>
+        <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
+        <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
+        <td style="padding: 0 5px;">
+            @*@try
+    {
+        @Html.Raw(version.Sessions.Select(x => x.ServerStartTime).SingleOrDefault().ToLongDateString())
+    }
+    catch (Exception )
+    {
+        @Html.Raw("seag")
+    }*@
+        </td>
         <td style="padding: 0 5px;">Last</td>
-        <td style="padding: 0 5px;">Environments</td>
+        <td style="padding: 0 5px;">@*@version.Sessions.Select(x => x.Environment).Distinct()*@</td>
     </tr>
 }
 </table>

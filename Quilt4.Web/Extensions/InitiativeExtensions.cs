@@ -27,6 +27,8 @@ namespace Quilt4.Web.Extensions
             }
 
             return item.Id.Replace(":", "");
+
+        
         }
     }
 }
