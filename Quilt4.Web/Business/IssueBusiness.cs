@@ -175,7 +175,7 @@ namespace Quilt4.Web.Business
             {
                 //var av = _compositeRoot.Repository.GetApplicationVersion(session.ApplicationVersionId);
                 var av = GetApplicationVersion(session.ApplicationVersionId);
-                //var a = _compositeRoot.Repository.GetInitiativeByApplication(av.ApplicationId).ApplicationGroups.SelectMany(x => x.Applications).First(x => x.Id == av.ApplicationId);
+                //var a = _compositeRoot.Repository.GetInitiativeByApplication(av.ApplicationName).ApplicationGroups.SelectMany(x => x.Applications).First(x => x.Id == av.ApplicationName);
                 var a = GetInitiativeByApplication(av.ApplicationId).ApplicationGroups.SelectMany(x => x.Applications).First(x => x.Id == av.ApplicationId);
 
                 ad = new ApplicationData { Version = av.Version, Fingerprint = av.Id, BuildTime = av.BuildTime, SupportToolkitNameVersion = av.SupportToolkitNameVersion, Name = a.Name };

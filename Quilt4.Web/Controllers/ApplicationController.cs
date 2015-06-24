@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
@@ -64,6 +65,61 @@ namespace Quilt4.Web.Controllers
             return View(model);
         }
 
+
+
+        // GET: Application/Edit/5
+        public ActionResult Edit(string initiativeId, string applicationName)
+        {
+            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeId);
+            var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == applicationName);
+            var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == applicationName)).Name;
+            var ticketPrefix = application.TicketPrefix;
+
+            var model = new ApplicationPropetiesModel()
+            {
+                ApplicationGroupName = applicationGroup,
+                TicketPrefix = ticketPrefix,
+                InitiativeId = initiativeId,
+                ApplicationName = applicationName
+            };
+
+
+
+            return View(model);
+        }
+
+        // POST: Application/Edit/5
+        [HttpPost]
+        public ActionResult Edit(ApplicationPropetiesModel model)
+        {
+            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == model.InitiativeId);
+            var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
+            var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
+            application.TicketPrefix = model.TicketPrefix;
+
+            if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
+            {
+                if (!initiative.ApplicationGroups.Single(x => x.Name == model.ApplicationGroupName).Applications.Any(x => x.Name == model.ApplicationName))
+                {
+                    initiative.ApplicationGroups.Single(x => x.Name == model.ApplicationGroupName).Add(application);
+                }
+                else
+                {
+                    _initiativeBusiness.UpdateInitiative(initiative);
+                    return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
+                }
+            }
+            else
+            {
+                initiative.AddApplicationGroup(new ApplicationGroup(model.ApplicationGroupName, new List<IApplication>{application}));
+            }
+
+            applicationGroup.Remove(application);
+            _initiativeBusiness.UpdateInitiative(initiative);
+
+            return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
+        }
+        
         //// GET: Application/Create
         //public ActionResult Create()
         //{
@@ -77,28 +133,6 @@ namespace Quilt4.Web.Controllers
         //    try
         //    {
         //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Application/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Application/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
 
         //        return RedirectToAction("Index");
         //    }

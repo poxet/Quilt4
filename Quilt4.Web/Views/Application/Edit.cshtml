@@ -1,0 +1,27 @@
+﻿@model Quilt4.Web.Models.ApplicationPropetiesModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (@Html.BeginForm("Edit", "Application", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.InitiativeId)
+    @Html.HiddenFor(m => m.ApplicationName)
+    <table>
+        <tr>
+            <td>ApplicationGroup</td>
+            <td>@Html.TextBoxFor(m => m.ApplicationGroupName)</td>
+        </tr>
+        <tr>
+            <td>Ticket Prefix</td>
+            <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
+        </tr>
+        <tr>
+            <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>
+            <td>@Html.ActionLink("Cancel", "Details", "Application", new {id =@Model.InitiativeId, Application = @Model.ApplicationName}, null)</td>
+        </tr>
+    </table>
+}
+

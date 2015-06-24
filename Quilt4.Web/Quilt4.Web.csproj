@@ -257,6 +257,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\ApplicationModel.cs" />
+    <Compile Include="Models\ApplicationPropetiesModel.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DeveloperRole.cs" />
     <Compile Include="Models\Initiative.cs" />
@@ -385,6 +386,7 @@
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Initiative\ConfirmInvite.cshtml" />
     <Content Include="Views\Initiative\DeclineInvite.cshtml" />
+    <Content Include="Views\Application\Edit.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
