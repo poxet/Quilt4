@@ -43,8 +43,8 @@ namespace Quilt4.MongoDBRepository
             initiative.OwnerDeveloperName = owner;
 
             Database.GetCollection("Initiative").Save(initiative);
-
         }
+
         public IDataBaseInfo GetDatabaseStatus()
         {
             var dbInfo = new DataBaseInfoEntity();
@@ -78,7 +78,6 @@ namespace Quilt4.MongoDBRepository
             emailLog.ErrorMessage = errorMessage;
 
             Database.GetCollection("EmailLog").Save(emailLog, WriteConcern.Acknowledged);
-
         }
 
         public IEnumerable<IEmail> GetLastHundredEmails()
@@ -236,25 +235,14 @@ namespace Quilt4.MongoDBRepository
 
                         _database = db;
 
-                        //_database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("UserName"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("Email"), IndexOptions.SetUnique(true));
                     }
                 }
 
                 return _database;
-
-        //        if (_database != null)
-        //            return _database;
-
-        //        lock (SyncRoot)
-        //        {
-        //            if (_database == null)
-        //            {
-        //                _database = Server.GetDatabase(DatabaseName);
-        //                _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true));
-        //            }
-        //        }
-        //        return _database;
-                throw new InvalidOperationException();
             }
         }
 
