@@ -143,22 +143,32 @@ namespace Quilt4.Web.Controllers
             if (ModelState.IsValid)
             {
                 //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _accountRepository.CreateAsync(model.Email, model.Email, model.Password);
-                if (result.Item1.Succeeded)
+                if (!_accountRepository.GetUsers().Where(x => x.Email == model.Email).Any())
                 {
-                    await _accountRepository.SignInAsync(result.Item2, isPersistent: false, rememberBrowser: false);
+                    
+                
+                var result = await _accountRepository.CreateAsync(model.Email, model.Email, model.Password);
+                    if (result.Item1.Succeeded)
+                    {
+                        await _accountRepository.SignInAsync(result.Item2, isPersistent: false, rememberBrowser: false);
                   
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToLocal(returnUrl); ;
+                        return RedirectToLocal(returnUrl); ;
+                    }
+                    AddErrors(result.Item1);
+                    return View(model);
                 }
-                AddErrors(result.Item1);
+                else
+                {
+                    ViewBag.EmailAlreadyUsed = "This email is already in use!";
+                    return View();
+                }
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
