@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
@@ -21,11 +20,6 @@ namespace Quilt4.Web.Controllers
             _sessionBusiness = sessionBusiness;
             _userBusiness = userBusiness;
         }
-        //// GET: IssueType
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
 
         // GET: IssueType/Details/5
         public ActionResult Details(string id, string application, string version, string issueType)
@@ -56,71 +50,5 @@ namespace Quilt4.Web.Controllers
             //};
             return View(model);
         }
-
-        //// GET: IssueType/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: IssueType/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: IssueType/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: IssueType/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: IssueType/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: IssueType/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }

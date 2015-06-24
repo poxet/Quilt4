@@ -13,8 +13,6 @@ namespace Quilt4.Web.Areas.Admin.Models
         [Display(Name = "Additional message")]
         public string Message { get; set; }
 
-        //public string RoleName { get; set; }
-
-        public bool IsAdministrator { get; set; }
+        public bool IsAllowedToInvite { get; set; }
     }
 }

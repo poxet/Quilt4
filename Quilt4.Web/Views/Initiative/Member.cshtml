@@ -31,7 +31,7 @@
     }
 </table>
 
-@if (@Model.IsAdministrator)
+@if (@Model.IsAllowedToInvite)
 {
     <hr />
     <h3>Invite member</h3>
@@ -47,5 +47,3 @@
         <input type="submit" value="Invite" />
     }
 }
-
-
