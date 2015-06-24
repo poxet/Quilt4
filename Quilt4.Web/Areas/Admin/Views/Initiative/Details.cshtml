@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Initiative", null, FormMethod.Post, null))
 {
     @Html.HiddenFor(m => m.Id)
 <table>
@@ -36,3 +36,4 @@
 <input style="margin: 0 25px 0 5px" type="submit" value="Save" />
 @Html.ActionLink("Cancel", "Index")
 }
+

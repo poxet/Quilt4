@@ -176,7 +176,6 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-
         public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)
         {
             throw new NotImplementedException();
@@ -266,20 +265,10 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<ICounter> GetAllCounters(string counterName)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<ICounter> GetAllCounters()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

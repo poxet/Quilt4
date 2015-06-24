@@ -21,6 +21,7 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // POST api/counter/register
         [HttpPost]
+        //[ActionName("register")]
         [Route("api/counter/register")]
         [AllowAnonymous]
         public RegisterCounterResponse RegisterCounter([FromBody] object request)
@@ -32,8 +33,7 @@ namespace Quilt4.Web.Controllers.WebAPI
             try
             {
                 var data = GetData(request);
-                _counterBusiness.RegisterCounter(data);
-                return new RegisterCounterResponse();
+                return _counterBusiness.RegisterCounter(data);
             }
             catch (Exception exception)
             {
@@ -46,7 +46,7 @@ namespace Quilt4.Web.Controllers.WebAPI
             }
         }
 
-        private ICounter GetData(object request)
+        private RegisterCounterRequest GetData(object request)
         {
             var reqiestString = request.ToString();
 
@@ -65,8 +65,7 @@ namespace Quilt4.Web.Controllers.WebAPI
                 data = DynamicExtensions.ToRegisterIssueRequest(dataD);
             }
 
-            var counter = new Quilt4.BusinessEntities.Counter(data.Message, data.ClientTime, null, 1, new string[] { }, new string[] { }, null, null);
-            return counter;
+            return data;
         }
     }
 }

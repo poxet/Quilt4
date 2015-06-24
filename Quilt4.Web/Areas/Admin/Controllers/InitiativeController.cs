@@ -54,18 +54,17 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Initiative/Details/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Details(Guid? id)
         {
             if (id == null)
-                return RedirectToAction("Index");
+                return Redirect("Index");
 
             var initiative = _initiativeBusiness.GetInitiative(id.Value).ToModel(null);
 
             return View(initiative);
         }
-
         [HttpPost]
-        public ActionResult Edit(Web.Models.Initiative model)
+        public ActionResult Edit(Quilt4.Web.Models.Initiative model)
         {
             _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
             var initiative = _initiativeBusiness.GetInitiative(model.Id);
@@ -73,7 +72,6 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             initiative.ConfirmInvitation(code, model.OwnerDeveloperName);
             _initiativeBusiness.UpdateInitiative(initiative);
             return RedirectToAction("Index");
-
         }
     }
 }

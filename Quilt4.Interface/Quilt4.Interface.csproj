@@ -93,7 +93,6 @@
     <Compile Include="IApplicationVersionBusiness.cs" />
     <Compile Include="IClientToken.cs" />
     <Compile Include="ICompatibilityBusiness.cs" />
-    <Compile Include="ICounter.cs" />
     <Compile Include="ICounterBusiness.cs" />
     <Compile Include="IDataBaseInfo.cs" />
     <Compile Include="IDeveloper.cs" />
