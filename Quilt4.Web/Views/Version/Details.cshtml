@@ -20,15 +20,21 @@
         <th style="padding: 0 5px;">Ticket</th>
     </tr>
 
-    @foreach (var issue in Model.IssueTypes)
+    @foreach (var issueType in Model.IssueTypes)
     {
         <tr>
-            <td style="padding: 0 5px;"><a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issue.Ticket">@issue.ExceptionTypeName</a></td>
-            <td style="padding: 0 5px;">@issue.Message</td>
-            <td style="padding: 0 5px;">@issue.IssueLevel</td>
-            <td style="padding: 0 5px;">Count... TODO</td>
-            <td style="padding: 0 5px;">Environment... TODO</td>
-            <td style="padding: 0 5px;">@issue.Ticket</td>
+            <td style="padding: 0 5px;"><a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issueType.Ticket">@issueType.ExceptionTypeName</a></td>
+            <td style="padding: 0 5px;">@issueType.Message</td>
+            <td style="padding: 0 5px;">@issueType.IssueLevel</td>
+            <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
+            <td style="padding: 0 5px;">
+                @foreach (var env in Model.Sessions.Where(x =>  issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
+                {
+                    @Html.Raw(env + ", ")
+                }
+        </td>
+
+            <td style="padding: 0 5px;">@issueType.Ticket</td>
             
         </tr>
     }
