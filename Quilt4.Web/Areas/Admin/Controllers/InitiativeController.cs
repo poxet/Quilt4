@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
@@ -63,6 +62,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
             return View(initiative);
         }
+
         [HttpPost]
         public ActionResult Edit(Quilt4.Web.Models.Initiative model)
         {

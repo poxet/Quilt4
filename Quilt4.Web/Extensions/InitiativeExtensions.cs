@@ -12,7 +12,7 @@ namespace Quilt4.Web.Extensions
             //First use name if possible
             if (names != null && names.Count(x => (x ?? Constants.DefaultInitiativeName) == (item.Name ?? Constants.DefaultInitiativeName)) == 1)
             {
-                return item.Name;
+                return item.Name ?? Constants.DefaultInitiativeName;
             }
 
             return item.Id.ToString();
@@ -21,14 +21,12 @@ namespace Quilt4.Web.Extensions
         public static string GetUniqueIdentifier(this IApplicationVersion item, IEnumerable<string> versions)
         {
             //First use name if possible
-            if (versions != null && versions.Count(x => (x ?? Constants.DefaultInitiativeName) == (item.Version ?? Constants.DefaultInitiativeName)) == 1)
+            if (versions != null && versions.Count(x => (x ?? Constants.DefaultVersionName) == (item.Version ?? Constants.DefaultVersionName)) == 1)
             {
-                return item.Version;
+                return item.Version ?? Constants.DefaultVersionName;
             }
 
-            return item.Id.Replace(":", "");
-
-        
+            return item.Id.Replace(":", string.Empty);
         }
     }
 }

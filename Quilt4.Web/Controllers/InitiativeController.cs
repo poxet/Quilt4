@@ -9,6 +9,7 @@ using Quilt4.Web.Agents;
 using Quilt4.Web.Areas.Admin.Models;
 using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
+using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Controllers
 {
@@ -62,21 +63,22 @@ namespace Quilt4.Web.Controllers
         }
 
         //Get
-        public ActionResult Member(string initiativeId)
+        public ActionResult Member(string id)
         {
-            if (string.IsNullOrEmpty(initiativeId))
+            if (string.IsNullOrEmpty(id))
             {
                 return Redirect("Index");
             }
                 
-            Guid id;
-            Guid.TryParse(initiativeId, out id);
+            Guid initiativeId;
+            if (!Guid.TryParse(id, out initiativeId))
+                throw new InvalidOperationException("Cannot parse as Guid!").AddData("id", id);
 
-            var initiative = _initiativeBusiness.GetInitiative(id);
+            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             
             var invite = new InviteModel();
             invite.Initiative = initiative;
-            invite.RoleName = invite.Initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName;
+            invite.RoleName = "?1"; //invite.Initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName;
 
             return View(invite);
         }

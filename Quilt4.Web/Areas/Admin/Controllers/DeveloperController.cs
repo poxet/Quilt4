@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
     [Authorize(Roles = "Admin")]
-    //[Authorize]
     [RouteArea("Admin")]
     public class DeveloperController : Controller
     {
