@@ -24,6 +24,13 @@ namespace Quilt4.Web.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
+            //Make two first users admin
+            if (_accountRepository.GetUsers().Count() <= 2 && !User.IsInRole("Admin"))
+            {
+                var user = _accountRepository.GetUsers().Single(x => x.Email == User.Identity.Name);
+                _accountRepository.AssignRole(user.UserId, "Admin");
+            }
+
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
