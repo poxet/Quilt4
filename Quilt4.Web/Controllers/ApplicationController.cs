@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -31,10 +32,16 @@ namespace Quilt4.Web.Controllers
         public ActionResult Details(string id, string application)
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
-            
+            var versionIds = versions.Select(x => x.Id);
+
+            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { applicationId }).ToArray();
+
+            var machines = _machineBusiness.GetMachinesByApplicationVersions(versionIds);
+
             var model = new ApplicationModel
             {
                 Initiative = id, 
@@ -44,8 +51,14 @@ namespace Quilt4.Web.Controllers
                     Version = x.Version,
                     IssueTypes = x.IssueTypes,
                     UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
-                    Sessions = _sessionBusiness.GetSessionsForApplicationVersion(x.Id),
-                })
+
+                    //TODO: This is fucking sloooooow ... fix this
+                    //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
+                    Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
+
+
+                    Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
+                }).ToList()
             };
 
             return View(model);

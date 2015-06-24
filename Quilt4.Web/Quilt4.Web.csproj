@@ -237,6 +237,7 @@
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\IssueTypeController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
+    <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\InitiativeExtensions.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\WebAPI\CompatibilityController.cs" />

@@ -573,7 +573,15 @@ namespace Quilt4.MongoDBRepository
         public IEnumerable<IMachine> GetMachinesByApplicationVersion(string applicationFingerprint)
         {
             var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.ApplicationVersionId == applicationFingerprint).ToArray();
-            return Database.GetCollection("Machine").FindAllAs<MachinePersist>().Where(x => sessions.Any(y => y.MachineFingerprint == x.Id)).Select(x => x.ToEntity());
+            return Database.GetCollection("Machine").FindAllAs<MachinePersist>().Where(x => sessions.Any(y => y.MachineFingerprint == x.Id)).Select(x => x.ToEntity()).ToArray();
+        }
+
+
+
+        public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
+        {
+            var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationFingerprints.Any(y => y == x.ApplicationVersionId)).ToArray();
+            return Database.GetCollection("Machine").FindAllAs<MachinePersist>().Where(x => sessions.Any(y => y.MachineFingerprint == x.Id)).Select(x => x.ToEntity()).ToArray();
         }
 
         public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)

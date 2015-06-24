@@ -68,5 +68,6 @@ namespace Quilt4.Interface
         void SetSetting(string name, string value, Type type);
 
         IEnumerable<ICounter> GetAllCounters(string counterName);
+        IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints);
     }
 }

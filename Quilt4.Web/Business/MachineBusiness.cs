@@ -41,6 +41,13 @@ namespace Quilt4.Web.Business
             return machines;
         }
 
+        public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> versionIds)
+        {
+            var machines = _repository.GetMachinesByApplicationVersions(versionIds).OrderBy(x => x.Name);
+            return machines;
+        }
+
+
         public IMachine GetMachine(Fingerprint machineFinterprint)
         {
             return _repository.GetMachine(machineFinterprint);
