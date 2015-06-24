@@ -6,8 +6,8 @@ using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
+    //[Authorize]
     [RouteArea("Admin")]
     public class DashboardController : Controller
     {
