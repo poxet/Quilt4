@@ -1,0 +1,15 @@
+﻿@model Quilt4.Web.Models.MemberModel
+
+@{
+    ViewBag.Title = "RemoveMember";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>RemoveMember</h2>
+<p>Are you sure that you want to remove @Model.DeveloperName from @Model.InitiativeName?</p>
+
+@using (@Html.BeginForm())
+{
+    <input type="submit" value="Remove"/>
+    <a href="~/Initiative/Details/@Model.InitiativeId">Cancel</a>
+}

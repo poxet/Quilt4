@@ -53,13 +53,29 @@ namespace Quilt4.Web.Controllers
             }
         }
 
-        public ActionResult RemoveMember(string id, string developer)
+        //GET
+        public ActionResult RemoveMember(string initiativeId, string developer)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
+            var model = new MemberModel()
+            {
+                DeveloperName = initiative.DeveloperRoles.Single(x => x.DeveloperName == developer).DeveloperName,
+                InitiativeName = initiative.Name,
+                InitiativeId = initiativeId,
+            };
+
+            return View(model);
+        }
+
+        //POST
+        [HttpPost]
+        public ActionResult RemoveMember(string initiativeId, string developer, FormCollection collection)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
             initiative.RemoveDeveloperRole(developer);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Member", "Initiative", new { initiativeId = id});
+            return RedirectToAction("Details", "Initiative", new { id = initiativeId});
         }
 
         //Get

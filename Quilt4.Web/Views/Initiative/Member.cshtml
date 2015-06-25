@@ -35,7 +35,7 @@
         @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td> <td style='padding: 0 5px;'>Senast aktiv..</td>")
         @if (member.DeveloperName != Model.Initiative.OwnerDeveloperName && User.Identity.Name == Model.Initiative.OwnerDeveloperName)
         {
-            <td><a href="~/Initiative/RemoveMember?id=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
+            <td><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
         }
     </tr>
     }
