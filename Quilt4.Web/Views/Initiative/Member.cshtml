@@ -32,7 +32,19 @@
     @foreach (var member in Model.Initiative.DeveloperRoles)
     {
     <tr>
-        @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td> <td style='padding: 0 5px;'>Senast aktiv..</td>")
+        @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td>")
+
+        <td style='padding: 0 5px;'>
+            @if (member.RoleName.Equals("Invited"))
+            {
+                @member.InviteTime
+            }
+            else
+            {
+                @Html.Raw("Status...")
+            }
+        </td>
+
         @if (member.DeveloperName != Model.Initiative.OwnerDeveloperName && User.Identity.Name == Model.Initiative.OwnerDeveloperName)
         {
             <td><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
