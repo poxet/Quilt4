@@ -7,6 +7,16 @@
 }
 
 <h2>Members</h2>
+
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Owner</th>
+    </tr>
+    <tr>
+        <td style="padding: 0 5px;">@Model.Initiative.OwnerDeveloperName</td>
+    </tr>
+</table>
+<br/>
 <table>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">Member</th>
@@ -16,7 +26,7 @@
 
     @if (Model == null || Model.Initiative.DeveloperRoles.IsNullOrEmpty())
     {
-        @Html.Raw("<tr><td>No members</td></tr>")
+        @Html.Raw("<tr><td style=\"padding: 0 5px;\">No members</td></tr>")
     }
     
     @foreach (var member in Model.Initiative.DeveloperRoles)
