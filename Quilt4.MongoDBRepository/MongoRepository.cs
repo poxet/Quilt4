@@ -238,7 +238,7 @@ namespace Quilt4.MongoDBRepository
                         _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
                         _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true));
                         _database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("UserName"), IndexOptions.SetUnique(true));
-                        _database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("Email"), IndexOptions.SetUnique(true));
+                        //_database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("Email"), IndexOptions.SetUnique(true));
                     }
                 }
 
