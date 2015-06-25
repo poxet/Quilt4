@@ -49,6 +49,7 @@ namespace Quilt4.Web.Controllers
                 Versions = versions.Select(x => new VersionModel
                 {
                     Version = x.Version,
+                    Build = x.BuildTime.ToString(),
                     IssueTypes = x.IssueTypes,
                     UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
 
