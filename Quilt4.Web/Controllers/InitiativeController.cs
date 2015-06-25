@@ -135,7 +135,7 @@ namespace Quilt4.Web.Controllers
                 _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
             }
 
-            return RedirectToAction("Member", "Initiative", new { initiativeId = collection["InitiativeId"] });
+            return RedirectToAction("Member", "Initiative", new { id = collection["InitiativeId"] });
         }
 
         public ActionResult ConfirmInvite(string id, string inviteCode)
