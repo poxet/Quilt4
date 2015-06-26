@@ -263,6 +263,7 @@
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\CreateInitiative.cs" />
     <Compile Include="Models\Initiatives.cs" />
+    <Compile Include="Models\InviteMemberModel.cs" />
     <Compile Include="Models\IssueModel.cs" />
     <Compile Include="Models\IssueTypeModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -389,6 +390,7 @@
     <Content Include="Views\Initiative\DeclineInvite.cshtml" />
     <Content Include="Views\Application\Edit.cshtml" />
     <Content Include="Views\Initiative\RemoveMember.cshtml" />
+    <Content Include="Views\Initiative\ResendInvite.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

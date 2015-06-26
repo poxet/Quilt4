@@ -47,7 +47,11 @@
 
         @if (member.DeveloperName != Model.Initiative.OwnerDeveloperName && User.Identity.Name == Model.Initiative.OwnerDeveloperName)
         {
-            <td><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
+            <td style="padding: 0 5px;"><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
+        }
+        @if (member.RoleName.Equals("Invited"))
+        {
+            <td>@Html.Raw("|")</td> <td style="padding: 0 5px;"><a href="~/Initiative/ResendInvite?initiativeid=@Model.Initiative.Id&code=@member.InviteCode">Resend invitation</a></td>
         }
     </tr>
     }

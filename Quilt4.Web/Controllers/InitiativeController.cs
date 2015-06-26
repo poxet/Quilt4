@@ -55,6 +55,72 @@ namespace Quilt4.Web.Controllers
             }
         }
 
+        public ActionResult ResendInvite(string initiativeid, string code)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
+            var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
+
+            var model = new InviteMemberModel()
+            {
+                InitiativeId = initiativeid,
+                Developer = developerRole,
+            };
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ResendInvite(string initiativeid, string code, FormCollection collection)
+        {
+
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
+            var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
+
+            var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
+            if (enabled)
+            {
+                var root = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, "/");
+                var acceptlink = string.Empty;
+                var declineLink = string.Empty;
+
+                if (root.Equals("http://localhost:54942/"))
+                {
+                    acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
+                    declineLink = root + "Initiative/DeclineInvite?id=" + initiativeid + "&inviteCode=" + code;
+                }
+                else if (root.Equals("http://ci.quilt4.com/"))
+                {
+                    acceptlink = root + "Master/Web/Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
+                    declineLink = root + "Master/WebInitiative/DeclineInvite?id=" + initiativeid + "&inviteCode=" + code;
+                }
+                else
+                {
+                    //Prod
+                }
+
+                var subject = "A reminder for the invitation to " + initiative.Name + " at www.quilt4.com";
+                var message = initiative.OwnerDeveloperName + " want to remind you to answer the invitation to initiative " + initiative.Name + " at Quilt4. <br/><br/><a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
+
+                try
+                {
+                    _emailBusiness.SendEmail(new List<string> { developerRole.InviteEMail }, subject, message);
+                }
+                catch (SmtpException e)
+                {
+                    TempData["InviteError"] = "Could not connect to the email server";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeid });
+                }
+                catch (Exception e)
+                {
+                    TempData["InviteError"] = "Something went wrong";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeid });
+                }
+            }
+
+
+            return RedirectToAction("Member", "Initiative", new { id = initiativeid});
+        }
+
         //GET
         public ActionResult RemoveMember(string initiativeId, string developer)
         {
