@@ -61,7 +61,7 @@
     {
         @Html.Hidden("InitiativeId", Model.Initiative.Id)
         @Html.TextBoxFor(m => m.InviteEmail, new { placeholder = Html.DisplayNameFor(n => n.InviteEmail) })
-        <br />
+        <p style="color: red;">@ViewBag.InviteError</p>
         <br />
         @Html.TextAreaFor(m => m.Message, new { placeholder = Html.DisplayNameFor(n => n.Message), Style = "width: 300px; height: 70px;" })
         <br />

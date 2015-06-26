@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Mvc;
 using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
@@ -85,6 +87,8 @@ namespace Quilt4.Web.Controllers
             {
                 return Redirect("Index");
             }
+
+            ViewBag.InviteError = TempData["InviteError"];
                 
             Guid initiativeId;
             if (!Guid.TryParse(id, out initiativeId))
@@ -110,12 +114,21 @@ namespace Quilt4.Web.Controllers
             var initiativeId = collection["InitiativeId"];
             var inviteEmail = collection["InviteEmail"];
 
+            if (inviteEmail.IsNullOrEmpty())
+            {
+                TempData["InviteError"] = "Please enter an email adress";
+                return RedirectToAction("Member", "Initiative", new {id = initiativeId});
+            }
+            if (!new EmailAddressAttribute().IsValid(inviteEmail))
+            {
+                TempData["InviteError"] = "Please enter a valid email adress";
+                return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+            }
+
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
             var invitationCode = initiative.AddDeveloperRolesInvitation(inviteEmail);
             initiative.DeveloperRoles.Single(x => x.InviteEMail == inviteEmail).DeveloperName = inviteEmail;
-
-            _initiativeBusiness.UpdateInitiative(initiative);
-
+            
             var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
             if (enabled)
             {
@@ -148,8 +161,24 @@ namespace Quilt4.Web.Controllers
                 var subject = "Invitation to " + initiative.Name + " at www.quilt4.com";
                 var message = initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/>" + userMessage + "<a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
 
-                _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
+                try
+                {
+                    _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
+                }
+                catch (SmtpException e)
+                {
+                    TempData["InviteError"] = "Could not connect to the email server";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                }
+                catch (Exception e)
+                {
+                    TempData["InviteError"] = "Something went wrong";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                }
             }
+
+            //if everything went well, save the initiative
+            _initiativeBusiness.UpdateInitiative(initiative);
 
             return RedirectToAction("Member", "Initiative", new { id = collection["InitiativeId"] });
         }
