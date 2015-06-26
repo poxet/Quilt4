@@ -120,8 +120,24 @@ namespace Quilt4.Web.Controllers
             if (enabled)
             {
                 var root = Request.Url.AbsoluteUri.Replace(Request.Url.AbsolutePath, "/");
-                var acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                var declineLink = root + "Initiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                var acceptlink = string.Empty;
+                var declineLink = string.Empty;
+
+                if (root.Equals("http://localhost:54942/"))
+                {
+                    acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    declineLink = root + "Initiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                }
+                else if (root.Equals("http://ci.quilt4.com/"))
+                {
+                    acceptlink = root + "Master/Web/Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    declineLink = root + "Master/WebInitiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                }
+                else
+                {
+                    //Prod
+                }
+                
 
                 var userMessage = "";
                 if (!collection["Message"].IsNullOrEmpty())
