@@ -42,7 +42,7 @@ namespace Quilt4.MongoDBRepository
             initiative.ClientToken = sessionToken;
             initiative.OwnerDeveloperName = owner;
 
-            Database.GetCollection("Initiative").Save(initiative);
+            Database.GetCollection("Initiative").Save(initiative, WriteConcern.Acknowledged);
         }
 
         public IDataBaseInfo GetDatabaseStatus()
@@ -134,7 +134,7 @@ namespace Quilt4.MongoDBRepository
 
             if (item == null)
             {
-                Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() });
+                Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() }, WriteConcern.Acknowledged);
                 return defaultValue;
             }
 
@@ -151,7 +151,7 @@ namespace Quilt4.MongoDBRepository
         public void SetSetting(string name, string value, Type type)
         {
             var settingPersist = new SettingPersist { Id = name, Value = value.ToString(), Type = type.ToString() };
-            Database.GetCollection("Setting").Save(settingPersist);
+            Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
         }
 
         //public string DatabaseName 
@@ -235,7 +235,7 @@ namespace Quilt4.MongoDBRepository
 
                         _database = db;
 
-                        _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("_id"), IndexOptions.SetUnique(true));
                         _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true));
                         //_database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("UserName"), IndexOptions.SetUnique(true));
                         //_database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("Email"), IndexOptions.SetUnique(true));
@@ -404,7 +404,7 @@ namespace Quilt4.MongoDBRepository
 
         public void UpdateMachine(IMachine machine)
         {
-            Database.GetCollection("Machine").Save(machine.ToPersist());
+            Database.GetCollection("Machine").Save(machine.ToPersist(), WriteConcern.Acknowledged);
         }
 
         public bool CanConnect()

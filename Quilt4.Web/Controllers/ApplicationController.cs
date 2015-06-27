@@ -53,10 +53,9 @@ namespace Quilt4.Web.Controllers
                     IssueTypes = x.IssueTypes,
                     UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
 
-                    //TODO: This is fucking sloooooow ... fix this
+                    //TODO: This is sloooooow ... fix this
                     //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
                     //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
-
 
                     Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
                 }).ToList()

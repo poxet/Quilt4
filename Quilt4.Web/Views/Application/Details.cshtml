@@ -31,8 +31,8 @@
         <td style="padding: 0 5px;">@version.Sessions.Count()</td>
         <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
         <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
-        <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToTimeAgo() ago</td>
-        <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToTimeAgo() ago</td>
+        <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+        <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
         <td style="padding: 0 5px;">
             
             @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())

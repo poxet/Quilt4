@@ -76,7 +76,7 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
             var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
 
-            var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
+            var enabled = _settingsBusiness.GetDatabaseSetting("EMailConfirmationEnabled", false);
             if (enabled)
             {
                 var root = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, "/");
@@ -195,7 +195,7 @@ namespace Quilt4.Web.Controllers
             var invitationCode = initiative.AddDeveloperRolesInvitation(inviteEmail);
             initiative.DeveloperRoles.Single(x => x.InviteEMail == inviteEmail).DeveloperName = inviteEmail;
             
-            var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
+            var enabled = _settingsBusiness.GetDatabaseSetting("EMailConfirmationEnabled", false);
             if (enabled)
             {
                 var root = Request.Url.AbsoluteUri.Replace(Request.Url.AbsolutePath, "/");

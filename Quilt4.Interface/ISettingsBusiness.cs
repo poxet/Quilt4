@@ -5,7 +5,6 @@ namespace Quilt4.Interface
 {
     public interface ISettingsBusiness
     {
-        T GetConfigSetting<T>(string name);
         ISetting GetDatabaseSetting(string name);
         T GetDatabaseSetting<T>(string name, T defaultValue);
         IEnumerable<ISetting> GetAllDatabaseSettings();

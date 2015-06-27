@@ -12,6 +12,20 @@ using Tharga.Quilt4Net.DataTransfer;
 
 namespace Quilt4.Web.Business
 {
+    public class LogResponse : ILogResponse
+    {
+        public LogResponse(string issueInstanceTicket, string issueTypeTicket, string responseMessage)
+        {
+            IssueInstanceTicket = issueInstanceTicket;
+            IssueTypeTicket = issueTypeTicket;
+            ResponseMessage = responseMessage;
+        }
+
+        public string IssueInstanceTicket { get; private set; }
+        public string IssueTypeTicket { get; private set; }
+        public string ResponseMessage { get; private set; }
+    }
+
     public class IssueBusiness : IIssueBusiness
     {
         private readonly IMembershipAgent _membershipAgent;
@@ -37,8 +51,22 @@ namespace Quilt4.Web.Business
 
         public ILogResponse RegisterIssue(Exception exception, IssueLevel issueLevel)
         {
-            //TODO: Refactor: _compositeRoot.LogAgent.RegisterIssue(exception, IssueLevel.Warning);
-            throw new NotImplementedException();
+            //TODO: Register internal issues in quilt4, using quilt4
+            //var registerIssueRequest = new RegisterIssueRequest
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Session = new Tharga.Quilt4Net.DataTransfer.Session { },
+            //    ClientTime = DateTime.UtcNow,
+            //    //Data = exception.Data.ToDictionary<string,string>(x => x.key,x => x.value),
+            //    //IssueThreadGuid =
+            //    UserInput = null,
+            //    VisibleToUser = false,
+            //    UserHandle = null,
+            //    IssueType = new Tharga.Quilt4Net.DataTransfer.IssueType(),                
+            //};
+            //var response = RegisterIssue(registerIssueRequest);
+            //throw new NotImplementedException();
+            return new LogResponse(null, null, null);
         }
 
         private ISession GetSession(Guid id)
@@ -161,10 +189,13 @@ namespace Quilt4.Web.Business
                 mutex.ReleaseMutex();
             }
 
-            var response = new RegisterIssueResponse { //IssueTypeTicket = application.TicketPrefix + Settings.IssueTypeTicketPrefix + issueTypeTicket,
-                IssueTypeTicket = application.TicketPrefix + _settingsBusiness.GetConfigSetting<string>("IssueTypeTicketPrefix") + issueTypeTicket,
-                //IssueInstanceTicket = application.TicketPrefix + Settings.IssueTicketPrefix + issueTicket,
-                IssueInstanceTicket = application.TicketPrefix + _settingsBusiness.GetConfigSetting<string>("IssueTicketPrefix") + issueTicket, ResponseMessage = applicationVersion.ResponseMessage ?? issueTypeResponseMessage, IsOfficial = applicationVersion.IsOfficial, };
+            var response = new RegisterIssueResponse
+            {
+                IssueTypeTicket = application.TicketPrefix + _settingsBusiness.GetDatabaseSetting("IssueTypeTicketPrefix", "A") + issueTypeTicket,
+                IssueInstanceTicket = application.TicketPrefix + _settingsBusiness.GetDatabaseSetting("IssueTicketPrefix", "B") + issueTicket,
+                ResponseMessage = applicationVersion.ResponseMessage ?? issueTypeResponseMessage,
+                IsOfficial = applicationVersion.IsOfficial
+            };
             return response;
         }
 
@@ -173,9 +204,7 @@ namespace Quilt4.Web.Business
             ApplicationData ad;
             if (request.Session.Application == null)
             {
-                //var av = _compositeRoot.Repository.GetApplicationVersion(session.ApplicationVersionId);
                 var av = GetApplicationVersion(session.ApplicationVersionId);
-                //var a = _compositeRoot.Repository.GetInitiativeByApplication(av.ApplicationName).ApplicationGroups.SelectMany(x => x.Applications).First(x => x.Id == av.ApplicationName);
                 var a = GetInitiativeByApplication(av.ApplicationId).ApplicationGroups.SelectMany(x => x.Applications).First(x => x.Id == av.ApplicationId);
 
                 ad = new ApplicationData { Version = av.Version, Fingerprint = av.Id, BuildTime = av.BuildTime, SupportToolkitNameVersion = av.SupportToolkitNameVersion, Name = a.Name };
