@@ -63,11 +63,8 @@ namespace Quilt4.Interface
         int GetIssueTypeCount();
         int GetIssueCount();
 
-        //ISetting GetSetting(string name);
-        //T GetSetting<T>(string name, T defaultValue);
         ISetting GetSetting(string name);
         IEnumerable<ISetting> GetSettings();
-        //void SetSetting(string name, string value, Type type);
         void SetSetting(ISetting setting);
     }
 }
