@@ -26,7 +26,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         {
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id", "The parameter id was not provided.");
 
-            var item = _settingsBusiness.GetDatabaseSetting(id);
+            var item = _settingsBusiness.GetSetting(id);
             return View(item);
         }
 
@@ -40,7 +40,8 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                 var type = Type.GetType(typeName);
                 var data = Convert.ChangeType(collection["Value"], type);
                 if (data == null) throw new InvalidOperationException();
-                _settingsBusiness.SetDatabaseSetting(id, collection["Value"], type);
+                var encrypt = collection["Encrypted"].Contains("true");
+                _settingsBusiness.SetDatabaseSetting(id, collection["Value"], type, encrypt);
 
                 return RedirectToAction("Index");
             }

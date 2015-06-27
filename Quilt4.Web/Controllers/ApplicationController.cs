@@ -67,19 +67,19 @@ namespace Quilt4.Web.Controllers
 
 
         // GET: Application/Edit/5
-        public ActionResult Edit(string initiativeId, string applicationName)
+        public ActionResult Edit(string id, string application)
         {
-            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeId);
-            var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == applicationName);
-            var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == applicationName)).Name;
-            var ticketPrefix = application.TicketPrefix;
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
+            var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == application)).Name;
+            var ticketPrefix = app.TicketPrefix;
 
             var model = new ApplicationPropetiesModel()
             {
                 ApplicationGroupName = applicationGroup,
                 TicketPrefix = ticketPrefix,
-                InitiativeId = initiativeId,
-                ApplicationName = applicationName
+                InitiativeId = id,
+                ApplicationName = application
             };
 
 
@@ -91,7 +91,7 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult Edit(ApplicationPropetiesModel model)
         {
-            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == model.InitiativeId);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), model.InitiativeId);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;

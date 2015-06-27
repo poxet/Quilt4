@@ -42,7 +42,7 @@ namespace Quilt4.Web
         {
             //var sb = new SettingsBusiness(); //TODO: Resolve the SettingsBusiness instead
             var sb = _container.Resolve<ISettingsBusiness>();
-            Configuration.ClientToken = sb.GetDatabaseSetting<string>("Quilt4ClientToken", string.Empty);
+            Configuration.ClientToken = sb.GetQuilt4ClientToken();
 
             if (!string.IsNullOrEmpty(Configuration.ClientToken))
             {

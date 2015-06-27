@@ -191,8 +191,8 @@ namespace Quilt4.Web.Business
 
             var response = new RegisterIssueResponse
             {
-                IssueTypeTicket = application.TicketPrefix + _settingsBusiness.GetDatabaseSetting("IssueTypeTicketPrefix", "A") + issueTypeTicket,
-                IssueInstanceTicket = application.TicketPrefix + _settingsBusiness.GetDatabaseSetting("IssueTicketPrefix", "B") + issueTicket,
+                IssueTypeTicket = application.TicketPrefix + _settingsBusiness.GetIssueTypeTicketPrefix() + issueTypeTicket,
+                IssueInstanceTicket = application.TicketPrefix + _settingsBusiness.GetIssueTicketPrefix() + issueTicket,
                 ResponseMessage = applicationVersion.ResponseMessage ?? issueTypeResponseMessage,
                 IsOfficial = applicationVersion.IsOfficial
             };

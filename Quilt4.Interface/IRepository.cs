@@ -44,6 +44,7 @@ namespace Quilt4.Interface
         IMachine GetMachine(string id);
         void AddMachine(IMachine machine);
         IEnumerable<IMachine> GetMachinesByApplicationVersion(string applicationFingerprint);
+        IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints);
 
         void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility);
         IEnumerable<IToolkitCompatibilities> GetToolkitCompability(Version version);
@@ -62,10 +63,11 @@ namespace Quilt4.Interface
         int GetIssueTypeCount();
         int GetIssueCount();
 
+        //ISetting GetSetting(string name);
+        //T GetSetting<T>(string name, T defaultValue);
         ISetting GetSetting(string name);
-        T GetSetting<T>(string name, T defaultValue);
         IEnumerable<ISetting> GetSettings();
-        void SetSetting(string name, string value, Type type);
-        IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints);
+        //void SetSetting(string name, string value, Type type);
+        void SetSetting(ISetting setting);
     }
 }

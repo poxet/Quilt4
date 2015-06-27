@@ -13,10 +13,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
     public class EmailController : Controller
     {
         private readonly IEmailBusiness _emailBusiness;
-        
-        public EmailController(IEmailBusiness emailBusiness)
+        private readonly ISettingsBusiness _settingsBusiness;
+
+        public EmailController(IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness)
         {
-            _emailBusiness = emailBusiness;    
+            _emailBusiness = emailBusiness;
+            _settingsBusiness = settingsBusiness;
         }
 
         // GET: Admin/Email/EmailHistory
@@ -30,11 +32,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Email/SendTestEmail
         public ActionResult SendTestEmail()
         {
-            var model = new SendEmailViewModel();
-
-            //TODO: Use setting business instead of ConfigurationManager
-            model.EmailEnabled = Convert.ToBoolean(ConfigurationManager.AppSettings["SendEMailEnabled"]);
-
+            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled };
             return View(model);
         }
 

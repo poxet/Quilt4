@@ -18,7 +18,7 @@ namespace Quilt4.Sample.Console
                 Session.Register();
 
                 //Register messages
-                Issue.Register("abc", Issue.MessageIssueLevel.Information);
+                var a = Issue.Register("abc", Issue.MessageIssueLevel.Information);
                 Issue.Register("abc?", Issue.MessageIssueLevel.Warning, null, null, null, new Dictionary<string, string> { { "D1", "V1" }, { "D2", "V2" } });
                 Issue.Register("abc!", Issue.MessageIssueLevel.Error);
 

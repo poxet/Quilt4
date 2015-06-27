@@ -10,6 +10,7 @@ namespace Quilt4.MongoDBRepository.Entities
         public string Id { get; internal set; }
         public string Value { get; internal set; }
         public string Type { get; internal set; }
+        public bool Encrypted { get; internal set; }
 
         [BsonExtraElements]
         private IDictionary<string, object> ExtraElements { get; set; }
