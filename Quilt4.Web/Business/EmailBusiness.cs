@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using Quilt4.Interface;
@@ -11,31 +10,26 @@ namespace Quilt4.Web.Business
     public class EmailBusiness : IEmailBusiness
     {
         private readonly IRepository _repository;
+        private readonly ISettingsBusiness _settingsBusiness;
 
-        public EmailBusiness(IRepository repository)
+        public EmailBusiness(IRepository repository, ISettingsBusiness settingsBusiness)
         {
             _repository = repository;
+            _settingsBusiness = settingsBusiness;
         }
 
         public void SendEmail(IEnumerable<string> tos, string subject, string body)
         {
-            var smtpServerAdress = ConfigurationManager.AppSettings["SmtpServerAddress"];
-            var smtpServerPort = ConfigurationManager.AppSettings["SmtpServerPort"];
-            var mailFrom = ConfigurationManager.AppSettings["SupportEmailAddress"];
-            var sendEmailEnabled = ConfigurationManager.AppSettings["SendEMailEnabled"];
+            var emailSetting = _settingsBusiness.GetEmailSetting();
 
-            var emailEnabled = Convert.ToBoolean(sendEmailEnabled);
+            if (!emailSetting.SendEMailEnabled)
+                return;
 
-            int portNumber;
-            int.TryParse(smtpServerPort, out portNumber);
+            var smtpClient = new SmtpClient(emailSetting.SmtpServerAdress, emailSetting.SmtpServerPort);
+            if (!string.IsNullOrEmpty(emailSetting.Username))
+                smtpClient.Credentials = new NetworkCredential(emailSetting.Username, emailSetting.Password);
 
-            var smtpClient = new SmtpClient(smtpServerAdress, portNumber);
-            
-            smtpClient.Credentials = new NetworkCredential("daniel.bohlin@quilt4net.com", "All4One!");
-
-            var errorMessage = "";
-
-            if (!emailEnabled) return;
+            var errorMessage = string.Empty;
 
             foreach (var to in tos)
             {
@@ -43,8 +37,7 @@ namespace Quilt4.Web.Business
 
                 try
                 {
-                    var mailMessage = new MailMessage(mailFrom, to, subject, body);
-                    mailMessage.IsBodyHtml = true;
+                    var mailMessage = new MailMessage(emailSetting.SupportEmailAddress, to, subject, body) { IsBodyHtml = true };
                     smtpClient.Send(mailMessage);
                     status = true;
                 }
@@ -55,7 +48,7 @@ namespace Quilt4.Web.Business
                 }
                 finally
                 {
-                    _repository.LogEmail(mailFrom, to, subject, body, DateTime.Now, status, errorMessage);
+                    _repository.LogEmail(emailSetting.SupportEmailAddress, to, subject, body, DateTime.Now, status, errorMessage);
                 }
             }
         }

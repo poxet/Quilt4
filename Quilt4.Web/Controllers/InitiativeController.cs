@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.Mvc;
 using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
@@ -53,13 +55,95 @@ namespace Quilt4.Web.Controllers
             }
         }
 
-        public ActionResult RemoveMember(string id, string developer)
+        public ActionResult ResendInvite(string initiativeid, string code)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
+            var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
+
+            var model = new InviteMemberModel()
+            {
+                InitiativeId = initiativeid,
+                Developer = developerRole,
+            };
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ResendInvite(string initiativeid, string code, FormCollection collection)
+        {
+
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
+            var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
+
+            var enabled = _settingsBusiness.GetEmailSetting().EMailConfirmationEnabled;
+            if (enabled)
+            {
+                var root = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, "/");
+                var acceptlink = string.Empty;
+                var declineLink = string.Empty;
+
+                if (root.Equals("http://localhost:54942/"))
+                {
+                    acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
+                    declineLink = root + "Initiative/DeclineInvite?id=" + initiativeid + "&inviteCode=" + code;
+                }
+                else if (root.Equals("http://ci.quilt4.com/"))
+                {
+                    acceptlink = root + "Master/Web/Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
+                    declineLink = root + "Master/WebInitiative/DeclineInvite?id=" + initiativeid + "&inviteCode=" + code;
+                }
+                else
+                {
+                    //Prod
+                }
+
+                var subject = "A reminder for the invitation to " + initiative.Name + " at www.quilt4.com";
+                var message = initiative.OwnerDeveloperName + " want to remind you to answer the invitation to initiative " + initiative.Name + " at Quilt4. <br/><br/><a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
+
+                try
+                {
+                    _emailBusiness.SendEmail(new List<string> { developerRole.InviteEMail }, subject, message);
+                }
+                catch (SmtpException e)
+                {
+                    TempData["InviteError"] = "Could not connect to the email server";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeid });
+                }
+                catch (Exception e)
+                {
+                    TempData["InviteError"] = "Something went wrong";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeid });
+                }
+            }
+
+
+            return RedirectToAction("Member", "Initiative", new { id = initiativeid});
+        }
+
+        //GET
+        public ActionResult RemoveMember(string initiativeId, string developer)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
+            var model = new MemberModel()
+            {
+                DeveloperName = initiative.DeveloperRoles.Single(x => x.DeveloperName == developer).DeveloperName,
+                InitiativeName = initiative.Name,
+                InitiativeId = initiativeId,
+            };
+
+            return View(model);
+        }
+
+        //POST
+        [HttpPost]
+        public ActionResult RemoveMember(string initiativeId, string developer, FormCollection collection)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
             initiative.RemoveDeveloperRole(developer);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Member", "Initiative", new { initiativeId = id});
+            return RedirectToAction("Details", "Initiative", new { id = initiativeId});
         }
 
         //Get
@@ -69,6 +153,8 @@ namespace Quilt4.Web.Controllers
             {
                 return Redirect("Index");
             }
+
+            ViewBag.InviteError = TempData["InviteError"];
                 
             Guid initiativeId;
             if (!Guid.TryParse(id, out initiativeId))
@@ -94,18 +180,43 @@ namespace Quilt4.Web.Controllers
             var initiativeId = collection["InitiativeId"];
             var inviteEmail = collection["InviteEmail"];
 
+            if (inviteEmail.IsNullOrEmpty())
+            {
+                TempData["InviteError"] = "Please enter an email adress";
+                return RedirectToAction("Member", "Initiative", new {id = initiativeId});
+            }
+            if (!new EmailAddressAttribute().IsValid(inviteEmail))
+            {
+                TempData["InviteError"] = "Please enter a valid email adress";
+                return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+            }
+
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
             var invitationCode = initiative.AddDeveloperRolesInvitation(inviteEmail);
             initiative.DeveloperRoles.Single(x => x.InviteEMail == inviteEmail).DeveloperName = inviteEmail;
 
-            _initiativeBusiness.UpdateInitiative(initiative);
-
-            var enabled = _settingsBusiness.GetConfigSetting<bool>("EMailConfirmationEnabled");
+            var enabled = _settingsBusiness.GetEmailSetting().EMailConfirmationEnabled;
             if (enabled)
             {
                 var root = Request.Url.AbsoluteUri.Replace(Request.Url.AbsolutePath, "/");
-                var acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                var declineLink = root + "Initiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                var acceptlink = string.Empty;
+                var declineLink = string.Empty;
+
+                if (root.Equals("http://localhost:54942/"))
+                {
+                    acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    declineLink = root + "Initiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                }
+                else if (root.Equals("http://ci.quilt4.com/"))
+                {
+                    acceptlink = root + "Master/Web/Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    declineLink = root + "Master/WebInitiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                }
+                else
+                {
+                    //Prod
+                }
+                
 
                 var userMessage = "";
                 if (!collection["Message"].IsNullOrEmpty())
@@ -116,10 +227,26 @@ namespace Quilt4.Web.Controllers
                 var subject = "Invitation to " + initiative.Name + " at www.quilt4.com";
                 var message = initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/>" + userMessage + "<a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
 
-                _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
+                try
+                {
+                    _emailBusiness.SendEmail(new List<string> { inviteEmail }, subject, message);
+                }
+                catch (SmtpException e)
+                {
+                    TempData["InviteError"] = "Could not connect to the email server";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                }
+                catch (Exception e)
+                {
+                    TempData["InviteError"] = "Something went wrong";
+                    return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                }
             }
 
-            return RedirectToAction("Member", "Initiative", new { initiativeId = collection["InitiativeId"] });
+            //if everything went well, save the initiative
+            _initiativeBusiness.UpdateInitiative(initiative);
+
+            return RedirectToAction("Member", "Initiative", new { id = collection["InitiativeId"] });
         }
 
         public ActionResult ConfirmInvite(string id, string inviteCode)

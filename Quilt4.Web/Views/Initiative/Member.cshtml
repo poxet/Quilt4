@@ -7,6 +7,16 @@
 }
 
 <h2>Members</h2>
+
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Owner</th>
+    </tr>
+    <tr>
+        <td style="padding: 0 5px;">@Model.Initiative.OwnerDeveloperName</td>
+    </tr>
+</table>
+<br/>
 <table>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">Member</th>
@@ -16,16 +26,32 @@
 
     @if (Model == null || Model.Initiative.DeveloperRoles.IsNullOrEmpty())
     {
-        @Html.Raw("<tr><td>No members</td></tr>")
+        @Html.Raw("<tr><td style=\"padding: 0 5px;\">No members</td></tr>")
     }
     
     @foreach (var member in Model.Initiative.DeveloperRoles)
     {
     <tr>
-        @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td> <td style='padding: 0 5px;'>Senast aktiv..</td>")
+        @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td>")
+
+        <td style='padding: 0 5px;'>
+            @if (member.RoleName.Equals("Invited"))
+            {
+                @member.InviteTime
+            }
+            else
+            {
+                @Html.Raw("Status...")
+            }
+        </td>
+
         @if (member.DeveloperName != Model.Initiative.OwnerDeveloperName && User.Identity.Name == Model.Initiative.OwnerDeveloperName)
         {
-            <td><a href="~/Initiative/RemoveMember?id=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
+            <td style="padding: 0 5px;"><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
+        }
+        @if (member.RoleName.Equals("Invited"))
+        {
+            <td>@Html.Raw("|")</td> <td style="padding: 0 5px;"><a href="~/Initiative/ResendInvite?initiativeid=@Model.Initiative.Id&code=@member.InviteCode">Resend invitation</a></td>
         }
     </tr>
     }
@@ -39,7 +65,7 @@
     {
         @Html.Hidden("InitiativeId", Model.Initiative.Id)
         @Html.TextBoxFor(m => m.InviteEmail, new { placeholder = Html.DisplayNameFor(n => n.InviteEmail) })
-        <br />
+        <p style="color: red;">@ViewBag.InviteError</p>
         <br />
         @Html.TextAreaFor(m => m.Message, new { placeholder = Html.DisplayNameFor(n => n.Message), Style = "width: 300px; height: 70px;" })
         <br />

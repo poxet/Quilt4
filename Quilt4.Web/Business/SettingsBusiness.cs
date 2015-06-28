@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Business
 {
@@ -15,25 +14,35 @@ namespace Quilt4.Web.Business
             _repository = repository;
         }
 
-        public T GetConfigSetting<T>(string name)
-        {
-            var result = ConfigurationManager.AppSettings[name];
-            if (string.IsNullOrEmpty(result))
-                throw new ConfigurationErrorsException("There is no configuration for provided name.").AddData("Name", name);
-
-            return (T)Convert.ChangeType(result, typeof(T));            
-        }
-
-        public ISetting GetDatabaseSetting(string name)
+        public ISetting GetSetting(string name)
         {
             var result = _repository.GetSetting(name);
+            if (result.Encrypted)
+            {
+                result = new Setting(result.Name, Decrypt(result.Value), result.Type, result.Encrypted);
+            }
+
             return result;
         }
 
-        public T GetDatabaseSetting<T>(string name, T defaultValue)
+        private T GetSettingValue<T>(string name, T defaultValue, bool encrypted = false)
         {
-            var result = _repository.GetSetting(name, defaultValue);
-            return result;
+            var result = _repository.GetSetting(name);
+
+            if (result == null)
+            {
+                SetDatabaseSetting(name, defaultValue.ToString(), typeof(T), encrypted);
+                return defaultValue;
+            }
+
+            var value = result.Value;
+            if (encrypted)
+            {
+                value = Decrypt(value);
+            }
+
+            var response = (T)Convert.ChangeType(value, typeof(T));
+            return response;
         }
 
         public IEnumerable<ISetting> GetAllDatabaseSettings()
@@ -42,9 +51,71 @@ namespace Quilt4.Web.Business
             return result;
         }
 
-        public void SetDatabaseSetting(string id, string value, Type type)
+        public void SetDatabaseSetting(string name, string value, Type type, bool encrypt)
         {
-            _repository.SetSetting(id, value, type);
+            if (encrypt)
+            {
+                value = Encrypt(value);
+            }
+
+            _repository.SetSetting(new Setting(name, value, type.ToString(), encrypt));
+        }
+
+        public IEmailSetting GetEmailSetting()
+        {
+            return new EmailSetting(GetSettingValue("SupportEmailAddress", "info@quilt4net.com"), GetSettingValue("SmtpServerAddress", "smtp.quilt4net.com"), GetSettingValue("SmtpServerPort", 587), GetSettingValue("SendEMailEnabled", false), GetSettingValue("EMailConfirmationEnabled", false), GetSettingValue("SmtpUserName", string.Empty), GetSettingValue("SmtpPassword", string.Empty, true));
+        }
+
+        public string GetIssueTypeTicketPrefix()
+        {
+            return GetSettingValue("IssueTypeTicketPrefix", "A");
+        }
+
+        public string GetIssueTicketPrefix()
+        {
+            return GetSettingValue("IssueTicketPrefix", "B");
+        }
+
+        public string GetQuilt4ClientToken()
+        {
+            return GetSettingValue("Quilt4ClientToken", string.Empty);
+        }
+
+        private static string Encrypt(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            var crypto = new Crypto(GetSalt());
+            var result = crypto.EncryptStringAES(value, GetSharedSecret());
+            return result;
+        }
+
+        private static string Decrypt(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return value;
+
+            var crypto = new Crypto(GetSalt());
+            try
+            {
+                var result = crypto.DecryptStringAes(value, GetSharedSecret());
+                return result;
+            }
+            catch (FormatException)
+            {
+                return string.Empty;
+            }
+        }
+
+        private static string GetSalt()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["Salt"];
+        }
+
+        private static string GetSharedSecret()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["SharedSecret"] ?? "Reapadda";
         }
     }
 }

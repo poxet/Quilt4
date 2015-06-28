@@ -7,7 +7,7 @@
 <h2>Details</h2>
 <a href='~/Initiative/Details/@Model.Initiative'>Go back to applications</a>
 <br/><br/>
-<a href="~/Application/Edit?initiativeId=@Model.Initiative&applicationName=@Model.Application">Properties</a>
+@Html.ActionLink("Properties", "Edit", new { id = @Model.Initiative, application = @Model.Application }, null)
 
 <h3>Versions</h3>
 <table>
@@ -26,13 +26,13 @@
 {
     <tr>
         <td style="padding: 0 5px;">@Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)<br/></td>
-        <td style="padding: 0 5px;">@*Build*@</td>
+        <td style="padding: 0 5px;">@version.Build</td>
         <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
-        <td style="padding: 0 5px;">@*@version.Sessions.Count()*@</td>
+        <td style="padding: 0 5px;">@version.Sessions.Count()</td>
         <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
         <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
-        <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToTimeAgo() ago</td>
-        <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToTimeAgo() ago</td>
+        <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+        <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
         <td style="padding: 0 5px;">
             
             @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())

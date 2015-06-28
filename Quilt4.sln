@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quilt4.BusinessEntities", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quilt4.Sample.Console", "Quilt4.Sample.Console\Quilt4.Sample.Console.csproj", "{6E4E8D34-8388-41ED-AE3F-64C39DC7B7ED}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{F9C33BD5-53F5-44DE-9137-711A3ABD589D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CI|Any CPU = CI|Any CPU
@@ -90,5 +92,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E59A9ECF-EF1A-4864-9483-3C9414FEAFBF} = {57E438BA-04AE-4752-9CAB-B503552F6F73}
 		{8EB22E5D-F1D6-45F4-990D-5B23E2585FCF} = {57E438BA-04AE-4752-9CAB-B503552F6F73}
+		{6E4E8D34-8388-41ED-AE3F-64C39DC7B7ED} = {F9C33BD5-53F5-44DE-9137-711A3ABD589D}
 	EndGlobalSection
 EndGlobal

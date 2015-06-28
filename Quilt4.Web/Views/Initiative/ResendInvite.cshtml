@@ -1,0 +1,15 @@
+﻿@model Quilt4.Web.Models.InviteMemberModel
+
+@{
+    ViewBag.Title = "ResendInvite";
+}
+
+<h2>ResendInvite</h2>
+
+<p>Are you sure you want to resend the invitation to @Model.Developer.DeveloperName?</p>
+@using (@Html.BeginForm())
+{
+    <input type="submit" value="Yes"/>
+    <a href="~/Initiative/Member/@Model.InitiativeId">Cancel</a>
+}
+

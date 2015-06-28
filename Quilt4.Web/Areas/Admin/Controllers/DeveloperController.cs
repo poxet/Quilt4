@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
+using Quilt4.Web.Areas.Admin.Models;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
@@ -32,9 +33,9 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Developer/ConfirmDeveloperEMail
         public ActionResult ConfirmDeveloperEMail(string id)
         {
-            var model = _accountRepository.GetUsers().Single(x => x.UserId == id);
-
-            return View(model);
+            var developer = _accountRepository.FindById(id);
+            
+            return View(developer);
         }
 
         // POST: Admin/Developer/ConfirmDeveloperEMail
@@ -47,18 +48,21 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Developer/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            var developer = _accountRepository.GetUsers().Single(x => x.UserId == id);
+            
+            return View(developer);
         }
 
         // POST: Admin/Developer/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
             try
             {
                 // TODO: Add delete logic here
+                _accountRepository.DeleteUser(id);
 
                 return RedirectToAction("Index");
             }

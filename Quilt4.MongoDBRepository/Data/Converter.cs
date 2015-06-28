@@ -71,7 +71,7 @@ namespace Quilt4.MongoDBRepository
 
         public static ISetting ToEntity(this SettingPersist item)
         {
-            var result = new Setting(item.Id, item.Value, item.Type);
+            var result = new Setting(item.Id, item.Value, item.Type, item.Encrypted);
             return result;
         }
 

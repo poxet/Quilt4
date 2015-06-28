@@ -54,7 +54,7 @@
     @foreach (var session in Model.Sessions)
     {
         <tr>
-            <td style="padding: 0 5px;">@session.ServerStartTime</td>
+            <td style="padding: 0 5px;">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;">@session.Environment</td>
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
             <td style="padding: 0 5px;">@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name</td>

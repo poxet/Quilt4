@@ -5,5 +5,6 @@ namespace Quilt4.Interface
         string Name { get; }
         string Value { get; }
         string Type { get; }
+        bool Encrypted { get; }
     }
 }

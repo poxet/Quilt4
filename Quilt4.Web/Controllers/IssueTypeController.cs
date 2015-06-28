@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -24,7 +25,7 @@ namespace Quilt4.Web.Controllers
         // GET: IssueType/Details/5
         public ActionResult Details(string id, string application, string version, string issueType)
         {
-            var initiative = _initiativeBusiness.GetInitiatives().SingleOrDefault(x => x.Name == id);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Name == application).Id;
             //TODO: version is an uniqe something ... how should this be solved?
             var ver = _applicationVersionBusiness.GetApplicationVersions(applicationId).SingleOrDefault(x => x.Version == version);

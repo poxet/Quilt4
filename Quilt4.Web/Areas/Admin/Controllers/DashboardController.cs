@@ -12,11 +12,13 @@ namespace Quilt4.Web.Areas.Admin.Controllers
     {
         private readonly SystemBusiness _systemBusiness;
         private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly ISettingsBusiness _settingsBusiness;
 
-        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness)
+        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness)
         {
             _systemBusiness = systemBusiness;
             _initiativeBusiness = initiativeBusiness;
+            _settingsBusiness = settingsBusiness;
         }
 
         // GET: Admin/Dashboard/Index
@@ -51,16 +53,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             adminViewModel.DBName = dbinfo.Name;
             adminViewModel.DBServer = dbinfo.Server;
 
-            var supportEmailAdress = ConfigurationManager.AppSettings["SupportEmailAddress"];
-            var smtpServerAdress = ConfigurationManager.AppSettings["SmtpServerAddress"];
-            var smtpServerPort = ConfigurationManager.AppSettings["SmtpServerPort"];
-            var sendEMailEnabled = ConfigurationManager.AppSettings["SendEMailEnabled"];
-            var eMailConfirmationEnabled = ConfigurationManager.AppSettings["EMailConfirmationEnabled"];
-            adminViewModel.SupportEmailAdress = supportEmailAdress;
-            adminViewModel.SmtpServerAdress = smtpServerAdress;
-            adminViewModel.SmtpServerPort = smtpServerPort;
-            adminViewModel.SendEMailEnabled = sendEMailEnabled;
-            adminViewModel.EMailConfirmationEnabled = eMailConfirmationEnabled;
+            var emailSetting = _settingsBusiness.GetEmailSetting();
+            adminViewModel.SupportEmailAdress = emailSetting.SupportEmailAddress;
+            adminViewModel.SmtpServerAdress = emailSetting.SmtpServerAdress;
+            adminViewModel.SmtpServerPort = emailSetting.SmtpServerPort.ToString();
+            adminViewModel.SendEMailEnabled = emailSetting.SendEMailEnabled.ToString();
+            adminViewModel.EMailConfirmationEnabled = emailSetting.EMailConfirmationEnabled.ToString();
 
             return View(adminViewModel);
         }

@@ -42,7 +42,7 @@ namespace Quilt4.MongoDBRepository
             initiative.ClientToken = sessionToken;
             initiative.OwnerDeveloperName = owner;
 
-            Database.GetCollection("Initiative").Save(initiative);
+            Database.GetCollection("Initiative").Save(initiative, WriteConcern.Acknowledged);
         }
 
         public IDataBaseInfo GetDatabaseStatus()
@@ -121,25 +121,30 @@ namespace Quilt4.MongoDBRepository
             var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
 
             if (item == null)
-                throw new InvalidOperationException("There is no database setting for provided type.");
+                return null;
 
             var result = item.ToEntity();
             return result;
         }
 
-        public T GetSetting<T>(string name, T defaultValue)
-        {
-            var query = Query.EQ("_id", name);
-            var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
+        //public T GetSetting<T>(string name, T defaultValue)
+        //{
+        //    var query = Query.EQ("_id", name);
+        //    var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
 
-            if (item == null)
-            {
-                Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() });
-                return defaultValue;
-            }
+        //    T response;
+        //    if (item == null)
+        //    {
+        //        Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() }, WriteConcern.Acknowledged);
+        //        response = defaultValue;
+        //    }
+        //    else
+        //    {
+        //        response = (T)Convert.ChangeType(item.Value, typeof(T));
+        //    }
 
-            return (T)Convert.ChangeType(item.Value, typeof(T));
-        }
+        //    return response;
+        //}
 
         public IEnumerable<ISetting> GetSettings()
         {
@@ -148,10 +153,10 @@ namespace Quilt4.MongoDBRepository
             return result;
         }
 
-        public void SetSetting(string name, string value, Type type)
+        public void SetSetting(ISetting setting)
         {
-            var settingPersist = new SettingPersist { Id = name, Value = value.ToString(), Type = type.ToString() };
-            Database.GetCollection("Setting").Save(settingPersist);
+            var settingPersist = new SettingPersist { Id = setting.Name, Value = setting.Value, Type = setting.Type, Encrypted = setting.Encrypted };
+            Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
         }
 
         //public string DatabaseName 
@@ -235,7 +240,8 @@ namespace Quilt4.MongoDBRepository
 
                         _database = db;
 
-                        _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("Name"), IndexOptions.SetUnique(true));
+                        _database.GetCollection("Setting").DropAllIndexes(); //TODO: If you cannot access the settings table. Enable this line, run the program and disable it again. (This line should be removed when it works on all machines)
+                        _database.GetCollection("Setting").CreateIndex(new IndexKeysBuilder().Ascending("_id"), IndexOptions.SetUnique(true));
                         _database.GetCollection("Initiative").CreateIndex(new IndexKeysBuilder().Ascending("ClientToken"), IndexOptions.SetUnique(true));
                         _database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("UserName"), IndexOptions.SetUnique(true));
                         _database.GetCollection("AspNetUsers").CreateIndex(new IndexKeysBuilder().Ascending("Email"), IndexOptions.SetUnique(true));
@@ -257,32 +263,32 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection(e.Collection).Save(e.Item, WriteConcern.Acknowledged);
         }
 
-        private static MongoServerAddress GetMongoServerAddress()
-        {
-            var mongoServerAddress = new MongoServerAddress("localhost", 27017);
+        //private static MongoServerAddress GetMongoServerAddress()
+        //{
+        //    var mongoServerAddress = new MongoServerAddress("localhost", 27017);
 
-            var mongoDbServerAddress = ConfigurationManager.AppSettings["MongoDbServerAddress"];
-            if (!string.IsNullOrEmpty(mongoDbServerAddress))
-            {
-                var parts = mongoDbServerAddress.Split(':');
+        //    var mongoDbServerAddress = ConfigurationManager.AppSettings["MongoDbServerAddress"];
+        //    if (!string.IsNullOrEmpty(mongoDbServerAddress))
+        //    {
+        //        var parts = mongoDbServerAddress.Split(':');
 
-                var host = mongoServerAddress.Host;
-                var port = mongoServerAddress.Port;
+        //        var host = mongoServerAddress.Host;
+        //        var port = mongoServerAddress.Port;
                 
-                if (parts.Length >= 1) 
-                    host = parts[0];
+        //        if (parts.Length >= 1) 
+        //            host = parts[0];
 
-                if (parts.Length >= 2)
-                {
-                    if (!int.TryParse(parts[1], out port))
-                        throw new InvalidOperationException("Unable to parse setting MongoDbServerAddress port to integer. (host:port).");
-                }
+        //        if (parts.Length >= 2)
+        //        {
+        //            if (!int.TryParse(parts[1], out port))
+        //                throw new InvalidOperationException("Unable to parse setting MongoDbServerAddress port to integer. (host:port).");
+        //        }
 
-                mongoServerAddress = new MongoServerAddress(host, port);
-            }
+        //        mongoServerAddress = new MongoServerAddress(host, port);
+        //    }
 
-            return mongoServerAddress;
-        }
+        //    return mongoServerAddress;
+        //}
 
         public void AddInitiative(IInitiative initiative)
         {
@@ -404,7 +410,7 @@ namespace Quilt4.MongoDBRepository
 
         public void UpdateMachine(IMachine machine)
         {
-            Database.GetCollection("Machine").Save(machine.ToPersist());
+            Database.GetCollection("Machine").Save(machine.ToPersist(), WriteConcern.Acknowledged);
         }
 
         public bool CanConnect()
@@ -569,8 +575,6 @@ namespace Quilt4.MongoDBRepository
             var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.ApplicationVersionId == applicationFingerprint).ToArray();
             return Database.GetCollection("Machine").FindAllAs<MachinePersist>().Where(x => sessions.Any(y => y.MachineFingerprint == x.Id)).Select(x => x.ToEntity()).ToArray();
         }
-
-
 
         public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
         {

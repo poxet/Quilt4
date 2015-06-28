@@ -7,6 +7,7 @@ namespace Quilt4.Web.BusinessEntities
     {
         public static bool AreEqual(this Tharga.Quilt4Net.DataTransfer.IssueType item, IIssueType issueType)
         {
+            if (item == null && issueType == null) return true;
             if (item.ExceptionTypeName != issueType.ExceptionTypeName) return false;
             if (string.Compare(Clean(item.Message), Clean(issueType.Message), StringComparison.InvariantCultureIgnoreCase) != 0) return false;
             if (string.Compare(Clean(item.StackTrace), Clean(issueType.StackTrace), StringComparison.InvariantCultureIgnoreCase) != 0) return false;
