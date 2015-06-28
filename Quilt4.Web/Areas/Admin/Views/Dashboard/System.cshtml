@@ -9,23 +9,25 @@
 <br/><br/>
 
 <table>
+    @*Database*@
     <tr>
         <th style="padding-right: 20px">Database Type</th>
-        <td>@Model.DBType</td>
+        <td>@Model.DbType</td>
     </tr>
     <tr>
         <th style="padding-right: 20px">Database Online</th>
-        <td>@Model.DBOnline</td>
+        <td>@Model.DbOnline</td>
     </tr>
     <tr>
         <th style="padding-right: 20px">Database Name</th>
-        <td>@Model.DBName</td>
+        <td>@Model.DbName</td>
     </tr>
     <tr>
         <th style="padding-right: 20px">Database Server</th>
-        <td>@Model.DBServer</td>
+        <td>@Model.DbServer</td>
     </tr>
 
+    @*EMail*@
     <tr style="border-top: 2px solid #000;">
         <th style="padding-right: 20px">SMTP Server Adress</th>
         <td>@Model.SmtpServerAdress</td>
@@ -34,7 +36,6 @@
         <th style="padding-right: 20px">SMTP Server Port</th>
         <td>@Model.SmtpServerPort</td>
     </tr>
-
     <tr style="border-top: 2px solid #000;">
         <th style="padding-right: 20px">Support Email Adress</th>
         <td>@Model.SupportEmailAdress</td>
@@ -47,4 +48,27 @@
         <th style="padding-right: 20px">Email Confirmation Enabled</th>
         <td>@Model.EMailConfirmationEnabled</td>
     </tr>
+
+    @*InfluxDB*@
+    <tr style="border-top: 2px solid #000;">
+        <th style="padding-right: 20px">InfluxDB Enabled</th>
+        <td>@Model.InfluxDbEnabled</td>
+    </tr>
+    <tr style="padding-right: 20px">
+        <th style="padding-right: 20px">InfluxDB Can Connect</th>
+        <td>@Model.InfluxDbOnline</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">InfluxDB Url</th>
+        <td>@Model.InfluxDbUrl</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">InfluxDB Version</th>
+        <td>@Model.InfluxDbVersion</td>
+    </tr>
+    <tr>
+        <th style="padding-right: 20px">InfluxDB Database Name</th>
+        <td>@Model.InfluxDbName</td>
+    </tr>
+
 </table>

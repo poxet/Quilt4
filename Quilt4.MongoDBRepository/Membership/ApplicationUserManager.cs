@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -34,9 +33,8 @@ namespace Quilt4.MongoDBRepository.Membership
         {
             get
             {
-                var r = Task<IEnumerable<ApplicationUser>>.Factory.StartNew(() => _store.GetAllUsersAsync().Result);
-                var response = r.Result.AsQueryable();
-                return response;
+                var task = Task.Run(async () => await _store.GetAllUsersAsync());
+                return task.Result.AsQueryable();
             }            
         }        
 

@@ -1,14 +1,21 @@
+using System.Collections.Generic;
 using Quilt4.Interface;
-using Tharga.Quilt4Net.DataTransfer;
+using Quilt4.Web.BusinessEntities;
 
 namespace Quilt4.Web.Business
 {
     public class CounterBusiness : ICounterBusiness
     {
-        public RegisterCounterResponse RegisterCounter(RegisterCounterRequest data)
+        private readonly IInfluxDbAgent _influxDbAgent;
+
+        public CounterBusiness(IInfluxDbAgent influxDbAgent)
         {
-            //TODO: Store counter data
-            return new RegisterCounterResponse { };
+            _influxDbAgent = influxDbAgent;
+        }
+
+        public void Register(string counterName, int count, Dictionary<string, string> data)
+        {
+            _influxDbAgent.WriteAsync(new Serie());
         }
     }
 }

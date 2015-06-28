@@ -125,7 +125,7 @@ namespace Quilt4.Web.Business
                 throw new ArgumentException("No value for application fingerprint provided. A globally unique identifier should be provided, perhaps a machine sid or a hash of unique data that does not change.");
             }
 
-            var applicationVersion = _applicationVersionBusiness.RegisterApplicationVersion(fingerprint, application.Id, ad.Version, ad.SupportToolkitNameVersion, ad.BuildTime);
+            var applicationVersion = _applicationVersionBusiness.RegisterApplicationVersionUsage(fingerprint, application.Id, ad.Version, ad.SupportToolkitNameVersion, ad.BuildTime);
 
             if (applicationVersion.Ignore)
             {

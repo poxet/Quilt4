@@ -21,7 +21,6 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // POST api/counter/register
         [HttpPost]
-        //[ActionName("register")]
         [Route("api/counter/register")]
         [AllowAnonymous]
         public RegisterCounterResponse RegisterCounter([FromBody] object request)
@@ -33,7 +32,9 @@ namespace Quilt4.Web.Controllers.WebAPI
             try
             {
                 var data = GetData(request);
-                return _counterBusiness.RegisterCounter(data);
+                //return _counterBusiness.RegisterCounter(data);
+                //return _counterBusiness.Register(data.)
+                throw new NotImplementedException();
             }
             catch (Exception exception)
             {

@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.Web.Agents;
 
 namespace Quilt4.Web.Business
 {
     public class ApplicationVersionBusiness : IApplicationVersionBusiness
     {
         private readonly IRepository _repository;
+        private readonly ICounterBusiness _counterBusiness;
 
-        public ApplicationVersionBusiness(IRepository repository)
+        public ApplicationVersionBusiness(IRepository repository, ICounterBusiness counterBusiness)
         {
             _repository = repository;
+            _counterBusiness = counterBusiness;
         }
 
         public IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId)
@@ -47,31 +50,26 @@ namespace Quilt4.Web.Business
             return (Fingerprint)applicationFingerprint;
         }
 
-        public IApplicationVersion RegisterApplicationVersion(IFingerprint applicationVersionFingerprint, Guid applicationId, string version, string supportToolkitNameVersion, DateTime? buildTime)
+        public IApplicationVersion RegisterApplicationVersionUsage(IFingerprint applicationVersionFingerprint, Guid applicationId, string version, string supportToolkitNameVersion, DateTime? buildTime)
         {
             Version tmp;
-            if (string.IsNullOrEmpty(version)) throw new ArgumentException(String.Format("No version provided for application."));
-            if (!Version.TryParse(version, out tmp)) throw new ArgumentException(String.Format("Invalid version format."));
+            if (string.IsNullOrEmpty(version)) throw new ArgumentException("No version provided for application.");
+            if (!Version.TryParse(version, out tmp)) throw new ArgumentException("Invalid version format.");
 
-            var applicationVersion = RegisterApplicationVersionEx((Fingerprint)applicationVersionFingerprint, applicationId);
+            var applicationVersion = RegisterExistingApplicationVersionUsage((Fingerprint)applicationVersionFingerprint, applicationId);
             if (applicationVersion != null)
                 return applicationVersion;
 
-            try
-            {
-                applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime);
-                _repository.AddApplicationVersion(applicationVersion);
-            }
-            catch (System.Data.SqlClient.SqlException)
-            {
-                applicationVersion = RegisterApplicationVersionEx((Fingerprint)applicationVersionFingerprint, applicationId);
-                if (applicationVersion == null)
-                    throw;
-            }
+            applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime);
+            _repository.AddApplicationVersion(applicationVersion);
+
+            //TODO: Provide: Initiative, Developer, Application, Environment
+            _counterBusiness.Register("ApplicationVersion", 1, new Dictionary<string, string> { { "ApplicationId", applicationId.ToString() }, { "Version", version } });
+
             return applicationVersion;
         }
 
-        private IApplicationVersion RegisterApplicationVersionEx(Fingerprint applicationVersionFingerprint, Guid applicationId)
+        private IApplicationVersion RegisterExistingApplicationVersionUsage(Fingerprint applicationVersionFingerprint, Guid applicationId)
         {
             var response = _repository.GetApplicationVersion(applicationVersionFingerprint);
             if (response != null)
@@ -111,10 +109,5 @@ namespace Quilt4.Web.Business
         {
             return _repository.GetApplicationVersionsForMachine(machineId);
         }
-
-        //public IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> initiative)
-        //{
-        //    return _repository.GetApplicationVersionsForApplications(initiative);
-        //}
     }
 }

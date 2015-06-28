@@ -101,6 +101,8 @@
     <Compile Include="IEmailBusiness.cs" />
     <Compile Include="IEmailSetting.cs" />
     <Compile Include="IFingerprint.cs" />
+    <Compile Include="IInfluxDbAgent.cs" />
+    <Compile Include="IInfluxDbSetting.cs" />
     <Compile Include="IInitiative.cs" />
     <Compile Include="IInitiativeBusiness.cs" />
     <Compile Include="IInitiativeHead.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="IMachineBusiness.cs" />
     <Compile Include="IMembershipUser.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="ISerie.cs" />
     <Compile Include="ISession.cs" />
     <Compile Include="ISessionBusiness.cs" />
     <Compile Include="ISetting.cs" />

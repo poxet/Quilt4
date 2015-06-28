@@ -81,6 +81,11 @@ namespace Quilt4.Web.Business
             return GetSettingValue("Quilt4ClientToken", string.Empty);
         }
 
+        public IInfluxDbSetting GetInfluxDBSetting()
+        {
+            return new InfluxDbSetting(GetSettingValue("InfluxDbUrl", string.Empty), GetSettingValue("InfluxDbUserName", string.Empty), GetSettingValue("InfluxDbPassword", string.Empty, true), GetSettingValue("InfluxDbDatabaseName", "Quilt4"));
+        }
+
         private static string Encrypt(string value)
         {
             if (string.IsNullOrEmpty(value))

@@ -1,57 +1,87 @@
 ﻿using System;
 using System.Threading.Tasks;
 using InfluxDB.Net;
+using InfluxDB.Net.Models;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Agents
 {
-    public interface IDatabaseConfig
+    public class InfluxDbAgent : IInfluxDbAgent
     {
-        string Url { get; }
-        string Username { get; }
-        string Password { get; }
-        string Name { get; }
-    }
-
-    public class InfluxDbAgent
-    {
+        private readonly ISettingsBusiness _settingsBusiness;
         private readonly InfluxDb _influxDb;
-        private readonly IDatabaseConfig _databaseConfig;
 
-        public InfluxDbAgent(IDatabaseConfig databaseConfig)
+        public InfluxDbAgent(ISettingsBusiness settingsBusiness)
         {
-            _databaseConfig = databaseConfig;
-            _influxDb = new InfluxDb(_databaseConfig.Url, _databaseConfig.Username, _databaseConfig.Password);
+            _settingsBusiness = settingsBusiness;
+            var influxDbSetting = GetSetting();
+            if (!string.IsNullOrEmpty(influxDbSetting.Url))
+            {
+                _influxDb = new InfluxDb(influxDbSetting.Url, influxDbSetting.Username, influxDbSetting.Password);
+            }
         }
 
-        public async Task<InfluxDbApiResponse> WriteAsync(TimeUnit milliseconds) //, Serie serie)
+        public bool IsEnabled { get { return _influxDb != null; } }
+
+        public void WriteAsync(ISerie serie)
         {
-            //return await _influxDb.WriteAsync(_databaseConfig.Name, milliseconds, serie);
+            if (_influxDb == null) return;
+
+            //var b = new Serie.Builder("");
+            //var s = b.Columns("").Values("").Build();
+
             throw new NotImplementedException();
+            //var task = Task.Run(async () => await _influxDb.WriteAsync(_influxDbSetting.Name, TimeUnit.Milliseconds, s));
         }
 
-        public async Task<bool> AuthenticateDatabaseUserAsync()
+        public bool CanConnect()
         {
-            var result = await _influxDb.AuthenticateDatabaseUserAsync(_databaseConfig.Name, _databaseConfig.Username, _databaseConfig.Password);
-            throw new NotImplementedException();
+            var task = Task.Run(async () => await _influxDb.PingAsync());
+            return task.Result.Status == "ok";
         }
 
-        public async Task<bool> CanConnect()
+        public IInfluxDbSetting GetSetting()
         {
-            var pong = await _influxDb.PingAsync();
-            if (pong.Status == "ok")
-                return true;
-            return false;
+            var result = _settingsBusiness.GetInfluxDBSetting();
+            return result;
         }
 
-        public async Task<bool> PingAsync()
+        public string GetDatabaseVersion()
         {
-            var pong = await _influxDb.PingAsync();
-            throw new NotImplementedException();
+            try
+            {
+                var task = Task.Run(async () => await _influxDb.VersionAsync());
+                return task.Result;
+            }
+            catch (Exception exception)
+            {
+                return exception.Message;
+            }
         }
 
-        public async Task<string> VersionAsync()
-        {
-            return await _influxDb.VersionAsync();
-        }
+        //public async Task<bool> AuthenticateDatabaseUserAsync()
+        //{
+        //    var result = await _influxDb.AuthenticateDatabaseUserAsync(_influxDbSetting.Name, _influxDbSetting.Username, _influxDbSetting.Password);
+        //    throw new NotImplementedException();
+        //}
+
+        //public async Task<bool> CanConnect()
+        //{
+        //    var pong = await _influxDb.PingAsync();
+        //    if (pong.Status == "ok")
+        //        return true;
+        //    return false;
+        //}
+
+        //public async Task<bool> PingAsync()
+        //{
+        //    var pong = await _influxDb.PingAsync();
+        //    throw new NotImplementedException();
+        //}
+
+        //public async Task<string> VersionAsync()
+        //{
+        //    return await _influxDb.VersionAsync();
+        //}
     }
 }

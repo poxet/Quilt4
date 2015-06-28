@@ -1,9 +1,9 @@
-﻿using Tharga.Quilt4Net.DataTransfer;
+﻿using System.Collections.Generic;
 
 namespace Quilt4.Interface
 {
     public interface ICounterBusiness
     {
-        RegisterCounterResponse RegisterCounter(RegisterCounterRequest data);
+        void Register(string counterName, int count, Dictionary<string, string> data);
     }
 }
