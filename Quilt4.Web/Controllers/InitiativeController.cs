@@ -143,7 +143,7 @@ namespace Quilt4.Web.Controllers
             initiative.RemoveDeveloperRole(developer);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Details", "Initiative", new { id = initiativeId});
+            return RedirectToAction("Member", "Initiative", new { id = initiativeId});
         }
 
         //Get
