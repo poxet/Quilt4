@@ -51,11 +51,11 @@
             }
         </td>
 
-        @if (member.DeveloperName != Model.Initiative.OwnerDeveloperName && User.Identity.Name == Model.Initiative.OwnerDeveloperName)
+        @if (Model.IsAllowedToAdministrate)
         {
             <td style="padding: 0 5px;"><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
         }
-        @if (member.RoleName.Equals("Invited"))
+        @if (member.RoleName.Equals("Invited") && !User.Identity.Name.Equals(member.DeveloperName))
         {
             <td>@Html.Raw("|")</td> <td style="padding: 0 5px;"><a href="~/Initiative/ResendInvite?initiativeid=@Model.Initiative.Id&code=@member.InviteCode">Resend invitation</a></td>
         }
@@ -63,7 +63,7 @@
     }
 </table>
 
-@if (@Model.IsAllowedToInvite)
+@if (@Model.IsAllowedToAdministrate)
 {
     <hr />
     <h3>Invite member</h3>

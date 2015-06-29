@@ -167,7 +167,7 @@ namespace Quilt4.Web.Controllers
             var invite = new InviteModel
             {
                 Initiative = initiative,
-                IsAllowedToInvite = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator"
+                IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator"
             };
 
             return View(invite);
