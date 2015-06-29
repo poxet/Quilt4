@@ -255,7 +255,7 @@ namespace Quilt4.Web.Controllers
             initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return View();
+            return View((object)initiative.Name);
         }
 
         [AllowAnonymous]
