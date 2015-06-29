@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="~/Initiative/">Initiative</a></li>
+    <li class="active">@Model.Name</li>
+</ol>
+
 <h2>Details</h2>
 @Html.ActionLink("Members", "Member", new { id = @Model.Id }, null)
 

@@ -6,6 +6,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="~/Initiative">Initiative</a></li>
+    <li><a href="~/Initiative/Details/@Model.Initiative.Name">@Model.Initiative.Name</a></li>
+    <li class="active">Members</li>
+</ol>
+
 <h2>Members</h2>
 
 <table>

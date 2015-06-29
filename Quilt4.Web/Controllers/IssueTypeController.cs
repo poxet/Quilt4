@@ -33,7 +33,10 @@ namespace Quilt4.Web.Controllers
             var model = new IssueTypeModel
             {
                 IssueType = ver.IssueTypes.Single(x => x.Ticket.ToString() == issueType), 
-                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id)
+                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
+                Initiative = id,
+                Application = application,
+                Version = version,
             };
             model.Users = model.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
             

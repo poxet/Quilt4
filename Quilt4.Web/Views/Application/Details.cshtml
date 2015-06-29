@@ -4,6 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="~/Initiative">Initiative</a></li>
+    <li><a href="~/Initiative/Details/@Model.Initiative">@Model.Initiative</a></li>
+    <li class="active">@Model.Application</li>
+</ol>
+
 <h2>Details</h2>
 <a href='~/Initiative/Details/@Model.Initiative'>Go back to applications</a>
 <br/><br/>

@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="~/Initiative">Initiative</a></li>
+    <li><a href="~/Initiative/Details/@Model.Initiative">@Model.Initiative</a></li>
+    <li><a href="~/Application/Details/@Model.Initiative/@Model.Application">@Model.Application</a></li>
+    <li><a href="~/Version/Details/@Model.Initiative/@Model.Application/@Model.Version">@Model.Version</a></li>
+    <li class="active">@Model.IssueType.ExceptionTypeName</li>
+</ol>
+
 <h2>Details</h2>
 
 <table>
