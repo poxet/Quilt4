@@ -17,7 +17,7 @@ namespace Quilt4.Web.Controllers
 
         public static Application ToModel(this IApplication item)
         {
-            return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix);
+            return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix, item.DevColor, item.CiColor, item.ProdColor);
         }
 
         public static Initiative ToModel(this IInitiative item, IEnumerable<string> allInitiativeNames)

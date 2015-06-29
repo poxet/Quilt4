@@ -72,14 +72,16 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == application)).Name;
-            var ticketPrefix = app.TicketPrefix;
 
             var model = new ApplicationPropetiesModel()
             {
                 ApplicationGroupName = applicationGroup,
-                TicketPrefix = ticketPrefix,
+                TicketPrefix = app.TicketPrefix,
                 InitiativeId = id,
-                ApplicationName = application
+                ApplicationName = application,
+                DevColor = app.DevColor,
+                CiColor = app.CiColor,
+                ProdColor = app.ProdColor
             };
 
 
@@ -95,6 +97,9 @@ namespace Quilt4.Web.Controllers
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;
+            application.DevColor = model.DevColor;
+            application.CiColor = model.CiColor;
+            application.ProdColor = model.ProdColor;
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {

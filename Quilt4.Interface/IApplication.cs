@@ -9,5 +9,8 @@ namespace Quilt4.Interface
         string Name { get; }
         DateTime FirstRegistered { get; }
         string TicketPrefix { get; set; }
+        string DevColor { get; set; }
+        string ProdColor { get; set; }
+        string CiColor { get; set; }
     }
 }
