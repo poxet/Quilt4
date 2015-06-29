@@ -2,10 +2,11 @@
 
 @{
     ViewBag.Title = "RemoveMember";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h2>Remove Member</h2>
 
-<p>Are you sure that you want to remove @Model.DeveloperName from @Model.InitiativeName?</p>
+<p>Are you sure that you want to remove <b>@Model.DeveloperName</b> from @Model.InitiativeName?</p>
 
 @using (@Html.BeginForm())
 {
