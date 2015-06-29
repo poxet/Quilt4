@@ -11,13 +11,14 @@ namespace Quilt4.BusinessEntities
         private string _developerName;
         private string _roleName;
 
-        public DeveloperRole(string developerName, string roleName, string inviteCode, string inviteEMail, DateTime inviteTime)
+        public DeveloperRole(string developerName, string roleName, string inviteCode, string inviteEMail, DateTime inviteTime, DateTime inviteResponseTime)
         {
             _developerName = developerName;
             _roleName = roleName;
             _inviteCode = inviteCode;
             _inviteEMail = inviteEMail;
             _inviteTime = inviteTime;
+            InviteResponseTime = inviteResponseTime;
         }
 
         public string DeveloperName { get { return !string.IsNullOrEmpty(_developerName) ? _developerName : null; } set { _developerName = value; } }
@@ -25,5 +26,6 @@ namespace Quilt4.BusinessEntities
         public string InviteCode { get { return _inviteCode; } }
         public string InviteEMail { get { return _inviteEMail; } }
         public DateTime InviteTime { get { return _inviteTime; } }
+        public DateTime InviteResponseTime { get; set; }
     }
 }

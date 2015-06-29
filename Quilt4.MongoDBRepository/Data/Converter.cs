@@ -77,7 +77,7 @@ namespace Quilt4.MongoDBRepository
 
         public static IDeveloperRole ToEntity(this DeveloperRolePersist item)
         {
-            return new DeveloperRole(item.DeveloperName, item.RoleName, item.InviteCode, item.InviteEMail, item.InviteTime);
+            return new DeveloperRole(item.DeveloperName, item.RoleName, item.InviteCode, item.InviteEMail, item.InviteTime, item.InviteResponseTime);
         }
 
         public static IApplicationGroup ToEntity(this ApplicationGroupPersist item)

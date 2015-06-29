@@ -58,7 +58,7 @@ namespace Quilt4.BusinessEntities
         public string AddDeveloperRolesInvitation(string email)
         {
             var inviteCode = RandomUtility.GetRandomString(10);
-            _developerRoles.Add(new DeveloperRole(null, "Invited", inviteCode, email, DateTime.UtcNow));
+            _developerRoles.Add(new DeveloperRole(null, "Invited", inviteCode, email, DateTime.UtcNow, new DateTime(01, 01, 01, 01, 01, 01)));
             return inviteCode;
         }
 
@@ -85,6 +85,7 @@ namespace Quilt4.BusinessEntities
             if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation with provided code."));
             item.DeveloperName = developerName;
             item.RoleName = "Administrator";
+            item.InviteResponseTime = DateTime.Now;
         }
     }
 }
