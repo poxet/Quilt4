@@ -235,8 +235,12 @@ namespace Quilt4.Web.Business
         private void DeleteApplicationVersions(Guid applicationId)
         {
             var versions = _repository.GetApplicationVersions(applicationId);
+
+            _repository.DeleteSessionForApplication(applicationId);
+
             foreach (var version in versions)
                 _repository.DeleteApplicationVersion(version.Id);
+                
         }
 
         public IEnumerable<IInitiative> GetInitiatives()
