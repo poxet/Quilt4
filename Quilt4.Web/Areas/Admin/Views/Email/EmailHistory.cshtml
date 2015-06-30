@@ -45,11 +45,11 @@
                         <div class="timeline-body">
                             <p>@if (!string.IsNullOrEmpty(mail.ErrorMessage))
                                {
-                                   @Html.Raw(mail.ErrorMessage)
+                                   @mail.ErrorMessage
                                }
                                else
                                {
-                                   @Html.Raw(mail.Body)
+                                   @mail.Body
                                }
                             </p>
                         </div>
