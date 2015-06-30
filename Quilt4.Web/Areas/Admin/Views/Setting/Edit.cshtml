@@ -1,46 +1,41 @@
 ﻿@model Quilt4.Interface.ISetting
 
-@{
-    ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
-}
-
-@using (Html.BeginForm("Edit", "Setting", null, FormMethod.Post, null))
-{
-    @Html.AntiForgeryToken()
-
-    @Html.HiddenFor(x => x.Type)
-    
-    <table>
-        <tr>
-            <th>Name</th>
-            <td>@Html.ValueFor(m => m.Name)</td>
-        </tr>
-        <tr>
-            <th>Value</th>
-            <td>@Html.TextBoxFor(m => m.Value)</td>
-        </tr>
-        <tr>
-            <th>Type</th>
-            <td>@Html.ValueFor(m => m.Type)</td>
-        </tr>
-        <tr>
-            <th>Encrypt</th>
-            <td>@Html.CheckBoxFor(m => m.Encrypted)</td>
-        </tr>
-    </table>
-    
-        <div class="form-horizontal">
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </div>
+<div class="modal-dialog" id="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="myModalLabel">@Model.Name</h4>
         </div>
+
+        @using (Html.BeginForm("Edit", "Setting", null, FormMethod.Post, null))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(x => x.Type)
+
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label>Value</label>
+                    @Html.TextBoxFor(m => m.Value, null, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <input class="form-control" id="disabledInput" type="text" placeholder="@Model.Type" disabled="">
+                </div>
+                <div class="form-group">
+                    <label>Encrypt</label>
+                    <div class="checkbox" style="margin-left: 20px; margin-top:-5px">
+                        @Html.CheckBoxFor(m => m.Encrypted)
+                    </div>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" type="submit">Save changes</button>
+            </div>
         }
 
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+    </div>
+</div>
