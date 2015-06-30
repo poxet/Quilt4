@@ -32,7 +32,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Email/SendTestEmail
         public ActionResult SendTestEmail()
         {
-            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled };
+            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled, Subject="Test", Body="Testar" };
             return View(model);
         }
 
@@ -43,7 +43,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             var success = true;
             try
             {
-                _emailBusiness.SendEmail(new List<string> { model.ToEmail }, "Test", "Testar");
+                _emailBusiness.SendEmail(new List<string> { model.ToEmail }, model.Subject, model.Body);
             }
             catch (FormatException e)
             {
