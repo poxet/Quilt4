@@ -41,7 +41,7 @@
         <ul class="timeline">
 
 
-            @foreach (var mail in Model.OrderBy(x => x.DateSent))
+            @foreach (var mail in Model.OrderByDescending(x => x.DateSent))
             {
                 var class1 = mail.Status ? "" : "class=\"timeline-inverted\"";
                 
