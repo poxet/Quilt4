@@ -43,7 +43,15 @@
                             </p>
                         </div>
                         <div class="timeline-body">
-                            <p>@mail.ErrorMessage</p>
+                            <p>@if (!string.IsNullOrEmpty(mail.ErrorMessage))
+                               {
+                                   @mail.ErrorMessage
+                               }
+                               else
+                               {
+                                   @mail.Body
+                               }
+                            </p>
                         </div>
                     </div>
                 </li>
