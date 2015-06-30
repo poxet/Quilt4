@@ -48,7 +48,7 @@ namespace Quilt4.Web.Business
 
             foreach (var applicationId in applicationIds)
             {
-                _repository.DeleteApplicationVersion(applicationId.ToString());
+                _repository.DeleteApplicationVersionForApplication(applicationId);
                 _repository.DeleteSessionForApplication(applicationId);
             }
 

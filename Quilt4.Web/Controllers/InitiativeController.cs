@@ -337,6 +337,10 @@ namespace Quilt4.Web.Controllers
             try
             {
                 // TODO: Add delete logic here
+                if(!User.Identity.Name.Equals(_initiativeBusiness.GetInitiative(Guid.Parse(id)).OwnerDeveloperName))
+                {
+                    return View();
+                }
 
                 _initiativeBusiness.DeleteInitiative(id);
                 //var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));

@@ -106,6 +106,11 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
+        public void DeleteApplicationVersionForApplication(Guid applicationVersionId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IApplicationVersion UpdateApplicationVersionId(string applicationVersionFingerprint, Guid applicationId)
         {
             throw new NotImplementedException();
