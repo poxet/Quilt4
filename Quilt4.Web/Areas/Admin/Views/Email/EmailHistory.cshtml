@@ -43,7 +43,9 @@
 
             @foreach (var mail in Model.OrderBy(x => x.DateSent))
             {
-                <li @(mail.Status ? "class=\"timeline-inverted\"" : "")>
+                var class1 = mail.Status ? "" : "class=\"timeline-inverted\"";
+                
+                <li @class1>
                      @if (!mail.Status)
                           {
                               <div class="timeline-badge danger">
