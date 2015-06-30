@@ -43,11 +43,10 @@
 
             @foreach (var mail in Model.OrderBy(x => x.DateSent))
             {
-
-                <li>
+                <li @(mail.Status ? "class=\"timeline-inverted\"" : "")>
                      @if (!mail.Status)
                           {
-                              <div class="timeline-badge-inverted">
+                              <div class="timeline-badge danger">
                                   <i class="fa fa-exclamation"></i>
                               </div>
                           }
