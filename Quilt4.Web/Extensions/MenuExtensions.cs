@@ -65,7 +65,7 @@ namespace Quilt4.Web
             var currentAction = routeData.GetRequiredString("action");
             var currentController = routeData.GetRequiredString("controller");
 
-            var htmlText = "<a href=\"#\"><i class=\"" + iconClass + "\"></i> Configuration<span class=\"fa arrow\"></span></a><ul class=\"nav nav-second-level\">";
+            var htmlText = "<a href=\"#\"><i class=\"" + iconClass + "\"></i> " + text + "<span class=\"fa arrow\"></span></a><ul class=\"nav nav-second-level\">";
 
             var anyActive = false;
 
