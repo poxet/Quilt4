@@ -19,16 +19,12 @@ namespace Quilt4.Web.Controllers
     public class InitiativeController : Controller
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
-        private readonly IMembershipAgent _membershipAgent;
-        private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly IEmailBusiness _emailBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
 
-        public InitiativeController(IInitiativeBusiness initiativeBusiness, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness)
+        public InitiativeController(IInitiativeBusiness initiativeBusiness, IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
-            _membershipAgent = membershipAgent;
-            _applicationVersionBusiness = applicationVersionBusiness;
             _emailBusiness = emailBusiness;
             _settingsBusiness = settingsBusiness;
         }
@@ -328,18 +324,31 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Initiative/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            return View();
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            return View(initiative);
         }
 
         // POST: Initiative/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(string id, FormCollection collection)
         {
             try
             {
                 // TODO: Add delete logic here
+
+                _initiativeBusiness.DeleteInitiative(id);
+                //var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+                //var applicationIds = initiative.ApplicationGroups.SelectMany(x => x.Applications).Select(x => x.Id).ToArray();
+                //var sessions = _sessionBusiness.GetSessionsForApplications(applicationIds);
+
+                //var versions = applicationIds.SelectMany(applicationId => _applicationVersionBusiness.GetApplicationVersions(applicationId)).ToList();
+
+                //foreach (var version in versions)
+                //{
+                //    _applicationVersionBusiness.Remove(); 
+                //}
 
                 return RedirectToAction("Index");
             }

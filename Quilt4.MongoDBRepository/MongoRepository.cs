@@ -159,6 +159,12 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
         }
 
+        public void DeleteSessionForApplication(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
+            Database.GetCollection("Session").Remove(query, WriteConcern.Acknowledged);
+        }
+
         //public string DatabaseName 
         //{
         //    get
@@ -171,7 +177,7 @@ namespace Quilt4.MongoDBRepository
         //        }
         //        return _databaseName;
         //    }
-        //    set
+        //    set¨'
         //    {
         //        if (!string.IsNullOrEmpty(_databaseName) && _databaseName != value)
         //            throw new InvalidOperationException("Cannot change database name once it has been set.");

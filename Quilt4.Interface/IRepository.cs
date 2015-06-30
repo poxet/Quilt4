@@ -66,5 +66,6 @@ namespace Quilt4.Interface
         ISetting GetSetting(string name);
         IEnumerable<ISetting> GetSettings();
         void SetSetting(ISetting setting);
+        void DeleteSessionForApplication(Guid applicationId);
     }
 }

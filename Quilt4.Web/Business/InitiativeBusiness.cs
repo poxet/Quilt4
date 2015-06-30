@@ -40,6 +40,22 @@ namespace Quilt4.Web.Business
             _repository.UpdateInitiative(initiative);
         }
 
+        public void DeleteInitiative(string id)
+        {
+            var guidId = Guid.Parse(id);
+            
+            var applicationIds = _repository.GetApplicationGroups(guidId).SelectMany(x => x.Applications).Select(y => y.Id);
+
+            foreach (var applicationId in applicationIds)
+            {
+                _repository.DeleteApplicationVersion(applicationId.ToString());
+                _repository.DeleteSessionForApplication(applicationId);
+            }
+
+            _repository.DeleteInitiative(Guid.Parse(id));
+            
+        }
+
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
             var initiatives = _repository.GetApplicationGroups(initiativeId).ToList();

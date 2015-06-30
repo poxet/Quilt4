@@ -28,9 +28,11 @@
         <th style="padding: 0 5px;">Last</th>
         <th style="padding: 0 5px;">Environments</th>
     </tr>
+    
 @foreach (var version in Model.Versions)
 {
     <tr>
+        @Html.CheckBox()
         <td style="padding: 0 5px;">@Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)<br/></td>
         <td style="padding: 0 5px;">@version.Build</td>
         <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
@@ -40,7 +42,7 @@
         <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
         <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
         <td style="padding: 0 5px;">
-            
+
             @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
             {
                 @Html.Raw(env + ", ")

@@ -1,8 +1,16 @@
-﻿
+﻿@model Quilt4.Interface.IInitiative
+
 @{
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Delete</h2>
+<p>Are you sure you want to delete @Model.Name</p>
+@using (Html.BeginForm())
+{
+    <input type="submit" value="Delete"/>
+    <a href="~/Initiative/Details/@Model.Id">Cancel</a>
+    
+}
 
