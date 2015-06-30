@@ -64,7 +64,19 @@ namespace Quilt4.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult ConfirmDeleteVersions(Quilt4.Web.Models.ApplicationModel model)
+        {
+            return View(model);
+        }
 
+        [HttpPost]
+        public ActionResult DeleteVersions(Quilt4.Web.Models.ApplicationModel model)
+        {
+
+
+            return Redirect("Index");
+        }
 
         // GET: Application/Edit/5
         public ActionResult Edit(string id, string application)
@@ -123,6 +135,8 @@ namespace Quilt4.Web.Controllers
 
             return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
         }
+
+        
         
         //// GET: Application/Create
         //public ActionResult Create()

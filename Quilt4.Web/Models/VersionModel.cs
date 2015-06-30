@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
@@ -11,5 +12,6 @@ namespace Quilt4.Web.Models
         public IEnumerable<IIssueType> IssueTypes { get; set; }
         public IEnumerable<ISession> Sessions { get; set; }
         public IEnumerable<IMachine> Machines { get; set; }
+        public bool Checked { get; set; }
     }
 }
