@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using InfluxDB.Net;
 using InfluxDB.Net.Models;
@@ -10,14 +11,15 @@ namespace Quilt4.Web.Agents
     {
         private readonly ISettingsBusiness _settingsBusiness;
         private readonly InfluxDb _influxDb;
+        private readonly IInfluxDbSetting _influxDbSetting;
 
         public InfluxDbAgent(ISettingsBusiness settingsBusiness)
         {
             _settingsBusiness = settingsBusiness;
-            var influxDbSetting = GetSetting();
-            if (!string.IsNullOrEmpty(influxDbSetting.Url))
+            _influxDbSetting = GetSetting();
+            if (!string.IsNullOrEmpty(_influxDbSetting.Url))
             {
-                _influxDb = new InfluxDb(influxDbSetting.Url, influxDbSetting.Username, influxDbSetting.Password);
+                _influxDb = new InfluxDb(_influxDbSetting.Url, _influxDbSetting.Username, _influxDbSetting.Password);
             }
         }
 
@@ -27,11 +29,12 @@ namespace Quilt4.Web.Agents
         {
             if (_influxDb == null) return;
 
-            //var b = new Serie.Builder("");
-            //var s = b.Columns("").Values("").Build();
+            var s = new Serie.Builder(serie.CounterName)
+                .Columns(serie.Data.Keys.ToArray())
+                .Values(serie.Data.Values.ToArray())
+                .Build();
 
-            throw new NotImplementedException();
-            //var task = Task.Run(async () => await _influxDb.WriteAsync(_influxDbSetting.Name, TimeUnit.Milliseconds, s));
+            var task = Task.Run(async () => await _influxDb.WriteAsync(_influxDbSetting.DatabaseName, TimeUnit.Milliseconds, s));
         }
 
         public bool CanConnect()

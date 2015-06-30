@@ -65,7 +65,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             adminViewModel.InfluxDbEnabled = _influxDbAgent.IsEnabled;
             adminViewModel.InfluxDbOnline = _influxDbAgent.CanConnect();
             adminViewModel.InfluxDbUrl = _influxDbAgent.GetSetting().Url;
-            adminViewModel.InfluxDbName = _influxDbAgent.GetSetting().Name;
+            adminViewModel.InfluxDbName = _influxDbAgent.GetSetting().DatabaseName;
             adminViewModel.InfluxDbVersion = _influxDbAgent.GetDatabaseVersion();
 
             return View(adminViewModel);

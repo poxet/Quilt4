@@ -11,11 +11,12 @@ namespace Quilt4.Web.Business
     public class InitiativeBusiness : IInitiativeBusiness
     {
         private readonly IRepository _repository;
-        
+        private readonly ICounterBusiness _counterBusiness;
 
-        public InitiativeBusiness(IRepository repository)
+        public InitiativeBusiness(IRepository repository, ICounterBusiness counterBusiness)
         {
             _repository = repository;
+            _counterBusiness = counterBusiness;
         }
 
         public IEnumerable<IInitiative> GetAllByDeveloper(string developerName)
@@ -168,7 +169,9 @@ namespace Quilt4.Web.Business
 
             var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Name == applicationName);
             if (application != null)
+            {
                 return application;
+            }
 
             var applicationGroup = GetDefaultApplicationGroup(initiative);
 
@@ -176,6 +179,8 @@ namespace Quilt4.Web.Business
             applicationGroup.Add(application);
 
             _repository.UpdateInitiative(initiative);
+
+            _counterBusiness.RegisterApplication(initiative, application);
 
             return application;
         }

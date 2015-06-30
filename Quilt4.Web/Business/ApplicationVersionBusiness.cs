@@ -63,8 +63,17 @@ namespace Quilt4.Web.Business
             applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime);
             _repository.AddApplicationVersion(applicationVersion);
 
-            //TODO: Provide: Initiative, Developer, Application, Environment
-            _counterBusiness.Register("ApplicationVersion", 1, new Dictionary<string, string> { { "ApplicationId", applicationId.ToString() }, { "Version", version } });
+            //TODO: Provide data
+            //var data = new Dictionary<string, object>
+            //{
+            //    { "InitiativeId", initiative.Id },
+            //    { "InitiativeName", initiative.Name },
+            //    { "OwnerDeveloperName", initiative.OwnerDeveloperName },
+            //    { "ApplicationId", application.Id.ToString() },
+            //    { "ApplicationName", application.Name },
+            //};
+            //TODO: Batch updates on existing data
+            //_counterBusiness.Register("ApplicationVersion", 1, data);
 
             return applicationVersion;
         }
