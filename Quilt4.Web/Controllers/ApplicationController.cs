@@ -73,9 +73,23 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult DeleteVersions(Quilt4.Web.Models.ApplicationModel model)
         {
+            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == model.Initiative);
+            var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == model.Application);
 
+            
 
-            return Redirect("Index");
+            var versions = new List<IApplicationVersion>();
+            foreach (var version in model.Versions)
+            {
+                versions.Add(_applicationVersionBusiness.GetApplicationVersions(application.Id).Single(x => x.Version == version.Version));
+            }
+
+            foreach (var version in versions)
+            {
+                _initiativeBusiness.DeleteApplicationVersion(version.Id);
+            }
+
+            return RedirectToAction("Details", new { id = model.Initiative, application = model.Application });
         }
 
         // GET: Application/Edit/5

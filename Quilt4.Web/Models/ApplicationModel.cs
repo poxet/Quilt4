@@ -7,6 +7,6 @@ namespace Quilt4.Web.Models
     {
         public string Initiative { get; set; }
         public string Application { get; set; }
-        public IEnumerable<VersionModel> Versions { get; set; }
+        public List<VersionModel> Versions { get; set; }
     }
 }

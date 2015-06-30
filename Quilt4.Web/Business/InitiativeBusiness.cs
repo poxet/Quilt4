@@ -243,6 +243,11 @@ namespace Quilt4.Web.Business
                 
         }
 
+        public void DeleteApplicationVersion(string applicationVersionFingerprint)
+        {
+            _repository.DeleteApplicationVersion(applicationVersionFingerprint);
+        }
+
         public IEnumerable<IInitiative> GetInitiatives()
         {
             return _repository.GetInitiatives();

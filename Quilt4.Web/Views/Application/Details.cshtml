@@ -19,6 +19,9 @@
 
 @using (Html.BeginForm("ConfirmDeleteVersions", "Application"))
 {
+    @Html.HiddenFor(x => x.Initiative)
+    @Html.HiddenFor(x => x.Application)
+    
     <table>
         <tr style="border-bottom-color: black; border-bottom-style: solid;">
             <th></th>
@@ -34,22 +37,25 @@
         </tr>
 
 
-        @foreach (var version in Model.Versions)
+        @*@foreach (var version in Model.Versions)*@
+        @for(var i = 0; i < Model.Versions.Count(); i++)
         {
+            @Html.HiddenFor(x => x.Versions[i].Version)
+            @Html.HiddenFor(x => x.Versions[i].Build)
 
             <tr>
-                <td>@Html.CheckBoxFor(x => version.Checked)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)<br/></td>
-                <td style="padding: 0 5px;">@version.Build</td>
+                <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br/></td>
+                <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
                 <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
-                <td style="padding: 0 5px;">@version.Sessions.Count()</td>
-                <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
-                <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
-                <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-                <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.Count()</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.SelectMany(x => x.Issues).Count()</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
                 <td style="padding: 0 5px;">
 
-                    @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
+                    @foreach (var env in Model.Versions[i].Sessions.Select(x => x.Environment).Distinct())
                     {
                         @Html.Raw(env + ", ")
                     }

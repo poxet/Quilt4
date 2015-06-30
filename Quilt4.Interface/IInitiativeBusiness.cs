@@ -20,5 +20,6 @@ namespace Quilt4.Interface
         void UpdateInitiative(Guid id, string name, string sessionToken, string owner);
         void UpdateInitiative(IInitiative initiative);
         void DeleteInitiative(string id);
+        void DeleteApplicationVersion(string applicationVersionFingerprint);
     }
 }

@@ -6,18 +6,25 @@
 <h2>DeleteVersions</h2>
 <p>Are you sure you want to delete the following versions:</p>
 
-<ul>
-    @foreach (var version in Model.Versions)
-    {
-        if (version.Checked)
-        {
-            <li>@version.Version</li>
-        }
-    }
-</ul>
-
 @using (Html.BeginForm("DeleteVersions", "Application"))
 {
+    <ul>
+        @for (var i = 0; i < Model.Versions.Count(); i++)
+        {
+            if (Model.Versions[i].Checked)
+            {
+                @Html.HiddenFor(x => Model.Versions[i].Version)
+                @Html.HiddenFor(x => Model.Versions[i].Build)
+                @Html.HiddenFor(x => Model.Versions[i].Checked)
+                <li>@Model.Versions[i].Version</li>
+            }
+        }
+    </ul>
+
+
+    @Html.HiddenFor(x => x.Initiative)
+    @Html.HiddenFor(x => x.Application)
+
     <input type="submit" value="Delete"/>
     <a href="~/Application/Details/@Model.Initiative/@Model.Application">Cancel</a>
 }
