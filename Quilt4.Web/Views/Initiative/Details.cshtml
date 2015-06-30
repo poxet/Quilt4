@@ -1,4 +1,5 @@
-﻿@model Quilt4.Web.Models.Initiative
+﻿@using Castle.Core.Internal
+@model Quilt4.Web.Models.Initiative
 
 @{
     ViewBag.Title = "Details";
@@ -20,7 +21,37 @@
 <h2>ClientToken</h2>
 @Html.Raw(@Model.ClientToken)
 
-<h3>Applications</h3>
+
+@if (Model == null || !Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray().Any())
+{
+    @Html.Raw("<h2>Applications</h2><p>No applications found!</p>")
+}
+else
+{
+    foreach (var group in Model.ApplicationGroups)
+    {
+        @(@group.Name.IsNullOrEmpty() ? Html.Raw("<h2>Applications</h2>") : Html.Raw("<h2>" + @group.Name + "</h2>"))
+
+        if (@group.Name.IsNullOrEmpty())
+        {
+            Html.Raw("<h2>Applications</h2>");
+        }
+        else
+        {
+            Html.Raw("<h2>" + @group.Name + "</h2>");
+        }
+
+        foreach (var application in group.Applications)
+        {
+            @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
+            <br />
+        }
+    }
+}
+
+
+
+@*<h3>Applications</h3>
 @{
     var applications = Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
 }
@@ -36,4 +67,4 @@ else
         @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
         <br/>
     }
-}
+}*@
