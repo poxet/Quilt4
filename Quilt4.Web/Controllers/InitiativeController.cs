@@ -307,20 +307,43 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Initiative/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+
+            var model = new Initiative()
+            {
+                Id = initiative.Id,
+                Name = initiative.Name,
+            };
+            
+            return View(model);
         }
 
         // POST: Initiative/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(string id, FormCollection collection)
         {
             try
             {
                 // TODO: Add update logic here
+                var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
 
-                return RedirectToAction("Index");
+                if (collection["Name"].IsNullOrEmpty())
+                {
+                    var model = new Initiative()
+                    {
+                        Id = initiative.Id,
+                        Name = collection["Name"],
+                    };
+                    ViewBag.InitiativeEditError = "The initiative must have a name!";
+                    return View(model);
+                }
+
+                initiative.Name = collection["Name"];
+                _initiativeBusiness.UpdateInitiative(initiative);
+
+                return RedirectToAction("Details", new { id = initiative.Id });
             }
             catch
             {

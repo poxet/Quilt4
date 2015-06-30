@@ -1,8 +1,30 @@
-﻿
+﻿@model Quilt4.Web.Models.Initiative
+
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<ol class="breadcrumb">
+    <li><a href="~/Initiative">Initiative</a></li>
+    <li><a href="~/Initiative/Details/@Model.Name">@Model.Name</a></li>
+    <li class="active">Properties</li>
+</ol>
+
 <h2>Edit</h2>
 
+@using (Html.BeginForm())
+{
+    <p style="color: red;">@ViewBag.InitiativeEditError</p>
+    
+    <table>
+        <tr>
+            <th>Initiative Name</th>
+            <td>@Html.TextBoxFor(x => x.Name)</td>
+        </tr>
+    </table>
+
+    <br/>
+    <input type="submit" value="Save"/>
+    <a href="~/Initiative/Details/@Model.Name">Cancel</a>
+}
