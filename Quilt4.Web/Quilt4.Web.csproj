@@ -395,6 +395,7 @@
     <Content Include="Views\Application\Edit.cshtml" />
     <Content Include="Views\Initiative\RemoveMember.cshtml" />
     <Content Include="Views\Initiative\ResendInvite.cshtml" />
+    <Content Include="Views\Application\ConfirmDeleteVersions.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

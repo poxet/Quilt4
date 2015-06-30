@@ -175,6 +175,7 @@ namespace Quilt4.Web.Controllers
         {
             var initiativeId = collection["InitiativeId"];
             var inviteEmail = collection["InviteEmail"];
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
 
             if (inviteEmail.IsNullOrEmpty())
             {
@@ -186,8 +187,12 @@ namespace Quilt4.Web.Controllers
                 TempData["InviteError"] = "Please enter a valid email adress";
                 return RedirectToAction("Member", "Initiative", new { id = initiativeId });
             }
+            if (initiative.DeveloperRoles.Any(x => x.DeveloperName == inviteEmail))
+            {
+                TempData["InviteError"] = "This developer is already added to the initiative";
+                return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+            }
 
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
             var invitationCode = initiative.AddDeveloperRolesInvitation(inviteEmail);
             initiative.DeveloperRoles.Single(x => x.InviteEMail == inviteEmail).DeveloperName = inviteEmail;
 
