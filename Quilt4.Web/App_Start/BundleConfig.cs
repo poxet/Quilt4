@@ -35,7 +35,7 @@ namespace Quilt4.Web
             bundles.Add(new StyleBundle("~/Admin/css").Include(
                       "~/Content/Admin/bootstrap.min.css",
                       "~/Content/Admin/metisMenu.css",
-                      "~/Content/timeline.css",
+                      "~/Content/Admin/timeline.css",
                       "~/Content/Admin/sb-admin-2.css",
                       "~/Content/Admin/morris.css",
                       "~/Content/Admin/font-awesome.min.css"));
