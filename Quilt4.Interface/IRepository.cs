@@ -27,6 +27,7 @@ namespace Quilt4.Interface
         IApplicationVersion GetApplicationVersion(string applicationVersionFingerprint);
         void AddApplicationVersion(IApplicationVersion applicationVersion);
         void DeleteApplicationVersion(string applicationVersionFingerprint);
+        void DeleteApplicationVersionForApplication(Guid applicationVersionId);
         IApplicationVersion UpdateApplicationVersionId(string applicationVersionFingerprint, Guid applicationId);
 
         void AddSession(ISession session);

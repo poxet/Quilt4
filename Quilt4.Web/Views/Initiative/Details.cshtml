@@ -13,8 +13,10 @@
 <h2>Details</h2>
 @Html.ActionLink("Members", "Member", new { id = @Model.Id }, null)
 <br/>
-@Html.ActionLink("Delete", "Delete", new {id = @Model.Id}, null)
-
+@if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
+{
+    @Html.ActionLink("Delete", "Delete", new { id = @Model.Id }, null)
+}
 <h2>ClientToken</h2>
 @Html.Raw(@Model.ClientToken)
 

@@ -497,8 +497,12 @@ namespace Quilt4.MongoDBRepository
         public void DeleteApplicationVersion(string applicationVersionFingerprint)
         {
             var query = Query.EQ("_id", applicationVersionFingerprint);
-            //TODO: Delete sessions for this application version
-            //var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.ApplicationVersionId == applicationVersionFingerprint).ToArray();
+            Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
+        }
+
+        public void DeleteApplicationVersionForApplication(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
             Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
         }
 

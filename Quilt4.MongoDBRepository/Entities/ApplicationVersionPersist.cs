@@ -42,8 +42,8 @@ namespace Quilt4.MongoDBRepository.Entities
 
     internal class ApplicationVersionPersist : ISupportInitialize
     {
-        public string Id { get; internal set; }
-        public Guid ApplicationId { get; internal set; }
+        public string Id { get; internal set; } //ApplicationVersionId
+        public Guid ApplicationId { get; internal set; } //ApplicationId
         public string Version { get; internal set; }
         public IEnumerable<IssueTypePersist> IssueTypes { get; internal set; }
         public string ResponseMessage { get; internal set; }

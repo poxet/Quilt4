@@ -32,7 +32,6 @@
 @foreach (var version in Model.Versions)
 {
     <tr>
-        @Html.CheckBox()
         <td style="padding: 0 5px;">@Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)<br/></td>
         <td style="padding: 0 5px;">@version.Build</td>
         <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
