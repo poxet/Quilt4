@@ -256,7 +256,17 @@ namespace Quilt4.Web.Controllers
         public ActionResult ConfirmInvite(string id, string inviteCode)
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-            initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
+
+            try
+            {
+                initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
+            }
+            catch (NullReferenceException exception)
+            {
+                ViewBag.ConfirmInviteError = "The invitation has been removed, or perhaps the invite code is wrong.";
+                return View();
+            }
+            
             _initiativeBusiness.UpdateInitiative(initiative);
 
             return View((object)initiative.Name);
