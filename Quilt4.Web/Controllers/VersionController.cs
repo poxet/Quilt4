@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
+using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 using IUser = Quilt4.Interface.IUser;
 
@@ -30,17 +31,28 @@ namespace Quilt4.Web.Controllers
         // GET: Version/Details/5
         public ActionResult Details(string id, string application, string version)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+            var initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
+            var initiative = _initiativeBusiness.GetInitiative(initiativeId).ToModel(null);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
+            var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), version).Version;
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
 
-            var issue = new IssueModel();
-            issue.InitiativeId = id;
-            issue.ApplicationName = application;
-            issue.Version = version;
-            issue.IssueTypes = ver.IssueTypes;
+            var issue = new IssueModel
+            {
+                InitiativeId = initiativeId.ToString(),
+                ApplicationName = application,
+                Version = version,
+                VersionName = versionName,
+                IssueTypes = ver.IssueTypes,
+                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
+                ApplicationVersionId = applicationId.ToString(),
+                //TODO: Add applicationversion id
+            };
+
+            //TODO: fetch version anmes
+            issue.UniqueIdentifier = issue.GetUniqueIdentifier(versionName);
 
             //issue.ExceptionTypeName = ver.IssueTypes.Select(x => x.ExceptionTypeName);
             //issue.Message = ver.IssueTypes.Select(x => x.Message);
@@ -48,7 +60,6 @@ namespace Quilt4.Web.Controllers
             //issue.Count = ver.IssueTypes.Select(x => x.Count.ToString());
             //issue.Ticket = ver.IssueTypes.Select(x => x.Ticket.ToString());
 
-            issue.Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id);
 
             var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
 
@@ -58,6 +69,7 @@ namespace Quilt4.Web.Controllers
     
             return View(issue);
         }
+
 
         //// GET: Version/Create
         //public ActionResult Create()

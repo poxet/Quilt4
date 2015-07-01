@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -18,6 +19,16 @@ namespace Quilt4.Web.Extensions
             return item.Id.ToString();
         }
 
+        public static string GetUniqueIdentifier(this IssueModel item, string name)
+        {
+            //First use name if possible
+            if (name != null)
+            {
+                return item.Version;
+            }
+
+            return item.ApplicationVersionId;
+        }
         public static string GetUniqueIdentifier(this IApplicationVersion item, IEnumerable<string> versions)
         {
             //First use name if possible

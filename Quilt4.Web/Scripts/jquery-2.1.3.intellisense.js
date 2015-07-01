@@ -41,7 +41,7 @@ intellisense.annotate(jQuery, {
     /// <returns type="PlainObject" />
   },
   'browser.version': function() {
-    /// <summary>The version number of the rendering engine for the user's browser. This property was removed in jQuery 1.9 and is available only through the jQuery.migrate plugin.</summary>
+    /// <summary>The versionUniqueIdentifier number of the rendering engine for the user's browser. This property was removed in jQuery 1.9 and is available only through the jQuery.migrate plugin.</summary>
     /// <returns type="String" />
   },
   'Callbacks': function() {
@@ -1619,7 +1619,7 @@ intellisense.annotate(jQuery.fn, {
     /// </signature>
   },
   'jquery': function() {
-    /// <summary>A string containing the jQuery version number.</summary>
+    /// <summary>A string containing the jQuery versionUniqueIdentifier number.</summary>
     /// <returns type="String" />
   },
   'keydown': function() {
@@ -2170,7 +2170,7 @@ intellisense.annotate(jQuery.fn, {
   'removeAttr': function() {
     /// <signature>
     ///   <summary>Remove an attribute from each element in the set of matched elements.</summary>
-    ///   <param name="attributeName" type="String">An attribute to remove; as of version 1.7, it can be a space-separated list of attributes.</param>
+    ///   <param name="attributeName" type="String">An attribute to remove; as of versionUniqueIdentifier 1.7, it can be a space-separated list of attributes.</param>
     ///   <returns type="jQuery" />
     /// </signature>
   },

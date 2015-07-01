@@ -15,6 +15,9 @@ namespace Quilt4.Web.Models
         public IEnumerable<IUser> Users { get; set; }
         public IEnumerable<IIssueType> IssueTypes { get; set; }
         public IEnumerable<IMachine> Machines { get; set; }
+        public string ApplicationVersionId { get; set; }
+        public string UniqueIdentifier { get; set; }
+        public string VersionName { get; set; }
  
     }
 }

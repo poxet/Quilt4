@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Business
 {
@@ -20,6 +21,7 @@ namespace Quilt4.Web.Business
             var response = _repository.GetApplicationVersions(applicationId);
             return response;
         }
+
 
         public IFingerprint AssureApplicationFingerprint(string applicationFingerprint, string version, string supportToolkitNameVersion, DateTime? buildTime, string applicationName, string clientToken)
         {
@@ -80,6 +82,40 @@ namespace Quilt4.Web.Business
                     response = _repository.UpdateApplicationVersionId(applicationVersionFingerprint, applicationId);
             }
             return response;
+        }
+
+
+        public IApplicationVersion GetApplicationVersion(string initiativeId, string applicationVersionUniqueIdentifier)
+        {
+            var initiative = _repository.GetInitiative(Guid.Parse(initiativeId));
+
+            var applications = initiative.ApplicationGroups.SelectMany(x => x.Applications);
+
+            var applicationIds = applications.Select(x => x.Id);
+
+            var applicationVersions = _repository.GetApplicationVersionsForApplications(applicationIds).ToArray();
+
+            var applicationVersionId = "";
+
+            //Try the name as identifier
+            var verionNames = applicationVersions.Where(x => (x.Version ?? Models.Constants.DefaultVersionName) == applicationVersionUniqueIdentifier).ToArray();
+            if (verionNames.Count() == 1)
+                applicationVersionId = verionNames.Single().Id;
+
+            //Try the id as identifier
+            if (string.IsNullOrEmpty(applicationVersionId))
+            {
+                var versionIds = applicationVersions.Where(x => x.Id.ToString().Replace(":", string.Empty) == applicationVersionUniqueIdentifier).ToArray();
+                if (versionIds.Count() == 1)
+                    applicationVersionId = versionIds.Single().Id;
+            }
+
+            if (string.IsNullOrEmpty(applicationVersionId))
+                throw new NullReferenceException("No application version found for the specified uid.");
+
+            var applicationVersion = _repository.GetApplicationVersion(applicationVersionId);
+
+            return applicationVersion;
         }
 
         public IApplicationVersion GetApplicationVersion(Fingerprint applicationVersionFingerprint)
