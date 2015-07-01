@@ -11,7 +11,7 @@ namespace Quilt4.Sample.Console
             try
             {
                 System.Threading.Thread.Sleep(2000);
-                 
+
                 Configuration.ClientToken = "EGP67U898AEN034HK11YE8TFN8LLZ5NV"; //TODO: Enter the clientToken you have in your system here.
                 Configuration.Target.Location = "http://localhost:54942/";
 

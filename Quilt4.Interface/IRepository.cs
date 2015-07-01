@@ -19,6 +19,7 @@ namespace Quilt4.Interface
         void DeleteInitiative(Guid initiativeId);
 
         void UpdateApplicationVersion(IApplicationVersion applicationVersion);
+        IEnumerable<IApplicationVersion> GetApplicationVersions();
         IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> applicationIds);

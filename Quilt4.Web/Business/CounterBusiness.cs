@@ -53,23 +53,29 @@ namespace Quilt4.Web.Business
 
         public void RegisterApplicationVersion(IApplicationVersion applicationVersion)
         {
-            throw new NotImplementedException();
-            var initiative = _repository.GetInitiativeByApplication(applicationVersion.ApplicationId);
-            var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == applicationVersion.ApplicationId);
+            var initiatives = _repository.GetInitiatives().ToArray();
+            var applicationVersions = _repository.GetApplicationVersions();
 
-            var data = new Dictionary<string, object>
+            var datas = new List<Dictionary<string, object>>();
+            var avSessionses = applicationVersions.GroupBy(x => new { x.ApplicationId, InitiativeId = GetInitiativeId(initiatives, x) });
+            foreach (var avSessions in avSessionses)
             {
-                { "InitiativeId", initiative.Id },
-                { "InitiativeName", initiative.Name },
-                { "OwnerDeveloperName", initiative.OwnerDeveloperName },
-                { "ApplicationId", application.Id.ToString() },
-                { "ApplicationName", application.Name },
-                { "ApplicationVersionId", applicationVersion.Id },
-                { "ApplicationVersionBuildTime", applicationVersion.BuildTime },
-                { "ApplicationVersionVersion", applicationVersion.Version },
-                { "ApplicationVersionSupportToolkit", applicationVersion.SupportToolkitNameVersion },
-            };
-            Register("ApplicationVersion", new[] { data });
+                var data = new Dictionary<string, object>
+                {
+                    { "InitiativeId", avSessions.Key.InitiativeId },
+                    { "ApplicationId", avSessions.Key.ApplicationId },
+                    { "Total", avSessions.Count() },
+                };
+
+                datas.Add(data);
+            }
+            Register("ApplicationVersion", datas.ToArray());
+        }
+
+        private static Guid GetInitiativeId(IInitiative[] initiatives, IApplicationVersion x)
+        {
+            var initiative = initiatives.SingleOrDefault(xx => xx.ApplicationGroups.SelectMany(y => y.Applications).Any(z => z.Id == x.ApplicationId));
+            return initiative != null ? initiative.Id : Guid.Empty;
         }
 
         public void RegisterIssueType(IInitiativeHead initiative, IApplication application, IApplicationVersion applicationVersion, IIssueType issueType)

@@ -66,6 +66,11 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
+        public IEnumerable<IApplicationVersion> GetApplicationVersions()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId)
         {
             throw new NotImplementedException();
