@@ -52,7 +52,7 @@ namespace Quilt4.Web.Controllers
                 //TODO: Add applicationversion id
                 InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
             };
-            };
+            
 
             //TODO: fetch version anmes
             issue.UniqueIdentifier = issue.GetUniqueIdentifier(versionName);
