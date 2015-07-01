@@ -329,17 +329,6 @@ namespace Quilt4.Web.Controllers
                 // TODO: Add update logic here
                 var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
 
-                if (collection["Name"].IsNullOrEmpty())
-                {
-                    var model = new Initiative()
-                    {
-                        Id = initiative.Id,
-                        Name = collection["Name"],
-                    };
-                    ViewBag.InitiativeEditError = "The initiative must have a name!";
-                    return View(model);
-                }
-
                 initiative.Name = collection["Name"];
                 _initiativeBusiness.UpdateInitiative(initiative);
 
