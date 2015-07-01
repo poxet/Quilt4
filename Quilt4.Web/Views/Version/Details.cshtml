@@ -82,6 +82,7 @@
             {
                 <td>@session.CallerIp</td>
             }
+            <td>@Html.ActionLink("Details", "Details", "Session", new {applicationVersionId = session.ApplicationVersionId, sessionId = session.Id}, null)</td>
 
 
         </tr>

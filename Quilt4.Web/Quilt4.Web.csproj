@@ -239,6 +239,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\IssueTypeController.cs" />
+    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\InitiativeExtensions.cs" />
@@ -396,6 +397,7 @@
     <Content Include="Views\Initiative\RemoveMember.cshtml" />
     <Content Include="Views\Initiative\ResendInvite.cshtml" />
     <Content Include="Views\Application\ConfirmDeleteVersions.cshtml" />
+    <Content Include="Views\Session\Details.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
