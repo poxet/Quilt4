@@ -3,7 +3,7 @@
 @model Quilt4.Web.Models.Initiative
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Initiative Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,7 +12,7 @@
     <li class="active">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</li>
 </ol>
 
-<h2>Details</h2>
+<h2>Initiative Details</h2>
 @Html.ActionLink("Members", "Member", new { id = @Model.Id }, null)
 <br/>
 @if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))

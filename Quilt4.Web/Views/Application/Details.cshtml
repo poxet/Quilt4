@@ -1,7 +1,7 @@
 ﻿@using Quilt4.Web.Models
 @model Quilt4.Web.Models.ApplicationModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Application Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,7 +11,7 @@
     <li class="active">@Model.Application</li>
 </ol>
 
-<h2>Details</h2>
+<h2>Application Details</h2>
 @Html.ActionLink("Properties", "Edit", new { id = @Model.Initiative, application = @Model.Application }, null)
 
 <h3>Versions</h3>
