@@ -40,16 +40,15 @@
     <tr>
         @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td>")
 
-        <td style='padding: 0 5px;'>
+
             @if (member.RoleName.Equals("Invited"))
             {
-                @member.InviteTime
+                <td style='padding: 0 5px;' data-toggle="tooltip" data-placement="bottom" title="@member.InviteTime">@member.InviteTime.ToTimeAgo() ago</td>
             }
             else
             {
-                @member.InviteResponseTime
+                <td style='padding: 0 5px;' data-toggle="tooltip" data-placement="bottom" title="@member.InviteResponseTime">@member.InviteResponseTime.ToTimeAgo() ago</td>
             }
-        </td>
 
         @if (Model.IsAllowedToAdministrate)
         {
