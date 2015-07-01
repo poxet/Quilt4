@@ -37,6 +37,8 @@ namespace Quilt4.Web.Controllers
                 Initiative = id,
                 Application = application,
                 Version = version,
+                InitiativeName = initiative.Name,
+                InitiativeUniqueIdentifier = initiative.UniqueIdentifier
             };
             model.Users = model.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
             

@@ -8,7 +8,7 @@
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.Initiative">@Html.Raw(Model.Initiative ?? Constants.DefaultInitiativeName)</a></li>
+    <li><a href="~/Initiative/Details/@Model.InitiativeUniqueIdentifier">@Html.Raw(Model.InitiativeName ?? Constants.DefaultInitiativeName)</a></li>
     <li><a href="~/Application/Details/@Model.Initiative/@Model.Application">@Model.Application</a></li>
     <li><a href="~/Version/Details/@Model.Initiative/@Model.Application/@Model.Version">@Model.Version</a></li>
     <li class="active">@Model.IssueType.ExceptionTypeName</li>

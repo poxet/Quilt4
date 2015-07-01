@@ -157,13 +157,16 @@ namespace Quilt4.Web.Controllers
                 throw new InvalidOperationException("Cannot parse as Guid!").AddData("id", id);
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var currentUser = User.Identity.GetUserName();
 
             var invite = new InviteModel
             {
                 Initiative = initiative,
-                IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator"
+                IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator",
+                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
             };
 
             return View(invite);
@@ -310,11 +313,14 @@ namespace Quilt4.Web.Controllers
         public ActionResult Edit(string id)
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var model = new Initiative()
             {
                 Id = initiative.Id,
                 Name = initiative.Name,
+                UniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
             };
             
             return View(model);

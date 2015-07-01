@@ -36,11 +36,16 @@ namespace Quilt4.Web.Controllers
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
 
-            var issue = new IssueModel();
-            issue.InitiativeId = id;
-            issue.ApplicationName = application;
-            issue.Version = version;
-            issue.IssueTypes = ver.IssueTypes;
+            var issue = new IssueModel
+            {
+                InitiativeId = id,
+                InitiativeName = initiative.Name,
+                ApplicationName = application,
+                Version = version,
+                IssueTypes = ver.IssueTypes,
+                InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
+                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id)
+            };
 
             //issue.ExceptionTypeName = ver.IssueTypes.Select(x => x.ExceptionTypeName);
             //issue.Message = ver.IssueTypes.Select(x => x.Message);
@@ -48,7 +53,6 @@ namespace Quilt4.Web.Controllers
             //issue.Count = ver.IssueTypes.Select(x => x.Count.ToString());
             //issue.Ticket = ver.IssueTypes.Select(x => x.Ticket.ToString());
 
-            issue.Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id);
 
             var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
 

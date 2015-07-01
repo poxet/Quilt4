@@ -9,7 +9,7 @@
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.InitiativeId">@Html.Raw(Model.InitiativeId ?? Constants.DefaultInitiativeName)</a></li>
+    <li><a href="~/Initiative/Details/@Model.InitiativeUniqueIdentifier">@Html.Raw(Model.InitiativeName ?? Constants.DefaultInitiativeName)</a></li>
     <li><a href="~/Application/Details/@Model.InitiativeId/@Model.ApplicationName">@Model.ApplicationName</a></li>
     <li class="active">@Model.Version</li>
 </ol>

@@ -9,12 +9,14 @@ namespace Quilt4.Web.Models
     public class IssueModel
     {
         public string InitiativeId { get; set; }
+        public string InitiativeUniqueIdentifier { get; set; }
+        public string InitiativeName { get; set; }
         public string ApplicationName { get; set; }
         public string Version { get; set; }
         public IEnumerable<ISession> Sessions { get; set; }
         public IEnumerable<IUser> Users { get; set; }
         public IEnumerable<IIssueType> IssueTypes { get; set; }
         public IEnumerable<IMachine> Machines { get; set; }
- 
+        
     }
 }
