@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 using Quilt4.Web.Areas.Admin.Models;
@@ -10,10 +11,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
     public class DeveloperController : Controller
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IInitiativeBusiness _initiativeBusiness;
 
-        public DeveloperController(IAccountRepository accountRepository)
+        public DeveloperController(IAccountRepository accountRepository, IInitiativeBusiness initiativeBusiness)
         {
             _accountRepository = accountRepository;
+            _initiativeBusiness = initiativeBusiness;
         }
 
         // GET: Admin/Developer/Index
@@ -62,6 +65,20 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             try
             {
                 // TODO: Add delete logic here
+                var user = _accountRepository.GetUsers().Single(x => x.UserId == id);
+                var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(user.UserName);
+                var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToList();
+
+
+                foreach (var initiative in initiatives)
+                {
+                    if (initiative.DeveloperRoles.Any(x => (x.DeveloperName == user.UserName) && x.RoleName.Equals("Administrator")))
+                    {
+                        initiative.DeveloperRoles.Single(x => (x.DeveloperName == user.UserName) && x.RoleName.Equals("Administrator")).RoleName = "Deleted";
+                        _initiativeBusiness.UpdateInitiative(initiative);
+                    }
+                }
+
                 _accountRepository.DeleteUser(id);
 
                 return RedirectToAction("Index");
