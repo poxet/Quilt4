@@ -49,8 +49,8 @@
                 <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.Count()</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.SelectMany(x => x.Issues).Count()</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
                 <td style="padding: 0 5px;">
 
                     @foreach (var env in Model.Versions[i].Sessions.Select(x => x.Environment).Distinct())
