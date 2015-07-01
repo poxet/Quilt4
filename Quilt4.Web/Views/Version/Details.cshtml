@@ -99,7 +99,7 @@
     @foreach (var user in Model.Users.Select(x => x.UserName).Distinct())
     {
         <tr>
-            <td style="padding: 0 5px;">@user</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@user, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId}, null)</td>
         </tr>
     }
 </table>

@@ -165,6 +165,11 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Session").Remove(query, WriteConcern.Acknowledged);
         }
 
+        public IEnumerable<ISession> GetSessionsForUser(string userId)
+        {
+            return Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.UserFingerprint == userId).Select(x => x.ToEntity()).ToArray();
+        }
+
         //public string DatabaseName 
         //{
         //    get

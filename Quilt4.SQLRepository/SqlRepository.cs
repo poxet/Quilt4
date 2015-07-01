@@ -271,6 +271,11 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
+        public IEnumerable<ISession> GetSessionsForUser(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
         {
             throw new NotImplementedException();
