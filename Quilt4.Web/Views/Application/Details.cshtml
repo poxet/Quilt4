@@ -19,6 +19,8 @@
 @using (Html.BeginForm("ConfirmDeleteVersions", "Application"))
 {
     @Html.HiddenFor(x => x.Initiative)
+    @Html.HiddenFor(x => x.InitiativeName)
+    @Html.HiddenFor(x => x.InitiativeUniqueIdentifier)
     @Html.HiddenFor(x => x.Application)
     
     <table>
@@ -41,6 +43,10 @@
         {
             @Html.HiddenFor(x => x.Versions[i].Version)
             @Html.HiddenFor(x => x.Versions[i].Build)
+            @Html.HiddenFor(x => x.Versions[i].ApplicationIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].InitiativeIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].UniqueIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].VersionId)
 
             <tr>
                 <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>

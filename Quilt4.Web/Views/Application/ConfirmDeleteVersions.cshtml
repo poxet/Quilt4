@@ -1,5 +1,5 @@
-﻿@model Quilt4.Web.Models.ApplicationModel
-@{
+﻿@model  List<Quilt4.Web.Models.VersionModel>
+           @{
     ViewBag.Title = "DeleteVersions";
 }
 
@@ -9,24 +9,20 @@
 @using (Html.BeginForm("DeleteVersions", "Application"))
 {
     <ul>
-        @for (var i = 0; i < Model.Versions.Count(); i++)
+        @for (var i = 0; i < Model.Count; i++)
         {
-            if (Model.Versions[i].Checked)
-            {
-                @Html.HiddenFor(x => Model.Versions[i].Version)
-                @Html.HiddenFor(x => Model.Versions[i].Build)
-                @Html.HiddenFor(x => Model.Versions[i].Checked)
-                <li>@Model.Versions[i].Version</li>
-            }
+            @Html.HiddenFor(x => Model[i].UniqueIdentifier)
+            @Html.HiddenFor(x => Model[i].ApplicationIdentifier)
+            @Html.HiddenFor(x => Model[i].InitiativeIdentifier)
+            @Html.HiddenFor(x => Model[i].VersionId)
+            <li>@Model[i].Version</li>
         }
+
     </ul>
 
-
-    @Html.HiddenFor(x => x.Initiative)
-    @Html.HiddenFor(x => x.Application)
-
     <input type="submit" value="Delete"/>
-    <a href="~/Application/Details/@Model.Initiative/@Model.Application">Cancel</a>
+    
+    @Html.ActionLink("Cancel", "Details", "Application", new { id= Model.First().InitiativeIdentifier, application=Model.First().ApplicationIdentifier}, null)
 }
 
 

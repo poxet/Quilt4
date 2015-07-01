@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
@@ -50,19 +51,23 @@ namespace Quilt4.Web.Controllers
                 InitiativeName = initiative.Name,
                 InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
                 Application = application,
+                
                 Versions = versions.Select(x => new VersionModel
                 {
                     Version = x.Version,
+                    VersionId = x.Id,
                     Build = x.BuildTime.ToString(),
                     IssueTypes = x.IssueTypes,
                     UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
+                    InitiativeIdentifier = id,
+                    ApplicationIdentifier = application,
 
                     //TODO: This is sloooooow ... fix this
                     //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
                     //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
 
                     Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
-                }).ToList()
+                }).OrderByDescending(y => y.Version).ToList()
             };
 
             return View(model);
@@ -71,29 +76,20 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult ConfirmDeleteVersions(Quilt4.Web.Models.ApplicationModel model)
         {
-            return View(model);
+            var cheked = model.Versions.Where(x => x.Checked).ToList();
+
+            return View(cheked);
         }
 
         [HttpPost]
-        public ActionResult DeleteVersions(Quilt4.Web.Models.ApplicationModel model)
+        public ActionResult DeleteVersions(List<Quilt4.Web.Models.VersionModel> model)
         {
-            var initiative = _initiativeBusiness.GetInitiatives().Single(x => x.Name == model.Initiative);
-            var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == model.Application);
-
-            
-
-            var versions = new List<IApplicationVersion>();
-            foreach (var version in model.Versions)
+            foreach (var version in model)
             {
-                versions.Add(_applicationVersionBusiness.GetApplicationVersions(application.Id).Single(x => x.Version == version.Version));
+                _initiativeBusiness.DeleteApplicationVersion(version.VersionId);
             }
 
-            foreach (var version in versions)
-            {
-                _initiativeBusiness.DeleteApplicationVersion(version.Id);
-            }
-
-            return RedirectToAction("Details", new { id = model.Initiative, application = model.Application });
+            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
         }
 
         // GET: Application/Edit/5
