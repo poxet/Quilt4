@@ -42,6 +42,7 @@ namespace Quilt4.Web.Controllers
             var issue = new IssueModel
             {
                 InitiativeId = initiativeId.ToString(),
+                InitiativeName = initiative.Name,
                 ApplicationName = application,
                 Version = version,
                 VersionName = versionName,
@@ -49,6 +50,8 @@ namespace Quilt4.Web.Controllers
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
                 ApplicationVersionId = applicationId.ToString(),
                 //TODO: Add applicationversion id
+                InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
+            };
             };
 
             //TODO: fetch version anmes

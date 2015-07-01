@@ -1,18 +1,17 @@
-﻿@model Quilt4.Web.Models.ApplicationModel
+﻿@using Quilt4.Web.Models
+@model Quilt4.Web.Models.ApplicationModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Application Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.Initiative">@Model.Initiative</a></li>
+    <li><a href="~/Initiative/Details/@Model.InitiativeUniqueIdentifier">@Html.Raw(Model.InitiativeName ?? Constants.DefaultInitiativeName)</a></li>
     <li class="active">@Model.Application</li>
 </ol>
 
-<h2>Details</h2>
-<a href='~/Initiative/Details/@Model.Initiative'>Go back to applications</a>
-<br/><br/>
+<h2>Application Details</h2>
 @Html.ActionLink("Properties", "Edit", new { id = @Model.Initiative, application = @Model.Application }, null)
 
 <h3>Versions</h3>

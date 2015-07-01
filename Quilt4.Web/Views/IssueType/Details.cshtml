@@ -1,20 +1,22 @@
-﻿@model Quilt4.Web.Models.IssueTypeModel
+﻿@using Quilt4.Web.Models
+@model Quilt4.Web.Models.IssueTypeModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Issuetype Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.Initiative">@Model.Initiative</a></li>
+    <li><a href="~/Initiative/Details/@Model.InitiativeUniqueIdentifier">@Html.Raw(Model.InitiativeName ?? Constants.DefaultInitiativeName)</a></li>
     <li><a href="~/Application/Details/@Model.Initiative/@Model.Application">@Model.Application</a></li>
     <li><a href="~/Version/Details/@Model.Initiative/@Model.Application/@Model.Version">@Model.Version</a></li>
     <li class="active">@Model.IssueType.ExceptionTypeName</li>
 </ol>
 
-<h2>Details</h2>
+<h2>Issuetype Details</h2>
 
+<h3>Issues</h3>
 <table>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">Time</th>

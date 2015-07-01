@@ -1,10 +1,19 @@
-﻿@model string
+﻿@using Microsoft.Ajax.Utilities
+@model string
 
 @{
     ViewBag.Title = "ConfirmInvite";
 }
 
-<h2>Confirm Invite</h2>
-<p>You have confirmed the invitation</p>
-<a href="~/Initiative/Details/@Model">Go to @Model</a>
 
+@if (!ViewBag.ConfirmInviteError.Equals(string.Empty))
+{
+    <h2>Confirm Invite Failed</h2>
+    <p>@ViewBag.ConfirmInviteError</p>
+}
+else
+{
+    <h2>Confirm Invite</h2>
+    <p>You have confirmed the invitation</p>
+    <a href="~/Initiative/Details/@Model">Go to @Model</a>
+}

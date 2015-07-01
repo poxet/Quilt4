@@ -9,6 +9,8 @@ namespace Quilt4.Web.Models
     public class IssueModel
     {
         public string InitiativeId { get; set; }
+        public string InitiativeUniqueIdentifier { get; set; }
+        public string InitiativeName { get; set; }
         public string ApplicationName { get; set; }
         public string Version { get; set; }
         public IEnumerable<ISession> Sessions { get; set; }
@@ -18,6 +20,6 @@ namespace Quilt4.Web.Models
         public string ApplicationVersionId { get; set; }
         public string UniqueIdentifier { get; set; }
         public string VersionName { get; set; }
- 
+        
     }
 }

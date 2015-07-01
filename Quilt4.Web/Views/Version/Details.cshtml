@@ -1,19 +1,20 @@
 ﻿@using Castle.Core.Internal
+@using Constants = Quilt4.Web.Models.Constants
 @model Quilt4.Web.Models.IssueModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Version Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.InitiativeId">@Model.InitiativeId</a></li>
+    <li><a href="~/Initiative/Details/@Model.InitiativeUniqueIdentifier">@Html.Raw(Model.InitiativeName ?? Constants.DefaultInitiativeName)</a></li>
     <li><a href="~/Application/Details/@Model.InitiativeId/@Model.ApplicationName">@Model.ApplicationName</a></li>
     <li class="active">@Model.VersionName</li>
 </ol>
 
-<h2>Details</h2>
+<h2>Version Details</h2>
 
 
 <h3>Issue Types</h3>

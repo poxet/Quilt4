@@ -157,13 +157,16 @@ namespace Quilt4.Web.Controllers
                 throw new InvalidOperationException("Cannot parse as Guid!").AddData("id", id);
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var currentUser = User.Identity.GetUserName();
 
             var invite = new InviteModel
             {
                 Initiative = initiative,
-                IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator"
+                IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator",
+                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
             };
 
             return View(invite);
@@ -253,7 +256,17 @@ namespace Quilt4.Web.Controllers
         public ActionResult ConfirmInvite(string id, string inviteCode)
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-            initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
+
+            try
+            {
+                initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
+            }
+            catch (NullReferenceException exception)
+            {
+                ViewBag.ConfirmInviteError = "The invitation has been removed, or perhaps the invite code is wrong.";
+                return View();
+            }
+            
             _initiativeBusiness.UpdateInitiative(initiative);
 
             return View((object)initiative.Name);
@@ -310,11 +323,14 @@ namespace Quilt4.Web.Controllers
         public ActionResult Edit(string id)
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var model = new Initiative()
             {
                 Id = initiative.Id,
                 Name = initiative.Name,
+                UniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
             };
             
             return View(model);
@@ -328,17 +344,6 @@ namespace Quilt4.Web.Controllers
             {
                 // TODO: Add update logic here
                 var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-
-                if (collection["Name"].IsNullOrEmpty())
-                {
-                    var model = new Initiative()
-                    {
-                        Id = initiative.Id,
-                        Name = collection["Name"],
-                    };
-                    ViewBag.InitiativeEditError = "The initiative must have a name!";
-                    return View(model);
-                }
 
                 initiative.Name = collection["Name"];
                 _initiativeBusiness.UpdateInitiative(initiative);

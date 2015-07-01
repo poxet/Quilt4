@@ -1,17 +1,18 @@
 ﻿@using Castle.Core.Internal
+@using Constants = Quilt4.Web.Models.Constants
 @model Quilt4.Web.Models.Initiative
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Initiative Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative/">Initiative</a></li>
-    <li class="active">@Model.Name</li>
+    <li class="active">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</li>
 </ol>
 
-<h2>Details</h2>
+<h2>Initiative Details</h2>
 @Html.ActionLink("Members", "Member", new { id = @Model.Id }, null)
 <br/>
 @if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
