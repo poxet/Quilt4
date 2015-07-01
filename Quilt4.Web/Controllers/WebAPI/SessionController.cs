@@ -32,7 +32,7 @@ namespace Quilt4.Web.Controllers.WebAPI
             try
             {
                 var data = GetData(request);
-                _sessionBusiness.RegisterSessionEx(data);
+                _sessionBusiness.RegisterSession(data);
             }
             catch (Exception exception)
             {

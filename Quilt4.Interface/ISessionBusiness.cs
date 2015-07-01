@@ -7,8 +7,8 @@ namespace Quilt4.Interface
     public interface ISessionBusiness
     {
         void RegisterSession(ISession session);
+        void RegisterSession(RegisterSessionRequest data);
         void EndSession(Guid sessionId);
-        void RegisterSessionEx(RegisterSessionRequest data);
         IEnumerable<ISession> GetSessionsForApplicationVersion(string applicationVersionId);
         IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds);
     }

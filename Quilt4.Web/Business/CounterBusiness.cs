@@ -1,37 +1,45 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Quilt4.Interface;
 using Quilt4.Web.BusinessEntities;
 
 namespace Quilt4.Web.Business
 {
+    //TODO: Batch updates on existing data
     public class CounterBusiness : ICounterBusiness
     {
         private readonly IInfluxDbAgent _influxDbAgent;
+        private readonly IRepository _repository;
 
-        public CounterBusiness(IInfluxDbAgent influxDbAgent)
+        public CounterBusiness(IInfluxDbAgent influxDbAgent, IRepository repository)
         {
             _influxDbAgent = influxDbAgent;
+            _repository = repository;
         }
 
-        private void Register(string counterName, int count, Dictionary<string, object> data)
+        private void Register(string counterName, Dictionary<string, object>[] datas)
         {
-            _influxDbAgent.WriteAsync(new Serie(counterName, data));
+            var task = Task.Run(async () => await _influxDbAgent.WriteAsync(datas.Select(data => new Serie(counterName, data))));
+            task.Wait();
         }
 
         public void RegisterInitiative(IInitiativeHead initiative)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "InitiativeId", initiative.Id },
                 { "InitiativeName", initiative.Name },
                 { "OwnerDeveloperName", initiative.OwnerDeveloperName },
             };
-            Register("Initiative", 1, data);
+            Register("Initiative", new[] { data });
         }
 
         public void RegisterApplication(IInitiativeHead initiative, IApplication application)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "InitiativeId", initiative.Id },
@@ -40,11 +48,15 @@ namespace Quilt4.Web.Business
                 { "ApplicationId", application.Id.ToString() },
                 { "ApplicationName", application.Name },
             };
-            Register("Application", 1, data);
+            Register("Application", new[] { data });
         }
 
-        public void RegisterApplicationVersion(IInitiativeHead initiative, IApplication application, IApplicationVersion applicationVersion)
+        public void RegisterApplicationVersion(IApplicationVersion applicationVersion)
         {
+            throw new NotImplementedException();
+            var initiative = _repository.GetInitiativeByApplication(applicationVersion.ApplicationId);
+            var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == applicationVersion.ApplicationId);
+
             var data = new Dictionary<string, object>
             {
                 { "InitiativeId", initiative.Id },
@@ -57,11 +69,12 @@ namespace Quilt4.Web.Business
                 { "ApplicationVersionVersion", applicationVersion.Version },
                 { "ApplicationVersionSupportToolkit", applicationVersion.SupportToolkitNameVersion },
             };
-            Register("ApplicationVersion", 1, data);
+            Register("ApplicationVersion", new[] { data });
         }
 
         public void RegisterIssueType(IInitiativeHead initiative, IApplication application, IApplicationVersion applicationVersion, IIssueType issueType)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "InitiativeId", initiative.Id },
@@ -78,11 +91,12 @@ namespace Quilt4.Web.Business
                 { "IssueTypeMessage", issueType.Message },
                 { "IssueTypeTicket", issueType.Ticket },
             };
-            Register("IssueType", 1, data);
+            Register("IssueType", new[] { data });
         }
 
         public void RegisterIssue(IInitiativeHead initiative, IApplication application, IApplicationVersion applicationVersion, IIssueType issueType, IIssue issue)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "InitiativeId", initiative.Id },
@@ -110,33 +124,35 @@ namespace Quilt4.Web.Business
                 data.Add(machineData.Key, machineData.Value);
             }
 
-            Register("Issue", 1, data);
+            Register("Issue", new[] { data });
         }
 
-        public void RegisterSession(IInitiativeHead initiative, IApplication application, IApplicationVersion applicationVersion, ISession session)
+        public void RegisterSession(ISession session, int count)
         {
-            var data = new Dictionary<string, object>
+            var sessions = _repository.GetActiveSessions(15 * 60);
+
+            var datas = new List<Dictionary<string, object>>();
+            foreach (var avSessions in sessions.GroupBy(x => new { x.ApplicationId, x.ApplicationVersionId, x.Environment, x.MachineFingerprint, x.CallerIp, x.UserFingerprint }))
             {
-                { "InitiativeId", initiative.Id },
-                { "InitiativeName", initiative.Name },
-                { "OwnerDeveloperName", initiative.OwnerDeveloperName },
-                { "ApplicationId", application.Id.ToString() },
-                { "ApplicationName", application.Name },
-                { "ApplicationVersionId", applicationVersion.Id },
-                { "ApplicationVersionBuildTime", applicationVersion.BuildTime },
-                { "ApplicationVersionVersion", applicationVersion.Version },
-                { "ApplicationVersionSupportToolkit", applicationVersion.SupportToolkitNameVersion },
-                { "SessionId", session.Id },
-                { "CallerIp", session.CallerIp },
-                { "Environment", session.Environment },
-                { "MachineFingerprint", session.MachineFingerprint },
-                { "UserFingerprint", session.UserFingerprint },
-            };
-            Register("Session", 1, data);
+                var data = new Dictionary<string, object>
+                {
+                    { "ApplicationId", avSessions.Key.ApplicationId },
+                    { "ApplicationVersionId", avSessions.Key.ApplicationVersionId },
+                    { "Environment", avSessions.Key.Environment },
+                    { "MachineFingerprint", avSessions.Key.MachineFingerprint },
+                    { "CallerIp", avSessions.Key.CallerIp },
+                    { "UserFingerprint", avSessions.Key.UserFingerprint },
+                    { "Total", avSessions.Count() },
+                };
+
+                datas.Add(data);
+            }
+            Register("Session", datas.ToArray());
         }
 
         public void RegisterMachine(IMachine machine)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "MachineId", machine.Id },
@@ -148,29 +164,31 @@ namespace Quilt4.Web.Business
                 data.Add(machineData.Key, machineData.Value);
             }
 
-            Register("Machine", 1, data);
+            Register("Machine", new[] { data });
         }
 
         public void RegisterUser(IUser user)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "UserId", user.Id },
                 { "UserName", user.UserName },
             };
 
-            Register("User", 1, data);
+            Register("User", new[] { data });
         }
 
         public void RegisterDeveloper(IDeveloper developer)
         {
+            throw new NotImplementedException();
             var data = new Dictionary<string, object>
             {
                 { "DeveloperName", developer.UserId },
                 { "DeveloperId", developer.UserName },
             };
 
-            Register("Developer", 1, data);
+            Register("Developer", new[] { data });
         }
     }
 }

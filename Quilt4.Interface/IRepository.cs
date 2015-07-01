@@ -35,6 +35,7 @@ namespace Quilt4.Interface
         IEnumerable<ISession> GetSessionsForApplication(Guid applicationId);
         IEnumerable<ISession> GetSessionsForDeveloper(string developerName);
         IEnumerable<ISession> GetSessionsForMachine(string machineFingerprint);
+        IEnumerable<ISession> GetActiveSessions(int timeoutSeconds);
         void EndSession(Guid sessionId, DateTime serverEndTime);
 
         IUser GetUser(string fingerprint);

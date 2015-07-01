@@ -1,9 +1,12 @@
-﻿namespace Quilt4.Interface
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Quilt4.Interface
 {
     public interface IInfluxDbAgent
     {
         bool IsEnabled { get; }
-        void WriteAsync(ISerie serie);
+        Task WriteAsync(IEnumerable<ISerie> series);
         bool CanConnect();
         IInfluxDbSetting GetSetting();
         string GetDatabaseVersion();

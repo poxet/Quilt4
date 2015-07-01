@@ -20,8 +20,9 @@ namespace Quilt4.Web.Business
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IUserBusiness _userBusiness;
         private readonly IMachineBusiness _machineBusiness;
+        private readonly ICounterBusiness _coutnerBusiness;
 
-        public SessionBusiness(IRepository repository, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness)
+        public SessionBusiness(IRepository repository, IMembershipAgent membershipAgent, IApplicationVersionBusiness applicationVersionBusiness, IInitiativeBusiness initiativeBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, ICounterBusiness coutnerBusiness)
         {
             _repository = repository;
             _membershipAgent = membershipAgent;
@@ -29,6 +30,7 @@ namespace Quilt4.Web.Business
             _initiativeBusiness = initiativeBusiness;
             _userBusiness = userBusiness;
             _machineBusiness = machineBusiness;
+            _coutnerBusiness = coutnerBusiness;
         }
 
         public void RegisterSession(ISession session)
@@ -42,7 +44,10 @@ namespace Quilt4.Web.Business
                 var existingSession = _repository.GetSession(session.Id);
                 Thread.Sleep(ThreadTestDelay);
                 if (existingSession == null)
+                {
                     _repository.AddSession(session);
+                    _coutnerBusiness.RegisterSession(session, 1);
+                }
                 else
                 {
                     if (session.ApplicationVersionId != existingSession.ApplicationVersionId)
@@ -68,7 +73,7 @@ namespace Quilt4.Web.Business
             _repository.EndSession(sessionId, DateTime.UtcNow);
         }
 
-        public void RegisterSessionEx(RegisterSessionRequest request)
+        public void RegisterSession(RegisterSessionRequest request)
         {
             if (request == null) throw new ArgumentNullException("request", "No request object provided.");
             if (request.Session == null) throw new ArgumentException("No session object in request was provided. Need object '{ \"Session\":{...} }' in root.");

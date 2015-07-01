@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Agents;
 
 namespace Quilt4.Web.Business
 {
@@ -11,11 +10,13 @@ namespace Quilt4.Web.Business
     {
         private readonly IRepository _repository;
         private readonly ICounterBusiness _counterBusiness;
+        private readonly IInitiativeBusiness _initiativeBusiness;
 
-        public ApplicationVersionBusiness(IRepository repository, ICounterBusiness counterBusiness)
+        public ApplicationVersionBusiness(IRepository repository, ICounterBusiness counterBusiness, IInitiativeBusiness initiativeBusiness)
         {
             _repository = repository;
             _counterBusiness = counterBusiness;
+            _initiativeBusiness = initiativeBusiness;
         }
 
         public IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId)
@@ -63,17 +64,7 @@ namespace Quilt4.Web.Business
             applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime);
             _repository.AddApplicationVersion(applicationVersion);
 
-            //TODO: Provide data
-            //var data = new Dictionary<string, object>
-            //{
-            //    { "InitiativeId", initiative.Id },
-            //    { "InitiativeName", initiative.Name },
-            //    { "OwnerDeveloperName", initiative.OwnerDeveloperName },
-            //    { "ApplicationId", application.Id.ToString() },
-            //    { "ApplicationName", application.Name },
-            //};
-            //TODO: Batch updates on existing data
-            //_counterBusiness.Register("ApplicationVersion", 1, data);
+            _counterBusiness.RegisterApplicationVersion(applicationVersion);
 
             return applicationVersion;
         }

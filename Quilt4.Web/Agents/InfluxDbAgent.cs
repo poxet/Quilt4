@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InfluxDB.Net;
@@ -25,16 +26,16 @@ namespace Quilt4.Web.Agents
 
         public bool IsEnabled { get { return _influxDb != null; } }
 
-        public void WriteAsync(ISerie serie)
+        public async Task WriteAsync(IEnumerable<ISerie> series)
         {
             if (_influxDb == null) return;
 
-            var s = new Serie.Builder(serie.CounterName)
-                .Columns(serie.Data.Keys.ToArray())
-                .Values(serie.Data.Values.ToArray())
-                .Build();
+            var ss = series.Select(x => new Serie.Builder(x.CounterName)
+                .Columns(x.Data.Keys.ToArray())
+                .Values(x.Data.Values.ToArray())
+                .Build());
 
-            var task = Task.Run(async () => await _influxDb.WriteAsync(_influxDbSetting.DatabaseName, TimeUnit.Milliseconds, s));
+            await _influxDb.WriteAsync(_influxDbSetting.DatabaseName, TimeUnit.Milliseconds, ss.ToArray());
         }
 
         public bool CanConnect()

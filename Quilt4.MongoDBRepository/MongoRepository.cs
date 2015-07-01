@@ -532,6 +532,13 @@ namespace Quilt4.MongoDBRepository
             return response;
         }
 
+        public IEnumerable<ISession> GetActiveSessions(int timeoutSeconds)
+        {
+            var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.ServerEndTime == null && (DateTime.UtcNow - (x.ServerLastKnown ?? x.ServerStartTime)).TotalSeconds < timeoutSeconds);
+            var response = sessions.Select(x => x.ToEntity()).ToArray();
+            return response;
+        }
+
         public void EndSession(Guid sessionId, DateTime serverEndTime)
         {
             var query = Query.EQ("_id", sessionId);
