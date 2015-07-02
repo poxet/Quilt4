@@ -112,10 +112,7 @@
 
 </div>
 
-@if (!string.IsNullOrEmpty(@ViewBag.EventLogCheckMessage))
-{
-    <div style="background-color: pink;">@ViewBag.EventLogCheckMessage</div>
-}
+@{ Html.RenderAction("_EventLogStatus", "Action"); }
 
 <p>This is the administration section.</p>
 

@@ -206,6 +206,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ActionController.cs" />
     <Compile Include="Areas\Admin\Controllers\EventLogController.cs" />
     <Compile Include="Areas\Admin\Controllers\SettingController.cs" />
     <Compile Include="Areas\Admin\Models\InviteModel.cs" />
@@ -311,6 +312,7 @@
     <Content Include="Areas\Admin\Views\Setting\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Setting\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\EventLog\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Action\_EventLogStatus.cshtml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\Admin\bootstrap.min.js" />

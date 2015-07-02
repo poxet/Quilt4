@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Mail;
 using System.Web.Mvc;
 using Quilt4.Interface;

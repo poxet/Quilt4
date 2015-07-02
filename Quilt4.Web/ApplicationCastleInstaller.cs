@@ -34,7 +34,14 @@ namespace Quilt4.Web
             var contollers = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.BaseType == typeof(Controller) || x.BaseType == typeof(ApiController)).ToList();
             foreach (var controller in contollers)
             {
-                container.Register(Component.For(controller).LifestylePerWebRequest());
+                if (controller.Name == "ActionController")
+                {
+                    container.Register(Component.For(controller).LifestyleTransient());
+                }
+                else
+                {
+                    container.Register(Component.For(controller).LifestylePerWebRequest());
+                }
             }
         }
 
