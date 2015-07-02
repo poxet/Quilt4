@@ -30,6 +30,7 @@
                 @Html.Raw(member.DeveloperName + ", ")
             }
         </td>
+        <td>@Html.ActionLink("Edit", "Member", new { initiativeId =  Model.Id})</td>
     </tr>
 </table>
 <br/>

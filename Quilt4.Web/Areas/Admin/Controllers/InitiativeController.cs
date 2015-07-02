@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
+using Quilt4.Web.Areas.Admin.Models;
 using Quilt4.Web.Controllers;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
@@ -50,6 +51,35 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             //}
 
             return View(initiatives);
+        }
+
+        public ActionResult Member(string initiativeId)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
+
+            var model = new InviteModel()
+            {
+                Initiative = initiative,
+                InitiativeId = initiativeId
+            };
+
+            return View(model);
+        }
+
+        //POST
+        public ActionResult AddDeveloper(FormCollection collection)
+        {
+            throw new NotImplementedException();
+            //return RedirectToAction("Member", new { initiativeId = collection["InitiativeId"]})
+        }
+
+        public ActionResult RemoveDeveloper(string initiativeId, string developerName)
+        {
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
+            initiative.RemoveDeveloperRole(developerName);
+            _initiativeBusiness.UpdateInitiative(initiative);
+            
+            return RedirectToAction("Member", new { initiativeId =  initiative.Id.ToString()});
         }
 
         // GET: Admin/Initiative/Details/5

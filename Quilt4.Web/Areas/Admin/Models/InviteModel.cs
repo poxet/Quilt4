@@ -15,5 +15,6 @@ namespace Quilt4.Web.Areas.Admin.Models
 
         public bool IsAllowedToAdministrate { get; set; }
         public string UniqueInitiativeIdentifier { get; set; }
+        public string InitiativeId { get; set; }
     }
 }
