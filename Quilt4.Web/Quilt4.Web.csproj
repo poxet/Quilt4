@@ -240,6 +240,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\IssueTypeController.cs" />
+    <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="Models\InviteMemberModel.cs" />
     <Compile Include="Models\IssueModel.cs" />
     <Compile Include="Models\IssueTypeModel.cs" />
+    <Compile Include="Models\MachineDetailsModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -403,6 +405,7 @@
     <Content Include="Views\Application\ConfirmDeleteVersions.cshtml" />
     <Content Include="Views\Session\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Machine\Details.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
