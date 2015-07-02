@@ -1,11 +1,8 @@
 ﻿using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 using Quilt4.Web.Business;
 using Quilt4.Web.Models;
-using System.Diagnostics;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
@@ -16,12 +13,14 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         private readonly SystemBusiness _systemBusiness;
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
+        private readonly IEventLogAgent _eventLogAgent;
 
-        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness)
+        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IEventLogAgent eventLogAgent)
         {
             _systemBusiness = systemBusiness;
             _initiativeBusiness = initiativeBusiness;
             _settingsBusiness = settingsBusiness;
+            _eventLogAgent = eventLogAgent;
         }
 
         // GET: Admin/Dashboard/Index
@@ -47,9 +46,10 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
         private void CheckEventlogAccess()
         {
-            //ExceptionHandlingAttribute.DeleteLog();
+            //_eventLogAgent.DeleteLog();
 
-            var response = ExceptionHandlingAttribute.AssureEventLogSource();
+            var response = _eventLogAgent.AssureEventLogSource();
+            //var response = ExceptionHandlingAttribute;
             if (response != null)
             {
                 //TODO: Try to write to the event log and tell the administrator if something went wrong.
