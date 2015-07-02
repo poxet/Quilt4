@@ -28,8 +28,8 @@
         <tr>
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@session.ServerStartTime.ToLocalTime()">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;">@session.Environment</td>
-            <td style="padding: 0 5px;">To do@*@session.UserFingerprint*@</td>
-            <td style="padding: 0 5px;">To do@*@session.MachineFingerprint*@</td>
+            <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
+            <td style="padding: 0 5px;">@Model.Machines.First(x => x.Id == session.MachineFingerprint).Name</td>
             <td style="padding: 0 5px;">@session.CallerIp</td>
         </tr>
     }

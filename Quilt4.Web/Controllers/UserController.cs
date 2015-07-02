@@ -36,10 +36,20 @@ namespace Quilt4.Web.Controllers
             //var applications = _initiativeBusiness.GetApplicationsByUser(userId);
             var sessions = _sessionBusiness.GetSessionsForUser(userId).ToArray();
 
+            var machines= new List<IMachine>();
+            var users = new List<IUser>();
+            foreach (var session in sessions)
+            {
+                machines.Add(_machineBusiness.GetMachine(session.MachineFingerprint));
+                users.Add(_userBusiness.GetUser(session.UserFingerprint));
+            }
+
 
             var model = new UserModel()
             {
                 Sessions = sessions,
+                Machines = machines,
+                Users = users
             };
 
             return View(model);
