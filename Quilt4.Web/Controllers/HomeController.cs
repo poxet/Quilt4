@@ -1,14 +1,43 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using System.Reflection;
+using Microsoft.AspNet.Identity;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IInitiativeBusiness _initiativeBusiness;
+
+        public HomeController(IInitiativeBusiness initiativeBusiness)
+        {
+            _initiativeBusiness = initiativeBusiness;
+        }
+
+
         public ActionResult Index()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
+                var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToList();
+
+                var initiaivesWithInvites = new List<IInitiative>();
+
+                foreach (var initiative in initiatives)
+                {
+                    if (initiative.DeveloperRoles.Any(x => x.DeveloperName.Equals(User.Identity.Name) && x.RoleName.Equals("Invited")))
+                    {
+                        initiaivesWithInvites.Add(initiative);
+                    }
+                }
+
+                return View(initiaivesWithInvites);
+            }
+            return View(new List<IInitiative>());
         }
 
         public ActionResult About()
