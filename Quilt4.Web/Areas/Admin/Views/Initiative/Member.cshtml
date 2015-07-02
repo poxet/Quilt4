@@ -31,6 +31,8 @@
 </table>
 
 <h3>Add developer</h3>
+<p style="color: red;">@ViewBag.AddDeveloperError</p>
+
 @using (Html.BeginForm("AddDeveloper", "Initiative"))
 {
     @Html.HiddenFor(x => Model.InitiativeId)
