@@ -112,6 +112,10 @@
 
 </div>
 
+@if (!string.IsNullOrEmpty(@ViewBag.EventLogCheckMessage))
+{
+    <div style="background-color: pink;">@ViewBag.EventLogCheckMessage</div>
+}
 
 <p>This is the administration section.</p>
 

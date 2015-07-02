@@ -1,8 +1,11 @@
 ﻿using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 using Quilt4.Web.Business;
 using Quilt4.Web.Models;
+using System.Diagnostics;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
 {
@@ -37,7 +40,26 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                 IssueCount = issueCount
             };
 
+            CheckEventlogAccess();
+
             return View(adminIndexViewModel);
+        }
+
+        private void CheckEventlogAccess()
+        {
+            //ExceptionHandlingAttribute.DeleteLog();
+
+            var response = ExceptionHandlingAttribute.AssureEventLogSource();
+            if (response != null)
+            {
+                //TODO: Try to write to the event log and tell the administrator if something went wrong.
+                ViewBag.EventLogCheckMessage = "The event log Quilt4 does not exist and cannot be created. If something goes wrong issues cannot be written there. Try to run this instance as administrator once, or create the event log " + Constants.EventLogName + " and source " + Constants.EventSourceName + " manually. (" + response.Message + ")";
+            }
+
+            //TODO: Check if there are new issues and show them on the dashboard.
+
+            //TODO: Load issues related to Quilt4 and show them on the admin page
+            //var entries = ExceptionHandlingAttribute.GetEventLogData().ToArray();
         }
 
         // GET: Admin/Dashboard/System

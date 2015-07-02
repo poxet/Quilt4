@@ -25,7 +25,6 @@ namespace Quilt4.Web.Controllers.WebAPI
         [AllowAnonymous]
         public RegisterIssueResponse RegisterIssue([FromBody] object request)
         {
-            //TODO: Move this logics to the business class
             if (request == null)
                 throw new ArgumentNullException("request", "No request object provided.");
             

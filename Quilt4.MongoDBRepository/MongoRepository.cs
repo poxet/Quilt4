@@ -285,7 +285,7 @@ namespace Quilt4.MongoDBRepository
 
         //        var host = mongoServerAddress.Host;
         //        var port = mongoServerAddress.Port;
-                
+
         //        if (parts.Length >= 1) 
         //            host = parts[0];
 
@@ -314,8 +314,8 @@ namespace Quilt4.MongoDBRepository
         public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
         {
             // TODO: Exact same statement in two places
-            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*" 
-                || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
+            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*"
+                || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0
                 || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
             var initiatives = initiativePersists.Select(x => x.ToEntity()).ToArray();
             return initiatives;
@@ -325,7 +325,7 @@ namespace Quilt4.MongoDBRepository
         {
             var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.Id == initiativeId).Select(y => y.ApplicationGroups);
             var applicationGroups = new List<IApplicationGroup>();
-           
+
             foreach (var initiativePersist in initiativePersists)
             {
                 applicationGroups.AddRange(initiativePersist.Select(x => x.ToEntity()));
@@ -416,7 +416,7 @@ namespace Quilt4.MongoDBRepository
         {
             var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationIds.Contains(x.ApplicationId)).ToArray();
             var response = allSessions.Select(x => x.ToEntity()).ToArray();
-            return response; 
+            return response;
         }
 
         public void UpdateMachine(IMachine machine)
@@ -564,7 +564,7 @@ namespace Quilt4.MongoDBRepository
         public void AddUser(IUser user)
         {
             Database.GetCollection("User").Insert(user.ToPersist());
-        }        
+        }
 
         public IEnumerable<IUser> GetUsersByApplicationVersion(string applicationFingerprint)
         {
@@ -622,7 +622,7 @@ namespace Quilt4.MongoDBRepository
             var toolkitCompability = Database.GetCollection("ToolkitCompability");
             var query = Query.EQ("ServerVersion", version.ToString());
             var toolkitCompabilities = toolkitCompability.FindAs<ToolkitCompabilityPersist>(query).Where(x => !string.IsNullOrEmpty(x.SupportToolkitNameVersion)).Select(x => x.ToEntity()).ToList();
-            var firstRegisterDate = toolkitCompabilities.Min(x => x.RegisterDate) ?? new DateTime(2014,4,28,16,20,0);
+            var firstRegisterDate = toolkitCompabilities.Min(x => x.RegisterDate) ?? new DateTime(2014, 4, 28, 16, 20, 0);
 
             var supportToolkitNameVersions = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().GroupBy(x => x.SupportToolkitNameVersion);
 
@@ -633,7 +633,7 @@ namespace Quilt4.MongoDBRepository
 
             foreach (var supportToolkitNameVersion in supportToolkitNameVersions)
             {
-                var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x =>  excludeApplications.All(y => y.Id != x.ApplicationId) &&  supportToolkitNameVersion.Select(y => y.Id).Any(y => x.ApplicationVersionId == y)).ToArray();
+                var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => excludeApplications.All(y => y.Id != x.ApplicationId) && supportToolkitNameVersion.Select(y => y.Id).Any(y => x.ApplicationVersionId == y)).ToArray();
                 var lastUsed = sessions.Any() ? sessions.Max(y => y.ServerStartTime) : (DateTime?)null;
 
                 var item = toolkitCompabilities.SingleOrDefault(x => x.SupportToolkitNameVersion == supportToolkitNameVersion.Key);
@@ -643,7 +643,7 @@ namespace Quilt4.MongoDBRepository
                     item = new ToolkitCompability(version, null, supportToolkitNameVersion.Key, ECompatibility.Unknown, lastUsedWithThisService);
                     toolkitCompabilities.Add(item);
                 }
-                else 
+                else
                     item.LastUsed = lastUsed;
             }
 

@@ -13,5 +13,6 @@ namespace Quilt4.Interface
         string GetIssueTypeTicketPrefix();
         string GetIssueTicketPrefix();
         string GetQuilt4ClientToken();
+        string GetQuilt4TargetLocation(string defaultLocation);
     }
 }

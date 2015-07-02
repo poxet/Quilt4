@@ -81,6 +81,11 @@ namespace Quilt4.Web.Business
             return GetSettingValue("Quilt4ClientToken", string.Empty);
         }
 
+        public string GetQuilt4TargetLocation(string defaultLocation)
+        {
+            return GetSettingValue("Quilt4TargetLocation", defaultLocation);
+        }
+
         private static string Encrypt(string value)
         {
             if (string.IsNullOrEmpty(value))
