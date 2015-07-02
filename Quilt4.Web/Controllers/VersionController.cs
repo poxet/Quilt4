@@ -29,13 +29,29 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Version/Details/5
-        public ActionResult Details(string id, string application, string version)
+        public ActionResult Details(string initiativeIdentifier, string application, string version)
         {
-            var initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
             var initiative = _initiativeBusiness.GetInitiative(initiativeId).ToModel(null);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
-            var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), version).Version;
+            var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), applicationId.ToString(), version).Version;
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
 

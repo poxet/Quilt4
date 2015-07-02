@@ -9,6 +9,6 @@ namespace Quilt4.Interface
         IApplicationVersion RegisterApplicationVersion(IFingerprint applicationVersionFingerprint, Guid applicationId, string version, string supportToolkitNameVersion, DateTime? buildTime);
         IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId);
 
-        IApplicationVersion GetApplicationVersion(string initiativeId, string applicationVersionUniqueIdentifier);
+        IApplicationVersion GetApplicationVersion(string initiativeId, string applicationId, string applicationVersionUniqueIdentifier);
     }
 }
