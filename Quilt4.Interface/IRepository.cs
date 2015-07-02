@@ -69,5 +69,6 @@ namespace Quilt4.Interface
         void SetSetting(ISetting setting);
         void DeleteSessionForApplication(Guid applicationId);
         IEnumerable<ISession> GetSessionsForUser(string userId);
+        //IApplication GetApplicationByApplicationId(Guid applicationId);
     }
 }

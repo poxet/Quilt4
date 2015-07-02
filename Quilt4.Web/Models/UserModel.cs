@@ -11,6 +11,6 @@ namespace Quilt4.Web.Models
         public IEnumerable<IUser> Users { get; set; }
         public IEnumerable<string> ApplicationName { get; set; }
         public IEnumerable<ISession> Sessions { get; set; }
-        public IEnumerable<string> Machines { get; set; }
+        public IEnumerable<IMachine> Machines { get; set; }
     }
 }
