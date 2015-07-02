@@ -69,8 +69,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         //POST
         public ActionResult AddDeveloper(FormCollection collection)
         {
-            throw new NotImplementedException();
-            //return RedirectToAction("Member", new { initiativeId = collection["InitiativeId"]})
+            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(collection["InitiativeId"]));
+            var code = initiative.AddDeveloperRolesInvitation(collection["InviteEmail"]);
+            initiative.ConfirmInvitation(code, collection["InviteEmail"]);
+            _initiativeBusiness.UpdateInitiative(initiative);
+
+            return RedirectToAction("Member", new { initiativeId = collection["InitiativeId"] });
         }
 
         public ActionResult RemoveDeveloper(string initiativeId, string developerName)

@@ -10,6 +10,10 @@
         <th style="padding: 0 5px">Developer</th>
         <th style="padding: 0 5px">Role</th>
     </tr>
+    @if (!Model.Initiative.DeveloperRoles.Any())
+    {
+        <tr><td style="padding: 0 5px">No developers</td></tr>
+    }
     @foreach (var developer in Model.Initiative.DeveloperRoles)
     {
         <tr>
