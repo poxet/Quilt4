@@ -17,6 +17,10 @@ namespace Quilt4.Web.Controllers
             _initiativeBusiness = initiativeBusiness;
         }
 
+        public HomeController()
+        {
+            
+        }
 
         public ActionResult Index()
         {
