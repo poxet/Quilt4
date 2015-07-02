@@ -96,10 +96,10 @@
         <th style="padding: 0 5px;">User</th>
     </tr>
 
-    @foreach (var user in Model.Users.Select(x => x.UserName).Distinct())
+    @foreach (var user in Model.Users)
     {
         <tr>
-            <td style="padding: 0 5px;">@Html.ActionLink(@user, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId}, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId, userId = user.Id }, null)</td>
         </tr>
     }
 </table>

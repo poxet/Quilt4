@@ -170,6 +170,15 @@ namespace Quilt4.MongoDBRepository
             return Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.UserFingerprint == userId).Select(x => x.ToEntity()).ToArray();
         }
 
+        //public IApplication GetApplicationByApplicationId(Guid applicationId)
+        //{
+        //    var query = Query.EQ("Id", applicationId);
+        //    var response = Database.GetCollection("Initiative").FindOneAs<ApplicationPersist>(query);
+        //    return response.ToEntity();
+        //    //return Database.GetCollection("Initative").FindAllAs<ApplicationPersist>().Where(x => x.Id == applicationId).Select(x => x.ToEntity()).ToArray();
+        //}
+
+
         //public string DatabaseName 
         //{
         //    get
