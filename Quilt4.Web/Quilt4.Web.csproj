@@ -406,6 +406,7 @@
     <Content Include="Views\Session\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Machine\Details.cshtml" />
+    <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

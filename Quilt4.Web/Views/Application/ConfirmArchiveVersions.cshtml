@@ -1,0 +1,27 @@
+﻿@model  List<Quilt4.Web.Models.VersionModel>
+
+@{
+    ViewBag.Title = "Confirm Archive Versions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ConfirmArchiveVersions</h2>
+<p>Are you sure you want to archive the following versions:</p>
+
+@using (Html.BeginForm("ArchiveVersions", "Application"))
+{
+    <ul>
+        @foreach (var version in Model)
+        {
+            @Html.HiddenFor(x => version.UniqueIdentifier)
+            @Html.HiddenFor(x => version.ApplicationIdentifier)
+            @Html.HiddenFor(x => version.InitiativeIdentifier)
+            @Html.HiddenFor(x => version.VersionId)
+            <li>@version.Version</li>
+        }
+    </ul>
+    
+    <input type="submit" value="Delete" />
+    @Html.ActionLink("Cancel", "Details", "Application", new { id = Model.First().InitiativeIdentifier, application = Model.First().ApplicationIdentifier }, null)
+}
+
