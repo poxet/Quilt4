@@ -101,7 +101,6 @@ namespace Quilt4.Web.Controllers
                 _initiativeBusiness.ArchiveApplicationVersion(version.VersionId);
             }
 
-            throw new NotImplementedException();
             return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
         }
 
