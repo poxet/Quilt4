@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Quilt4.Interface
 {
@@ -7,5 +9,6 @@ namespace Quilt4.Interface
         Exception AssureEventLogSource();
         void DeleteLog();
         void WriteToEventLog(Exception exception);
+        IEnumerable<EventLogEntry> GetEventLogData();
     }
 }

@@ -24,12 +24,12 @@ namespace Quilt4.Web.Agents
             }
         }
 
-        public IEnumerable<string> GetEventLogData()
+        public IEnumerable<EventLogEntry> GetEventLogData()
         {
             var myLog = new EventLog(Constants.EventLogName);
             foreach (EventLogEntry entry in myLog.Entries)
             {
-                yield return entry.Message;
+                yield return entry;
             }
         }
 

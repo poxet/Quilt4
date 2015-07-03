@@ -1,4 +1,4 @@
-﻿
+﻿@model Quilt4.Web.Models.EventLogIndexViewModel
 @{
     ViewBag.Title = "Event Log";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
@@ -6,10 +6,22 @@
 
 @{ Html.RenderAction("_EventLogStatus", "Action"); }
 
-<p>Show a list of all events in the log here</p>
-
-@{ Html.RenderAction("_EventLogStatus", "Action"); }
-
-<p>Have a command that wipes the log</p>
-
-@{ Html.RenderAction("_EventLogStatus", "Action"); }
+<table>
+    <tr>
+        <th></th>
+        <th>EntryType</th>
+        <th>TimeGenerated</th>
+        <th>Source</th>
+        <th>Message</th>
+    </tr>
+    @foreach (var message in @Model.EventLogData)
+    {
+        <tr>
+            <td><i class="fa @Html.Raw(message.Icon)"></i></td>
+            <td>@Html.Raw(message.EntryType)</td>
+            <td title="@Html.Raw(message.TimeGenerated)">@Html.Raw(message.TimeGenerated.ToTimeAgo()) ago</td>
+            <td>@Html.Raw(message.Source)</td>
+            <td>@Html.Raw(message.Message)</td>
+        </tr>
+    }
+</table>

@@ -1,6 +1,6 @@
-﻿SHOW THE STATUS OF THE EVENT LOG HERE....
+﻿@model Quilt4.Web.Models.EventLogStatusViewModel
 
-@if (!string.IsNullOrEmpty(@ViewBag.EventLogCheckMessage))
+@if (!string.IsNullOrEmpty(@Model.EventLogCheckMessage))
 {
-    <div style="background-color: pink;">@ViewBag.EventLogCheckMessage</div>
+    <div style="background-color: fuchsia;">@Model.EventLogCheckMessage</div>
 }

@@ -44,5 +44,4 @@ namespace Quilt4.Web.Models
         public bool Status { get; set; }
         public string ErrorMessage { get; set; }
     }
-
 }
