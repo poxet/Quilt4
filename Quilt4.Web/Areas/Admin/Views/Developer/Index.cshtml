@@ -1,14 +1,14 @@
 ﻿@using System.Web.Mvc.Html
 @model IEnumerable<Quilt4.Interface.IDeveloper>
 @{
-    ViewBag.Title = "Admin Developer";
+    ViewBag.Title = "Developers";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <table class="dataTable">
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th style="padding: 0 5px;">Id</th>
-        <th style="padding: 0 5px;">Name</th>
+        @*<th style="padding: 0 5px;">Id</th>*@
+        <th style="padding: 0 5px;">Username</th>
         <th style="padding: 0 5px;">Local</th>
         <th style="padding: 0 5px;">Providers</th>
         @*<th>Creation</th>
@@ -22,7 +22,7 @@
     @foreach (var developer in Model)
     {
         <tr>
-            <td style="padding: 0 5px;">@developer.UserId</td>
+            @*<td style="padding: 0 5px;">@developer.UserId</td>*@
             <td style="padding: 0 5px;">@developer.UserName</td>
             <td style="padding: 0 5px;">@Html.Raw(developer.HasLocalAccount ? "Yes" : "No")</td>
             <td style="padding: 0 5px;" title="@Html.Raw(string.Join(", ", developer.ProviderNames))">@Html.Raw(developer.ProviderNames.Count() > 2 ? developer.ProviderNames.Count().ToString() : string.Join(", ", developer.ProviderNames))</td>

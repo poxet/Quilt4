@@ -10,5 +10,6 @@ namespace Quilt4.Web.Models
         public DateTime TimeGenerated { get; set; }
         public string Source { get; set; }
         public string Message { get; set; }
+        public bool Read { get; set; }
     }
 }

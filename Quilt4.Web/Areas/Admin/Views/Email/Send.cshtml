@@ -1,7 +1,7 @@
 ﻿@model Quilt4.Web.Models.SendEmailViewModel
 
 @{
-    ViewBag.Title = "Email";
+    ViewBag.Title = "Email Send";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -17,7 +17,7 @@
 
         <div class="col-lg-4">
 
-            @using (@Html.BeginForm("SendTestEmail", "Email", "Email"))
+            @using (@Html.BeginForm("Send", "Email", "Email"))
             {
                 @Html.HiddenFor(x => x.EmailEnabled)
 

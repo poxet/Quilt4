@@ -249,7 +249,7 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
+                        @*<li class="sidebar-search">
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
@@ -258,14 +258,14 @@
                                     </button>
                                 </span>
                             </div>
-                            <!-- /input-group -->
-                        </li>
+                        </li>*@
                         @Html.MenuItem("Dashboard", "fa fa-dashboard fa-fw", "Index", "Dashboard")
+                        @Html.MenuItem("Developers", "fa fa-group fa-fw", "Index", "Developer")
+                        @Html.MenuItem("Initiatives", "fa fa-bars fa-fw", "Index", "Initiative")
+                        @Html.MenuItem("System", "fa fa-wrench fa-fw", new List<Link> { new Link("Information", "System", "Dashboard"), new Link("Configuration", "Index", "Setting") })
+                        @Html.MenuItem("Email", "fa fa-envelope-o fa-fw", new List<Link> { new Link("Send", "Send", "Email"), new Link("History", "History", "Email") })
+                        @Html.MenuItem("Logging", "fa fa-fire fa-fw", new List<Link> { new Link("Event Log", "Index", "EventLog"), new Link("Clear Event Log", "Clear", "EventLog"), new Link("Mark Event Log as read", "MarkAsRead", "EventLog") })
 
-
-                        @Html.MenuItem("Configuration", "fa fa-wrench fa-fw", new List<Link> { new Link("Settings", "Index", "Setting") })
-                        @Html.MenuItem("Email", "fa fa-envelope-o fa-fw", new List<Link> { new Link("Send", "SendTestEmail", "Email"), new Link("History", "EmailHistory", "Email") })
-                        @Html.MenuItem("Logging", "fa fa-fire fa-fw", new List<Link> { new Link("Event log", "Index", "EventLog") })
 
                         @*<li>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>

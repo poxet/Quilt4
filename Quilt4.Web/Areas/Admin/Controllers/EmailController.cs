@@ -21,15 +21,14 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Email/EmailHistory
-        public ActionResult EmailHistory()
+        public ActionResult History()
         {
             var emails = _emailBusiness.GetLastHundredEmails();
-
             return View(emails);
         }
 
         // GET: Admin/Email/SendTestEmail
-        public ActionResult SendTestEmail()
+        public ActionResult Send()
         {
             var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled, Subject="Test", Body="Testar" };
             return View(model);
@@ -37,7 +36,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
         // POST: Admin/Email/SendTestEmail
         [HttpPost]
-        public ActionResult SendTestEmail(SendEmailViewModel model)
+        public ActionResult Send(SendEmailViewModel model)
         {
             var success = true;
             try

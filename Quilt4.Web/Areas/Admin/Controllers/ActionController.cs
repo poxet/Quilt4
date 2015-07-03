@@ -9,10 +9,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
     public class ActionController : Controller
     {
         private readonly IEventLogAgent _eventLogAgent;
+        private readonly ISettingsBusiness _settingsBusiness;
 
-        public ActionController(IEventLogAgent eventLogAgent)
+        public ActionController(IEventLogAgent eventLogAgent, ISettingsBusiness settingsBusiness)
         {
             _eventLogAgent = eventLogAgent;
+            _settingsBusiness = settingsBusiness;
         }
 
         public ActionResult _EventLogStatus()
@@ -33,9 +35,11 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
         public ActionResult _EventLogAlert()
         {
+            var lastRead = _settingsBusiness.GetEventLogReadDate();
+
             var vm = new EventLogStatusViewModel
             {
-                EventLogData = _eventLogAgent.GetEventLogData().Where(x => x.EntryType == EventLogEntryType.Error).OrderByDescending(x => x.TimeGenerated).Select(x => new EventLogItemModel { EntryType = x.EntryType, Icon = EventLogController.GetIcon(x.EntryType), Message = x.Message, TimeGenerated = x.TimeGenerated, Source = x.Source }).ToList()
+                EventLogData = _eventLogAgent.GetEventLogData().Where(x => x.EntryType == EventLogEntryType.Error && x.TimeGenerated > lastRead).OrderByDescending(x => x.TimeGenerated).Select(x => new EventLogItemModel { EntryType = x.EntryType, Icon = EventLogController.GetIcon(x.EntryType), Message = x.Message, TimeGenerated = x.TimeGenerated, Source = x.Source }).ToList()
             };
             return PartialView(vm);            
         }

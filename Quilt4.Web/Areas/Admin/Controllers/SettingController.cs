@@ -18,7 +18,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Setting
         public ActionResult Index()
         {
-            var settings = _settingsBusiness.GetAllDatabaseSettings();
+            var settings = _settingsBusiness.GetAllSettings();
             return View(settings.ToList().OrderBy(x => x.Name));
         }
 
@@ -42,7 +42,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                 var data = Convert.ChangeType(collection["Value"], type);
                 if (data == null) throw new InvalidOperationException();
                 var encrypt = collection["Encrypted"].Contains("true");
-                _settingsBusiness.SetDatabaseSetting(id, collection["Value"], type, encrypt);
+                _settingsBusiness.SetSetting(id, collection["Value"], type, encrypt);
 
                 return RedirectToAction("Index");
             }

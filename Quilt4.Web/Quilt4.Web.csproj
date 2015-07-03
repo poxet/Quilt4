@@ -32,7 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AutoParameterizationWebConfigConnectionStrings>False</AutoParameterizationWebConfigConnectionStrings>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -243,7 +242,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\IssueTypeController.cs" />
-    <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
@@ -280,7 +278,6 @@
     <Compile Include="Models\InviteMemberModel.cs" />
     <Compile Include="Models\IssueModel.cs" />
     <Compile Include="Models\IssueTypeModel.cs" />
-    <Compile Include="Models\MachineDetailsModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -317,11 +314,11 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\Setting\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Setting\Edit.cshtml" />
-    <Content Include="Areas\Admin\Views\Initiative\Member.cshtml" />
     <Content Include="Areas\Admin\Views\EventLog\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Action\_EventLogStatus.cshtml" />
     <Content Include="Areas\Admin\Views\Action\_EventLogAlert.cshtml" />
     <Content Include="Areas\Admin\Views\EventLog\Clear.cshtml" />
+    <Content Include="Areas\Admin\Views\EventLog\MarkAsRead.cshtml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\Admin\bootstrap.min.js" />
@@ -399,9 +396,9 @@
     <Content Include="Views\Home\System.cshtml" />
     <Content Include="Areas\Admin\Views\Developer\ConfirmDeveloperEMail.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\System.cshtml" />
-    <Content Include="Areas\Admin\Views\Email\SendTestEmail.cshtml" />
+    <Content Include="Areas\Admin\Views\Email\Send.cshtml" />
     <Content Include="Areas\Admin\Views\Initiative\Details.cshtml" />
-    <Content Include="Areas\Admin\Views\Email\EmailHistory.cshtml" />
+    <Content Include="Areas\Admin\Views\Email\History.cshtml" />
     <Content Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Initiative\Member.cshtml" />
     <Content Include="Views\Application\Details.cshtml" />
@@ -417,8 +414,6 @@
     <Content Include="Views\Application\ConfirmDeleteVersions.cshtml" />
     <Content Include="Views\Session\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
-    <Content Include="Views\Machine\Details.cshtml" />
-    <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
