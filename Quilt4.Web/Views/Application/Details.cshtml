@@ -16,7 +16,7 @@
 
 <h3>Versions</h3>
 
-@using (Html.BeginForm("ConfirmDeleteVersions", "Application"))
+@using (Html.BeginForm())
 {
     @Html.HiddenFor(x => x.Initiative)
     @Html.HiddenFor(x => x.InitiativeName)
@@ -69,5 +69,6 @@
         }
     </table>
     <br/>
-    <input type="submit" value="Delete Versions" />
+    <input type="submit" name="submit" id="submit" value="Delete Versions"/>
+    <input type="submit" name="submit" id="submit" value="Archive Versions" />
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Castle.Core.Internal;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
@@ -74,11 +75,28 @@ namespace Quilt4.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ConfirmDeleteVersions(Quilt4.Web.Models.ApplicationModel model)
+        public ActionResult Details(Quilt4.Web.Models.ApplicationModel model, FormCollection collection)
         {
-            var cheked = model.Versions.Where(x => x.Checked).ToList();
+            var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
+            
+            switch (collection["submit"])
+            {
+                case "Delete Versions" :
+                    return View("ConfirmDeleteVersions", checkedVersions);
+                    
+                case "Archive Versions" :
+                    return View("ConfirmArchiveVersions", checkedVersions);
+                    
+                    
+                default : 
+                    throw new ArgumentException("Submit button has an invalid value");
+            }
+        }
 
-            return View(cheked);
+        [HttpPost]
+        public ActionResult ArchiveVersions(List<Quilt4.Web.Models.VersionModel> model)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpPost]
