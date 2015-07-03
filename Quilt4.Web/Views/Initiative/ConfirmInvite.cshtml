@@ -6,7 +6,7 @@
 }
 
 
-@if (!ViewBag.ConfirmInviteError.Equals(string.Empty))
+@if (!string.IsNullOrEmpty(ViewBag.ConfirmInviteError))
 {
     <h2>Confirm Invite Failed</h2>
     <p>@ViewBag.ConfirmInviteError</p>

@@ -1,14 +1,14 @@
 ﻿@model  List<Quilt4.Web.Models.VersionModel>
 
 @{
-    ViewBag.Title = "Confirm Delete Versions";
+    ViewBag.Title = "Confirm Archive Versions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>DeleteVersions</h2>
-<p>Are you sure you want to delete the following versionUniqueIdentifiers:</p>
+<h2>ConfirmArchiveVersions</h2>
+<p>Are you sure you want to archive the following versions:</p>
 
-@using (Html.BeginForm("DeleteVersions", "Application"))
+@using (Html.BeginForm("ArchiveVersions", "Application"))
 {
     <ul>
         @for (var i = 0; i < Model.Count; i++)
@@ -19,12 +19,9 @@
             @Html.HiddenFor(x => Model[i].VersionId)
             <li>@Model[i].Version</li>
         }
-
     </ul>
-
-    <input type="submit" value="Delete"/>
     
-    @Html.ActionLink("Cancel", "Details", "Application", new { id= Model.First().InitiativeIdentifier, application=Model.First().ApplicationIdentifier}, null)
+    <input type="submit" value="Archive" />
+    @Html.ActionLink("Cancel", "Details", "Application", new { id = Model.First().InitiativeIdentifier, application = Model.First().ApplicationIdentifier }, null)
 }
-
 

@@ -1,28 +1,55 @@
-﻿@model Quilt4.Web.Models.UserModel
+﻿@using Castle.Core.Internal
+@model Quilt4.Web.Models.MachineDetailsModel
+
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Machine Details for @Model.MachineName";
 }
 
-<h2>Details</h2>
+<h2>Machine Details for @Model.MachineName</h2>
 
+<h3>Applications</h3>
 <table>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th>Applications</th>
+        <th style="padding: 0 5px;">Application</th>
     </tr>
-    <tr>
-        <td>Applications</td>
-    </tr>
+    @foreach (var application in Model.Applications)
+    {
+        <tr>
+            @if (application == null || application.Name.IsNullOrEmpty())
+            {
+                <td style="padding: 0 5px;">N/A</td>
+            }
+            else
+            {
+                <td style="padding: 0 5px;">@application.Name</td>
+            }
+            
+        </tr>
+    }
 </table>
+
+<h3>Users</h3>
 <table>
-    <h4>Sessions</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th style="padding: 0 5px;">Start</th>
+        <th style="padding: 0 5px;">Username</th>
+    </tr>
+    @foreach (var user in @Model.Users)
+    {
+        <tr>
+            <td style="padding: 0 5px;">@user.UserName</td>
+        </tr>
+    }
+</table>
+
+<h3>Sessions</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Start Time</th>
         <th style="padding: 0 5px;">Environment</th>
         <th style="padding: 0 5px;">User</th>
         <th style="padding: 0 5px;">Machine</th>
         <th style="padding: 0 5px;">Ip</th>
     </tr>
-
     @foreach (var session in @Model.Sessions)
     {
         <tr>
@@ -33,12 +60,7 @@
             <td style="padding: 0 5px;">@session.CallerIp</td>
         </tr>
     }
+</table>
 
-</table>
-<table>
-    <h4>Machines</h4>
-    <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th></th>
-    </tr>
-    <tr><td></td></tr>
-</table>
+
+

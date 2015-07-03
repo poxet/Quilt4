@@ -65,7 +65,7 @@
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@session.ServerStartTime.ToLocalTime()">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;">@session.Environment</td>
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
-            <td style="padding: 0 5px;">@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = session.MachineFingerprint}, null)</td>
 
 
             @*@session.ServerStartTime == null ? @Html.Raw("<td style='padding: 0 5px;'>N/A</td>") : @Html.Raw("<td style='padding: 0 5px;'>" + @session.ServerStartTime + "</td>")
@@ -96,10 +96,10 @@
         <th style="padding: 0 5px;">User</th>
     </tr>
 
-    @foreach (var user in Model.Users.Select(x => x.UserName).Distinct())
+    @foreach (var user in Model.Users)
     {
         <tr>
-            <td style="padding: 0 5px;">@Html.ActionLink(@user, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId}, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId, userId = user.Id }, null)</td>
         </tr>
     }
 </table>
@@ -130,16 +130,16 @@
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th>Machine</th>
     </tr>
-@foreach (var machine in @Model.Machines.Select(x => x.Name).Distinct())
+@foreach (var machine in @Model.Machines.Distinct())
 {
     <tr>
-        @if (machine.IsNullOrEmpty()) 
+        @if (machine.Name.IsNullOrEmpty()) 
         { 
             <td style="padding: 0 5px;">@Html.Raw("N/A")</td>
         }
         else
         {
-            <td style="padding: 0 5px;">@machine</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@machine.Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = machine.Id }, null)</td>
         }
     </tr>
 }

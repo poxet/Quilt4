@@ -21,5 +21,7 @@ namespace Quilt4.Interface
         void UpdateInitiative(IInitiative initiative);
         void DeleteInitiative(string id);
         void DeleteApplicationVersion(string applicationVersionFingerprint);
+        //IEnumerable<IApplication> GetApplicationsByUser(string userId);
+        void ArchiveApplicationVersion(string versionId);
     }
 }

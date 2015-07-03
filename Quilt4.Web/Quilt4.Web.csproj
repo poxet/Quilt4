@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AutoParameterizationWebConfigConnectionStrings>False</AutoParameterizationWebConfigConnectionStrings>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -242,6 +243,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InitiativeController.cs" />
     <Compile Include="Controllers\IssueTypeController.cs" />
+    <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
@@ -278,6 +280,7 @@
     <Compile Include="Models\InviteMemberModel.cs" />
     <Compile Include="Models\IssueModel.cs" />
     <Compile Include="Models\IssueTypeModel.cs" />
+    <Compile Include="Models\MachineDetailsModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -314,6 +317,7 @@
     <Content Include="Areas\Admin\Views\web.config" />
     <Content Include="Areas\Admin\Views\Setting\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Setting\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Initiative\Member.cshtml" />
     <Content Include="Areas\Admin\Views\EventLog\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Action\_EventLogStatus.cshtml" />
     <Content Include="Areas\Admin\Views\Action\_EventLogAlert.cshtml" />
@@ -413,6 +417,8 @@
     <Content Include="Views\Application\ConfirmDeleteVersions.cshtml" />
     <Content Include="Views\Session\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Machine\Details.cshtml" />
+    <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

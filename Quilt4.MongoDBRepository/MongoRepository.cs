@@ -170,6 +170,32 @@ namespace Quilt4.MongoDBRepository
             return Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.UserFingerprint == userId).Select(x => x.ToEntity()).ToArray();
         }
 
+        public void ArchiveApplicationVersion(string versionId)
+        {
+            var versionPersist = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().Single(x => x.Id == versionId);
+            Database.GetCollection("ApplicationVersionArchive").Insert(versionPersist, WriteConcern.Acknowledged);
+
+            var query = Query.EQ("_id", versionId);
+            Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
+        }
+
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
+            var applicationVersionPersists = Database.GetCollection("ApplicationVersionArchive").FindAs<ApplicationVersionPersist>(query);
+            var response = applicationVersionPersists.Select(x => x.ToEntity());
+            return response;
+        }
+
+        //public IApplication GetApplicationByApplicationId(Guid applicationId)
+        //{
+        //    var query = Query.EQ("Id", applicationId);
+        //    var response = Database.GetCollection("Initiative").FindOneAs<ApplicationPersist>(query);
+        //    return response.ToEntity();
+        //    //return Database.GetCollection("Initative").FindAllAs<ApplicationPersist>().Where(x => x.Id == applicationId).Select(x => x.ToEntity()).ToArray();
+        //}
+
+
         //public string DatabaseName 
         //{
         //    get

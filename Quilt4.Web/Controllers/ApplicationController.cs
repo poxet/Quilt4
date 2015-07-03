@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Castle.Core.Internal;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
@@ -38,6 +39,7 @@ namespace Quilt4.Web.Controllers
 
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
+            var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
             //var versionIds = versions.Select(x => x.Id);
 
@@ -67,6 +69,23 @@ namespace Quilt4.Web.Controllers
                     //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
 
                     Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
+                }).OrderByDescending(y => y.Version).ToList(),
+
+                ArchivedVersions = archivedVersions.Select(x => new VersionModel
+                {
+                    Version = x.Version,
+                    VersionId = x.Id,
+                    Build = x.BuildTime.ToString(),
+                    IssueTypes = x.IssueTypes,
+                    UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
+                    InitiativeIdentifier = id,
+                    ApplicationIdentifier = application,
+
+                    //TODO: This is sloooooow ... fix this
+                    //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
+                    //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
+
+                    Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
                 }).OrderByDescending(y => y.Version).ToList()
             };
 
@@ -74,15 +93,37 @@ namespace Quilt4.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ConfirmDeleteVersions(Quilt4.Web.Models.ApplicationModel model)
+        public ActionResult Details(ApplicationModel model, FormCollection collection)
         {
-            var cheked = model.Versions.Where(x => x.Checked).ToList();
-
-            return View(cheked);
+            var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
+            
+            switch (collection["submit"])
+            {
+                case "Delete Versions" :
+                    return View("ConfirmDeleteVersions", checkedVersions);
+                    
+                case "Archive Versions" :
+                    return View("ConfirmArchiveVersions", checkedVersions);
+                    
+                    
+                default : 
+                    throw new ArgumentException("Submit button has an invalid value");
+            }
         }
 
         [HttpPost]
-        public ActionResult DeleteVersions(List<Quilt4.Web.Models.VersionModel> model)
+        public ActionResult ArchiveVersions(List<VersionModel> model)
+        {
+            foreach (var version in model)
+            {
+                _initiativeBusiness.ArchiveApplicationVersion(version.VersionId);
+            }
+
+            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteVersions(List<VersionModel> model)
         {
             foreach (var version in model)
             {

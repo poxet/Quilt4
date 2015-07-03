@@ -1,7 +1,43 @@
-﻿@{
+﻿@model List<Quilt4.Interface.IInitiative>
+
+@{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@if (Model.Any())
+{
+    <h3>Initiative invitations</h3>
+    <p>You have @Model.Count pending invitations to:</p>
+    <ul>
+        @foreach (var initiative in Model)
+        {
+            <li>@initiative.Name</li>
+        }
+    </ul>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class="row">
     @{ Html.RenderAction("_EventLogStatus", "Action", new { area = "Admin" }); }

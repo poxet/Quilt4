@@ -276,6 +276,22 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
+        public void ArchiveApplicationVersion(string versionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public IApplication GetApplicationByApplicationId(Guid applicationId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
         public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
         {
             throw new NotImplementedException();

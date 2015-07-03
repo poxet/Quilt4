@@ -85,15 +85,20 @@ namespace Quilt4.Web.Business
         }
 
 
-        public IApplicationVersion GetApplicationVersion(string initiativeId, string applicationVersionUniqueIdentifier)
+        public IApplicationVersion GetApplicationVersion(string initiativeId, string applicationId, string applicationVersionUniqueIdentifier)
         {
-            var initiative = _repository.GetInitiative(Guid.Parse(initiativeId));
+            //var initiative = _repository.GetInitiative(Guid.Parse(initiativeId));
+            //var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == Guid.Parse(applicationId));
 
-            var applications = initiative.ApplicationGroups.SelectMany(x => x.Applications);
+            //var applicationIds = applications.Select(x => x.Id);
+            //var applicationIds = new List<Guid>();
+            //foreach (var application in applications)
+            //{
+            //    applicationIds.Add(application.Id);
+            //}
 
-            var applicationIds = applications.Select(x => x.Id);
-
-            var applicationVersions = _repository.GetApplicationVersionsForApplications(applicationIds).ToArray();
+            var applicationVersions = _repository.GetApplicationVersionsForApplications(new List<Guid>(){Guid.Parse(applicationId)}).ToArray();
+            
 
             var applicationVersionId = "";
 
@@ -116,6 +121,11 @@ namespace Quilt4.Web.Business
             var applicationVersion = _repository.GetApplicationVersion(applicationVersionId);
 
             return applicationVersion;
+        }
+
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            return _repository.GetArchivedApplicationVersions(applicationId);
         }
 
         public IApplicationVersion GetApplicationVersion(Fingerprint applicationVersionFingerprint)
