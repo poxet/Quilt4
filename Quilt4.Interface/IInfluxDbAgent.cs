@@ -7,6 +7,7 @@ namespace Quilt4.Interface
     {
         bool IsEnabled { get; }
         Task WriteAsync(IEnumerable<ISerie> series);
+        Task<List<ISerie>> QueryAsync(string counterName);
         bool CanConnect();
         IInfluxDbSetting GetSetting();
         string GetDatabaseVersion();

@@ -64,7 +64,7 @@ namespace Quilt4.Web.Business
             applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime);
             _repository.AddApplicationVersion(applicationVersion);
 
-            _counterBusiness.RegisterApplicationVersion(applicationVersion);
+            _counterBusiness.UpdateApplicationVersionCounters();
 
             return applicationVersion;
         }

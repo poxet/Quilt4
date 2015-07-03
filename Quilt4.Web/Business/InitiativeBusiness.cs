@@ -180,7 +180,7 @@ namespace Quilt4.Web.Business
 
             _repository.UpdateInitiative(initiative);
 
-            _counterBusiness.RegisterApplication(initiative, application);
+            //_counterBusiness.RegisterApplication(initiative, application);
 
             return application;
         }

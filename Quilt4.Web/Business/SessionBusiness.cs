@@ -46,7 +46,7 @@ namespace Quilt4.Web.Business
                 if (existingSession == null)
                 {
                     _repository.AddSession(session);
-                    _coutnerBusiness.RegisterSession(session, 1);
+                    _coutnerBusiness.UpdateSessionCounters();
                 }
                 else
                 {
@@ -71,6 +71,7 @@ namespace Quilt4.Web.Business
         public void EndSession(Guid sessionId)
         {
             _repository.EndSession(sessionId, DateTime.UtcNow);
+            _coutnerBusiness.UpdateApplicationVersionCounters();
         }
 
         public void RegisterSession(RegisterSessionRequest request)

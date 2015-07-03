@@ -38,6 +38,22 @@ namespace Quilt4.Web.Agents
             await _influxDb.WriteAsync(_influxDbSetting.DatabaseName, TimeUnit.Milliseconds, ss.ToArray());
         }
 
+        public async Task<List<ISerie>> QueryAsync(string counterName)
+        {
+            var list = new List<ISerie>();
+            var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "select * from " + counterName + " limit 1000;", TimeUnit.Milliseconds);
+            foreach (var serie in response)
+            {
+                var data = new Dictionary<string, object>();
+                for (var i = 0; i < serie.Columns.Length; i++)
+                {
+                    data.Add(serie.Columns[i], serie.Points[i]);
+                }
+                list.Add(new BusinessEntities.Serie(counterName, data));
+            }
+            return list;
+        }
+
         public bool CanConnect()
         {
             var task = Task.Run(async () => await _influxDb.PingAsync());
