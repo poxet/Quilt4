@@ -1,6 +1,6 @@
 ﻿@model Quilt4.Web.Models.EventLogStatusViewModel
 
-@if (!string.IsNullOrEmpty(@Model.EventLogCheckMessage) && @User.IsInRole("Admin"))
+@if (@Model.EventLogData.Any() && @User.IsInRole("Admin"))
 {
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-red">
@@ -10,8 +10,8 @@
                         <i class="fa fa-exclamation-triangle fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">Oups</div>
-                        <div>@Model.EventLogCheckMessage</div>
+                        <div class="huge">@Model.EventLogData.Count.ToString()</div>
+                        <div>There are errors in the server event log!</div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,10 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="row">
+    @{ Html.RenderAction("_EventLogStatus", "Action"); }
+    @{ Html.RenderAction("_EventLogAlert", "Action"); }
+</div>
 
 <div class="row">
     @{
@@ -112,17 +116,13 @@
 
 </div>
 
-@{ Html.RenderAction("_EventLogStatus", "Action"); }
+        <h3>Shortcuts</h3>
+        <ol>
+            <li>@Html.ActionLink("Developers", "Index", "Developer")</li>
+            <li>@Html.ActionLink("System Information", "System", "Dashboard")</li>
+        </ol>
 
-<p>This is the administration section.</p>
-
-<h3>Shortcuts</h3>
-<ol>
-    <li>@Html.ActionLink("Developers", "Index", "Developer")</li>
-    <li>@Html.ActionLink("System Information", "System", "Dashboard")</li>
-</ol>
-
-<br /><br />
-<a href="https://www.google.com/analytics/web/?authuser=0#report/visitors-overview/a49281453w80996805p83821649/" target="_blank">Google Analytics</a><br />
-<a href="http://www.twitter.com/quilt4net">Twitter</a><br />
-<a href="http://nugetmusthaves.azurewebsites.net/Package/Tharga.Quilt4Net">Nuget statistics</a>
+        <br /><br />
+        <a href="https://www.google.com/analytics/web/?authuser=0#report/visitors-overview/a49281453w80996805p83821649/" target="_blank">Google Analytics</a><br />
+        <a href="http://www.twitter.com/quilt4net">Twitter</a><br />
+        <a href="http://nugetmusthaves.azurewebsites.net/Package/Tharga.Quilt4Net">Nuget statistics</a>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -11,7 +10,6 @@ using System.Web.Routing;
 using Castle.Windsor;
 using Quilt4.Interface;
 using Quilt4.Web.Agents;
-using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
 
 namespace Quilt4.Web
@@ -91,8 +89,8 @@ namespace Quilt4.Web
 
         protected void Application_End()
         {
-            EventLog.WriteEntry(Constants.EventLogName, "Ending", EventLogEntryType.Information);
             Tharga.Quilt4Net.Session.End();
+            //EventLog.WriteEntry(Constants.EventLogName, "Ending", EventLogEntryType.Information);
         }
 
         protected void Application_BeginRequest()

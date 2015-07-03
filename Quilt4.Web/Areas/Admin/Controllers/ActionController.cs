@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Web.Mvc;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -24,27 +26,18 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
             var vm = new EventLogStatusViewModel
                          {
-                             EventLogCheckMessage = eventLogCheckMessage
+                             EventLogCheckMessage = eventLogCheckMessage,
                          };
-            return PartialView("_EventLogStatus", vm);
+            return PartialView(vm);
         }
 
-        //private void CheckEventlogAccess()
-        //{
-        //    //_eventLogAgent.DeleteLog();
-
-        //    var response = _eventLogAgent.AssureEventLogSource();
-        //    //var response = ExceptionHandlingAttribute;
-        //    if (response != null)
-        //    {
-        //        //TODO: Try to write to the event log and tell the administrator if something went wrong.
-        //        ViewBag.EventLogCheckMessage = "The event log Quilt4 does not exist and cannot be created. If something goes wrong issues cannot be written there. Try to run this instance as administrator once, or create the event log " + Constants.EventLogName + " and source " + Constants.EventSourceName + " manually. (" + response.Message + ")";
-        //    }
-
-        //    //TODO: Check if there are new issues and show them on the dashboard.
-
-        //    //TODO: Load issues related to Quilt4 and show them on the admin page
-        //    //var entries = ExceptionHandlingAttribute.GetEventLogData().ToArray();
-        //}
+        public ActionResult _EventLogAlert()
+        {
+            var vm = new EventLogStatusViewModel
+            {
+                EventLogData = _eventLogAgent.GetEventLogData().Where(x => x.EntryType == EventLogEntryType.Error).OrderByDescending(x => x.TimeGenerated).Select(x => new EventLogItemModel { EntryType = x.EntryType, Icon = EventLogController.GetIcon(x.EntryType), Message = x.Message, TimeGenerated = x.TimeGenerated, Source = x.Source }).ToList()
+            };
+            return PartialView(vm);            
+        }
     }
 }

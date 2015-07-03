@@ -11,7 +11,7 @@ namespace Quilt4.Web.Agents
 {
     public class EventLogAgent : IEventLogAgent
     {
-        public void DeleteLog()
+        public void ClearAll()
         {
             if (EventLog.SourceExists(Constants.EventSourceName))
             {

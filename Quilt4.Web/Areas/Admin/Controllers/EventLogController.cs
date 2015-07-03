@@ -26,7 +26,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        private string GetIcon(EventLogEntryType entryType)
+        public static string GetIcon(EventLogEntryType entryType)
         {
             switch (entryType)
             {
@@ -40,6 +40,26 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                     return "fa-exclamation-triangle";
                 default:
                     throw new ArgumentOutOfRangeException(string.Format("Unknown entry type {0}", entryType));
+            }
+        }
+
+        public ActionResult Clear()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Clear(FormCollection collection)
+        {
+            try
+            {
+                _eventLogAgent.ClearAll();
+                return RedirectToAction("Index", "EventLog");
+            }
+            catch (Exception exception)
+            {
+                ViewBag.ErrorMessage = exception.Message;
+                return View();
             }
         }
     }
