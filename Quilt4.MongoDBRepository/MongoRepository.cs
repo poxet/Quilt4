@@ -179,6 +179,14 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
         }
 
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
+            var applicationVersionPersists = Database.GetCollection("ApplicationVersionArchive").FindAs<ApplicationVersionPersist>(query);
+            var response = applicationVersionPersists.Select(x => x.ToEntity());
+            return response;
+        }
+
         //public IApplication GetApplicationByApplicationId(Guid applicationId)
         //{
         //    var query = Query.EQ("Id", applicationId);

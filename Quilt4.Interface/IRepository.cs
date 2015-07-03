@@ -20,6 +20,7 @@ namespace Quilt4.Interface
 
         void UpdateApplicationVersion(IApplicationVersion applicationVersion);
         IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId);
+        IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> applicationIds);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForMachine(string machineId);

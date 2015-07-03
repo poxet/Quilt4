@@ -39,6 +39,7 @@ namespace Quilt4.Web.Controllers
 
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
+            var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
             //var versionIds = versions.Select(x => x.Id);
 
@@ -54,6 +55,23 @@ namespace Quilt4.Web.Controllers
                 Application = application,
                 
                 Versions = versions.Select(x => new VersionModel
+                {
+                    Version = x.Version,
+                    VersionId = x.Id,
+                    Build = x.BuildTime.ToString(),
+                    IssueTypes = x.IssueTypes,
+                    UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
+                    InitiativeIdentifier = id,
+                    ApplicationIdentifier = application,
+
+                    //TODO: This is sloooooow ... fix this
+                    //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
+                    //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
+
+                    Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
+                }).OrderByDescending(y => y.Version).ToList(),
+
+                ArchivedVersions = archivedVersions.Select(x => new VersionModel
                 {
                     Version = x.Version,
                     VersionId = x.Id,

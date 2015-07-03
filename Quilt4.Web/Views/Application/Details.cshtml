@@ -72,3 +72,37 @@
     <input type="submit" name="submit" id="submit" value="Delete Versions"/>
     <input type="submit" name="submit" id="submit" value="Archive Versions" />
 }
+
+<h3>Archived Versions</h3>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Version</th>
+        <th style="padding: 0 5px;">Build</th>
+        <th style="padding: 0 5px;">Machines</th>
+        <th style="padding: 0 5px;">Sessions</th>
+        <th style="padding: 0 5px;">Issue Types</th>
+        <th style="padding: 0 5px;">Issues</th>
+        <th style="padding: 0 5px;">First</th>
+        <th style="padding: 0 5px;">Last</th>
+        <th style="padding: 0 5px;">Environments</th>
+    </tr>
+    @foreach (var version in Model.ArchivedVersions)
+    {
+        <tr>
+            <td style="padding: 0 5px;">@version.Version</td>
+            <td style="padding: 0 5px;">@version.Build</td>
+            <td style="padding: 0 5px;"></td>
+            <td style="padding: 0 5px;">@version.Sessions.Count()</td>
+            <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
+            <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+            <td style="padding: 0 5px;">
+                @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
+                {
+                    @Html.Raw(env + ", ")
+                }
+            </td>
+        </tr>
+    }
+</table>

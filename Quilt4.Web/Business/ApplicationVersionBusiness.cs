@@ -123,6 +123,11 @@ namespace Quilt4.Web.Business
             return applicationVersion;
         }
 
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            return _repository.GetArchivedApplicationVersions(applicationId);
+        }
+
         public IApplicationVersion GetApplicationVersion(Fingerprint applicationVersionFingerprint)
         {
             return _repository.GetApplicationVersion(applicationVersionFingerprint);
