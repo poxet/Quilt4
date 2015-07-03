@@ -33,9 +33,12 @@ namespace Quilt4.Web.Controllers
 
                 foreach (var initiative in initiatives)
                 {
-                    if (initiative.DeveloperRoles.Any(x => x.DeveloperName.Equals(User.Identity.Name) && x.RoleName.Equals("Invited")))
+                    foreach (var developer in initiative.DeveloperRoles)
                     {
-                        initiaivesWithInvites.Add(initiative);
+                        if (developer.RoleName.Equals("Invited") && developer.DeveloperName.Equals(User.Identity.Name))
+                        {
+                            initiaivesWithInvites.Add(initiative);
+                        }
                     }
                 }
 
