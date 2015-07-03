@@ -75,7 +75,7 @@ namespace Quilt4.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Details(Quilt4.Web.Models.ApplicationModel model, FormCollection collection)
+        public ActionResult Details(ApplicationModel model, FormCollection collection)
         {
             var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
             
@@ -94,13 +94,19 @@ namespace Quilt4.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ArchiveVersions(List<Quilt4.Web.Models.VersionModel> model)
+        public ActionResult ArchiveVersions(List<VersionModel> model)
         {
+            foreach (var version in model)
+            {
+                _initiativeBusiness.ArchiveApplicationVersion(version.VersionId);
+            }
+
             throw new NotImplementedException();
+            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
         }
 
         [HttpPost]
-        public ActionResult DeleteVersions(List<Quilt4.Web.Models.VersionModel> model)
+        public ActionResult DeleteVersions(List<VersionModel> model)
         {
             foreach (var version in model)
             {

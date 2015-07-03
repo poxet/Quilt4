@@ -248,6 +248,11 @@ namespace Quilt4.Web.Business
             _repository.DeleteApplicationVersion(applicationVersionFingerprint);
         }
 
+        public void ArchiveApplicationVersion(string versionId)
+        {
+            _repository.ArchiveApplicationVersion(versionId);
+        }
+
         //public IEnumerable<IApplication> GetApplicationsByUser(string userId)
         //{
         //    var sessions = _repository.GetSessionsForUser(userId);

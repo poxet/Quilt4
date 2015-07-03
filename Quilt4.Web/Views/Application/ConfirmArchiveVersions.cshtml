@@ -11,17 +11,17 @@
 @using (Html.BeginForm("ArchiveVersions", "Application"))
 {
     <ul>
-        @foreach (var version in Model)
+        @for (var i = 0; i < Model.Count; i++)
         {
-            @Html.HiddenFor(x => version.UniqueIdentifier)
-            @Html.HiddenFor(x => version.ApplicationIdentifier)
-            @Html.HiddenFor(x => version.InitiativeIdentifier)
-            @Html.HiddenFor(x => version.VersionId)
-            <li>@version.Version</li>
+            @Html.HiddenFor(x => Model[i].UniqueIdentifier)
+            @Html.HiddenFor(x => Model[i].ApplicationIdentifier)
+            @Html.HiddenFor(x => Model[i].InitiativeIdentifier)
+            @Html.HiddenFor(x => Model[i].VersionId)
+            <li>@Model[i].Version</li>
         }
     </ul>
     
-    <input type="submit" value="Delete" />
+    <input type="submit" value="Archive" />
     @Html.ActionLink("Cancel", "Details", "Application", new { id = Model.First().InitiativeIdentifier, application = Model.First().ApplicationIdentifier }, null)
 }
 
