@@ -24,23 +24,27 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
-                var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToList();
+            //TODO: Create a function in _initiativeBusiness named GetInvitations and takes the username as parameter. That function should return invitations for the user
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
+            //    var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToList();
 
-                var initiaivesWithInvites = new List<IInitiative>();
+            //    var initiaivesWithInvites = new List<IInitiative>();
 
-                foreach (var initiative in initiatives)
-                {
-                    if (initiative.DeveloperRoles.Any(x => x.DeveloperName.Equals(User.Identity.Name) && x.RoleName.Equals("Invited")))
-                    {
-                        initiaivesWithInvites.Add(initiative);
-                    }
-                }
+            //    foreach (var initiative in initiatives)
+            //    {
+            //        foreach (var developer in initiative.DeveloperRoles)
+            //        {
+            //            if (developer.RoleName.Equals("Invited") && developer.DeveloperName.Equals(User.Identity.Name))
+            //            {
+            //                initiaivesWithInvites.Add(initiative);
+            //            }
+            //        }
+            //    }
 
-                return View(initiaivesWithInvites);
-            }
+            //    return View(initiaivesWithInvites);
+            //}
             return View(new List<IInitiative>());
         }
 

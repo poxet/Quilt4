@@ -5,6 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="row">
+    @{ Html.RenderAction("_EventLogStatus", "Action", new { area = "Admin" }); }
+    @{ Html.RenderAction("_EventLogAlert", "Action", new { area = "Admin" }); }
+</div>
+
 @if (Model.Any())
 {
     <h3>Initiative invitations</h3>
@@ -16,34 +21,6 @@
         }
     </ul>
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="row">
-    @{ Html.RenderAction("_EventLogStatus", "Action", new { area = "Admin" }); }
-    @{ Html.RenderAction("_EventLogAlert", "Action", new { area = "Admin" }); }
-</div>
-
 
 @*<div class="jumbotron">
     <h1>ASP.NET</h1>

@@ -30,8 +30,9 @@ namespace Quilt4.Web.Controllers
             _sessionBusiness = sessionBusiness;
         }
 
+        public ApplicationModel GenerateApplicationModel(string id, string application, bool showArchivedVersions)
         // GET: Application/Details/5
-        public ActionResult Details(string id, string application)
+        //public ActionResult Details(string id, string application)
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var developerName = User.Identity.Name;
@@ -53,7 +54,7 @@ namespace Quilt4.Web.Controllers
                 InitiativeName = initiative.Name,
                 InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
                 Application = application,
-                
+
                 Versions = versions.Select(x => new VersionModel
                 {
                     Version = x.Version,
@@ -70,24 +71,33 @@ namespace Quilt4.Web.Controllers
 
                     Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
                 }).OrderByDescending(y => y.Version).ToList(),
+            };
 
-                ArchivedVersions = archivedVersions.Select(x => new VersionModel
+            if (showArchivedVersions)
+            {
+                model.ShowArchivedVersions = true;
+                model.ArchivedVersions = archivedVersions.Select(x => new VersionModel
                 {
                     Version = x.Version,
                     VersionId = x.Id,
                     Build = x.BuildTime.ToString(),
                     IssueTypes = x.IssueTypes,
-                    UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
-                    InitiativeIdentifier = id,
-                    ApplicationIdentifier = application,
 
                     //TODO: This is sloooooow ... fix this
                     //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
                     //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
 
-                    Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
-                }).OrderByDescending(y => y.Version).ToList()
-            };
+                    Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id).ToArray(),
+                }).OrderByDescending(y => y.Version).ToList();
+            }
+
+            return model;
+        }
+
+        // GET: Application/Details/5
+        public ActionResult Details(string id, string application)
+        {
+            var model = GenerateApplicationModel(id, application, false);
 
             return View(model);
         }
@@ -95,15 +105,19 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult Details(ApplicationModel model, FormCollection collection)
         {
-            var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
-            
             switch (collection["submit"])
             {
                 case "Delete Versions" :
+                    var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
                     return View("ConfirmDeleteVersions", checkedVersions);
                     
                 case "Archive Versions" :
+                    checkedVersions = model.Versions.Where(x => x.Checked).ToList();
                     return View("ConfirmArchiveVersions", checkedVersions);
+
+                case "Show Archived Versions":
+                    var newModel = GenerateApplicationModel(model.Initiative, model.Application, true);
+                    return View(newModel);
                     
                     
                 default : 

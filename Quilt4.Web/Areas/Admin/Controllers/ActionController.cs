@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
@@ -37,9 +39,19 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         {
             var lastRead = _settingsBusiness.GetEventLogReadDate();
 
+            var eventLogData = new List<EventLogItemModel>();
+            try
+            {
+                var eventLogEntries = _eventLogAgent.GetEventLogData().Where(x => x.EntryType == EventLogEntryType.Error && x.TimeGenerated > lastRead);
+                eventLogData = eventLogEntries.OrderByDescending(x => x.TimeGenerated).Select(x => new EventLogItemModel { EntryType = x.EntryType, Icon = EventLogController.GetIcon(x.EntryType), Message = x.Message, TimeGenerated = x.TimeGenerated, Source = x.Source }).ToList();
+            }
+            catch (Exception)
+            {
+            }
+
             var vm = new EventLogStatusViewModel
             {
-                EventLogData = _eventLogAgent.GetEventLogData().Where(x => x.EntryType == EventLogEntryType.Error && x.TimeGenerated > lastRead).OrderByDescending(x => x.TimeGenerated).Select(x => new EventLogItemModel { EntryType = x.EntryType, Icon = EventLogController.GetIcon(x.EntryType), Message = x.Message, TimeGenerated = x.TimeGenerated, Source = x.Source }).ToList()
+                EventLogData = eventLogData
             };
             return PartialView(vm);            
         }
