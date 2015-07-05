@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Castle.Core.Internal;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
@@ -31,7 +29,7 @@ namespace Quilt4.Web.Controllers
 
         public ApplicationModel GenerateApplicationModel(string id, string application, bool showArchivedVersions)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
@@ -39,7 +37,6 @@ namespace Quilt4.Web.Controllers
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
             var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
-            //var versionIds = versions.Select(x => x.Id);
 
             var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { applicationId }).ToArray();
 
@@ -49,7 +46,7 @@ namespace Quilt4.Web.Controllers
             {
                 Initiative = id,
                 InitiativeName = initiative.Name,
-                InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
+                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)), //initiative.UniqueIdentifier,
                 Application = application,
 
                 Versions = versions.Select(x => new VersionViewModel
@@ -200,51 +197,5 @@ namespace Quilt4.Web.Controllers
 
             return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
         }
-
-        
-        
-        //// GET: Application/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}C:\Dev\Tharga\Quilt4\Quilt4.Web\Controllers\ApplicationController.cs
-
-        //// POST: Application/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Application/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Application/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }

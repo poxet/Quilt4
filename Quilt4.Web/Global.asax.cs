@@ -73,9 +73,7 @@ namespace Quilt4.Web
 
         private static void RegisterWindsor()
         {
-            //_container = new WindsorContainer();
             _container.Install(new ApplicationCastleInstaller());
-            //_container.Install(new WindsorCompositionRoot());
 
             // Create the Controller Factory
             var castleControllerFactory = new CastleControllerFactory(_container);
@@ -90,7 +88,6 @@ namespace Quilt4.Web
         protected void Application_End()
         {
             Tharga.Quilt4Net.Session.End();
-            //EventLog.WriteEntry(Constants.EventLogName, "Ending", EventLogEntryType.Information);
         }
 
         protected void Application_BeginRequest()
@@ -138,6 +135,7 @@ namespace Quilt4.Web
             catch (Exception exp)
             {
                 _eventLogAgent.WriteToEventLog(exception);
+                _eventLogAgent.WriteToEventLog(exp);
             }
         }
     }

@@ -3,24 +3,22 @@
 @model Quilt4.Web.Models.InitiativeViewModel
 
 @{
-    ViewBag.Title = "Initiative Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb">
-    <li><a href="~/Initiative/">Initiative</a></li>
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
     <li class="active">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</li>
 </ol>
 
 <h2>Initiative Details</h2>
-@Html.ActionLink("Members", "Member", new { id = @Model.Id }, null)
+@Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
 <br/>
+@Html.ActionLink("Properties", "Edit", new { id = Model.UniqueIdentifier }, null)
 @if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
 {
-    @Html.ActionLink("Properties", "Edit", new { id = @Model.Id}, null)
-    <br/>
-    @Html.ActionLink("Delete", "Delete", new { id = @Model.Id }, null)
-    
+    <br />
+    @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)    
 }
 <h2>ClientToken</h2>
 @Html.Raw(@Model.ClientToken)
@@ -52,23 +50,3 @@ else
         }
     }
 }
-
-
-
-@*<h3>Applications</h3>
-@{
-    var applications = Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
-}
-
-@if (Model == null || !applications.Any())
-{ 
-    @Html.Raw("No applications found!")
-}
-else
-{
-    foreach (var application in applications)
-    {        
-        @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
-        <br/>
-    }
-}*@

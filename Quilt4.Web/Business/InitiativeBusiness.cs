@@ -26,11 +26,9 @@ namespace Quilt4.Web.Business
             _repository.UpdateInitiative(initiative);
         }
 
-        public void DeleteInitiative(string id)
+        public void DeleteInitiative(Guid id)
         {
-            var guidId = Guid.Parse(id);
-            
-            var applicationIds = _repository.GetApplicationGroups(guidId).SelectMany(x => x.Applications).Select(y => y.Id);
+            var applicationIds = _repository.GetApplicationGroups(id).SelectMany(x => x.Applications).Select(y => y.Id);
 
             foreach (var applicationId in applicationIds)
             {
@@ -38,8 +36,7 @@ namespace Quilt4.Web.Business
                 _repository.DeleteSessionForApplication(applicationId);
             }
 
-            _repository.DeleteInitiative(Guid.Parse(id));
-            
+            _repository.DeleteInitiative(id);
         }
 
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
@@ -208,11 +205,6 @@ namespace Quilt4.Web.Business
                 initiative.Name = null;
 
             _repository.UpdateInitiative(initiative);
-        }
-
-        public void DeleteInitiative(Guid initiativeId)
-        {
-            _repository.DeleteInitiative(initiativeId);
         }
 
         public void DeleteApplication(Guid applicationId)

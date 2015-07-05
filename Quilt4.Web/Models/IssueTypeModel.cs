@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
@@ -16,5 +13,7 @@ namespace Quilt4.Web.Models
         public IEnumerable<IUser> Users { get; set; }
         public string InitiativeUniqueIdentifier { get; set; }
         public string InitiativeName { get; set; }
+        public string ApplicationName { get; set; }
+        public string VersionUniqueIdentifier { get; set; }
     }
 }

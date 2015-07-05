@@ -3,19 +3,17 @@
 @model Quilt4.Web.Models.IssueViewModel
 
 @{
-    ViewBag.Title = "Version Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <ol class="breadcrumb">
-    <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.InitiativeUniqueIdentifier">@Html.Raw(Model.InitiativeName ?? Constants.DefaultInitiativeName)</a></li>
-    <li><a href="~/Application/Details/@Model.InitiativeId/@Model.ApplicationName">@Model.ApplicationName</a></li>
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(@Model.ApplicationName, "Details", "Application", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
     <li class="active">@Model.VersionName</li>
 </ol>
 
 <h2>Version Details</h2>
-
 
 <h3>Issue Types</h3>
 <table>
@@ -31,19 +29,19 @@
     @foreach (var issueType in Model.IssueTypes)
     {
         <tr>
-            <td style="padding: 0 5px;"><a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issueType.Ticket">@issueType.ExceptionTypeName</a></td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName, "Details", "IssueType", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
             <td style="padding: 0 5px;">@issueType.Message</td>
             <td style="padding: 0 5px;">@issueType.IssueLevel</td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
             <td style="padding: 0 5px;">
-                @foreach (var env in Model.Sessions.Where(x =>  issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
+                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
                 {
                     @Html.Raw(env + ", ")
                 }
-        </td>
+            </td>
 
             <td style="padding: 0 5px;">@issueType.Ticket</td>
-            
+
         </tr>
     }
 

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
-using Quilt4.Web.Business;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -30,8 +29,6 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult Details(string applicationVersionId, string userId)
         {
-            
-            //var applications = _initiativeBusiness.GetApplicationsByUser(userId);
             var sessions = _sessionBusiness.GetSessionsForUser(userId).ToArray();
 
             var machines= new List<IMachine>();

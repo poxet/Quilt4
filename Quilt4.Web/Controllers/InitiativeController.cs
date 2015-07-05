@@ -9,7 +9,6 @@ using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Areas.Admin.Models;
 using Quilt4.Web.Models;
-using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Controllers
 {
@@ -65,7 +64,6 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult ResendInvite(string initiativeid, string code, FormCollection collection)
         {
-
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
             var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
 
@@ -111,19 +109,23 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
-
             return RedirectToAction("Member", "Initiative", new { id = initiativeid});
         }
 
         //GET
-        public ActionResult RemoveMember(string initiativeId, string developer)
+        public ActionResult RemoveMember(string id, string application)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
-            var model = new MemberModel()
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
+
+            var model = new MemberModel
             {
-                DeveloperName = initiative.DeveloperRoles.Single(x => x.DeveloperName == developer).DeveloperName,
+                DeveloperName = initiative.DeveloperRoles.Single(x => x.DeveloperName == application).DeveloperName,
                 InitiativeName = initiative.Name,
-                InitiativeId = initiativeId,
+                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)),
             };
 
             return View(model);
@@ -131,30 +133,29 @@ namespace Quilt4.Web.Controllers
 
         //POST
         [HttpPost]
-        public ActionResult RemoveMember(string initiativeId, string developer, FormCollection collection)
+        public ActionResult RemoveMember(string id, string application, FormCollection collection)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeId));
-            initiative.RemoveDeveloperRole(developer);
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
+
+            initiative.RemoveDeveloperRole(application);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Member", "Initiative", new { id = initiativeId});
+            return RedirectToAction("Member", "Initiative", new { id = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)) });
         }
 
         //Get
         public ActionResult Member(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return Redirect("Index");
-            }
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
 
             ViewBag.InviteError = TempData["InviteError"];
                 
-            Guid initiativeId;
-            if (!Guid.TryParse(id, out initiativeId))
-                throw new InvalidOperationException("Cannot parse as Guid!").AddData("id", id);
-
-            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
@@ -164,7 +165,7 @@ namespace Quilt4.Web.Controllers
             {
                 Initiative = initiative,
                 IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator",
-                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
+                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)),
             };
 
             return View(invite);
@@ -218,7 +219,6 @@ namespace Quilt4.Web.Controllers
                 {
                     //Prod
                 }
-                
 
                 var userMessage = "";
                 if (!collection["Message"].IsNullOrEmpty())
@@ -321,7 +321,10 @@ namespace Quilt4.Web.Controllers
         // GET: Initiative/Edit/5
         public ActionResult Edit(string id)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
@@ -339,11 +342,12 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult Edit(string id, FormCollection collection)
         {
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+
             try
             {
-                // TODO: Add update logic here
-                var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-
                 initiative.Name = collection["Name"];
                 _initiativeBusiness.UpdateInitiative(initiative);
 
@@ -358,7 +362,12 @@ namespace Quilt4.Web.Controllers
         // GET: Initiative/Delete/5
         public ActionResult Delete(string id)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(ins.Select(x => x.Name));
+
             return View(initiative);
         }
 
@@ -366,26 +375,13 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult Delete(string id, FormCollection collection)
         {
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+
             try
             {
-                // TODO: Add delete logic here
-                if(!User.Identity.Name.Equals(_initiativeBusiness.GetInitiative(Guid.Parse(id)).OwnerDeveloperName))
-                {
-                    return View();
-                }
-
-                _initiativeBusiness.DeleteInitiative(id);
-                //var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-                //var applicationIds = initiative.ApplicationGroups.SelectMany(x => x.Applications).Select(x => x.Id).ToArray();
-                //var sessions = _sessionBusiness.GetSessionsForApplications(applicationIds);
-
-                //var versions = applicationIds.SelectMany(applicationId => _applicationVersionBusiness.GetApplicationVersions(applicationId)).ToList();
-
-                //foreach (var version in versions)
-                //{
-                //    _applicationVersionBusiness.Remove(); 
-                //}
-
+                _initiativeBusiness.DeleteInitiative(initiative.Id);
                 return RedirectToAction("Index");
             }
             catch
