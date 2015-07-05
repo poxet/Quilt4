@@ -107,6 +107,7 @@
     <Compile Include="IInitiativeBusiness.cs" />
     <Compile Include="IInitiativeHead.cs" />
     <Compile Include="IInnerIssueType.cs" />
+    <Compile Include="IInvitation.cs" />
     <Compile Include="IInviteApproval.cs" />
     <Compile Include="IIssue.cs" />
     <Compile Include="IIssueBusiness.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="IUser.cs" />
     <Compile Include="IUserBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleNameConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

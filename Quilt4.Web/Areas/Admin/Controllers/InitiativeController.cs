@@ -90,9 +90,8 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                 return RedirectToAction("Member", new { initiativeId = collection["InitiativeId"] });
             }
 
-            var code = initiative.AddDeveloperRolesInvitation(collection["InviteEmail"]);
-            initiative.ConfirmInvitation(code, collection["InviteEmail"]);
-            _initiativeBusiness.UpdateInitiative(initiative);
+            initiative.AddDeveloperRolesInvitation(collection["InviteEmail"]);
+            _initiativeBusiness.ConfirmInvitation(initiative.Id, collection["InviteEmail"]);
 
             return RedirectToAction("Member", new { initiativeId = collection["InitiativeId"] });
         }
@@ -118,13 +117,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Quilt4.Web.Models.Initiative model)
+        public ActionResult Edit(Web.Models.Initiative model)
         {
             _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
             var initiative = _initiativeBusiness.GetInitiative(model.Id);
-            var code = initiative.AddDeveloperRolesInvitation(model.OwnerDeveloperName);
-            initiative.ConfirmInvitation(code, model.OwnerDeveloperName);
-            _initiativeBusiness.UpdateInitiative(initiative);
+            initiative.AddDeveloperRolesInvitation(model.OwnerDeveloperName);
+            _initiativeBusiness.ConfirmInvitation(model.Id, model.OwnerDeveloperName);
             return RedirectToAction("Index");
         }
     }

@@ -36,7 +36,7 @@ namespace Quilt4.Web.Controllers
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.MongoDBRepository.Entities;
 
@@ -337,15 +338,15 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Initiative").Save(initiative.ToPersist(), WriteConcern.Acknowledged);
         }
 
-        public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
-        {
-            // TODO: Exact same statement in two places
-            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*"
-                || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0
-                || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
-            var initiatives = initiativePersists.Select(x => x.ToEntity()).ToArray();
-            return initiatives;
-        }
+        //public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
+        //{
+        //    // TODO: Exact same statement in two places
+        //    var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*"
+        //        || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0
+        //        || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
+        //    var initiatives = initiativePersists.Select(x => x.ToEntity()).ToArray();
+        //    return initiatives;
+        //}
 
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
@@ -360,11 +361,24 @@ namespace Quilt4.MongoDBRepository
             return applicationGroups;
         }
 
-        public IEnumerable<IInitiative> GetInitiativeHeadsByDeveloper(string developerName)
+        public IEnumerable<IInvitation> GetInvitations(string email)
         {
-            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*"
-                || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0
-                || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
+            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.InviteEMail, email, StringComparison.InvariantCultureIgnoreCase) == 0 && string.Compare(xx.RoleName, RoleNameConstants.Invited, StringComparison.InvariantCultureIgnoreCase) == 0)));
+            var invitations = initiativePersists.Select(x => new Invitation(x.Id,x.Name,x.DeveloperRoles.Single(y => string.Compare(y.InviteEMail, email, StringComparison.InvariantCultureIgnoreCase) == 0).InviteCode)).ToArray();
+            return invitations;
+        }
+
+        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
+        {
+            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => 
+                x.OwnerDeveloperName == "*"
+                || (roleNames.Contains(RoleNameConstants.Owner) && string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                || (x.DeveloperRoles != null 
+                    && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
+                        && string.Compare(xx.InviteEMail, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
+                        && roleNames.Any(z => string.Compare(z, xx.RoleName, StringComparison.InvariantCultureIgnoreCase) == 0))
+                    )
+                );
             var initiatives = initiativePersists.Select(x => x.ToEntityHead()).ToArray();
             return initiatives;
         }
@@ -552,13 +566,14 @@ namespace Quilt4.MongoDBRepository
 
         public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
         {
-            //TODO: Rewrite this to a direct mongodb query
-            var initiatives = GetInitiativesByDeveloper(developerName);
-            var applications = initiatives.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications);
-            var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().ToArray();
-            var sessionPersists = allSessions.Where(x => applications.Any(y => y.Id == x.ApplicationId));
-            var response = sessionPersists.Select(x => x.ToEntity()).ToArray();
-            return response;
+            throw new NotImplementedException();
+            ////TODO: Rewrite this to a direct mongodb query
+            //var initiatives = GetInitiativesByDeveloper(developerName);
+            //var applications = initiatives.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications);
+            //var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().ToArray();
+            //var sessionPersists = allSessions.Where(x => applications.Any(y => y.Id == x.ApplicationId));
+            //var response = sessionPersists.Select(x => x.ToEntity()).ToArray();
+            //return response;
         }
 
         public IEnumerable<ISession> GetSessionsForApplications(Guid initiativeId)

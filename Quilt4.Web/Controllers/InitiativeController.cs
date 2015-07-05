@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
-using Quilt4.Web.Agents;
 using Quilt4.Web.Areas.Admin.Models;
 using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
@@ -40,7 +39,6 @@ namespace Quilt4.Web.Controllers
                 var initiatives = new Initiatives
                 {
                     InitiativeInfos = ins.Select(x => new Initiative { Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName, UniqueIdentifier = x.GetUniqueIdentifier(ins.Select(xx => xx.Name)) }),
-                    //InitiativeInfos = ins.Select(x =>x.ToModel())
                 };
                 return View(initiatives);
             }
@@ -79,6 +77,7 @@ namespace Quilt4.Web.Controllers
                 var acceptlink = string.Empty;
                 var declineLink = string.Empty;
 
+                //TODO: Använd aldrig kod för att hantera olika miljöer. Detta måste göras utan en if-sats.
                 if (root.Equals("http://localhost:54942/"))
                 {
                     acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
@@ -158,7 +157,7 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var currentUser = User.Identity.GetUserName();
 
@@ -253,32 +252,33 @@ namespace Quilt4.Web.Controllers
             return RedirectToAction("Member", "Initiative", new { id = collection["InitiativeId"] });
         }
 
-        public ActionResult ConfirmInvite(string id, string inviteCode)
+        public ActionResult ConfirmInvite(string id)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
+            Guid initiativeId;
+            IInitiative initiative;
+            if (Guid.TryParse(id, out initiativeId))
+            {
+                initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            }
+            else
+            {
+                initiative = _initiativeBusiness.GetInitiativeByInviteCode(id);
+                if (initiative == null)
+                {
+                    ViewBag.ConfirmInviteError = "The invitation has been removed, or perhaps the invite code is wrong.";
+                    return View();
+                }
+            }
 
-            try
-            {
-                initiative.ConfirmInvitation(inviteCode, User.Identity.Name);
-            }
-            catch (NullReferenceException exception)
-            {
-                ViewBag.ConfirmInviteError = "The invitation has been removed, or perhaps the invite code is wrong.";
-                return View();
-            }
-            
-            _initiativeBusiness.UpdateInitiative(initiative);
+            _initiativeBusiness.ConfirmInvitation(initiative.Id, User.Identity.Name);
 
             return View((object)initiative.Name);
         }
 
         [AllowAnonymous]
-        public ActionResult DeclineInvite(string id, string inviteCode)
+        public ActionResult DeclineInvite(string id)
         {
-            var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
-            initiative.DeclineInvitation(inviteCode);
-            _initiativeBusiness.UpdateInitiative(initiative);
-
+            _initiativeBusiness.DeclineInvitation(id);
             return View();
         }
 
@@ -287,7 +287,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiativeNames = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.GetUserName()).Select(x => x.Name).ToList();
+            var initiativeNames = _initiativeBusiness.GetInitiativesByDeveloperOwner(User.Identity.GetUserName()).Select(x => x.Name).ToList();
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(initiativeNames);
 
             return View(initiative); 
@@ -324,7 +324,7 @@ namespace Quilt4.Web.Controllers
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(id));
             var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var model = new Initiative()
             {

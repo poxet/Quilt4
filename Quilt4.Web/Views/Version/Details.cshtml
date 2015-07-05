@@ -67,7 +67,6 @@
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
             <td style="padding: 0 5px;">@Html.ActionLink(@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = session.MachineFingerprint}, null)</td>
 
-
             @*@session.ServerStartTime == null ? @Html.Raw("<td style='padding: 0 5px;'>N/A</td>") : @Html.Raw("<td style='padding: 0 5px;'>" + @session.ServerStartTime + "</td>")
             @session.Environment == null ? @Html.Raw("<td style='padding: 0 5px;'>N/A</td>") : @Html.Raw("<td style='padding: 0 5px;'>" + @session.Environment + "</td>")
             @Model.Users.Single(x => x.Id == session.UserFingerprint).UserName== null ? @Html.Raw("<td style='padding: 0 5px;'>N/A</td>") : @Html.Raw("<td style='padding: 0 5px;'>" + @Model.Users.Single(x => x.Id == session.UserFingerprint).UserName + "</td>")

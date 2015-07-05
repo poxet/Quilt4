@@ -9,9 +9,9 @@ namespace Quilt4.Interface
         void UpdateInitiative(IInitiative initiative);
         void UpdateInitiative(Guid id, string name, string sessionToken, string owner);
 
-        IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName);
+        //IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName);
         IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId);
-        IEnumerable<IInitiative> GetInitiativeHeadsByDeveloper(string developerName);
+        IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames);
         IEnumerable<IInitiative> GetInitiatives();
         IInitiative GetInitiative(Guid initiativeId);
         IInitiative GetInitiativeByClientToken(string clientToken);
@@ -72,5 +72,6 @@ namespace Quilt4.Interface
         IEnumerable<ISession> GetSessionsForUser(string userId);
         //IApplication GetApplicationByApplicationId(Guid applicationId);
         void ArchiveApplicationVersion(string versionId);
+        IEnumerable<IInvitation> GetInvitations(string email);
     }
 }

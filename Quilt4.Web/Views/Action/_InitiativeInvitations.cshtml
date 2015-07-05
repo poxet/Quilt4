@@ -1,0 +1,22 @@
+﻿@model Quilt4.Web.Models.InitiativeInvitationsModel
+
+@{
+    Layout = null;
+}
+
+@if (Model.Invitations.Any())
+{
+    <div>
+        <h2>Pending invitations</h2>
+        <ul>
+            @foreach (var initiative in Model.Invitations)
+            {
+                <li>
+                    @Html.Raw(initiative.InitiativeName ?? Quilt4.Web.Models.Constants.DefaultInitiativeName)
+                    @Html.ActionLink("Accept", "ConfirmInvite", "Initiative", new { id = initiative.InviteCode }, null)
+                    @Html.ActionLink("Decline", "DeclineInvite", "Initiative", new { id = initiative.InviteCode }, null)
+                </li>
+            }
+        </ul>
+    </div>
+}

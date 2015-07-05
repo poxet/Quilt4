@@ -56,6 +56,7 @@
     <Compile Include="ApplicationGroup.cs" />
     <Compile Include="ApplicationVersion.cs" />
     <Compile Include="Developer.cs" />
+    <Compile Include="Invitation.cs" />
     <Compile Include="RandomUtility.cs" />
     <Compile Include="DeveloperRole.cs" />
     <Compile Include="Fingerprint.cs" />

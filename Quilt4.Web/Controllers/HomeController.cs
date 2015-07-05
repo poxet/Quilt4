@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Web.Mvc;
-using System.Reflection;
-using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
+using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Controllers
 {
@@ -17,35 +14,9 @@ namespace Quilt4.Web.Controllers
             _initiativeBusiness = initiativeBusiness;
         }
 
-        public HomeController()
-        {
-            
-        }
-
         public ActionResult Index()
         {
-            //TODO: Create a function in _initiativeBusiness named GetInvitations and takes the username as parameter. That function should return invitations for the user
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
-            //    var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToList();
-
-            //    var initiaivesWithInvites = new List<IInitiative>();
-
-            //    foreach (var initiative in initiatives)
-            //    {
-            //        foreach (var developer in initiative.DeveloperRoles)
-            //        {
-            //            if (developer.RoleName.Equals("Invited") && developer.DeveloperName.Equals(User.Identity.Name))
-            //            {
-            //                initiaivesWithInvites.Add(initiative);
-            //            }
-            //        }
-            //    }
-
-            //    return View(initiaivesWithInvites);
-            //}
-            return View(new List<IInitiative>());
+            return View();
         }
 
         public ActionResult About()
@@ -65,11 +36,11 @@ namespace Quilt4.Web.Controllers
         public ActionResult System()
         {
             ViewBag.Version = Assembly.GetAssembly(typeof(HomeController)).GetName().Version.ToString();
-            ViewBag.Environment = Tharga.Quilt4Net.Information.Environment;
+            ViewBag.Environment = Information.Environment;
             ViewBag.Quilt4SessionStarter = Tharga.Quilt4Net.Session.ClientStartTime.ToLocalTime();
             ViewBag.Quilt4RegisteredOnServer = Tharga.Quilt4Net.Session.RegisteredOnServer;
-            ViewBag.Quilt4HasClientToken = !string.IsNullOrEmpty(Tharga.Quilt4Net.Configuration.ClientToken);
-            ViewBag.Quilt4IsEnabled = Tharga.Quilt4Net.Configuration.Enabled;
+            ViewBag.Quilt4HasClientToken = !string.IsNullOrEmpty(Configuration.ClientToken);
+            ViewBag.Quilt4IsEnabled = Configuration.Enabled;
 
             return View();
         }

@@ -14,3 +14,5 @@
 }
 
 @Html.ActionLink("Create new Initiative", "Create", null, new { @class = "btn btn-default" })
+
+@{ Html.RenderAction("_InitiativeInvitations", "Action"); }

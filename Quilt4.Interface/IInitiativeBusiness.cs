@@ -6,6 +6,7 @@ namespace Quilt4.Interface
     public interface IInitiativeBusiness
     {
         void Create(string developerName, string initiativename);
+        IEnumerable<IInitiativeHead> GetInitiativesByDeveloperOwner(string developerName);
         IEnumerable<IInitiativeHead> GetInitiativesByDeveloper(string developerName);
         IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId);
         IApplication RegisterApplication(IClientToken clientToken, string applicationName, string applicationVersionFingerprint);
@@ -21,7 +22,10 @@ namespace Quilt4.Interface
         void UpdateInitiative(IInitiative initiative);
         void DeleteInitiative(string id);
         void DeleteApplicationVersion(string applicationVersionFingerprint);
-        //IEnumerable<IApplication> GetApplicationsByUser(string userId);
         void ArchiveApplicationVersion(string versionId);
+        IInitiative GetInitiativeByInviteCode(string inviteCode);
+        void ConfirmInvitation(Guid initiativeId, string developerName);
+        void DeclineInvitation(string inviteCode);
+        IEnumerable<IInvitation> GetInvitations(string email);
     }
 }

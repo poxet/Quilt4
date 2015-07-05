@@ -31,11 +31,11 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IInitiative> GetInitiativeHeadsByDeveloper(string developerName)
+        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
         {
             throw new NotImplementedException();
         }
-
+        
         public IEnumerable<IInitiative> GetInitiatives()
         {
             throw new NotImplementedException();
@@ -277,6 +277,11 @@ namespace Quilt4.SQLRepository
         }
 
         public void ArchiveApplicationVersion(string versionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IInvitation> GetInvitations(string email)
         {
             throw new NotImplementedException();
         }

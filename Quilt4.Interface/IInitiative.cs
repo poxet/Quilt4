@@ -11,7 +11,5 @@ namespace Quilt4.Interface
         void RemoveApplicationGroup(IApplicationGroup applicationGroup);
         string AddDeveloperRolesInvitation(string email);
         void RemoveDeveloperRole(string developer);
-        void DeclineInvitation(string inviteCode);
-        void ConfirmInvitation(string inviteCode, string developerName);
     }
 }

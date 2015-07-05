@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
-using IUser = Quilt4.Interface.IUser;
 
 namespace Quilt4.Web.Controllers
 {
@@ -29,18 +26,20 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Version/Details/5
-        public ActionResult Details(string initiativeIdentifier, string application, string version)
+        public ActionResult Details(string id, string application, string version)
         {
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeIdentifier).ToArray();
+            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
             }
 
             if (initiativeId == Guid.Empty)

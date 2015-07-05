@@ -235,6 +235,7 @@
     <Compile Include="Areas\Admin\Controllers\DeveloperController.cs" />
     <Compile Include="Areas\Admin\Controllers\EmailController.cs" />
     <Compile Include="Areas\Admin\Controllers\InitiativeController.cs" />
+    <Compile Include="Controllers\ActionController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\ApplicationUserExtensions.cs" />
     <Compile Include="Controllers\Converter.cs" />
@@ -272,6 +273,8 @@
     <Compile Include="Models\EventLogIndexViewModel.cs" />
     <Compile Include="Models\EventLogItemModel.cs" />
     <Compile Include="Models\EventLogStatusViewModel.cs" />
+    <Compile Include="Models\InitiativeInvitationModel.cs" />
+    <Compile Include="Models\InitiativeInvitationsModel.cs" />
     <Compile Include="Models\Initiative.cs" />
     <Compile Include="Models\CreateInitiative.cs" />
     <Compile Include="Models\Initiatives.cs" />
@@ -415,6 +418,7 @@
     <Content Include="Views\Session\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Help\EventLog.cshtml" />
+    <Content Include="Views\Action\_InitiativeInvitations.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
