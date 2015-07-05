@@ -11,6 +11,8 @@ namespace Quilt4.Web.Agents
 {
     public class EventLogAgent : IEventLogAgent
     {
+        public const string EventLogInitialMessage = "Eventlog works as it should.";
+
         public void ClearAll()
         {
             if (EventLog.SourceExists(Constants.EventSourceName))
@@ -26,11 +28,17 @@ namespace Quilt4.Web.Agents
 
         public IEnumerable<EventLogEntry> GetEventLogData()
         {
-            var myLog = new EventLog(Constants.EventLogName);
-            foreach (EventLogEntry entry in myLog.Entries)
+            var eventLogEntries = new List<EventLogEntry>();
+            try
             {
-                yield return entry;
+                var myLog = new EventLog(Constants.EventLogName);
+                eventLogEntries.AddRange(myLog.Entries.Cast<EventLogEntry>());
             }
+            catch (InvalidOperationException)
+            {
+            }
+
+            return eventLogEntries;
         }
 
         public Exception AssureEventLogSource()
@@ -40,6 +48,7 @@ namespace Quilt4.Web.Agents
                 if (!EventLog.SourceExists(Constants.EventSourceName))
                 {
                     EventLog.CreateEventSource(new EventSourceCreationData(Constants.EventSourceName, Constants.EventLogName));
+                    WriteToEventLog(EventLogInitialMessage, EventLogEntryType.Information);
                 }
                 return null;
             }

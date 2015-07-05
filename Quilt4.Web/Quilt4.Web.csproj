@@ -414,6 +414,7 @@
     <Content Include="Views\Application\ConfirmDeleteVersions.cshtml" />
     <Content Include="Views\Session\Details.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\Help\EventLog.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

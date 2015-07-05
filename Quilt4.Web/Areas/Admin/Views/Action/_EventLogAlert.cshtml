@@ -1,6 +1,6 @@
 ﻿@model Quilt4.Web.Models.EventLogStatusViewModel
 
-@if (@Model.EventLogData.Any() && @User.IsInRole("Admin"))
+@if (@User.IsInRole("Admin") && @Model.EventLogData.Any())
 {
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-red">

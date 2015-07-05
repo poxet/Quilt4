@@ -26,17 +26,18 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Dashboard/Index
         public ActionResult Index()
         {
-            var initiativeCount = _initiativeBusiness.GetInitiativeCount();
-            var applicationCount = _initiativeBusiness.GetApplicationCount();
-            var issueTypeCount = _initiativeBusiness.GetIssueTypeCount();
-            var issueCount = _initiativeBusiness.GetIssueCount();
+            //TODO: Make this faster (Or use InfluxDB to get the data)
+            //var initiativeCount = _initiativeBusiness.GetInitiativeCount();
+            //var applicationCount = _initiativeBusiness.GetApplicationCount();
+            //var issueTypeCount = _initiativeBusiness.GetIssueTypeCount();
+            //var issueCount = _initiativeBusiness.GetIssueCount();
 
             var adminIndexViewModel = new AdminIndexViewModel
             {
-                InitiativeCount = initiativeCount,
-                ApplicationCount = applicationCount,
-                IssueTypeCount = issueTypeCount,
-                IssueCount = issueCount
+                InitiativeCount = -1, //initiativeCount,
+                ApplicationCount = -1, //applicationCount,
+                IssueTypeCount = -1, //issueTypeCount,
+                IssueCount = -1, //issueCount
             };
 
             return View(adminIndexViewModel);
