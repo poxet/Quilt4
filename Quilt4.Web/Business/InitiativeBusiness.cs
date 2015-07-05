@@ -264,15 +264,6 @@ namespace Quilt4.Web.Business
             return _repository.GetIssueStatistics(fromDate, toDate);
         }
 
-        //public IEnumerable<IInvitation> GetInvitationsByEMail(string email)
-        //{
-        //    _repository.GetInvitations()
-        //    //var initiatives = GetHeadsByDeveloper(email, new[] { RoleNameConstants.Invited }).ToArray();
-        //    //initiatives.SelectMany(x => x);
-        //    //var response = initiatives.OrderBy(x => x.Name);
-        //    //return response;
-        //}
-
         public void DeclineInvitation(string inviteCode)
         {
             var initiatives = _repository.GetInitiatives();
@@ -280,6 +271,8 @@ namespace Quilt4.Web.Business
             var item = initiative.DeveloperRoles.FirstOrDefault(x => string.Compare(x.InviteCode, inviteCode, StringComparison.InvariantCultureIgnoreCase) == 0);
             if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation with provided code."));
             item.RoleName = RoleNameConstants.Declined;
+            item.InviteCode = string.Empty;
+
             _repository.UpdateInitiative(initiative);
         }
 
@@ -292,6 +285,7 @@ namespace Quilt4.Web.Business
             item.DeveloperName = developerName;
             item.RoleName = RoleNameConstants.Administrator;
             item.InviteResponseTime = DateTime.Now;
+            item.InviteCode = string.Empty;
 
             _repository.UpdateInitiative(initiative);
         }

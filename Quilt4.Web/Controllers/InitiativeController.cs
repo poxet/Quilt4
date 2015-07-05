@@ -80,13 +80,13 @@ namespace Quilt4.Web.Controllers
                 //TODO: Använd aldrig kod för att hantera olika miljöer. Detta måste göras utan en if-sats.
                 if (root.Equals("http://localhost:54942/"))
                 {
-                    acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
-                    declineLink = root + "Initiative/DeclineInvite?id=" + initiativeid + "&inviteCode=" + code;
+                    acceptlink = root + "Initiative/Accept?id=" + initiativeid + "&inviteCode=" + code;
+                    declineLink = root + "Initiative/Decline?id=" + initiativeid + "&inviteCode=" + code;
                 }
                 else if (root.Equals("http://ci.quilt4.com/"))
                 {
-                    acceptlink = root + "Master/Web/Initiative/ConfirmInvite?id=" + initiativeid + "&inviteCode=" + code;
-                    declineLink = root + "Master/WebInitiative/DeclineInvite?id=" + initiativeid + "&inviteCode=" + code;
+                    acceptlink = root + "Master/Web/Initiative/Accept?id=" + initiativeid + "&inviteCode=" + code;
+                    declineLink = root + "Master/WebInitiative/Decline?id=" + initiativeid + "&inviteCode=" + code;
                 }
                 else
                 {
@@ -207,13 +207,13 @@ namespace Quilt4.Web.Controllers
 
                 if (root.Equals("http://localhost:54942/"))
                 {
-                    acceptlink = root + "Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                    declineLink = root + "Initiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    acceptlink = root + "Initiative/Accept?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    declineLink = root + "Initiative/Decline?id=" + initiativeId + "&inviteCode=" + invitationCode;
                 }
                 else if (root.Equals("http://ci.quilt4.com/"))
                 {
-                    acceptlink = root + "Master/Web/Initiative/ConfirmInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                    declineLink = root + "Master/WebInitiative/DeclineInvite?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    acceptlink = root + "Master/Web/Initiative/Accept?id=" + initiativeId + "&inviteCode=" + invitationCode;
+                    declineLink = root + "Master/WebInitiative/Decline?id=" + initiativeId + "&inviteCode=" + invitationCode;
                 }
                 else
                 {
@@ -252,7 +252,7 @@ namespace Quilt4.Web.Controllers
             return RedirectToAction("Member", "Initiative", new { id = collection["InitiativeId"] });
         }
 
-        public ActionResult ConfirmInvite(string id)
+        public ActionResult Accept(string id)
         {
             Guid initiativeId;
             IInitiative initiative;
@@ -265,7 +265,7 @@ namespace Quilt4.Web.Controllers
                 initiative = _initiativeBusiness.GetInitiativeByInviteCode(id);
                 if (initiative == null)
                 {
-                    ViewBag.ConfirmInviteError = "The invitation has been removed, or perhaps the invite code is wrong.";
+                    ViewBag.AcceptError = "The invitation has been removed, or perhaps the invite code is wrong.";
                     return View();
                 }
             }
@@ -276,7 +276,7 @@ namespace Quilt4.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeclineInvite(string id)
+        public ActionResult Decline(string id)
         {
             _initiativeBusiness.DeclineInvitation(id);
             return View();

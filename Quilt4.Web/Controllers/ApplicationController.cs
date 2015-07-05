@@ -31,8 +31,6 @@ namespace Quilt4.Web.Controllers
         }
 
         public ApplicationModel GenerateApplicationModel(string id, string application, bool showArchivedVersions)
-        // GET: Application/Details/5
-        //public ActionResult Details(string id, string application)
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var developerName = User.Identity.Name;
@@ -118,7 +116,6 @@ namespace Quilt4.Web.Controllers
                 case "Show Archived Versions":
                     var newModel = GenerateApplicationModel(model.Initiative, model.Application, true);
                     return View(newModel);
-                    
                     
                 default : 
                     throw new ArgumentException("Submit button has an invalid value");

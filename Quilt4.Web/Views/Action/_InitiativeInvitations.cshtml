@@ -13,8 +13,8 @@
             {
                 <li>
                     @Html.Raw(initiative.InitiativeName ?? Quilt4.Web.Models.Constants.DefaultInitiativeName)
-                    @Html.ActionLink("Accept", "ConfirmInvite", "Initiative", new { id = initiative.InviteCode }, null)
-                    @Html.ActionLink("Decline", "DeclineInvite", "Initiative", new { id = initiative.InviteCode }, null)
+                    @Html.ActionLink("Accept", "Accept", "Initiative", new { id = initiative.InviteCode }, null)
+                    @Html.ActionLink("Decline", "Decline", "Initiative", new { id = initiative.InviteCode }, null)
                 </li>
             }
         </ul>

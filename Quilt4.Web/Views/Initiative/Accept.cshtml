@@ -1,15 +1,14 @@
-﻿@using Microsoft.Ajax.Utilities
-@model string
+﻿@model string
 
 @{
-    ViewBag.Title = "ConfirmInvite";
+    ViewBag.Title = "Accept Invite";
 }
 
 
-@if (!string.IsNullOrEmpty(ViewBag.ConfirmInviteError))
+@if (!string.IsNullOrEmpty(ViewBag.AcceptError))
 {
     <h2>Confirm Invite Failed</h2>
-    <p>@ViewBag.ConfirmInviteError</p>
+    <p>@ViewBag.AcceptError</p>
 }
 else
 {

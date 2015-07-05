@@ -6,11 +6,9 @@ namespace Quilt4.Interface
     {
         string DeveloperName { get; set; }
         string RoleName { get; set; }
-        string InviteCode { get; }
+        string InviteCode { get; set; }
         string InviteEMail { get; }
         DateTime InviteTime { get; }
         DateTime InviteResponseTime { get; set; }
-        //string InviteMessage { get; } // TODO: Add this property
-
     }
 }
