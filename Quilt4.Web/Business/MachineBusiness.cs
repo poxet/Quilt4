@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.BusinessEntities;
 
 namespace Quilt4.Web.Business
 {
@@ -46,7 +45,6 @@ namespace Quilt4.Web.Business
             var machines = _repository.GetMachinesByApplicationVersions(versionIds).OrderBy(x => x.Name);
             return machines;
         }
-
 
         public IMachine GetMachine(Fingerprint machineFinterprint)
         {

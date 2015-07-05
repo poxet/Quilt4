@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using MongoDB.Bson.Serialization.Attributes;
+using Quilt4.MongoDBRepository.Data;
 
 namespace Quilt4.MongoDBRepository.Entities
 {

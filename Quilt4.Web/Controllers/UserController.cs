@@ -43,7 +43,7 @@ namespace Quilt4.Web.Controllers
             }
 
 
-            var model = new UserModel()
+            var model = new UserViewModel()
             {
                 Sessions = sessions,
                 Machines = machines,

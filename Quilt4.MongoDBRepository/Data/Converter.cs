@@ -6,7 +6,7 @@ using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.MongoDBRepository.Entities;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Data
 {
     internal static class Converter
     {
@@ -149,7 +149,7 @@ namespace Quilt4.MongoDBRepository
 
         public static IToolkitCompatibilities ToEntity(this ToolkitCompabilityPersist item)
         {
-            return new ToolkitCompability(new Version(item.ServerVersion), item.RegisterDate, item.SupportToolkitNameVersion, (ECompatibility)item.Compatibility, null);
+            return new ToolkitCompability(new Version(item.ServerVersion), item.RegisterDate, item.SupportToolkitNameVersion, (Compatibility)item.Compatibility, null);
         }
     }
 }

@@ -102,7 +102,7 @@ namespace Quilt4.Web.Business
                 return value;
 
             var crypto = new Crypto(GetSalt());
-            var result = crypto.EncryptStringAES(value, GetSharedSecret());
+            var result = crypto.EncryptStringAes(value, GetSharedSecret());
             return result;
         }
 

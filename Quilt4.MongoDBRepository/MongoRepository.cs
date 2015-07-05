@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.MongoDBRepository.Data;
 using Quilt4.MongoDBRepository.Entities;
 
 namespace Quilt4.MongoDBRepository
@@ -128,25 +129,6 @@ namespace Quilt4.MongoDBRepository
             return result;
         }
 
-        //public T GetSetting<T>(string name, T defaultValue)
-        //{
-        //    var query = Query.EQ("_id", name);
-        //    var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
-
-        //    T response;
-        //    if (item == null)
-        //    {
-        //        Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() }, WriteConcern.Acknowledged);
-        //        response = defaultValue;
-        //    }
-        //    else
-        //    {
-        //        response = (T)Convert.ChangeType(item.Value, typeof(T));
-        //    }
-
-        //    return response;
-        //}
-
         public IEnumerable<ISetting> GetSettings()
         {
             var items = Database.GetCollection("Setting").FindAllAs<SettingPersist>();
@@ -188,67 +170,14 @@ namespace Quilt4.MongoDBRepository
             return response;
         }
 
-        //public IApplication GetApplicationByApplicationId(Guid applicationId)
-        //{
-        //    var query = Query.EQ("Id", applicationId);
-        //    var response = Database.GetCollection("Initiative").FindOneAs<ApplicationPersist>(query);
-        //    return response.ToEntity();
-        //    //return Database.GetCollection("Initative").FindAllAs<ApplicationPersist>().Where(x => x.Id == applicationId).Select(x => x.ToEntity()).ToArray();
-        //}
-
-
-        //public string DatabaseName 
-        //{
-        //    get
-        //    {
-        //        if (string.IsNullOrEmpty(_databaseName))
-        //        {
-        //            _databaseName = System.Configuration.ConfigurationManager.AppSettings["MongoDbName"];
-        //            if (string.IsNullOrEmpty(_databaseName))
-        //                _databaseName = "Quilt4Net";
-        //        }
-        //        return _databaseName;
-        //    }
-        //    set¨'
-        //    {
-        //        if (!string.IsNullOrEmpty(_databaseName) && _databaseName != value)
-        //            throw new InvalidOperationException("Cannot change database name once it has been set.");
-        //        _databaseName = value;
-        //    }
-        //}
-
-        //public MongoServer Server
-        //{
-        //    get
-        //    {
-        //        if (_server != null)
-        //            return _server;
-
-        //        lock (SyncRoot)
-        //        {
-        //            if (_server == null)
-        //                _server = new MongoServer(new MongoServerSettings {Server = GetMongoServerAddress()});
-        //        }
-        //        return _server;
-        //    }
-        //    set
-        //    {
-        //        if (_server != null)
-        //            throw new InvalidOperationException("Cannot change server once it has been initialized.");
-        //        _server = value;
-        //    }
-        //}
-
         //TODO: Duplicate code
         private MongoDatabase GetDatabaseFromUrl(MongoUrl url)
         {
-            //var client = new MongoClient(url);
             if (url.DatabaseName == null)
             {
                 throw new Exception("No database name specified in connection string");
             }
-            //return client.GetDatabase(,); // WriteConcern defaulted to Acknowledged
-            //return client.GetDatabase()
+
             return new MongoDatabase(new MongoServer(new MongoServerSettings { Server = url.Server }), url.DatabaseName, new MongoDatabaseSettings { });
         }
 
@@ -301,33 +230,6 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection(e.Collection).Save(e.Item, WriteConcern.Acknowledged);
         }
 
-        //private static MongoServerAddress GetMongoServerAddress()
-        //{
-        //    var mongoServerAddress = new MongoServerAddress("localhost", 27017);
-
-        //    var mongoDbServerAddress = ConfigurationManager.AppSettings["MongoDbServerAddress"];
-        //    if (!string.IsNullOrEmpty(mongoDbServerAddress))
-        //    {
-        //        var parts = mongoDbServerAddress.Split(':');
-
-        //        var host = mongoServerAddress.Host;
-        //        var port = mongoServerAddress.Port;
-
-        //        if (parts.Length >= 1) 
-        //            host = parts[0];
-
-        //        if (parts.Length >= 2)
-        //        {
-        //            if (!int.TryParse(parts[1], out port))
-        //                throw new InvalidOperationException("Unable to parse setting MongoDbServerAddress port to integer. (host:port).");
-        //        }
-
-        //        mongoServerAddress = new MongoServerAddress(host, port);
-        //    }
-
-        //    return mongoServerAddress;
-        //}
-
         public void AddInitiative(IInitiative initiative)
         {
             Database.GetCollection("Initiative").Insert(initiative.ToPersist(), WriteConcern.Acknowledged);
@@ -337,16 +239,6 @@ namespace Quilt4.MongoDBRepository
         {
             Database.GetCollection("Initiative").Save(initiative.ToPersist(), WriteConcern.Acknowledged);
         }
-
-        //public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
-        //{
-        //    // TODO: Exact same statement in two places
-        //    var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*"
-        //        || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0
-        //        || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
-        //    var initiatives = initiativePersists.Select(x => x.ToEntity()).ToArray();
-        //    return initiatives;
-        //}
 
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
@@ -638,7 +530,7 @@ namespace Quilt4.MongoDBRepository
             return Database.GetCollection("Machine").FindAllAs<MachinePersist>().Where(x => sessions.Any(y => y.MachineFingerprint == x.Id)).Select(x => x.ToEntity()).ToArray();
         }
 
-        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)
+        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, Compatibility compatibility)
         {
             var serverVersionString = serverVersion.ToString();
 
@@ -650,9 +542,9 @@ namespace Quilt4.MongoDBRepository
                 var toolkitCompabilityPersist = new ToolkitCompabilityPersist { Id = Guid.NewGuid(), ServerVersion = serverVersionString, RegisterDate = registerDate, SupportToolkitNameVersion = supportToolkitNameVersion, Compatibility = (int)compatibility };
                 toolkitCompability.Insert(toolkitCompabilityPersist, WriteConcern.Acknowledged);
             }
-            else if ((ECompatibility)item.Compatibility != compatibility)
+            else if ((Compatibility)item.Compatibility != compatibility)
             {
-                item.Compatibility = (int)ECompatibility.Inconclusive;
+                item.Compatibility = (int)Compatibility.Inconclusive;
                 item.RegisterDate = registerDate;
                 toolkitCompability.Save(item, WriteConcern.Acknowledged);
             }
@@ -681,11 +573,14 @@ namespace Quilt4.MongoDBRepository
                 if (item == null)
                 {
                     var lastUsedWithThisService = lastUsed > firstRegisterDate ? lastUsed : (DateTime?)null;
-                    item = new ToolkitCompability(version, null, supportToolkitNameVersion.Key, ECompatibility.Unknown, lastUsedWithThisService);
+                    item = new ToolkitCompability(version, null, supportToolkitNameVersion.Key, Compatibility.Unknown, lastUsedWithThisService);
                     toolkitCompabilities.Add(item);
                 }
                 else
-                    item.LastUsed = lastUsed;
+                {
+                    //TODO: Send information on when this toolkit was last userd to the repository
+                    //item.LastUsed = lastUsed;
+                }
             }
 
             return toolkitCompabilities;

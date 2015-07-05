@@ -117,7 +117,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Web.Models.Initiative model)
+        public ActionResult Edit(Web.Models.InitiativeViewModel model)
         {
             _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
             var initiative = _initiativeBusiness.GetInitiative(model.Id);

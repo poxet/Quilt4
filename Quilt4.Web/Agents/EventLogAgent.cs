@@ -58,7 +58,7 @@ namespace Quilt4.Web.Agents
             }
         }
 
-        public void WriteToEventLog(string message, EventLogEntryType eventLogEntryType)
+        private void WriteToEventLog(string message, EventLogEntryType eventLogEntryType)
         {
             AssureEventLogSource();
 

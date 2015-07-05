@@ -21,11 +21,6 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
             throw new NotImplementedException();
@@ -35,7 +30,7 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
-        
+
         public IEnumerable<IInitiative> GetInitiatives()
         {
             throw new NotImplementedException();
@@ -67,6 +62,11 @@ namespace Quilt4.SQLRepository
         }
 
         public IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
         {
             throw new NotImplementedException();
         }
@@ -181,7 +181,12 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)
+        public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, Compatibility compatibility)
         {
             throw new NotImplementedException();
         }
@@ -282,22 +287,6 @@ namespace Quilt4.SQLRepository
         }
 
         public IEnumerable<IInvitation> GetInvitations(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public IApplication GetApplicationByApplicationId(Guid applicationId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-
-        public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
         {
             throw new NotImplementedException();
         }

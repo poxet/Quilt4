@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Agents;
-using Quilt4.Web.BusinessEntities;
 using Quilt4.Web.Controllers.WebAPI;
 using Tharga.Quilt4Net.DataTransfer;
 
@@ -13,7 +11,7 @@ namespace Quilt4.Web.Business
 {
     public class SessionBusiness : ISessionBusiness
     {
-        internal int ThreadTestDelay;
+        //internal int ThreadTestDelay;
         private readonly IRepository _repository;
         private readonly IMembershipAgent _membershipAgent;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
@@ -40,7 +38,7 @@ namespace Quilt4.Web.Business
                 mutex.WaitOne();
 
                 var existingSession = _repository.GetSession(session.Id);
-                Thread.Sleep(ThreadTestDelay);
+                //Thread.Sleep(ThreadTestDelay);
                 if (existingSession == null)
                     _repository.AddSession(session);
                 else

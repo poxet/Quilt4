@@ -8,7 +8,6 @@ using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Areas.Admin.Models;
-using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
 
@@ -36,9 +35,9 @@ namespace Quilt4.Web.Controllers
                 var developerName = User.Identity.Name;
                 var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
-                var initiatives = new Initiatives
+                var initiatives = new InitiativesViewModel
                 {
-                    InitiativeInfos = ins.Select(x => new Initiative { Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName, UniqueIdentifier = x.GetUniqueIdentifier(ins.Select(xx => xx.Name)) }),
+                    InitiativeInfos = ins.Select(x => new InitiativeViewModel { Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName, UniqueIdentifier = x.GetUniqueIdentifier(ins.Select(xx => xx.Name)) }),
                 };
                 return View(initiatives);
             }
@@ -301,7 +300,7 @@ namespace Quilt4.Web.Controllers
 
         // POST: Initiative/Create
         [HttpPost]
-        public ActionResult Create(CreateInitiative createInitiative)
+        public ActionResult Create(CreateInitiativeViewModel createInitiative)
         {
             try
             {
@@ -326,7 +325,7 @@ namespace Quilt4.Web.Controllers
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
-            var model = new Initiative()
+            var model = new InitiativeViewModel()
             {
                 Id = initiative.Id,
                 Name = initiative.Name,

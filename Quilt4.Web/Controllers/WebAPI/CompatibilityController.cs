@@ -17,7 +17,6 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // GET api/compatibility/register
         [HttpPost]
-        //[ActionName("register")]
         [Route("api/compatibility/register")]
         [AllowAnonymous]
         public void RegisterCompatibility([FromBody] RegisterCompatibilityRequest request)
@@ -25,7 +24,7 @@ namespace Quilt4.Web.Controllers.WebAPI
             if (string.IsNullOrEmpty(request.SupportToolkitNameVersion)) throw new ArgumentNullException("request", "No SupportToolkitNameVersion provided.");
 
             var version = Assembly.GetAssembly(typeof(HomeController)).GetName().Version;
-            _compatibilityBusiness.RegisterToolkitCompability(version, DateTime.UtcNow, request.SupportToolkitNameVersion, request.Compatible ? ECompatibility.Compable : ECompatibility.Incompatible);
+            _compatibilityBusiness.RegisterToolkitCompability(version, DateTime.UtcNow, request.SupportToolkitNameVersion, request.Compatible ? Compatibility.Compable : Compatibility.Incompatible);
         }
     }
 }

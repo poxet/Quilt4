@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.BusinessEntities;
 
 namespace Quilt4.Web.Business
 {
-    public class SystemBusiness
+    public class SystemBusiness : ISystemBusiness
     {
-        private IRepository _repository;
+        private readonly IRepository _repository;
 
         public SystemBusiness(IRepository repository)
         {
             _repository = repository;
         }
 
-        public DataBaseInfo GetDataBaseStatus()
+        public IDataBaseInfo GetDataBaseStatus()
         {
             var dbInfo = _repository.GetDatabaseStatus();
 
-            var newDbInfo = new DataBaseInfo();
-
-            newDbInfo.Online = dbInfo.Online;
-            newDbInfo.Name = dbInfo.Name;
-            newDbInfo.Server = dbInfo.Server;
+            var newDbInfo = new DataBaseInfo
+            {
+                Online = dbInfo.Online,
+                Name = dbInfo.Name,
+                Server = dbInfo.Server
+            };
 
             return newDbInfo;
         }

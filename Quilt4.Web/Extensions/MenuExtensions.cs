@@ -1,26 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Mvc.Html;
+using Quilt4.BusinessEntities;
 
 namespace Quilt4.Web
 {
-    public class Link
-    {
-        public string Text { get; private set; }
-        public string Action { get; private set; }
-        public string Controller { get; private set; }
-
-        public Link(string text, string action, string controller)
-        {
-            Text = text;
-            Action = action;
-            Controller = controller;
-        }
-    }
-
     public static class MenuExtensions
     {
         public static MvcHtmlString MenuItem(
@@ -47,8 +31,6 @@ namespace Quilt4.Web
             a.InnerHtml = "<a href=\"" + urlHelper.Action(action, controller) + "\" " + (active ? "class=\"active\"" : "") + "><i class=\"" + iconClass + "\"></i> " + text + "</a>";
             return MvcHtmlString.Create(a.ToString());
         }
-
-        
 
         public static MvcHtmlString MenuItem(
             this HtmlHelper<dynamic> htmlHelper,
@@ -92,8 +74,5 @@ namespace Quilt4.Web
 
             return MvcHtmlString.Create(a.ToString());
         }
-
-        
-
     }
 }

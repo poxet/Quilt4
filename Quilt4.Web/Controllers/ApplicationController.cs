@@ -7,7 +7,6 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -53,7 +52,7 @@ namespace Quilt4.Web.Controllers
                 InitiativeUniqueIdentifier = initiative.UniqueIdentifier,
                 Application = application,
 
-                Versions = versions.Select(x => new VersionModel
+                Versions = versions.Select(x => new VersionViewModel
                 {
                     Version = x.Version,
                     VersionId = x.Id,
@@ -74,7 +73,7 @@ namespace Quilt4.Web.Controllers
             if (showArchivedVersions)
             {
                 model.ShowArchivedVersions = true;
-                model.ArchivedVersions = archivedVersions.Select(x => new VersionModel
+                model.ArchivedVersions = archivedVersions.Select(x => new VersionViewModel
                 {
                     Version = x.Version,
                     VersionId = x.Id,
@@ -123,7 +122,7 @@ namespace Quilt4.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ArchiveVersions(List<VersionModel> model)
+        public ActionResult ArchiveVersions(List<VersionViewModel> model)
         {
             foreach (var version in model)
             {
@@ -134,7 +133,7 @@ namespace Quilt4.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteVersions(List<VersionModel> model)
+        public ActionResult DeleteVersions(List<VersionViewModel> model)
         {
             foreach (var version in model)
             {

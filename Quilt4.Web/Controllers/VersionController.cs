@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
-using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -54,7 +53,7 @@ namespace Quilt4.Web.Controllers
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
 
-            var issue = new IssueModel
+            var issue = new IssueViewModel
             {
                 InitiativeId = initiativeId.ToString(),
                 InitiativeName = initiative.Name,

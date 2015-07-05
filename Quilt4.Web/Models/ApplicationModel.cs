@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Web.Mvc;
 
 namespace Quilt4.Web.Models
 {
@@ -9,8 +8,8 @@ namespace Quilt4.Web.Models
         public string InitiativeName { get; set; }
         public string InitiativeUniqueIdentifier { get; set; }
         public string Application { get; set; }
-        public List<VersionModel> Versions { get; set; }
+        public List<VersionViewModel> Versions { get; set; }
         public bool ShowArchivedVersions { get; set; }
-        public List<VersionModel> ArchivedVersions { get; set; }
+        public List<VersionViewModel> ArchivedVersions { get; set; }
     }
 }

@@ -4,7 +4,6 @@ using System.Web.Script.Serialization;
 using Quilt4.Interface;
 using Tharga.Quilt4Net;
 using Tharga.Quilt4Net.DataTransfer;
-using Tharga.Quilt4Net.Web;
 
 namespace Quilt4.Web.Controllers.WebAPI
 {
@@ -21,7 +20,6 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // GET api/session/register
         [HttpPost]
-        //[ActionName("register")]
         [Route("api/session/register")]
         [AllowAnonymous]
         public void RegisterSession([FromBody] object request)
@@ -69,7 +67,6 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // GET api/session/end
         [HttpPost]
-        //[ActionName("end")]
         [Route("api/session/end")]
         [AllowAnonymous]
         public void EndSession([FromBody]object sessionId)

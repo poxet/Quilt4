@@ -10,12 +10,12 @@ namespace Quilt4.Web.Areas.Admin.Controllers
     [RouteArea("Admin")]
     public class DashboardController : Controller
     {
-        private readonly SystemBusiness _systemBusiness;
+        private readonly ISystemBusiness _systemBusiness;
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
         private readonly IEventLogAgent _eventLogAgent;
 
-        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IEventLogAgent eventLogAgent)
+        public DashboardController(ISystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IEventLogAgent eventLogAgent)
         {
             _systemBusiness = systemBusiness;
             _initiativeBusiness = initiativeBusiness;

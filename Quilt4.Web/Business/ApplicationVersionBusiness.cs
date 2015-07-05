@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Tharga.Quilt4Net;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Business
 {
@@ -21,7 +22,6 @@ namespace Quilt4.Web.Business
             var response = _repository.GetApplicationVersions(applicationId);
             return response;
         }
-
 
         public IFingerprint AssureApplicationFingerprint(string applicationFingerprint, string version, string supportToolkitNameVersion, DateTime? buildTime, string applicationName, string clientToken)
         {
@@ -64,7 +64,7 @@ namespace Quilt4.Web.Business
                 applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime);
                 _repository.AddApplicationVersion(applicationVersion);
             }
-            catch (System.Data.SqlClient.SqlException)
+            catch (SqlException)
             {
                 applicationVersion = RegisterApplicationVersionEx((Fingerprint)applicationVersionFingerprint, applicationId);
                 if (applicationVersion == null)
@@ -87,23 +87,11 @@ namespace Quilt4.Web.Business
 
         public IApplicationVersion GetApplicationVersion(string initiativeId, string applicationId, string applicationVersionUniqueIdentifier)
         {
-            //var initiative = _repository.GetInitiative(Guid.Parse(initiativeId));
-            //var application = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == Guid.Parse(applicationId));
-
-            //var applicationIds = applications.Select(x => x.Id);
-            //var applicationIds = new List<Guid>();
-            //foreach (var application in applications)
-            //{
-            //    applicationIds.Add(application.Id);
-            //}
-
             var applicationVersions = _repository.GetApplicationVersionsForApplications(new List<Guid>(){Guid.Parse(applicationId)}).ToArray();
-            
-
-            var applicationVersionId = "";
+            var applicationVersionId = string.Empty;
 
             //Try the name as identifier
-            var verionNames = applicationVersions.Where(x => (x.Version ?? Models.Constants.DefaultVersionName) == applicationVersionUniqueIdentifier).ToArray();
+            var verionNames = applicationVersions.Where(x => (x.Version ?? Constants.DefaultVersionName) == applicationVersionUniqueIdentifier).ToArray();
             if (verionNames.Count() == 1)
                 applicationVersionId = verionNames.Single().Id;
 
@@ -157,10 +145,5 @@ namespace Quilt4.Web.Business
         {
             return _repository.GetApplicationVersionsForMachine(machineId);
         }
-
-        //public IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> initiative)
-        //{
-        //    return _repository.GetApplicationVersionsForApplications(initiative);
-        //}
     }
 }

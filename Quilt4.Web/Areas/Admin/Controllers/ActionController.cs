@@ -49,8 +49,9 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                     var eventLogEntries = _eventLogAgent.GetEventLogData().Where(x => x.EntryType == EventLogEntryType.Error && x.TimeGenerated > lastRead);
                     eventLogData = eventLogEntries.OrderByDescending(x => x.TimeGenerated).Select(x => new EventLogItemModel { EntryType = x.EntryType, Icon = EventLogController.GetIcon(x.EntryType), Message = x.Message, TimeGenerated = x.TimeGenerated, Source = x.Source }).ToList();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    Debug.WriteLine(exception.Message);
                 }
             }
 

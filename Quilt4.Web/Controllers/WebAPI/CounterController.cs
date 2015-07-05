@@ -4,7 +4,6 @@ using System.Web.Script.Serialization;
 using Quilt4.Interface;
 using Tharga.Quilt4Net;
 using Tharga.Quilt4Net.DataTransfer;
-using Tharga.Quilt4Net.Web;
 
 namespace Quilt4.Web.Controllers.WebAPI
 {
@@ -21,7 +20,6 @@ namespace Quilt4.Web.Controllers.WebAPI
 
         // POST api/counter/register
         [HttpPost]
-        //[ActionName("register")]
         [Route("api/counter/register")]
         [AllowAnonymous]
         public RegisterCounterResponse RegisterCounter([FromBody] object request)

@@ -4,28 +4,14 @@ using System.Linq;
 using System.Threading;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Agents;
-using Quilt4.Web.BusinessEntities;
 using Quilt4.Web.Controllers.WebAPI;
 using Tharga.Quilt4Net;
 using Tharga.Quilt4Net.DataTransfer;
+using Issue = Quilt4.BusinessEntities.Issue;
+using IssueType = Tharga.Quilt4Net.DataTransfer.IssueType;
 
 namespace Quilt4.Web.Business
 {
-    public class LogResponse : ILogResponse
-    {
-        public LogResponse(string issueInstanceTicket, string issueTypeTicket, string responseMessage)
-        {
-            IssueInstanceTicket = issueInstanceTicket;
-            IssueTypeTicket = issueTypeTicket;
-            ResponseMessage = responseMessage;
-        }
-
-        public string IssueInstanceTicket { get; private set; }
-        public string IssueTypeTicket { get; private set; }
-        public string ResponseMessage { get; private set; }
-    }
-
     public class IssueBusiness : IIssueBusiness
     {
         private readonly IMembershipAgent _membershipAgent;
@@ -51,6 +37,7 @@ namespace Quilt4.Web.Business
 
         public ILogResponse RegisterIssue(Exception exception, IssueLevel issueLevel)
         {
+            throw new NotImplementedException();
             //TODO: Register internal issues in quilt4, using quilt4
             //var registerIssueRequest = new RegisterIssueRequest
             //{
@@ -179,7 +166,7 @@ namespace Quilt4.Web.Business
                 var lastIssueTicket = issues.Any() ? issues.Max(x => x.Ticket) : 0;
                 issueTicket = lastIssueTicket + 1;
 
-                var issue = new Quilt4.BusinessEntities.Issue(request.Id, request.ClientTime, DateTime.UtcNow, request.VisibleToUser, request.Data, request.IssueThreadGuid, request.UserHandle, request.UserInput, issueTicket, session.Id);
+                var issue = new Issue(request.Id, request.ClientTime, DateTime.UtcNow, request.VisibleToUser, request.Data, request.IssueThreadGuid, request.UserHandle, request.UserInput, issueTicket, session.Id);
                 issueType.Add(issue);
 
                 UpdateApplicationVersion(applicationVersion);
@@ -247,7 +234,7 @@ namespace Quilt4.Web.Business
             return ud;
         }
 
-        private IInnerIssueType ToInnerIssueType(Tharga.Quilt4Net.DataTransfer.IssueType issueType)
+        private IInnerIssueType ToInnerIssueType(IssueType issueType)
         {
             if (issueType == null)
                 return null;
