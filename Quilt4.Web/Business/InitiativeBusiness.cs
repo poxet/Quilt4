@@ -57,10 +57,9 @@ namespace Quilt4.Web.Business
         {
             var initiative = _repository.GetInitiative(Guid.Parse(initiativeid));
 
-            var relativeAcceptLink = "/Initiative/Accept?id=" + initiativeid + "&inviteCode=" + code;
-            var relativeDeclineLink = "/Initiative/Decline?id=" + initiativeid + "&inviteCode=" + code;
-            var acceptLink = url.GetLeftPart(UriPartial.Authority) + relativeAcceptLink;
-            var declineLink = url.GetLeftPart(UriPartial.Authority) + relativeDeclineLink;
+            var route = url.AbsolutePath.Replace("ResendInvite", "");
+            var acceptLink = url.GetLeftPart(UriPartial.Authority) + route + "Accept?id=" + initiativeid + "&inviteCode=" + code;
+            var declineLink = url.GetLeftPart(UriPartial.Authority) + route + "Decline?id=" + initiativeid + "&inviteCode=" + code;
 
             if(!message.Equals(string.Empty)) { return initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/> Message: " + message + "<br/><br/><a href='" + acceptLink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>"; }
             return initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/><a href='" + acceptLink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
