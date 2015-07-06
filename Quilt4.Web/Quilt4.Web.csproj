@@ -430,6 +430,7 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Help\EventLog.cshtml" />
     <Content Include="Views\Action\_InitiativeInvitations.cshtml" />
+    <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

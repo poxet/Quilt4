@@ -1,13 +1,12 @@
-﻿@model  List<Quilt4.Web.Models.VersionModel>
+﻿@model System.Collections.Generic.List<Quilt4.Web.Models.VersionViewModel>
 
 @{
     ViewBag.Title = "Confirm Archive Versions";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ConfirmArchiveVersions</h2>
+<h2>Archive Versions</h2>
 <p>Are you sure you want to archive the following versions:</p>
-
 @using (Html.BeginForm("ArchiveVersions", "Application"))
 {
     <ul>
@@ -20,8 +19,7 @@
             <li>@Model[i].Version</li>
         }
     </ul>
-    
+
     <input type="submit" value="Archive" />
     @Html.ActionLink("Cancel", "Details", "Application", new { id = Model.First().InitiativeIdentifier, application = Model.First().ApplicationIdentifier }, null)
 }
-
