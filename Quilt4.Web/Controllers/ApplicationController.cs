@@ -197,7 +197,7 @@ namespace Quilt4.Web.Controllers
 
         // POST: Application/Edit/5
         [HttpPost]
-        public ActionResult Edit(ApplicationPropetiesModel model)
+        public ActionResult Edit(ApplicationPropetiesModel model, FormCollection collection)
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), model.InitiativeId);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));

@@ -24,28 +24,28 @@
             {
                 <tr>
                     <td>Dev color</td>
-                    <td>@Html.TextBoxFor(m => m.DevColor)</td>
+                    <td><input style="width: 30px; height: 30px;" type="color" value="@Model.DevColor" id="DevColor" name="DevColor"/></td>
                 </tr>
             }
             else if (env.Equals("CI"))
             {
                 <tr>
                     <td>CI color</td>
-                    <td>@Html.TextBoxFor(m => m.CiColor)</td>
+                    <td><input style="width: 30px; height: 30px;" type="color" value="@Model.CiColor" id="CiColor" name="CiColor" /></td>
                 </tr>
             }
             else if (env.Equals("Prod"))
             {
                 <tr>
                     <td>Prod color</td>
-                    <td>@Html.TextBoxFor(m => m.ProdColor)</td>
+                    <td><input style="width: 30px; height: 30px;" type="color" value="@Model.ProdColor" id="ProdColor" name="ProdColor" /></td>
                 </tr>
             }
             else
             {
-                <tr>
+                @*<tr>
                     <td>Something went wrong</td>
-                </tr>
+                </tr>*@
             }
         }
         
