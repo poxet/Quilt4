@@ -11,5 +11,8 @@ namespace Quilt4.Web.Models
         public List<VersionViewModel> Versions { get; set; }
         public bool ShowArchivedVersions { get; set; }
         public List<VersionViewModel> ArchivedVersions { get; set; }
+        public string DevColor { get; set; }
+        public string CiColor { get; set; }
+        public string ProdColor { get; set; }
     }
 }

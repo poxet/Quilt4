@@ -33,7 +33,8 @@ namespace Quilt4.Web.Controllers
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
-            var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
+            var applicationId = app.Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
             var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
@@ -48,6 +49,9 @@ namespace Quilt4.Web.Controllers
                 InitiativeName = initiative.Name,
                 InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)), //initiative.UniqueIdentifier,
                 Application = application,
+                DevColor = app.DevColor,
+                CiColor = app.CiColor,
+                ProdColor = app.ProdColor,
 
                 Versions = versions.Select(x => new VersionViewModel
                 {
