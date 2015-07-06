@@ -56,11 +56,7 @@ namespace Quilt4.Web.Business
         public string GenerateInviteMessage(string initiativeid, string code, string message, Uri url)
         {
             var initiative = _repository.GetInitiative(Guid.Parse(initiativeid));
-            var route = string.Empty;
-
-            if (url.AbsolutePath.EndsWith("ResendInvite")) { route = url.AbsolutePath.Replace("ResendInvite", ""); }
-            else if(url.AbsolutePath.EndsWith("Invite")) { route = url.AbsolutePath.Replace("Invite", ""); }
-            else { throw new ArgumentException("Invite message not generated in \"ResendInvite\" or \"Invite\" method"); }
+            var route = url.AbsolutePath.Replace(url.Segments.Last(), "");
 
             var acceptLink = url.GetLeftPart(UriPartial.Authority) + route + "Accept?id=" + initiativeid + "&inviteCode=" + code;
             var declineLink = url.GetLeftPart(UriPartial.Authority) + route + "Decline?id=" + initiativeid + "&inviteCode=" + code;
