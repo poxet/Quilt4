@@ -106,6 +106,7 @@ namespace Quilt4.Web.Controllers
             }
 
             var model = GenerateApplicationModel(initiativeId.ToString(), application, false);
+            model.InitiativeUniqueIdentifier = initiativeUniqueIdentifier;
 
             return View(model);
         }
