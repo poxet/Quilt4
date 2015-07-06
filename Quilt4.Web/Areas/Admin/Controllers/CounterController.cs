@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using Quilt4.Interface;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
@@ -31,9 +34,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         public ActionResult Reset(FormCollection collection)
         {
             _counterBusiness.ClearSessionCounters();
-
-            var sessions = _sessionBusiness.GetSessions();
-            _counterBusiness.UpdateSessionCounters(sessions);
+            _counterBusiness.UpdateSessionCounters();
 
             return View();
         }

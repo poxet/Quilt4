@@ -40,7 +40,9 @@ namespace Quilt4.Web.Agents
 
         public async Task ClearAsync(string counterName)
         {
-            await _influxDb.DeleteSeriesAsync(_influxDbSetting.DatabaseName, counterName);
+            //TODO:
+            //await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "DELETE FROM \"" + counterName + "\"", TimeUnit.Seconds);
+            //await _influxDb.DeleteSeriesAsync(_influxDbSetting.DatabaseName, counterName);
         }
 
         public async Task<ISerie> QueryLastAsync(string counterName)
@@ -62,7 +64,6 @@ namespace Quilt4.Web.Agents
         {
             var list = new List<ISerie>();
             var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "select * from " + counterName + "", TimeUnit.Seconds);
-            //var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "SELECT * FROM \"" + counterName + "\" LIMIT 1", TimeUnit.Seconds);
             foreach (var serie in response)
             {
                 var data = new Dictionary<string, object>();

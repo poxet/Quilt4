@@ -12,7 +12,18 @@ namespace Quilt4.Web
             if (string.Compare(Clean(item.Message), Clean(issueType.Message), StringComparison.InvariantCultureIgnoreCase) != 0) return false;
             if (string.Compare(Clean(item.StackTrace), Clean(issueType.StackTrace), StringComparison.InvariantCultureIgnoreCase) != 0) return false;
             if (item.IssueLevel.ToIssueLevel() != issueType.IssueLevel) return false;
-            if (!item.Inner.AreEqual((Quilt4.BusinessEntities.IssueType)issueType.Inner)) return false;
+            if (!item.Inner.AreEqual(issueType.Inner)) return false;
+            return true;
+        }
+
+        public static bool AreEqual(this Tharga.Quilt4Net.DataTransfer.IssueType item, IInnerIssueType issueType)
+        {
+            if (item == null && issueType == null) return true;
+            if (item.ExceptionTypeName != issueType.ExceptionTypeName) return false;
+            if (string.Compare(Clean(item.Message), Clean(issueType.Message), StringComparison.InvariantCultureIgnoreCase) != 0) return false;
+            if (string.Compare(Clean(item.StackTrace), Clean(issueType.StackTrace), StringComparison.InvariantCultureIgnoreCase) != 0) return false;
+            if (item.IssueLevel != issueType.IssueLevel) return false;
+            if (!item.Inner.AreEqual(issueType.Inner)) return false;
             return true;
         }
 

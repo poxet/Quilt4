@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Quilt4.Interface;
 using Quilt4.Web.BusinessEntities;
@@ -153,7 +154,7 @@ namespace Quilt4.Web.Business
         public void ClearSessionCounters()
         {
             //TODO:
-            //Clear("Session");
+            Clear("Session");
         }
 
         public DateTime GetLastSessionCounterTime()
@@ -167,43 +168,57 @@ namespace Quilt4.Web.Business
             return lastTime;
         }
 
-        public void UpdateSessionCounters(IEnumerable<ISession> sessions)
+        public void UpdateSessionCounters()
         {
-            //TODO: Lock this update with mutex
-            //TODO: Also filter out points that has already been registered to the service
-            var last = GetLastSessionCounterTime();
+            Task.Factory.StartNew(UpdateSessionCountersEx);
+        }
 
-            var ss = sessions as ISession[] ?? sessions.ToArray();
-            var startTimes = ss.Select(x => x.ServerStartTime);
-            var endTimes = ss.Select(x => x.ServerEndTimeCalculated()).OrderBy(x => x);
-            //var timePoints = startTimes.Union(endTimes).Where(x => x > last && x <= DateTime.UtcNow).OrderBy(x => x).ToArray();
-            var timePoints = startTimes.Union(endTimes).Where(x => (x - last).TotalSeconds >= 1 && x <= DateTime.UtcNow).OrderBy(x => x).ToArray();
-
-            var datas = new List<Dictionary<string, object>>();
-            foreach (var timePoint in timePoints)
+        private void UpdateSessionCountersEx()
+        {
+            var mutex = new Mutex(false, "UpdateSessionCounters");
+            try
             {
-                var inSpanSessions = ss.Where(x => x.ServerStartTime <= timePoint && (x.ServerEndTime ?? x.ServerStartTime.AddMinutes(15)) >= timePoint).ToArray();
-                var time = timePoint.ToInfluxTime();
-                foreach (var avSessions in inSpanSessions.GroupBy(x => new { x.ApplicationId, x.ApplicationVersionId, x.Environment, x.MachineFingerprint, x.CallerIp, x.UserFingerprint }))
+                mutex.WaitOne();
+
+                //TODO: Lock this update with mutex
+                var last = GetLastSessionCounterTime();
+                var sessions = _repository.GetSessions().Where(x => x.ServerStartTime >= last || x.ServerEndTimeCalculated() >= last).ToArray();
+
+                var startTimes = sessions.Select(x => x.ServerStartTime);
+                var endTimes = sessions.Select(x => x.ServerEndTimeCalculated()).OrderBy(x => x);
+                var timePoints = startTimes.Union(endTimes).Where(x => (x - last).TotalSeconds >= 1 && x <= DateTime.UtcNow).OrderBy(x => x).ToArray();
+
+                var datas = new List<Dictionary<string, object>>();
+                foreach (var timePoint in timePoints)
                 {
-                    var count = avSessions.Count(x => x.ServerStartTime <= timePoint && (x.ServerEndTime ?? x.ServerStartTime.AddMinutes(15)) > timePoint);
-                    var data = new Dictionary<string, object>
+                    var inSpanSessions = sessions.Where(x => x.ServerStartTime <= timePoint && (x.ServerEndTime ?? x.ServerStartTime.AddMinutes(15)) >= timePoint).ToArray();
+                    var time = timePoint.ToInfluxTime();
+                    foreach (var avSessions in inSpanSessions.GroupBy(x => new { x.ApplicationId, x.ApplicationVersionId, x.Environment, x.MachineFingerprint, x.CallerIp, x.UserFingerprint }))
                     {
-                        { "time", time },
-                        { "ApplicationId", avSessions.Key.ApplicationId },
-                        { "ApplicationVersionId", avSessions.Key.ApplicationVersionId },
-                        { "Environment", avSessions.Key.Environment },
-                        { "MachineFingerprint", avSessions.Key.MachineFingerprint },
-                        { "CallerIp", avSessions.Key.CallerIp },
-                        { "UserFingerprint", avSessions.Key.UserFingerprint },
-                        { "Total", count },
-                    };
+                        var count = avSessions.Count(x => x.ServerStartTime <= timePoint && (x.ServerEndTime ?? x.ServerStartTime.AddMinutes(15)) > timePoint);
+                        var data = new Dictionary<string, object>
+                        {
+                            { "time", time },
+                            { "ApplicationId", avSessions.Key.ApplicationId },
+                            { "ApplicationVersionId", avSessions.Key.ApplicationVersionId },
+                            { "Environment", avSessions.Key.Environment },
+                            { "MachineFingerprint", avSessions.Key.MachineFingerprint },
+                            { "CallerIp", avSessions.Key.CallerIp },
+                            { "UserFingerprint", avSessions.Key.UserFingerprint },
+                            { "Total", count },
+                        };
 
-                    datas.Add(data);
+                        datas.Add(data);
+                    }
+                    Register("Session", datas.ToArray());
+                    datas.Clear();
                 }
-            }
 
-            Register("Session", datas.ToArray());
+            }
+            finally
+            {
+                mutex.ReleaseMutex();
+            }
         }
 
         //public void RegisterMachine(IMachine machine)

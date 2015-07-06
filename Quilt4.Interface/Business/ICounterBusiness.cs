@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Quilt4.Interface
 {
@@ -7,6 +6,6 @@ namespace Quilt4.Interface
     {
         void ClearSessionCounters();
         DateTime GetLastSessionCounterTime();
-        void UpdateSessionCounters(IEnumerable<ISession> sessions);
+        void UpdateSessionCounters();
     }
 }

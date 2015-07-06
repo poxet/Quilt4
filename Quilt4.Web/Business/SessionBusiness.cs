@@ -44,8 +44,7 @@ namespace Quilt4.Web.Business
                 if (existingSession == null)
                 {
                     _repository.AddSession(session);
-
-                    UpdateSessionCounter();
+                    _coutnerBusiness.UpdateSessionCounters();
                 }
                 else
                 {
@@ -67,17 +66,18 @@ namespace Quilt4.Web.Business
             }
         }
 
-        private void UpdateSessionCounter()
-        {
-            var lastCounterTime = _coutnerBusiness.GetLastSessionCounterTime();
-            var sessionsInPlay = _repository.GetSessions().Where(x => x.ServerStartTime >= lastCounterTime || x.ServerEndTimeCalculated() >= lastCounterTime).ToArray();
-            _coutnerBusiness.UpdateSessionCounters(sessionsInPlay);
-        }
+        //private void UpdateSessionCounter()
+        //{
+        //    //var lastCounterTime = _coutnerBusiness.GetLastSessionCounterTime();
+        //    //var sessionsInPlay = _repository.GetSessions().Where(x => x.ServerStartTime >= lastCounterTime || x.ServerEndTimeCalculated() >= lastCounterTime).ToArray();
+        //    //_coutnerBusiness.UpdateSessionCounters(sessionsInPlay);
+        //    //Task.Factory.StartNew(() => { _coutnerBusiness.UpdateSessionCounters(); });
+        //}
 
         public void EndSession(Guid sessionId)
         {
             _repository.EndSession(sessionId, DateTime.UtcNow);
-            UpdateSessionCounter();
+            _coutnerBusiness.UpdateSessionCounters();
         }
 
         public void RegisterSession(RegisterSessionRequest request)

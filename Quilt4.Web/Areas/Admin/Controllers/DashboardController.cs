@@ -1,7 +1,6 @@
 ﻿using System.Configuration;
 using System.Web.Mvc;
 using Quilt4.Interface;
-using Quilt4.Web.Business;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Areas.Admin.Controllers
