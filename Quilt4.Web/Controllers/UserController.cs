@@ -54,11 +54,17 @@ namespace Quilt4.Web.Controllers
             var sessions = _sessionBusiness.GetSessionsForUser(userId).ToArray();
 
             var applicationIds = sessions.GroupBy(x => x.ApplicationId).Select(x => x.First().ApplicationId).ToArray();
-
             var applicationNames = new List<string>();
             foreach (var applicationId in applicationIds)
             {
                 applicationNames.Add(initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == applicationId).Name);
+            }
+            
+            var machineIds = sessions.GroupBy(x => x.MachineFingerprint).Select(x => x.First().MachineFingerprint).ToArray();
+            var machineNames = new List<string>();
+            foreach (var machineId in machineIds)
+            {
+                machineNames.Add(_machineBusiness.GetMachine(machineId).Name);
             }
 
             var machines= new List<IMachine>();
@@ -74,9 +80,10 @@ namespace Quilt4.Web.Controllers
             var model = new UserViewModel()
             {
                 Sessions = sessions,
-                Machines = machines,
                 Users = users,
                 ApplicationNames = applicationNames,
+                Machines = machines,
+                MachineNames = machineNames,
                 InitiativeName = initiativeName,
                 InitiativeUniqueIdentifier = initiativeidentifier,
             };

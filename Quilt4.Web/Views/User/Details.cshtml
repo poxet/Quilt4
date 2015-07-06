@@ -13,8 +13,9 @@
 <h2>Details</h2>
 
 <table>
+    <h4>Application</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th>Applications</th>
+        <th>Application</th>
     </tr>
     @foreach (var applicationName in @Model.ApplicationNames)
     {
@@ -32,10 +33,10 @@
         }
 
     }
-    
+
 </table>
 <table>
-    <h4>Sessions</h4>
+    <h4>Session</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">Start</th>
         <th style="padding: 0 5px;">Environment</th>
@@ -57,9 +58,24 @@
 
 </table>
 <table>
-    <h4>Machines</h4>
+    <h4>Machine</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th></th>
+        <th>Machine</th>
     </tr>
-    <tr><td></td></tr>
+    @foreach (var MachineName in @Model.MachineNames)
+    {
+        if (MachineName == null)
+        {
+            <tr>
+                <td>N/A</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>@MachineName</td>
+            </tr>
+        }
+    }
+
 </table>
