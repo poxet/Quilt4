@@ -27,5 +27,6 @@ namespace Quilt4.Interface
         void ConfirmInvitation(Guid initiativeId, string developerName);
         void DeclineInvitation(string inviteCode);
         IEnumerable<IInvitation> GetInvitations(string email);
+        string GenerateInviteMessage(string initiativeid, string code, string message, Uri url);
     }
 }

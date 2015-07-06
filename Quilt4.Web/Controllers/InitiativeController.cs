@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
 using System.Web.Mvc;
+using System.Web.UI;
 using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
@@ -70,28 +71,8 @@ namespace Quilt4.Web.Controllers
             var enabled = _settingsBusiness.GetEmailSetting().EMailConfirmationEnabled;
             if (enabled)
             {
-                var root = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, "/");
-                var acceptlink = string.Empty;
-                var declineLink = string.Empty;
-
-                //TODO: Använd aldrig kod för att hantera olika miljöer. Detta måste göras utan en if-sats.
-                if (root.Equals("http://localhost:54942/"))
-                {
-                    acceptlink = root + "Initiative/Accept?id=" + initiativeid + "&inviteCode=" + code;
-                    declineLink = root + "Initiative/Decline?id=" + initiativeid + "&inviteCode=" + code;
-                }
-                else if (root.Equals("http://ci.quilt4.com/"))
-                {
-                    acceptlink = root + "Master/Web/Initiative/Accept?id=" + initiativeid + "&inviteCode=" + code;
-                    declineLink = root + "Master/WebInitiative/Decline?id=" + initiativeid + "&inviteCode=" + code;
-                }
-                else
-                {
-                    //Prod
-                }
-
                 var subject = "A reminder for the invitation to " + initiative.Name + " at www.quilt4.com";
-                var message = initiative.OwnerDeveloperName + " want to remind you to answer the invitation to initiative " + initiative.Name + " at Quilt4. <br/><br/><a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
+                var message = _initiativeBusiness.GenerateInviteMessage(initiativeid, code, string.Empty, Request.Url);
 
                 try
                 {
@@ -252,25 +233,6 @@ namespace Quilt4.Web.Controllers
             var enabled = _settingsBusiness.GetEmailSetting().EMailConfirmationEnabled;
             if (enabled)
             {
-                var root = Request.Url.AbsoluteUri.Replace(Request.Url.AbsolutePath, "/");
-                var acceptlink = string.Empty;
-                var declineLink = string.Empty;
-
-                if (root.Equals("http://localhost:54942/"))
-                {
-                    acceptlink = root + "Initiative/Accept?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                    declineLink = root + "Initiative/Decline?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                }
-                else if (root.Equals("http://ci.quilt4.com/"))
-                {
-                    acceptlink = root + "Master/Web/Initiative/Accept?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                    declineLink = root + "Master/WebInitiative/Decline?id=" + initiativeId + "&inviteCode=" + invitationCode;
-                }
-                else
-                {
-                    //Prod
-                }
-
                 var userMessage = "";
                 if (!collection["Message"].IsNullOrEmpty())
                 {
@@ -278,7 +240,7 @@ namespace Quilt4.Web.Controllers
                 }
 
                 var subject = "Invitation to " + initiative.Name + " at www.quilt4.com";
-                var message = initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/>" + userMessage + "<a href='" + acceptlink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
+                var message = _initiativeBusiness.GenerateInviteMessage(initiativeId, invitationCode, userMessage, Request.Url);
 
                 try
                 {

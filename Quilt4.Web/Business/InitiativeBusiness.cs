@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Cache;
+using System.Web;
+using System.Web.UI;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Tharga.Quilt4Net;
@@ -48,6 +51,18 @@ namespace Quilt4.Web.Business
         public IEnumerable<IInvitation> GetInvitations(string email)
         {
             return _repository.GetInvitations(email);
+        }
+
+        public string GenerateInviteMessage(string initiativeid, string code, string message, Uri url)
+        {
+            var initiative = _repository.GetInitiative(Guid.Parse(initiativeid));
+            var route = url.AbsolutePath.Replace(url.Segments.Last(), "");
+
+            var acceptLink = url.GetLeftPart(UriPartial.Authority) + route + "Accept?id=" + initiativeid + "&inviteCode=" + code;
+            var declineLink = url.GetLeftPart(UriPartial.Authority) + route + "Decline?id=" + initiativeid + "&inviteCode=" + code;
+
+            if(!message.Equals(string.Empty)) { return initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/> Message: " + message + "<br/><br/><a href='" + acceptLink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>"; }
+            return initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/><a href='" + acceptLink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
         }
 
         private IEnumerable<IInitiativeHead> GetHeadsByDeveloper(string developerName, string[] roleNames)
