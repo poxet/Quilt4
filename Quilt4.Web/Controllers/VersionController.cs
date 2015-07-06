@@ -79,7 +79,7 @@ namespace Quilt4.Web.Controllers
             //issue.Ticket = ver.IssueTypes.Select(x => x.Ticket.ToString());
 
 
-            var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
+            var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList().GroupBy(x => x.Id).Select(x => x.First());
 
             issue.Users = users;
 
