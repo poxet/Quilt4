@@ -96,7 +96,7 @@
     @foreach (var user in Model.Users)
     {
         <tr>
-            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId, userId = user.Id }, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { initiativeidentifier = @Model.InitiativeUniqueIdentifier, userId = user.Id }, null)</td>
         </tr>
     }
 </table>

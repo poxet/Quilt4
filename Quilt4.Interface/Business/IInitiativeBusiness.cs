@@ -27,5 +27,6 @@ namespace Quilt4.Interface
         void ConfirmInvitation(Guid initiativeId, string developerName);
         void DeclineInvitation(string inviteCode);
         IEnumerable<IInvitation> GetInvitations(string email);
+        IEnumerable<IApplication> GetApplicationsByApplicationIds(Guid applicationId);
     }
 }

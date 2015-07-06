@@ -260,6 +260,11 @@ namespace Quilt4.MongoDBRepository
             return invitations;
         }
 
+        public IEnumerable<IApplication> GetApplicationsByApplicationIds(Guid applicationId)
+        {
+            return Database.GetCollection("Initiative").FindAllAs<ApplicationPersist>().Where(x => x.Id == applicationId).ToArray();
+        }
+
         public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
         {
             var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => 

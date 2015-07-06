@@ -73,5 +73,6 @@ namespace Quilt4.Interface
         //IApplication GetApplicationByApplicationId(Guid applicationId);
         void ArchiveApplicationVersion(string versionId);
         IEnumerable<IInvitation> GetInvitations(string email);
+        IEnumerable<IApplication> GetApplicationsByApplicationIds(Guid applicationIds);
     }
 }
