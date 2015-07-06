@@ -50,11 +50,6 @@ namespace Quilt4.Web.Business
             return _repository.GetInvitations(email);
         }
 
-        public IEnumerable<IApplication> GetApplicationsByApplicationIds(Guid applicationIds)
-        {
-            return _repository.GetApplicationByApplicationId(applicationIds);
-        }
-
         private IEnumerable<IInitiativeHead> GetHeadsByDeveloper(string developerName, string[] roleNames)
         {
             var initiatives = _repository.GetInitiativeHeadsByDeveloper(developerName, roleNames).ToList();

@@ -50,20 +50,19 @@ namespace Quilt4.Web.Controllers
             }
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
-            //var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Select(x => x.Id);
-
+            var initiativeName = initiative.Name;
             var sessions = _sessionBusiness.GetSessionsForUser(userId).ToArray();
-            var applicationIds = sessions.GroupBy(x => x.ApplicationId).Select(x => x.First().ApplicationId);
 
-            var applications = _initiativeBusiness.GetApplicationByApplicationIds(applicationIds)
-            
+            var applicationIds = sessions.GroupBy(x => x.ApplicationId).Select(x => x.First().ApplicationId).ToArray();
 
+            var applicationNames = new List<string>();
+            foreach (var applicationId in applicationIds)
+            {
+                applicationNames.Add(initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == applicationId).Name);
+            }
 
             var machines= new List<IMachine>();
             var users = new List<IUser>();
-
-
-
 
             foreach (var session in sessions)
             {
@@ -76,7 +75,10 @@ namespace Quilt4.Web.Controllers
             {
                 Sessions = sessions,
                 Machines = machines,
-                Users = users
+                Users = users,
+                ApplicationNames = applicationNames,
+                InitiativeName = initiativeName,
+                InitiativeUniqueIdentifier = initiativeidentifier,
             };
 
             return View(model);

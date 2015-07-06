@@ -290,10 +290,5 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<IApplication> GetApplicationsByApplicationIds(Guid applicationIds)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
