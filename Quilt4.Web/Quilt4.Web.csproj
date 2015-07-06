@@ -419,6 +419,7 @@
     <Content Include="Views\Version\Details.cshtml" />
     <Content Include="Views\IssueType\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Initiative\Index.cshtml" />
+	<Content Include="Areas\Admin\Views\Initiative\Member.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Initiative\Accept.cshtml" />
     <Content Include="Views\Initiative\Decline.cshtml" />
