@@ -16,7 +16,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         private readonly IEventLogAgent _eventLogAgent;
         private readonly IInfluxDbAgent _influxDbAgent;
 
-        public DashboardController(ISystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IEventLogAgent eventLogAgent)
+        public DashboardController(ISystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IEventLogAgent eventLogAgent, IInfluxDbAgent influxDbAgent)
         {
             _systemBusiness = systemBusiness;
             _initiativeBusiness = initiativeBusiness;

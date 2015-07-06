@@ -151,10 +151,10 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ISession> GetActiveSessions(int timeoutSeconds)
-        {
-            throw new NotImplementedException();
-        }
+        //public IEnumerable<ISession> GetActiveSessions(int timeoutSeconds)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public void EndSession(Guid sessionId, DateTime serverEndTime)
         {
@@ -297,6 +297,11 @@ namespace Quilt4.SQLRepository
         }
 
         public IEnumerable<IInvitation> GetInvitations(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessions()
         {
             throw new NotImplementedException();
         }

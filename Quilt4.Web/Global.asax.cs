@@ -87,6 +87,7 @@ namespace Quilt4.Web
 
         protected void Application_End()
         {
+            //TODO: Cannot use the API call to the site it self when it is unloading. This has to be done as a direct call to the business class.
             Tharga.Quilt4Net.Session.End();
         }
 

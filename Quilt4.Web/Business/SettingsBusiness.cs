@@ -86,19 +86,9 @@ namespace Quilt4.Web.Business
             return GetSettingValue("Quilt4TargetLocation", defaultLocation);
         }
 
-                public string GetQuilt4TargetLocation(string defaultLocation)
+        public IInfluxDbSetting GetInfluxDBSetting()
         {
-            return GetSettingValue("Quilt4TargetLocation", defaultLocation);
-        }
-
-        public void SetEventLogReadDate(DateTime dateTime)
-        {
-            SetSetting("EventLogReadDate", dateTime.ToShortDateString() + " " + dateTime.ToLongTimeString(), typeof(DateTime), false);
-        }
-
-        public DateTime GetEventLogReadDate()
-        {
-            return GetSettingValue("EventLogReadDate", DateTime.MinValue);
+            return new InfluxDbSetting(GetSettingValue("InfluxDbUrl", string.Empty), GetSettingValue("InfluxDbUserName", string.Empty), GetSettingValue("InfluxDbPassword", string.Empty, true), GetSettingValue("InfluxDbDatabaseName", "Quilt4"));
         }
 
         public void SetEventLogReadDate(DateTime dateTime)

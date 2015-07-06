@@ -215,6 +215,7 @@
     <Compile Include="Agents\EventLogAgent.cs" />
     <Compile Include="Agents\InfluxDbAgent.cs" />
     <Compile Include="Agents\MembershipAgent.cs" />
+    <Compile Include="Areas\Admin\Controllers\CounterController.cs" />
     <Compile Include="BusinessEntities\Serie.cs" />
     <Compile Include="ApplicationCastleInstaller.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="Business\ApplicationVersionBusiness.cs" />
     <Compile Include="Business\CounterBusiness.cs" />
     <Compile Include="Business\Crypto.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Business\EmailBusiness.cs" />
     <Compile Include="Business\InfluxDbSetting.cs" />
     <Compile Include="Business\InitiativeBusiness.cs" />
@@ -275,12 +277,12 @@
     <Compile Include="Controllers\WebAPI\WebApiCallLogHandler.cs" />
     <Compile Include="Extensions\DynamicExtensions.cs" />
     <Compile Include="Extensions\MenuExtensions.cs" />
+    <Compile Include="Extensions\SessionExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AddPhoneNumberViewModel.cs" />
-    <Compile Include="Models\AdminIndexViewModel.cs" />
     <Compile Include="Models\AdminIndexViewModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\ApplicationModel.cs" />
@@ -313,7 +315,6 @@
     <Compile Include="Models\SendEmailViewModel.cs" />
     <Compile Include="Models\ResetPasswordViewModel.cs" />
     <Compile Include="Models\SendCodeViewModel.cs" />
-    <Compile Include="Models\SendEmailViewModel.cs" />
     <Compile Include="Models\SetPasswordViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Models\VerifyCodeViewModel.cs" />
@@ -356,6 +357,8 @@
     <Content Include="Areas\Admin\Views\Action\_EventLogAlert.cshtml" />
     <Content Include="Areas\Admin\Views\EventLog\Clear.cshtml" />
     <Content Include="Areas\Admin\Views\EventLog\MarkAsRead.cshtml" />
+    <Content Include="Areas\Admin\Views\Counter\Reset.cshtml" />
+    <Content Include="Areas\Admin\Views\Counter\Index.cshtml" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Icon.png" />
     <Content Include="Scripts\Admin\bootstrap.min.js" />

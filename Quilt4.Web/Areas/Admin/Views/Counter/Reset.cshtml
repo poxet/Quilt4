@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewBag.Title = "Reset";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<p>Are you sure you want to reset counters?</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <p class="submitSection">
+        <input type="submit" value="Reset" /> |
+        @Html.ActionLink("Cancel", "Index", "Counter")
+    </p>
+}

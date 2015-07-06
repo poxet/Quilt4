@@ -30,7 +30,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Email/SendTestEmail
         public ActionResult Send()
         {
-            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled, Subject="Test", Body="Testar" };
+            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled, Subject = "Test", Body = "Testar" };
             return View(model);
         }
 

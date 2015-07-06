@@ -44,7 +44,8 @@ namespace Quilt4.Web.Business
                 if (existingSession == null)
                 {
                     _repository.AddSession(session);
-                    _coutnerBusiness.UpdateSessionCounters();
+
+                    UpdateSessionCounter();
                 }
                 else
                 {
@@ -66,10 +67,17 @@ namespace Quilt4.Web.Business
             }
         }
 
+        private void UpdateSessionCounter()
+        {
+            var lastCounterTime = _coutnerBusiness.GetLastSessionCounterTime();
+            var sessionsInPlay = _repository.GetSessions().Where(x => x.ServerStartTime >= lastCounterTime || x.ServerEndTimeCalculated() >= lastCounterTime).ToArray();
+            _coutnerBusiness.UpdateSessionCounters(sessionsInPlay);
+        }
+
         public void EndSession(Guid sessionId)
         {
             _repository.EndSession(sessionId, DateTime.UtcNow);
-            _coutnerBusiness.UpdateApplicationVersionCounters();
+            UpdateSessionCounter();
         }
 
         public void RegisterSession(RegisterSessionRequest request)
@@ -153,6 +161,11 @@ namespace Quilt4.Web.Business
         public IEnumerable<ISession> GetSessionsForMachine(string machineId)
         {
             return _repository.GetSessionsForMachine(machineId);
+        }
+
+        public IEnumerable<ISession> GetSessions()
+        {
+            return _repository.GetSessions();
         }
 
         public IEnumerable<ISession> GetSessionsForMachine(Fingerprint machineFingerprint)

@@ -25,9 +25,20 @@ namespace Quilt4.Web.Business
             task.Wait();
         }
 
+        private void Clear(string counterName)
+        {
+            Task.Run(async () => await _influxDbAgent.ClearAsync(counterName));
+        }
+
         private List<ISerie> Query(string counterName)
         {
             var task = Task<List<ISerie>>.Run(async () => await _influxDbAgent.QueryAsync(counterName));
+            return task.Result;
+        }
+
+        private ISerie QueryLast(string counterName)
+        {
+            var task = Task<ISerie>.Run(async () => await _influxDbAgent.QueryLastAsync(counterName));
             return task.Result;
         }
 
@@ -139,31 +150,58 @@ namespace Quilt4.Web.Business
         //    Register("Issue", new[] { data });
         //}
 
-        public void UpdateSessionCounters()
+        public void ClearSessionCounters()
         {
-            var sessions = _repository.GetActiveSessions(15 * 60);
+            //TODO:
+            //Clear("Session");
+        }
+
+        public DateTime GetLastSessionCounterTime()
+        {
+            var lastItem = QueryLast("Session");
+            if (lastItem == null)
+                return DateTime.MinValue;
+
+            var lastEpoch = (long)lastItem.Data["time"];
+            var lastTime = lastEpoch.ToDateTime();
+            return lastTime;
+        }
+
+        public void UpdateSessionCounters(IEnumerable<ISession> sessions)
+        {
+            //TODO: Lock this update with mutex
+            //TODO: Also filter out points that has already been registered to the service
+            var last = GetLastSessionCounterTime();
+
+            var ss = sessions as ISession[] ?? sessions.ToArray();
+            var startTimes = ss.Select(x => x.ServerStartTime);
+            var endTimes = ss.Select(x => x.ServerEndTimeCalculated()).OrderBy(x => x);
+            //var timePoints = startTimes.Union(endTimes).Where(x => x > last && x <= DateTime.UtcNow).OrderBy(x => x).ToArray();
+            var timePoints = startTimes.Union(endTimes).Where(x => (x - last).TotalSeconds >= 1 && x <= DateTime.UtcNow).OrderBy(x => x).ToArray();
 
             var datas = new List<Dictionary<string, object>>();
-            foreach (var avSessions in sessions.GroupBy(x => new { x.ApplicationId, x.ApplicationVersionId, x.Environment, x.MachineFingerprint, x.CallerIp, x.UserFingerprint }))
+            foreach (var timePoint in timePoints)
             {
-                var data = new Dictionary<string, object>
+                var inSpanSessions = ss.Where(x => x.ServerStartTime <= timePoint && (x.ServerEndTime ?? x.ServerStartTime.AddMinutes(15)) >= timePoint).ToArray();
+                var time = timePoint.ToInfluxTime();
+                foreach (var avSessions in inSpanSessions.GroupBy(x => new { x.ApplicationId, x.ApplicationVersionId, x.Environment, x.MachineFingerprint, x.CallerIp, x.UserFingerprint }))
                 {
-                    { "ApplicationId", avSessions.Key.ApplicationId },
-                    { "ApplicationVersionId", avSessions.Key.ApplicationVersionId },
-                    { "Environment", avSessions.Key.Environment },
-                    { "MachineFingerprint", avSessions.Key.MachineFingerprint },
-                    { "CallerIp", avSessions.Key.CallerIp },
-                    { "UserFingerprint", avSessions.Key.UserFingerprint },
-                    { "Total", avSessions.Count() },
-                };
+                    var count = avSessions.Count(x => x.ServerStartTime <= timePoint && (x.ServerEndTime ?? x.ServerStartTime.AddMinutes(15)) > timePoint);
+                    var data = new Dictionary<string, object>
+                    {
+                        { "time", time },
+                        { "ApplicationId", avSessions.Key.ApplicationId },
+                        { "ApplicationVersionId", avSessions.Key.ApplicationVersionId },
+                        { "Environment", avSessions.Key.Environment },
+                        { "MachineFingerprint", avSessions.Key.MachineFingerprint },
+                        { "CallerIp", avSessions.Key.CallerIp },
+                        { "UserFingerprint", avSessions.Key.UserFingerprint },
+                        { "Total", count },
+                    };
 
-                datas.Add(data);
+                    datas.Add(data);
+                }
             }
-
-            //TODO: Points that previously had a count, but now are zero, should be explicitly be set as zero.
-            //? How do I find theese points
-            //i Perhaps query inflyx to get the last input from there. Check if that combination exists in datas, and add with zero value, if it does not.
-            var existing = Query("Session");
 
             Register("Session", datas.ToArray());
         }

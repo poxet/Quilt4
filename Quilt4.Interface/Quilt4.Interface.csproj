@@ -117,6 +117,8 @@
     <Compile Include="Entity\IMachine.cs" />
     <Compile Include="Business\IMachineBusiness.cs" />
     <Compile Include="Entity\IMembershipUser.cs" />
+    <Compile Include="Agent\IInfluxDbAgent.cs" />
+    <Compile Include="Entity\IInfluxDbSetting.cs" />
     <Compile Include="ISerie.cs" />
     <Compile Include="Entity\ISession.cs" />
     <Compile Include="Business\ISessionBusiness.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="IssueLevel.cs" />
     <Compile Include="Repository\IAccountRepository.cs" />
     <Compile Include="Entity\IApplicationUser.cs" />
+    <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\IRepositoryHandler.cs" />
     <Compile Include="Entity\IToolkitCompatibilities.cs" />
     <Compile Include="Entity\IUser.cs" />

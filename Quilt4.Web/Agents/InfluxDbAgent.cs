@@ -35,13 +35,34 @@ namespace Quilt4.Web.Agents
                 .Values(x.Data.Values.ToArray())
                 .Build());
 
-            await _influxDb.WriteAsync(_influxDbSetting.DatabaseName, TimeUnit.Milliseconds, ss.ToArray());
+            await _influxDb.WriteAsync(_influxDbSetting.DatabaseName, TimeUnit.Seconds, ss.ToArray());
+        }
+
+        public async Task ClearAsync(string counterName)
+        {
+            await _influxDb.DeleteSeriesAsync(_influxDbSetting.DatabaseName, counterName);
+        }
+
+        public async Task<ISerie> QueryLastAsync(string counterName)
+        {
+            var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "SELECT * FROM \"" + counterName + "\" LIMIT 1", TimeUnit.Seconds);
+            foreach (var serie in response)
+            {
+                var data = new Dictionary<string, object>();
+                for (var i = 0; i < serie.Columns.Length; i++)
+                {
+                    data.Add(serie.Columns[i], serie.Points[0][i]);
+                }
+                return new BusinessEntities.Serie(counterName, data);
+            }
+            return null;
         }
 
         public async Task<List<ISerie>> QueryAsync(string counterName)
         {
             var list = new List<ISerie>();
-            var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "select * from " + counterName + " limit 1000;", TimeUnit.Milliseconds);
+            var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "select * from " + counterName + "", TimeUnit.Seconds);
+            //var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "SELECT * FROM \"" + counterName + "\" LIMIT 1", TimeUnit.Seconds);
             foreach (var serie in response)
             {
                 var data = new Dictionary<string, object>();
