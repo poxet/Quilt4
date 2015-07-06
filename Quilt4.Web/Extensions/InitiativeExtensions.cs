@@ -3,7 +3,7 @@ using System.Linq;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
-namespace Quilt4.Web.Extensions
+namespace Quilt4.Web
 {
     public static class InitiativeExtensions
     {
@@ -18,6 +18,16 @@ namespace Quilt4.Web.Extensions
             return item.Id.ToString();
         }
 
+        public static string GetUniqueIdentifier(this IssueViewModel item, string name)
+        {
+            //First use name if possible
+            if (name != null)
+            {
+                return item.Version;
+            }
+
+            return item.ApplicationVersionId;
+        }
         public static string GetUniqueIdentifier(this IApplicationVersion item, IEnumerable<string> versions)
         {
             //First use name if possible

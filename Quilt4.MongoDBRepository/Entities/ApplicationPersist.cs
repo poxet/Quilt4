@@ -8,5 +8,8 @@ namespace Quilt4.MongoDBRepository.Entities
         public string Name { get; internal set; }
         public DateTime FirstRegistered { get; internal set; }
         public string TicketPrefix { get; internal set; }
+        public string DevColor { get; internal set; }
+        public string ProdColor { get; internal set; }
+        public string CiColor { get; internal set; }
     }
 }

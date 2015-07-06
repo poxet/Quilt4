@@ -6,7 +6,7 @@ using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.MongoDBRepository.Entities;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Data
 {
     internal static class Converter
     {
@@ -77,7 +77,7 @@ namespace Quilt4.MongoDBRepository
 
         public static IDeveloperRole ToEntity(this DeveloperRolePersist item)
         {
-            return new DeveloperRole(item.DeveloperName, item.RoleName, item.InviteCode, item.InviteEMail, item.InviteTime);
+            return new DeveloperRole(item.DeveloperName, item.RoleName, item.InviteCode, item.InviteEMail, item.InviteTime, item.InviteResponseTime);
         }
 
         public static IApplicationGroup ToEntity(this ApplicationGroupPersist item)
@@ -87,7 +87,7 @@ namespace Quilt4.MongoDBRepository
 
         public static IApplication ToEntity(this ApplicationPersist item)
         {
-            return new Application(item.Id, item.Name, item.FirstRegistered, item.TicketPrefix);
+            return new Application(item.Id, item.Name, item.FirstRegistered, item.TicketPrefix, item.DevColor, item.CiColor, item.ProdColor);
         }
 
         public static ISession ToEntity(this SessionPersist item)
@@ -149,7 +149,7 @@ namespace Quilt4.MongoDBRepository
 
         public static IToolkitCompatibilities ToEntity(this ToolkitCompabilityPersist item)
         {
-            return new ToolkitCompability(new Version(item.ServerVersion), item.RegisterDate, item.SupportToolkitNameVersion, (ECompatibility)item.Compatibility, null);
+            return new ToolkitCompability(new Version(item.ServerVersion), item.RegisterDate, item.SupportToolkitNameVersion, (Compatibility)item.Compatibility, null);
         }
     }
 }

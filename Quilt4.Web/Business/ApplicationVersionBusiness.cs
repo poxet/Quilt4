@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Business
 {
@@ -78,6 +80,38 @@ namespace Quilt4.Web.Business
                     response = _repository.UpdateApplicationVersionId(applicationVersionFingerprint, applicationId);
             }
             return response;
+        }
+
+
+        public IApplicationVersion GetApplicationVersion(string initiativeId, string applicationId, string applicationVersionUniqueIdentifier)
+        {
+            var applicationVersions = _repository.GetApplicationVersionsForApplications(new List<Guid>(){Guid.Parse(applicationId)}).ToArray();
+            var applicationVersionId = string.Empty;
+
+            //Try the name as identifier
+            var verionNames = applicationVersions.Where(x => (x.Version ?? Constants.DefaultVersionName) == applicationVersionUniqueIdentifier).ToArray();
+            if (verionNames.Count() == 1)
+                applicationVersionId = verionNames.Single().Id;
+
+            //Try the id as identifier
+            if (string.IsNullOrEmpty(applicationVersionId))
+            {
+                var versionIds = applicationVersions.Where(x => x.Id.ToString().Replace(":", string.Empty) == applicationVersionUniqueIdentifier).ToArray();
+                if (versionIds.Count() == 1)
+                    applicationVersionId = versionIds.Single().Id;
+            }
+
+            if (string.IsNullOrEmpty(applicationVersionId))
+                throw new NullReferenceException("No application version found for the specified uid.");
+
+            var applicationVersion = _repository.GetApplicationVersion(applicationVersionId);
+
+            return applicationVersion;
+        }
+
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            return _repository.GetArchivedApplicationVersions(applicationId);
         }
 
         public IApplicationVersion GetApplicationVersion(Fingerprint applicationVersionFingerprint)

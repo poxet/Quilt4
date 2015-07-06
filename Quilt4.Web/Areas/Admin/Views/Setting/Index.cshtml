@@ -1,21 +1,56 @@
 ﻿@model IEnumerable<Quilt4.Interface.ISetting>
 @{
-    ViewBag.Title = "Settings";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "System Configuration";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Type</th>
-    </tr>
-@foreach (var setting in Model)
-{
-    <tr>
-        <td>@Html.ActionLink(setting.Name, "Edit", "Setting", new { id = setting.Name }, null)</td>
-        <td>@Html.Raw(setting.Value)</td>
-        <td>@Html.Raw(setting.Type)</td>
-    </tr>
-}
-</table>
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+
+        Settings
+
+    </div>
+
+    <div class="panel-body">
+        
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div id="dialog">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                    <th>Type</th>
+                </tr>
+                @foreach (var setting in Model)
+                {
+                    <tr>
+                        <td><a href="#" onclick="myFunction('@Url.Action("Edit", new {id = setting.Name})')">@setting.Name</a></td>
+                        <td>@Html.Raw(setting.Value)</td>
+                        <td>@Html.Raw(setting.Type)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+</div>
+<script>
+
+
+    function myFunction(url) {
+
+        console.log(url);
+        var data = null;
+        $.get(url, function (data) {
+            $('#dialog').replaceWith(data);
+            $('#myModal').modal('show');
+        });
+
+    }
+</script>

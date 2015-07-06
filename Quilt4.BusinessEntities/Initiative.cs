@@ -58,7 +58,7 @@ namespace Quilt4.BusinessEntities
         public string AddDeveloperRolesInvitation(string email)
         {
             var inviteCode = RandomUtility.GetRandomString(10);
-            _developerRoles.Add(new DeveloperRole(null, "Invited", inviteCode, email, DateTime.UtcNow));
+            _developerRoles.Add(new DeveloperRole(null, RoleNameConstants.Invited, inviteCode, email, DateTime.UtcNow, new DateTime(01, 01, 01, 01, 01, 01)));
             return inviteCode;
         }
 
@@ -72,19 +72,20 @@ namespace Quilt4.BusinessEntities
                 _developerRoles.Remove(item);
         }
 
-        public void DeclineInvitation(string inviteCode)
-        {
-            var item = _developerRoles.FirstOrDefault(x => string.Compare(x.InviteCode, inviteCode, StringComparison.InvariantCultureIgnoreCase) == 0);
-            if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation with provided code."));
-            item.RoleName = "Declined";
-        }
+        //public void DeclineInvitation(string inviteCode)
+        //{
+        //    var item = _developerRoles.FirstOrDefault(x => string.Compare(x.InviteCode, inviteCode, StringComparison.InvariantCultureIgnoreCase) == 0);
+        //    if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation with provided code."));
+        //    item.RoleName = RoleNameConstants.Declined;
+        //}
 
-        public void ConfirmInvitation(string inviteCode, string developerName)
-        {
-            var item = _developerRoles.FirstOrDefault(x => string.Compare(x.InviteCode, inviteCode, StringComparison.InvariantCultureIgnoreCase) == 0);
-            if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation with provided code."));
-            item.DeveloperName = developerName;
-            item.RoleName = "Administrator";
-        }
+        //public void ConfirmInvitation(string inviteCode, string developerName)
+        //{
+        //    var item = _developerRoles.FirstOrDefault(x => string.Compare(x.InviteCode, inviteCode, StringComparison.InvariantCultureIgnoreCase) == 0);
+        //    if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation with provided code."));
+        //    item.DeveloperName = developerName;
+        //    item.RoleName = RoleNameConstants.Administrator;
+        //    item.InviteResponseTime = DateTime.Now;
+        //}
     }
 }

@@ -1,45 +1,120 @@
-﻿@model Quilt4.Web.Models.ApplicationModel
+﻿@using Quilt4.Web.Models
+@model ApplicationModel
 @{
-    ViewBag.Title = "Details";
+    //ViewBag.Title = "Application Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
-<a href='~/Initiative/Details/@Model.Initiative'>Go back to applications</a>
-<br/><br/>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = @Model.InitiativeUniqueIdentifier }, null)</li>
+    <li class="active">@Model.Application</li>
+</ol>
+
+<h2>Application Details</h2>
 @Html.ActionLink("Properties", "Edit", new { id = @Model.Initiative, application = @Model.Application }, null)
 
 <h3>Versions</h3>
-<table>
-    <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th style="padding: 0 5px;">Version</th>
-        <th style="padding: 0 5px;">Build</th>
-        <th style="padding: 0 5px;">Machines</th>
-        <th style="padding: 0 5px;">Sessions</th>
-        <th style="padding: 0 5px;">Issue Types</th>
-        <th style="padding: 0 5px;">Issues</th>
-        <th style="padding: 0 5px;">First</th>
-        <th style="padding: 0 5px;">Last</th>
-        <th style="padding: 0 5px;">Environments</th>
-    </tr>
-@foreach (var version in Model.Versions)
+
+@using (Html.BeginForm())
 {
-    <tr>
-        <td style="padding: 0 5px;">@Html.ActionLink(@version.Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @version.UniqueIdentifier }, null)<br/></td>
-        <td style="padding: 0 5px;">@version.Build</td>
-        <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
-        <td style="padding: 0 5px;">@version.Sessions.Count()</td>
-        <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
-        <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
-        <td style="padding: 0 5px;">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-        <td style="padding: 0 5px;">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-        <td style="padding: 0 5px;">
-            
-            @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
-            {
-                @Html.Raw(env + ", ")
-            }
-        </td>
-    </tr>
+    @Html.HiddenFor(x => x.Initiative)
+    @Html.HiddenFor(x => x.InitiativeName)
+    @Html.HiddenFor(x => x.InitiativeUniqueIdentifier)
+    @Html.HiddenFor(x => x.Application)
+
+    <table>
+        <tr style="border-bottom-color: black; border-bottom-style: solid;">
+            <th></th>
+            <th style="padding: 0 5px;">Version</th>
+            <th style="padding: 0 5px;">Build</th>
+            <th style="padding: 0 5px;">Machines</th>
+            <th style="padding: 0 5px;">Sessions</th>
+            <th style="padding: 0 5px;">Issue Types</th>
+            <th style="padding: 0 5px;">Issues</th>
+            <th style="padding: 0 5px;">First</th>
+            <th style="padding: 0 5px;">Last</th>
+            <th style="padding: 0 5px;">Environments</th>
+        </tr>
+
+
+        @*@foreach (var version in Model.Versions)*@
+        @for (var i = 0; i < Model.Versions.Count(); i++)
+        {
+            @Html.HiddenFor(x => x.Versions[i].Version)
+            @Html.HiddenFor(x => x.Versions[i].Build)
+            @Html.HiddenFor(x => x.Versions[i].ApplicationIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].InitiativeIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].UniqueIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].VersionId)
+
+            <tr>
+                <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br/></td>
+                <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
+                <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.Count()</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.SelectMany(x => x.Issues).Count()</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">
+
+                    @foreach (var env in Model.Versions[i].Sessions.Select(x => x.Environment).Distinct())
+                    {
+                        @Html.Raw(env + ", ")
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    <br/>
+    <input type="submit" name="submit" id="submit" value="Delete Versions"/>
+    <input type="submit" name="submit" id="submit" value="Archive Versions"/>
 }
-</table>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Initiative)
+    @Html.HiddenFor(x => x.Application)
+    <h3>Archived Versions</h3>
+    if (!Model.ShowArchivedVersions)
+    {
+        <input type="submit" name="submit" id="submit" value="Show Archived Versions" />
+    }
+    else
+    {
+        <table>
+            <tr style="border-bottom-color: black; border-bottom-style: solid;">
+                <th style="padding: 0 5px;">Version</th>
+                <th style="padding: 0 5px;">Build</th>
+                <th style="padding: 0 5px;">Machines</th>
+                <th style="padding: 0 5px;">Sessions</th>
+                <th style="padding: 0 5px;">Issue Types</th>
+                <th style="padding: 0 5px;">Issues</th>
+                <th style="padding: 0 5px;">First</th>
+                <th style="padding: 0 5px;">Last</th>
+                <th style="padding: 0 5px;">Environments</th>
+            </tr>
+            @foreach (var version in Model.ArchivedVersions)
+            {
+                <tr>
+                    <td style="padding: 0 5px;">@version.Version</td>
+                    <td style="padding: 0 5px;">@version.Build</td>
+                    <td style="padding: 0 5px;">@*Machines cound*@</td>
+                    <td style="padding: 0 5px;">@version.Sessions.Count()</td>
+                    <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
+                    <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
+                    <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                    <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                    <td style="padding: 0 5px;">
+                        @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
+                        {
+                            @Html.Raw(env + ", ")
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+}

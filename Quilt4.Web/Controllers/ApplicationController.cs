@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Extensions;
 using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
@@ -28,15 +27,16 @@ namespace Quilt4.Web.Controllers
             _sessionBusiness = sessionBusiness;
         }
 
-        // GET: Application/Details/5
-        public ActionResult Details(string id, string application)
+        public ApplicationModel GenerateApplicationModel(string id, string application, bool showArchivedVersions)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
+            var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(applicationId).ToArray();
             var versionNames = versions.Select(x => x.Version);
-            //var versionIds = versions.Select(x => x.Id);
 
             var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { applicationId }).ToArray();
 
@@ -44,27 +44,101 @@ namespace Quilt4.Web.Controllers
 
             var model = new ApplicationModel
             {
-                Initiative = id, 
+                Initiative = id,
+                InitiativeName = initiative.Name,
+                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)), //initiative.UniqueIdentifier,
                 Application = application,
-                Versions = versions.Select(x => new VersionModel
+
+                Versions = versions.Select(x => new VersionViewModel
                 {
                     Version = x.Version,
+                    VersionId = x.Id,
                     Build = x.BuildTime.ToString(),
                     IssueTypes = x.IssueTypes,
                     UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
+                    InitiativeIdentifier = id,
+                    ApplicationIdentifier = application,
 
                     //TODO: This is sloooooow ... fix this
                     //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
                     //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
 
                     Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
-                }).ToList()
+                }).OrderByDescending(y => y.Version).ToList(),
             };
+
+            if (showArchivedVersions)
+            {
+                model.ShowArchivedVersions = true;
+                model.ArchivedVersions = archivedVersions.Select(x => new VersionViewModel
+                {
+                    Version = x.Version,
+                    VersionId = x.Id,
+                    Build = x.BuildTime.ToString(),
+                    IssueTypes = x.IssueTypes,
+
+                    //TODO: This is sloooooow ... fix this
+                    //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
+                    //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
+
+                    Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id).ToArray(),
+                }).OrderByDescending(y => y.Version).ToList();
+            }
+
+            return model;
+        }
+
+        // GET: Application/Details/5
+        public ActionResult Details(string id, string application)
+        {
+            var model = GenerateApplicationModel(id, application, false);
 
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Details(ApplicationModel model, FormCollection collection)
+        {
+            switch (collection["submit"])
+            {
+                case "Delete Versions" :
+                    var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
+                    return View("ConfirmDeleteVersions", checkedVersions);
+                    
+                case "Archive Versions" :
+                    checkedVersions = model.Versions.Where(x => x.Checked).ToList();
+                    return View("ConfirmArchiveVersions", checkedVersions);
 
+                case "Show Archived Versions":
+                    var newModel = GenerateApplicationModel(model.Initiative, model.Application, true);
+                    return View(newModel);
+                    
+                default : 
+                    throw new ArgumentException("Submit button has an invalid value");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ArchiveVersions(List<VersionViewModel> model)
+        {
+            foreach (var version in model)
+            {
+                _initiativeBusiness.ArchiveApplicationVersion(version.VersionId);
+            }
+
+            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteVersions(List<VersionViewModel> model)
+        {
+            foreach (var version in model)
+            {
+                _initiativeBusiness.DeleteApplicationVersion(version.VersionId);
+            }
+
+            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
+        }
 
         // GET: Application/Edit/5
         public ActionResult Edit(string id, string application)
@@ -72,14 +146,16 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == application)).Name;
-            var ticketPrefix = app.TicketPrefix;
 
             var model = new ApplicationPropetiesModel()
             {
                 ApplicationGroupName = applicationGroup,
-                TicketPrefix = ticketPrefix,
+                TicketPrefix = app.TicketPrefix,
                 InitiativeId = id,
-                ApplicationName = application
+                ApplicationName = application,
+                DevColor = app.DevColor,
+                CiColor = app.CiColor,
+                ProdColor = app.ProdColor
             };
 
 
@@ -95,6 +171,9 @@ namespace Quilt4.Web.Controllers
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;
+            application.DevColor = model.DevColor;
+            application.CiColor = model.CiColor;
+            application.ProdColor = model.ProdColor;
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {
@@ -118,49 +197,5 @@ namespace Quilt4.Web.Controllers
 
             return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
         }
-        
-        //// GET: Application/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}C:\Dev\Tharga\Quilt4\Quilt4.Web\Controllers\ApplicationController.cs
-
-        //// POST: Application/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Application/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Application/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }

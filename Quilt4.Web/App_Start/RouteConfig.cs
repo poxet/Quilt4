@@ -10,6 +10,18 @@ namespace Quilt4.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "issueType",
+                url: "{controller}/{action}/{id}/{application}/{version}/{issueType}",
+                defaults: new
+                {
+                    application = UrlParameter.Optional,
+                    version = UrlParameter.Optional,
+                    issueType = UrlParameter.Optional,
+                },
+                namespaces: new[] { "Quilt4.Web.Controllers" }
+            );
+
+            routes.MapRoute(
                 name: "version",
                 url: "{controller}/{action}/{id}/{application}/{version}",
                 defaults: new
@@ -38,18 +50,6 @@ namespace Quilt4.Web
                     controller = "Home",
                     action = "Index",
                     id = UrlParameter.Optional
-                },
-                namespaces: new[] { "Quilt4.Web.Controllers" }
-            );
-
-            routes.MapRoute(
-                name: "issueType",
-                url: "{controller}/{action}/{id}/{application}/{version}/{issueType}",
-                defaults: new
-                {
-                    application = UrlParameter.Optional,
-                    version = UrlParameter.Optional,
-                    issueType = UrlParameter.Optional,
                 },
                 namespaces: new[] { "Quilt4.Web.Controllers" }
             );

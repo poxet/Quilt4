@@ -1,13 +1,19 @@
 ﻿@using Castle.Core.Internal
-@model Quilt4.Web.Models.IssueModel
+@using Constants = Quilt4.Web.Models.Constants
+@model Quilt4.Web.Models.IssueViewModel
 
 @{
-    ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(@Model.ApplicationName, "Details", "Application", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
+    <li class="active">@Model.VersionName</li>
+</ol>
 
+<h2>Version Details</h2>
 
 <h3>Issue Types</h3>
 <table>
@@ -23,19 +29,19 @@
     @foreach (var issueType in Model.IssueTypes)
     {
         <tr>
-            <td style="padding: 0 5px;"><a href="~/IssueType/Details/@Model.InitiativeId/@Model.ApplicationName/@Model.Version/@issueType.Ticket">@issueType.ExceptionTypeName</a></td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName, "Details", "IssueType", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
             <td style="padding: 0 5px;">@issueType.Message</td>
             <td style="padding: 0 5px;">@issueType.IssueLevel</td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
             <td style="padding: 0 5px;">
-                @foreach (var env in Model.Sessions.Where(x =>  issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
+                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
                 {
                     @Html.Raw(env + ", ")
                 }
-        </td>
+            </td>
 
             <td style="padding: 0 5px;">@issueType.Ticket</td>
-            
+
         </tr>
     }
 
@@ -54,11 +60,10 @@
     @foreach (var session in Model.Sessions)
     {
         <tr>
-            <td style="padding: 0 5px;">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@session.ServerStartTime.ToLocalTime()">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;">@session.Environment</td>
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
-            <td style="padding: 0 5px;">@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name</td>
-
+            <td style="padding: 0 5px;">@Html.ActionLink(@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = session.MachineFingerprint}, null)</td>
 
             @*@session.ServerStartTime == null ? @Html.Raw("<td style='padding: 0 5px;'>N/A</td>") : @Html.Raw("<td style='padding: 0 5px;'>" + @session.ServerStartTime + "</td>")
             @session.Environment == null ? @Html.Raw("<td style='padding: 0 5px;'>N/A</td>") : @Html.Raw("<td style='padding: 0 5px;'>" + @session.Environment + "</td>")
@@ -74,6 +79,7 @@
             {
                 <td>@session.CallerIp</td>
             }
+            <td>@Html.ActionLink("Details", "Details", "Session", new {applicationVersionId = session.ApplicationVersionId, sessionId = session.Id}, null)</td>
 
 
         </tr>
@@ -87,10 +93,10 @@
         <th style="padding: 0 5px;">User</th>
     </tr>
 
-    @foreach (var user in Model.Users.Select(x => x.UserName).Distinct())
+    @foreach (var user in Model.Users)
     {
         <tr>
-            <td style="padding: 0 5px;">@user</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId, userId = user.Id }, null)</td>
         </tr>
     }
 </table>
@@ -121,16 +127,16 @@
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th>Machine</th>
     </tr>
-@foreach (var machine in @Model.Machines.Select(x => x.Name).Distinct())
+@foreach (var machine in @Model.Machines.Distinct())
 {
     <tr>
-        @if (machine.IsNullOrEmpty()) 
+        @if (machine.Name.IsNullOrEmpty()) 
         { 
             <td style="padding: 0 5px;">@Html.Raw("N/A")</td>
         }
         else
         {
-            <td style="padding: 0 5px;">@machine</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@machine.Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = machine.Id }, null)</td>
         }
     </tr>
 }

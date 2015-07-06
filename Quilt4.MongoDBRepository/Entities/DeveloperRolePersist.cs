@@ -9,5 +9,6 @@ namespace Quilt4.MongoDBRepository.Entities
         public string InviteCode { get; internal set; }
         public string InviteEMail { get; internal set; }
         public DateTime InviteTime { get; internal set; }
+        public DateTime InviteResponseTime { get; internal set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Quilt4.MongoDBRepository
+namespace Quilt4.MongoDBRepository.Data
 {
     internal class RequestDeleteEntityEventArgs : EventArgs
     {

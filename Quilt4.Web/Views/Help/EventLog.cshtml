@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Event Log Help";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Access to Event Log</h2>
+@if (ViewBag.EventLogSourceHelp)
+{
+    <div style="background-color: pink;">This is probaly something you want help with now.</div>
+}
+<p>The event log Quilt4 does not exist and cannot be created.</p>
+<p><i>Quilt4</i> uses a separate event log where all critical issues is logged. To be able to create this event log (and event source) the process needs to run as administrator, the first time.</p>
+
+<h3>If you are running in <i>Visual Studio</i> as a developer</h3>
+<p>What you should do is to start Visual Studio with administrator privileges and run the website. Logon on to <i>Quilt4</i> as a user that is admin and view the @Html.ActionLink("Event Log", "Index", new { area = "Admin", controller = "EventLog" }) in the Admin section. If there is an entry saying @ViewBag.EventLogInitiatLentry things are working as they should. From now on you can run <i>Visual Studio</i> as a regular user.</p>
+
+<h3>If you are installing on a server</h3>
+<p>You have to change temporarly change the user that runs the application pool for <i>Quilt4</i> in IIS, so it runs as an administrator.</p>
+<ol>
+    <li>Open IIS Manager</li>
+    <li>Select <i>Application Pools</i> and look for the pool runs <i>Quilt4</i>.</li>
+    <li>Right click and choose <i>Advanced Settings...</i></li>
+    <li>Go to Identity, click the <i>...</i> button and select <i>LocalSystem</i>.</li>
+    <li>Close the settings by pressing OK. Right click the pool once more and choose "Recycle..."</li>
+    <li>Run the site and log on as an administrator. Go to <i>Event Log</i> in the Admin section. If there is an entry saying @ViewBag.EventLogInitiatLentry things are working as they should.</li>
+    <li>Change back the Identity of the application pool to <i>ApplicationPoolIdentity</i>.</li>
+</ol>

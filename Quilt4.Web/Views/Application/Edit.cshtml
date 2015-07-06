@@ -19,6 +19,18 @@
             <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
         </tr>
         <tr>
+            <td>Dev color</td>
+            <td>@Html.TextBoxFor(m => m.DevColor)</td>
+        </tr>
+        <tr>
+            <td>CI color</td>
+            <td>@Html.TextBoxFor(m => m.CiColor)</td>
+        </tr>
+        <tr>
+            <td>Prod color</td>
+            <td>@Html.TextBoxFor(m => m.ProdColor)</td>
+        </tr>
+        <tr>
             <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>
             <td>@Html.ActionLink("Cancel", "Details", "Application", new {id =@Model.InitiativeId, Application = @Model.ApplicationName}, null)</td>
         </tr>

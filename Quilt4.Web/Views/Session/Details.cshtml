@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Quilt4.Interface.IIssueType>
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th>Issue Type</th>
+    </tr>
+    @foreach (var issueType in Model)
+    {
+        <tr>
+            <td>@issueType.ExceptionTypeName</td>
+        </tr>
+    }
+</table>

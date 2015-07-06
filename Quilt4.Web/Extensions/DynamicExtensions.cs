@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Tharga.Quilt4Net;
 using Tharga.Quilt4Net.DataTransfer;
 
-namespace Tharga.Quilt4Net.Web
+namespace Quilt4.Web
 {
     internal static class DynamicExtensions
     {
@@ -78,9 +79,9 @@ namespace Tharga.Quilt4Net.Web
             return issueType;
         }
 
-        public static DataTransfer.Session ToSession(Dictionary<string, object> sessionD)
+        public static Tharga.Quilt4Net.DataTransfer.Session ToSession(Dictionary<string, object> sessionD)
         {
-            var session = new DataTransfer.Session();
+            var session = new Tharga.Quilt4Net.DataTransfer.Session();
 
             try
             {

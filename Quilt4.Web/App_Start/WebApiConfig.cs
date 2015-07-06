@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Quilt4.Web.Agents;
 
 namespace Quilt4.Web
 {
@@ -30,6 +31,8 @@ namespace Quilt4.Web
             //    routeTemplate: "api/{controller}/methodtwo/{directory}/{report}",
             //    defaults: new { directory = RouteParameter.Optional, report = RouteParameter.Optional }
             //);
+
+            config.Filters.Add(new ExceptionHandlingAttribute());
         }
     }
 }

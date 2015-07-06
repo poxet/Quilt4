@@ -1,0 +1,30 @@
+﻿@model  List<Quilt4.Web.Models.VersionViewModel>
+
+@{
+    //ViewBag.Title = "Confirm Delete Versions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete Versions</h2>
+<p>Are you sure you want to delete the following versionUniqueIdentifiers:</p>
+
+@using (Html.BeginForm("DeleteVersions", "Application"))
+{
+    <ul>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            @Html.HiddenFor(x => Model[i].UniqueIdentifier)
+            @Html.HiddenFor(x => Model[i].ApplicationIdentifier)
+            @Html.HiddenFor(x => Model[i].InitiativeIdentifier)
+            @Html.HiddenFor(x => Model[i].VersionId)
+            <li>@Model[i].Version</li>
+        }
+
+    </ul>
+
+    <input type="submit" value="Delete"/>
+    
+    @Html.ActionLink("Cancel", "Details", "Application", new { id= Model.First().InitiativeIdentifier, application=Model.First().ApplicationIdentifier}, null)
+}
+
+

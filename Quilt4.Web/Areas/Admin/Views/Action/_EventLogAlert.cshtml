@@ -1,0 +1,27 @@
+﻿@model Quilt4.Web.Models.EventLogStatusViewModel
+
+@if (@User.IsInRole("Admin") && @Model.EventLogData.Any())
+{
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-exclamation-triangle fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Model.EventLogData.Count.ToString()</div>
+                        <div>There are errors in the server event log!</div>
+                    </div>
+                </div>
+            </div>
+            <a href="@Url.Action("Index", "EventLog")">
+                <div class="panel-footer">
+                    <span class="pull-left">View Event Log</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+}

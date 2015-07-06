@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Mail;
 using System.Web.Mvc;
 using Quilt4.Interface;
@@ -22,28 +21,27 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Email/EmailHistory
-        public ActionResult EmailHistory()
+        public ActionResult History()
         {
             var emails = _emailBusiness.GetLastHundredEmails();
-
             return View(emails);
         }
 
         // GET: Admin/Email/SendTestEmail
-        public ActionResult SendTestEmail()
+        public ActionResult Send()
         {
-            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled };
+            var model = new SendEmailViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled, Subject="Test", Body="Testar" };
             return View(model);
         }
 
         // POST: Admin/Email/SendTestEmail
         [HttpPost]
-        public ActionResult SendTestEmail(SendEmailViewModel model)
+        public ActionResult Send(SendEmailViewModel model)
         {
             var success = true;
             try
             {
-                _emailBusiness.SendEmail(new List<string> { model.ToEmail }, "Test", "Testar");
+                _emailBusiness.SendEmail(new List<string> { model.ToEmail }, model.Subject, model.Body);
             }
             catch (FormatException e)
             {

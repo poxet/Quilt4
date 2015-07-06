@@ -1,9 +1,9 @@
 ﻿@using System.Web.Mvc.Html
-@model Quilt4.Web.Models.Initiative
+@model Quilt4.Web.Models.InitiativeViewModel
 
 @{
     ViewBag.Title = "Edit Initiative";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 @using (Html.BeginForm("Edit", "Initiative", null, FormMethod.Post, null))
@@ -30,6 +30,7 @@
                 @Html.Raw(member.DeveloperName + ", ")
             }
         </td>
+        <td>@Html.ActionLink("Edit", "Member", new { initiativeId =  Model.Id})</td>
     </tr>
 </table>
 <br/>

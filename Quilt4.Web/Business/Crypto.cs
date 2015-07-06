@@ -14,37 +14,37 @@ namespace Quilt4.Web.Business
             _salt = Encoding.ASCII.GetBytes(salt ?? "o6806642kbM7c5");
         }
 
-        public string EncryptStringAES(string plainText, string sharedSecret)
+        public string EncryptStringAes(string plainText, string sharedSecret)
         {
             if (string.IsNullOrEmpty(plainText))
                 throw new ArgumentNullException("plainText");
             if (string.IsNullOrEmpty(sharedSecret))
                 throw new ArgumentNullException("sharedSecret");
 
-            string outStr = null;                       // Encrypted string to return
-            RijndaelManaged aesAlg = null;              // RijndaelManaged object used to encrypt the data.
+            string outStr;
+            RijndaelManaged aesAlg = null;
 
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(sharedSecret, _salt);
+                var key = new Rfc2898DeriveBytes(sharedSecret, _salt);
 
                 // Create a RijndaelManaged object
                 aesAlg = new RijndaelManaged();
                 aesAlg.Key = key.GetBytes(aesAlg.KeySize / 8);
 
                 // Create a decryptor to perform the stream transform.
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+                var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
                 // Create the streams used for encryption.
-                using (MemoryStream msEncrypt = new MemoryStream())
+                using (var msEncrypt = new MemoryStream())
                 {
                     // prepend the IV
                     msEncrypt.Write(BitConverter.GetBytes(aesAlg.IV.Length), 0, sizeof(int));
                     msEncrypt.Write(aesAlg.IV, 0, aesAlg.IV.Length);
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        using (var swEncrypt = new StreamWriter(csEncrypt))
                         {
                             //Write all data to the stream.
                             swEncrypt.Write(plainText);
@@ -77,16 +77,16 @@ namespace Quilt4.Web.Business
 
             // Declare the string used to hold
             // the decrypted text.
-            string plaintext = null;
+            string plaintext;
 
             try
             {
                 // generate the key from the shared secret and the salt
-                Rfc2898DeriveBytes key = new Rfc2898DeriveBytes(sharedSecret, _salt);
+                var key = new Rfc2898DeriveBytes(sharedSecret, _salt);
 
                 // Create the streams used for decryption.                
-                byte[] bytes = Convert.FromBase64String(cipherText);
-                using (MemoryStream msDecrypt = new MemoryStream(bytes))
+                var bytes = Convert.FromBase64String(cipherText);
+                using (var msDecrypt = new MemoryStream(bytes))
                 {
                     // Create a RijndaelManaged object
                     // with the specified key and IV.
@@ -95,10 +95,10 @@ namespace Quilt4.Web.Business
                     // Get the initialization vector from the encrypted stream
                     aesAlg.IV = ReadByteArray(msDecrypt);
                     // Create a decrytor to perform the stream transform.
-                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        using (var srDecrypt = new StreamReader(csDecrypt))
 
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.

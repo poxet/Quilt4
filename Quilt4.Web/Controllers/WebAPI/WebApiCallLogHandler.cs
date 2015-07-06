@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Quilt4.Interface;
-using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Controllers.WebAPI
 {

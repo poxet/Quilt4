@@ -10,33 +10,36 @@ namespace Quilt4.Web.Areas.Admin.Controllers
     [RouteArea("Admin")]
     public class DashboardController : Controller
     {
-        private readonly SystemBusiness _systemBusiness;
+        private readonly ISystemBusiness _systemBusiness;
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
+        private readonly IEventLogAgent _eventLogAgent;
         private readonly IInfluxDbAgent _influxDbAgent;
 
-        public DashboardController(SystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IInfluxDbAgent influxDbAgent)
+        public DashboardController(ISystemBusiness systemBusiness, IInitiativeBusiness initiativeBusiness, ISettingsBusiness settingsBusiness, IEventLogAgent eventLogAgent)
         {
             _systemBusiness = systemBusiness;
             _initiativeBusiness = initiativeBusiness;
             _settingsBusiness = settingsBusiness;
+            _eventLogAgent = eventLogAgent;
             _influxDbAgent = influxDbAgent;
         }
 
         // GET: Admin/Dashboard/Index
         public ActionResult Index()
         {
-            var initiativeCount = _initiativeBusiness.GetInitiativeCount();
-            var applicationCount = _initiativeBusiness.GetApplicationCount();
-            var issueTypeCount = _initiativeBusiness.GetIssueTypeCount();
-            var issueCount = _initiativeBusiness.GetIssueCount();
+            //TODO: Make this faster (Or use InfluxDB to get the data)
+            //var initiativeCount = _initiativeBusiness.GetInitiativeCount();
+            //var applicationCount = _initiativeBusiness.GetApplicationCount();
+            //var issueTypeCount = _initiativeBusiness.GetIssueTypeCount();
+            //var issueCount = _initiativeBusiness.GetIssueCount();
 
             var adminIndexViewModel = new AdminIndexViewModel
             {
-                InitiativeCount = initiativeCount,
-                ApplicationCount = applicationCount,
-                IssueTypeCount = issueTypeCount,
-                IssueCount = issueCount
+                InitiativeCount = -1, //initiativeCount,
+                ApplicationCount = -1, //applicationCount,
+                IssueTypeCount = -1, //issueTypeCount,
+                IssueCount = -1, //issueCount
             };
 
             return View(adminIndexViewModel);

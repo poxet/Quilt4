@@ -56,6 +56,7 @@ namespace Quilt4.Web.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
+                    ViewBag.ReturnUrl = returnUrl;
                     return View(model);
             }
         }

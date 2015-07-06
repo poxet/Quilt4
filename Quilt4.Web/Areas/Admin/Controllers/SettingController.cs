@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Quilt4.Interface;
 
@@ -17,8 +18,8 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Setting
         public ActionResult Index()
         {
-            var settings = _settingsBusiness.GetAllDatabaseSettings();
-            return View(settings);
+            var settings = _settingsBusiness.GetAllSettings();
+            return View(settings.ToList().OrderBy(x => x.Name));
         }
 
         // GET: Admin/Setting/Edit/5
@@ -27,7 +28,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             if (string.IsNullOrEmpty(id)) throw new ArgumentNullException("id", "The parameter id was not provided.");
 
             var item = _settingsBusiness.GetSetting(id);
-            return View(item);
+            return PartialView(item);
         }
 
         // POST: Admin/Setting/Edit/5
@@ -41,7 +42,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
                 var data = Convert.ChangeType(collection["Value"], type);
                 if (data == null) throw new InvalidOperationException();
                 var encrypt = collection["Encrypted"].Contains("true");
-                _settingsBusiness.SetDatabaseSetting(id, collection["Value"], type, encrypt);
+                _settingsBusiness.SetSetting(id, collection["Value"], type, encrypt);
 
                 return RedirectToAction("Index");
             }

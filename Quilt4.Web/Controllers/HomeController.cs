@@ -1,11 +1,19 @@
 ﻿using System.Reflection;
 using System.Web.Mvc;
-using System.Reflection;
+using Quilt4.Interface;
+using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IInitiativeBusiness _initiativeBusiness;
+
+        public HomeController(IInitiativeBusiness initiativeBusiness)
+        {
+            _initiativeBusiness = initiativeBusiness;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -28,11 +36,11 @@ namespace Quilt4.Web.Controllers
         public ActionResult System()
         {
             ViewBag.Version = Assembly.GetAssembly(typeof(HomeController)).GetName().Version.ToString();
-            ViewBag.Environment = Tharga.Quilt4Net.Information.Environment;
+            ViewBag.Environment = Information.Environment;
             ViewBag.Quilt4SessionStarter = Tharga.Quilt4Net.Session.ClientStartTime.ToLocalTime();
             ViewBag.Quilt4RegisteredOnServer = Tharga.Quilt4Net.Session.RegisteredOnServer;
-            ViewBag.Quilt4HasClientToken = !string.IsNullOrEmpty(Tharga.Quilt4Net.Configuration.ClientToken);
-            ViewBag.Quilt4IsEnabled = Tharga.Quilt4Net.Configuration.Enabled;
+            ViewBag.Quilt4HasClientToken = !string.IsNullOrEmpty(Configuration.ClientToken);
+            ViewBag.Quilt4IsEnabled = Configuration.Enabled;
 
             return View();
         }

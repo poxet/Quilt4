@@ -1,0 +1,41 @@
+﻿@model Quilt4.Web.Areas.Admin.Models.InviteModel
+
+@{
+    ViewBag.Title = "Members in " + @Model.Initiative.Name;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<table>
+    <tr style="border-bottom: 1px solid #000;">
+        <th style="padding: 0 5px">Developer</th>
+        <th style="padding: 0 5px">Role</th>
+    </tr>
+    @if (!Model.Initiative.DeveloperRoles.Any())
+    {
+        <tr><td style="padding: 0 5px">No developers</td></tr>
+    }
+    @foreach (var developer in Model.Initiative.DeveloperRoles)
+    {
+        <tr>
+            <td style="padding: 0 5px">
+                @developer.DeveloperName
+            </td>
+            <td style="padding: 0 5px">
+                @developer.RoleName
+            </td>
+            <td style="padding: 0 5px">
+                @Html.ActionLink("Remove", "RemoveDeveloper", new { initiativeId = Model.Initiative.Id, developerName = developer.DeveloperName })
+            </td>
+        </tr>
+    }
+</table>
+
+<h3>Add developer</h3>
+<p style="color: red;">@ViewBag.AddDeveloperError</p>
+
+@using (Html.BeginForm("AddDeveloper", "Initiative"))
+{
+    @Html.HiddenFor(x => Model.InitiativeId)
+    @Html.TextBoxFor(x => x.InviteEmail)
+    <input type="submit" value="Add"/>
+}

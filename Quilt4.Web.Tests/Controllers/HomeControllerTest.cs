@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quilt4.Web;
+using Moq;
+using Quilt4.Interface;
 using Quilt4.Web.Controllers;
 
 namespace Quilt4.Web.Tests.Controllers
@@ -16,10 +13,11 @@ namespace Quilt4.Web.Tests.Controllers
         public void Index()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var initiativeBusinessMock = new Mock<IInitiativeBusiness>(MockBehavior.Strict);
+            var controller = new HomeController(initiativeBusinessMock.Object);
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            var result = controller.Index() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -29,10 +27,11 @@ namespace Quilt4.Web.Tests.Controllers
         public void About()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var initiativeBusinessMock = new Mock<IInitiativeBusiness>(MockBehavior.Strict);
+            var controller = new HomeController(initiativeBusinessMock.Object);
 
             // Act
-            ViewResult result = controller.About() as ViewResult;
+            var result = controller.About() as ViewResult;
 
             // Assert
             Assert.AreEqual("Your application description page.", result.ViewBag.Message);
@@ -42,10 +41,11 @@ namespace Quilt4.Web.Tests.Controllers
         public void Contact()
         {
             // Arrange
-            HomeController controller = new HomeController();
+            var initiativeBusinessMock = new Mock<IInitiativeBusiness>(MockBehavior.Strict);
+            var controller = new HomeController(initiativeBusinessMock.Object);
 
             // Act
-            ViewResult result = controller.Contact() as ViewResult;
+            var result = controller.Contact() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Extensions;
-using Initiative = Quilt4.Web.Models.Initiative;
+using Quilt4.Web.Models;
 
 namespace Quilt4.Web.Controllers
 {
@@ -17,14 +16,14 @@ namespace Quilt4.Web.Controllers
 
         public static Application ToModel(this IApplication item)
         {
-            return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix);
+            return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix, item.DevColor, item.CiColor, item.ProdColor);
         }
 
-        public static Initiative ToModel(this IInitiative item, IEnumerable<string> allInitiativeNames)
+        public static InitiativeViewModel ToModel(this IInitiative item, IEnumerable<string> allInitiativeNames)
         {
             var dateCreated = (item.ApplicationGroups.SelectMany(x => x.Applications)).Select(y => y.FirstRegistered).OrderBy(z => z.Date).FirstOrDefault();
             
-            var response = new Initiative
+            var response = new InitiativeViewModel
             {
                 Id = item.Id,
                 Name = item.Name,
@@ -40,9 +39,9 @@ namespace Quilt4.Web.Controllers
             return response;
         }
 
-        public static Models.DeveloperRole ToModel(this IDeveloperRole item)
+        public static Models.DeveloperRoleViewModel ToModel(this IDeveloperRole item)
         { 
-            return new Models.DeveloperRole
+            return new Models.DeveloperRoleViewModel
             {
                 DeveloperName = item.DeveloperName
             };

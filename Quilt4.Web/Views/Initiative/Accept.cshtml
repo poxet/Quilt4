@@ -1,0 +1,18 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "Accept Invite";
+}
+
+
+@if (!string.IsNullOrEmpty(ViewBag.AcceptError))
+{
+    <h2>Confirm Invite Failed</h2>
+    <p>@ViewBag.AcceptError</p>
+}
+else
+{
+    <h2>Confirm Invite</h2>
+    <p>You have confirmed the invitation</p>
+    <a href="~/Initiative/Details/@Model">Go to @Model</a>
+}

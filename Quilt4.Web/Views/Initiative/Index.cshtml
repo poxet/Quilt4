@@ -1,5 +1,5 @@
 ﻿@using Quilt4.Web.Models
-@model Quilt4.Web.Models.Initiatives
+@model Quilt4.Web.Models.InitiativesViewModel
 @{
     ViewBag.Title = "Initiatives";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,3 +14,5 @@
 }
 
 @Html.ActionLink("Create new Initiative", "Create", null, new { @class = "btn btn-default" })
+
+@{ Html.RenderAction("_InitiativeInvitations", "Action"); }

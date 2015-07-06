@@ -1,10 +1,18 @@
 ﻿@using Castle.Core.Internal
+@using Quilt4.Interface
+@using Constants = Quilt4.Web.Models.Constants
 @model Quilt4.Web.Areas.Admin.Models.InviteModel
 
 @{
-    ViewBag.Title = "Member";
+    //ViewBag.Title = "Member";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.Initiative.Name ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.UniqueInitiativeIdentifier }, null)</li>
+    <li class="active">Members</li>
+</ol>
 
 <h2>Members</h2>
 
@@ -34,22 +42,21 @@
     <tr>
         @Html.Raw("<td style='padding: 0 5px;'>" + member.DeveloperName + "</td> <td style='padding: 0 5px;'>" + member.RoleName + "</td>")
 
-        <td style='padding: 0 5px;'>
-            @if (member.RoleName.Equals("Invited"))
+
+            @if (member.RoleName.Equals(RoleNameConstants.Invited))
             {
-                @member.InviteTime
+                <td style='padding: 0 5px;' data-toggle="tooltip" data-placement="bottom" title="@member.InviteTime">@member.InviteTime.ToTimeAgo() ago</td>
             }
             else
             {
-                @Html.Raw("Status...")
+                <td style='padding: 0 5px;' data-toggle="tooltip" data-placement="bottom" title="@member.InviteResponseTime">@member.InviteResponseTime.ToTimeAgo() ago</td>
             }
-        </td>
 
-        @if (member.DeveloperName != Model.Initiative.OwnerDeveloperName && User.Identity.Name == Model.Initiative.OwnerDeveloperName)
+        @if (Model.IsAllowedToAdministrate)
         {
-            <td style="padding: 0 5px;"><a href="~/Initiative/RemoveMember?initiativeId=@Model.Initiative.Id&developer=@member.DeveloperName">Remove</a></td>
+            <td style="padding: 0 5px;">@Html.ActionLink("Remove", "RemoveMember", "Initiative", new { id = Model.UniqueInitiativeIdentifier, application = member.DeveloperName }, null)</td>
         }
-        @if (member.RoleName.Equals("Invited"))
+        @if (member.RoleName.Equals(RoleNameConstants.Invited) && !User.Identity.Name.Equals(member.DeveloperName))
         {
             <td>@Html.Raw("|")</td> <td style="padding: 0 5px;"><a href="~/Initiative/ResendInvite?initiativeid=@Model.Initiative.Id&code=@member.InviteCode">Resend invitation</a></td>
         }
@@ -57,7 +64,7 @@
     }
 </table>
 
-@if (@Model.IsAllowedToInvite)
+@if (@Model.IsAllowedToAdministrate)
 {
     <hr />
     <h3>Invite member</h3>

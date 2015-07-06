@@ -1,8 +1,14 @@
-﻿
+﻿@model Quilt4.Web.Models.InitiativeViewModel
+
 @{
-    ViewBag.Title = "Delete";
+    //ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Delete</h2>
-
+<p>Are you sure you want to delete @Model.Name</p>
+@using (Html.BeginForm())
+{
+    <input type="submit" value="Delete"/>
+    @Html.ActionLink("Cancel", "Details", "Initiative", new { id = Model.UniqueIdentifier }, null)
+}

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
-using IUser = Quilt4.Interface.IUser;
 
 namespace Quilt4.Web.Controllers
 {
@@ -30,17 +27,50 @@ namespace Quilt4.Web.Controllers
         // GET: Version/Details/5
         public ActionResult Details(string id, string application, string version)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
+            var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), applicationId.ToString(), version).Version;
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
-            var issue = new IssueModel();
-            issue.InitiativeId = id;
-            issue.ApplicationName = application;
-            issue.Version = version;
-            issue.IssueTypes = ver.IssueTypes;
+            var issue = new IssueViewModel
+            {
+                InitiativeId = initiativeId.ToString(),
+                InitiativeName = initiative.Name,
+                ApplicationName = application,
+                Version = version,
+                VersionName = versionName,
+                IssueTypes = ver.IssueTypes,
+                Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
+                ApplicationVersionId = applicationId.ToString(),
+                //TODO: Add applicationversion id
+                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)),
+            };
+
+            //TODO: fetch version anmes
+            issue.UniqueIdentifier = issue.GetUniqueIdentifier(versionName);
 
             //issue.ExceptionTypeName = ver.IssueTypes.Select(x => x.ExceptionTypeName);
             //issue.Message = ver.IssueTypes.Select(x => x.Message);
@@ -48,7 +78,6 @@ namespace Quilt4.Web.Controllers
             //issue.Count = ver.IssueTypes.Select(x => x.Count.ToString());
             //issue.Ticket = ver.IssueTypes.Select(x => x.Ticket.ToString());
 
-            issue.Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id);
 
             var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
 
@@ -58,71 +87,5 @@ namespace Quilt4.Web.Controllers
     
             return View(issue);
         }
-
-        //// GET: Version/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Version/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Version/Edit/5
-        //public ActionResult Edit(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Version/Edit/5
-        //[HttpPost]
-        //public ActionResult Edit(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add update logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
-        //// GET: Version/Delete/5
-        //public ActionResult Delete(int id)
-        //{
-        //    return View();
-        //}
-
-        //// POST: Version/Delete/5
-        //[HttpPost]
-        //public ActionResult Delete(int id, FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }

@@ -31,7 +31,7 @@ namespace Quilt4.Web.Business
 
             if (result == null)
             {
-                SetDatabaseSetting(name, defaultValue.ToString(), typeof(T), encrypted);
+                SetSetting(name, defaultValue.ToString(), typeof(T), encrypted);
                 return defaultValue;
             }
 
@@ -45,13 +45,13 @@ namespace Quilt4.Web.Business
             return response;
         }
 
-        public IEnumerable<ISetting> GetAllDatabaseSettings()
+        public IEnumerable<ISetting> GetAllSettings()
         {
             var result = _repository.GetSettings();
             return result;
         }
 
-        public void SetDatabaseSetting(string name, string value, Type type, bool encrypt)
+        public void SetSetting(string name, string value, Type type, bool encrypt)
         {
             if (encrypt)
             {
@@ -81,9 +81,34 @@ namespace Quilt4.Web.Business
             return GetSettingValue("Quilt4ClientToken", string.Empty);
         }
 
-        public IInfluxDbSetting GetInfluxDBSetting()
+        public string GetQuilt4TargetLocation(string defaultLocation)
         {
-            return new InfluxDbSetting(GetSettingValue("InfluxDbUrl", string.Empty), GetSettingValue("InfluxDbUserName", string.Empty), GetSettingValue("InfluxDbPassword", string.Empty, true), GetSettingValue("InfluxDbDatabaseName", "Quilt4"));
+            return GetSettingValue("Quilt4TargetLocation", defaultLocation);
+        }
+
+                public string GetQuilt4TargetLocation(string defaultLocation)
+        {
+            return GetSettingValue("Quilt4TargetLocation", defaultLocation);
+        }
+
+        public void SetEventLogReadDate(DateTime dateTime)
+        {
+            SetSetting("EventLogReadDate", dateTime.ToShortDateString() + " " + dateTime.ToLongTimeString(), typeof(DateTime), false);
+        }
+
+        public DateTime GetEventLogReadDate()
+        {
+            return GetSettingValue("EventLogReadDate", DateTime.MinValue);
+        }
+
+        public void SetEventLogReadDate(DateTime dateTime)
+        {
+            SetSetting("EventLogReadDate", dateTime.ToShortDateString() + " " + dateTime.ToLongTimeString(), typeof(DateTime), false);
+        }
+
+        public DateTime GetEventLogReadDate()
+        {
+            return GetSettingValue("EventLogReadDate", DateTime.MinValue);
         }
 
         private static string Encrypt(string value)
@@ -92,7 +117,7 @@ namespace Quilt4.Web.Business
                 return value;
 
             var crypto = new Crypto(GetSalt());
-            var result = crypto.EncryptStringAES(value, GetSharedSecret());
+            var result = crypto.EncryptStringAes(value, GetSharedSecret());
             return result;
         }
 

@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.MongoDBRepository.Data;
 using Quilt4.MongoDBRepository.Entities;
 
 namespace Quilt4.MongoDBRepository
@@ -127,25 +129,6 @@ namespace Quilt4.MongoDBRepository
             return result;
         }
 
-        //public T GetSetting<T>(string name, T defaultValue)
-        //{
-        //    var query = Query.EQ("_id", name);
-        //    var item = Database.GetCollection("Setting").FindOneAs<SettingPersist>(query);
-
-        //    T response;
-        //    if (item == null)
-        //    {
-        //        Database.GetCollection("Setting").Save(new SettingPersist { Id = name, Value = defaultValue.ToString(), Type = typeof(T).ToString() }, WriteConcern.Acknowledged);
-        //        response = defaultValue;
-        //    }
-        //    else
-        //    {
-        //        response = (T)Convert.ChangeType(item.Value, typeof(T));
-        //    }
-
-        //    return response;
-        //}
-
         public IEnumerable<ISetting> GetSettings()
         {
             var items = Database.GetCollection("Setting").FindAllAs<SettingPersist>();
@@ -159,58 +142,42 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Setting").Save(settingPersist, WriteConcern.Acknowledged);
         }
 
-        //public string DatabaseName 
-        //{
-        //    get
-        //    {
-        //        if (string.IsNullOrEmpty(_databaseName))
-        //        {
-        //            _databaseName = System.Configuration.ConfigurationManager.AppSettings["MongoDbName"];
-        //            if (string.IsNullOrEmpty(_databaseName))
-        //                _databaseName = "Quilt4Net";
-        //        }
-        //        return _databaseName;
-        //    }
-        //    set
-        //    {
-        //        if (!string.IsNullOrEmpty(_databaseName) && _databaseName != value)
-        //            throw new InvalidOperationException("Cannot change database name once it has been set.");
-        //        _databaseName = value;
-        //    }
-        //}
+        public void DeleteSessionForApplication(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
+            Database.GetCollection("Session").Remove(query, WriteConcern.Acknowledged);
+        }
 
-        //public MongoServer Server
-        //{
-        //    get
-        //    {
-        //        if (_server != null)
-        //            return _server;
+        public IEnumerable<ISession> GetSessionsForUser(string userId)
+        {
+            return Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.UserFingerprint == userId).Select(x => x.ToEntity()).ToArray();
+        }
 
-        //        lock (SyncRoot)
-        //        {
-        //            if (_server == null)
-        //                _server = new MongoServer(new MongoServerSettings {Server = GetMongoServerAddress()});
-        //        }
-        //        return _server;
-        //    }
-        //    set
-        //    {
-        //        if (_server != null)
-        //            throw new InvalidOperationException("Cannot change server once it has been initialized.");
-        //        _server = value;
-        //    }
-        //}
+        public void ArchiveApplicationVersion(string versionId)
+        {
+            var versionPersist = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().Single(x => x.Id == versionId);
+            Database.GetCollection("ApplicationVersionArchive").Insert(versionPersist, WriteConcern.Acknowledged);
+
+            var query = Query.EQ("_id", versionId);
+            Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
+        }
+
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
+            var applicationVersionPersists = Database.GetCollection("ApplicationVersionArchive").FindAs<ApplicationVersionPersist>(query);
+            var response = applicationVersionPersists.Select(x => x.ToEntity());
+            return response;
+        }
 
         //TODO: Duplicate code
         private MongoDatabase GetDatabaseFromUrl(MongoUrl url)
         {
-            //var client = new MongoClient(url);
             if (url.DatabaseName == null)
             {
                 throw new Exception("No database name specified in connection string");
             }
-            //return client.GetDatabase(,); // WriteConcern defaulted to Acknowledged
-            //return client.GetDatabase()
+
             return new MongoDatabase(new MongoServer(new MongoServerSettings { Server = url.Server }), url.DatabaseName, new MongoDatabaseSettings { });
         }
 
@@ -263,33 +230,6 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection(e.Collection).Save(e.Item, WriteConcern.Acknowledged);
         }
 
-        //private static MongoServerAddress GetMongoServerAddress()
-        //{
-        //    var mongoServerAddress = new MongoServerAddress("localhost", 27017);
-
-        //    var mongoDbServerAddress = ConfigurationManager.AppSettings["MongoDbServerAddress"];
-        //    if (!string.IsNullOrEmpty(mongoDbServerAddress))
-        //    {
-        //        var parts = mongoDbServerAddress.Split(':');
-
-        //        var host = mongoServerAddress.Host;
-        //        var port = mongoServerAddress.Port;
-                
-        //        if (parts.Length >= 1) 
-        //            host = parts[0];
-
-        //        if (parts.Length >= 2)
-        //        {
-        //            if (!int.TryParse(parts[1], out port))
-        //                throw new InvalidOperationException("Unable to parse setting MongoDbServerAddress port to integer. (host:port).");
-        //        }
-
-        //        mongoServerAddress = new MongoServerAddress(host, port);
-        //    }
-
-        //    return mongoServerAddress;
-        //}
-
         public void AddInitiative(IInitiative initiative)
         {
             Database.GetCollection("Initiative").Insert(initiative.ToPersist(), WriteConcern.Acknowledged);
@@ -300,21 +240,11 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Initiative").Save(initiative.ToPersist(), WriteConcern.Acknowledged);
         }
 
-        public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
-        {
-            // TODO: Exact same statement in two places
-            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*" 
-                || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
-                || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
-            var initiatives = initiativePersists.Select(x => x.ToEntity()).ToArray();
-            return initiatives;
-        }
-
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
             var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.Id == initiativeId).Select(y => y.ApplicationGroups);
             var applicationGroups = new List<IApplicationGroup>();
-           
+
             foreach (var initiativePersist in initiativePersists)
             {
                 applicationGroups.AddRange(initiativePersist.Select(x => x.ToEntity()));
@@ -323,11 +253,24 @@ namespace Quilt4.MongoDBRepository
             return applicationGroups;
         }
 
-        public IEnumerable<IInitiative> GetInitiativeHeadsByDeveloper(string developerName)
+        public IEnumerable<IInvitation> GetInvitations(string email)
         {
-            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => x.OwnerDeveloperName == "*"
-                || string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0
-                || (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)));
+            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => (x.DeveloperRoles != null && x.DeveloperRoles.Any(xx => string.Compare(xx.InviteEMail, email, StringComparison.InvariantCultureIgnoreCase) == 0 && string.Compare(xx.RoleName, RoleNameConstants.Invited, StringComparison.InvariantCultureIgnoreCase) == 0)));
+            var invitations = initiativePersists.Select(x => new Invitation(x.Id,x.Name,x.DeveloperRoles.Single(y => string.Compare(y.InviteEMail, email, StringComparison.InvariantCultureIgnoreCase) == 0).InviteCode)).ToArray();
+            return invitations;
+        }
+
+        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
+        {
+            var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => 
+                x.OwnerDeveloperName == "*"
+                || (roleNames.Contains(RoleNameConstants.Owner) && string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                || (x.DeveloperRoles != null 
+                    && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
+                        && string.Compare(xx.InviteEMail, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
+                        && roleNames.Any(z => string.Compare(z, xx.RoleName, StringComparison.InvariantCultureIgnoreCase) == 0))
+                    )
+                );
             var initiatives = initiativePersists.Select(x => x.ToEntityHead()).ToArray();
             return initiatives;
         }
@@ -412,7 +355,7 @@ namespace Quilt4.MongoDBRepository
         {
             var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationIds.Contains(x.ApplicationId)).ToArray();
             var response = allSessions.Select(x => x.ToEntity()).ToArray();
-            return response; 
+            return response;
         }
 
         public void UpdateMachine(IMachine machine)
@@ -498,8 +441,12 @@ namespace Quilt4.MongoDBRepository
         public void DeleteApplicationVersion(string applicationVersionFingerprint)
         {
             var query = Query.EQ("_id", applicationVersionFingerprint);
-            //TODO: Delete sessions for this application version
-            //var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => x.ApplicationVersionId == applicationVersionFingerprint).ToArray();
+            Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
+        }
+
+        public void DeleteApplicationVersionForApplication(Guid applicationId)
+        {
+            var query = Query.EQ("ApplicationId", applicationId);
             Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
         }
 
@@ -518,13 +465,14 @@ namespace Quilt4.MongoDBRepository
 
         public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
         {
-            //TODO: Rewrite this to a direct mongodb query
-            var initiatives = GetInitiativesByDeveloper(developerName);
-            var applications = initiatives.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications);
-            var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().ToArray();
-            var sessionPersists = allSessions.Where(x => applications.Any(y => y.Id == x.ApplicationId));
-            var response = sessionPersists.Select(x => x.ToEntity()).ToArray();
-            return response;
+            throw new NotImplementedException();
+            ////TODO: Rewrite this to a direct mongodb query
+            //var initiatives = GetInitiativesByDeveloper(developerName);
+            //var applications = initiatives.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications);
+            //var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().ToArray();
+            //var sessionPersists = allSessions.Where(x => applications.Any(y => y.Id == x.ApplicationId));
+            //var response = sessionPersists.Select(x => x.ToEntity()).ToArray();
+            //return response;
         }
 
         public IEnumerable<ISession> GetSessionsForApplications(Guid initiativeId)
@@ -563,7 +511,7 @@ namespace Quilt4.MongoDBRepository
         public void AddUser(IUser user)
         {
             Database.GetCollection("User").Insert(user.ToPersist());
-        }        
+        }
 
         public IEnumerable<IUser> GetUsersByApplicationVersion(string applicationFingerprint)
         {
@@ -596,7 +544,7 @@ namespace Quilt4.MongoDBRepository
             return Database.GetCollection("Machine").FindAllAs<MachinePersist>().Where(x => sessions.Any(y => y.MachineFingerprint == x.Id)).Select(x => x.ToEntity()).ToArray();
         }
 
-        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)
+        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, Compatibility compatibility)
         {
             var serverVersionString = serverVersion.ToString();
 
@@ -608,9 +556,9 @@ namespace Quilt4.MongoDBRepository
                 var toolkitCompabilityPersist = new ToolkitCompabilityPersist { Id = Guid.NewGuid(), ServerVersion = serverVersionString, RegisterDate = registerDate, SupportToolkitNameVersion = supportToolkitNameVersion, Compatibility = (int)compatibility };
                 toolkitCompability.Insert(toolkitCompabilityPersist, WriteConcern.Acknowledged);
             }
-            else if ((ECompatibility)item.Compatibility != compatibility)
+            else if ((Compatibility)item.Compatibility != compatibility)
             {
-                item.Compatibility = (int)ECompatibility.Inconclusive;
+                item.Compatibility = (int)Compatibility.Inconclusive;
                 item.RegisterDate = registerDate;
                 toolkitCompability.Save(item, WriteConcern.Acknowledged);
             }
@@ -621,7 +569,7 @@ namespace Quilt4.MongoDBRepository
             var toolkitCompability = Database.GetCollection("ToolkitCompability");
             var query = Query.EQ("ServerVersion", version.ToString());
             var toolkitCompabilities = toolkitCompability.FindAs<ToolkitCompabilityPersist>(query).Where(x => !string.IsNullOrEmpty(x.SupportToolkitNameVersion)).Select(x => x.ToEntity()).ToList();
-            var firstRegisterDate = toolkitCompabilities.Min(x => x.RegisterDate) ?? new DateTime(2014,4,28,16,20,0);
+            var firstRegisterDate = toolkitCompabilities.Min(x => x.RegisterDate) ?? new DateTime(2014, 4, 28, 16, 20, 0);
 
             var supportToolkitNameVersions = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().GroupBy(x => x.SupportToolkitNameVersion);
 
@@ -632,18 +580,21 @@ namespace Quilt4.MongoDBRepository
 
             foreach (var supportToolkitNameVersion in supportToolkitNameVersions)
             {
-                var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x =>  excludeApplications.All(y => y.Id != x.ApplicationId) &&  supportToolkitNameVersion.Select(y => y.Id).Any(y => x.ApplicationVersionId == y)).ToArray();
+                var sessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => excludeApplications.All(y => y.Id != x.ApplicationId) && supportToolkitNameVersion.Select(y => y.Id).Any(y => x.ApplicationVersionId == y)).ToArray();
                 var lastUsed = sessions.Any() ? sessions.Max(y => y.ServerStartTime) : (DateTime?)null;
 
                 var item = toolkitCompabilities.SingleOrDefault(x => x.SupportToolkitNameVersion == supportToolkitNameVersion.Key);
                 if (item == null)
                 {
                     var lastUsedWithThisService = lastUsed > firstRegisterDate ? lastUsed : (DateTime?)null;
-                    item = new ToolkitCompability(version, null, supportToolkitNameVersion.Key, ECompatibility.Unknown, lastUsedWithThisService);
+                    item = new ToolkitCompability(version, null, supportToolkitNameVersion.Key, Compatibility.Unknown, lastUsedWithThisService);
                     toolkitCompabilities.Add(item);
                 }
-                else 
-                    item.LastUsed = lastUsed;
+                else
+                {
+                    //TODO: Send information on when this toolkit was last userd to the repository
+                    //item.LastUsed = lastUsed;
+                }
             }
 
             return toolkitCompabilities;

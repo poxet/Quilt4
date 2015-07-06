@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Quilt4.Interface.IEmail>
+
+@{
+    ViewBag.Title = "Email History";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+
+        <i class="fa fa-clock-o fa-fw"></i> The 100 latest sent emails
+
+    </div>
+
+    <div class="panel-body">
+
+        <ul class="timeline">
+
+
+            @foreach (var mail in Model.OrderByDescending(x => x.DateSent))
+            {
+                var class1 = mail.Status ? "" : "timeline-inverted";
+                
+                <li class="@class1">
+                     @if (!mail.Status)
+                          {
+                              <div class="timeline-badge danger">
+                                  <i class="fa fa-exclamation"></i>
+                              </div>
+                          }
+                          else
+                          {
+                              <div class="timeline-badge success">
+                                  <i class="fa fa-check"></i>
+                              </div>
+                          }
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4 class="timeline-title">@mail.Subject</h4>
+                            <p>
+                                <small class="text-muted"><i class="fa fa-clock-o"></i> @mail.DateSent.ToTimeAgo() ago to @mail.ToEmail</small>
+                            </p>
+                        </div>
+                        <div class="timeline-body">
+                            <p>@if (!string.IsNullOrEmpty(mail.ErrorMessage))
+                               {
+                                   @mail.ErrorMessage
+                               }
+                               else
+                               {
+                                   @mail.Body
+                               }
+                            </p>
+                        </div>
+                    </div>
+                </li>
+
+            }
+
+        </ul>
+
+    </div>
+
+</div>

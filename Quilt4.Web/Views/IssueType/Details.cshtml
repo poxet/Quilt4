@@ -1,12 +1,22 @@
-﻿@model Quilt4.Web.Models.IssueTypeModel
+﻿@using Quilt4.Web.Models
+@model IssueTypeModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Issuetype Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.ApplicationName, "Details", "Application", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
+    <li>@Html.ActionLink(Model.Version, "Details", "Version", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.VersionUniqueIdentifier }, null)</li>
+    <li class="active">@Model.IssueType.ExceptionTypeName</li>
+</ol>
 
+<h2>Issuetype Details</h2>
+
+<h3>Issues</h3>
 <table>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">Time</th>
@@ -21,7 +31,7 @@
     {
         <tr>
             <td style="padding: 0 5px;">@issue.ServerTime</td>
-            <td style="padding: 0 5px;">Thread To Do@*@issue.IssueThreadGuid*@</td>
+            <td style="padding: 0 5px;">@Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid)</td>
             <td style="padding: 0 5px;">@(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName == null ? Html.Raw("N/A") : Html.Raw(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName))</td>
             <td style="padding: 0 5px;">@(issue.UserHandle == null ? Html.Raw("N/A") : Html.Raw(issue.UserHandle))</td>
             <td style="padding: 0 5px;">@((issue.VisibleToUser == null || issue.VisibleToUser == false) ? "No" : "Yes")</td>

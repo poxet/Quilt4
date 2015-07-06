@@ -3,9 +3,13 @@
 
 @{
     //ViewBag.Title = "Dashboard";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
+<div class="row">
+    @{ Html.RenderAction("_EventLogStatus", "Action"); }
+    @{ Html.RenderAction("_EventLogAlert", "Action"); }
+</div>
 
 <div class="row">
     @{
@@ -15,7 +19,7 @@
         var issueText = Model.IssueCount != 1 ? "Issues" : "Issue";
     }
     @*Initiatives*@
-    <div class="col-lg-3 col-md-6">
+    @*<div class="col-lg-3 col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
@@ -36,10 +40,10 @@
                 </div>
             </a>
         </div>
-    </div>
+    </div>*@
 
     @*Applications*@
-    <div class="col-lg-3 col-md-6">
+    @*<div class="col-lg-3 col-md-6">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <div class="row">
@@ -60,10 +64,10 @@
                 </div>
             </a>
         </div>
-    </div>
+    </div>*@
 
     @*IssueTypeCount*@
-    <div class="col-lg-3 col-md-6">
+    @*<div class="col-lg-3 col-md-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -84,10 +88,10 @@
                 </div>
             </a>
         </div>
-    </div>
+    </div>*@
 
     @*IssueCount*@
-    <div class="col-lg-3 col-md-6">
+    @*<div class="col-lg-3 col-md-6">
         <div class="panel panel-red">
             <div class="panel-heading">
                 <div class="row">
@@ -108,22 +112,10 @@
                 </div>
             </a>
         </div>
-    </div>
+    </div>*@
 
 </div>
 
-
-<p>This is the administration section.</p>
-
-<h3>Shortcuts</h3>
-<ol>
-    <li>@Html.ActionLink("Developers", "Index", "Developer")</li>
-    <li>@Html.ActionLink("System Information", "System", "Dashboard")</li>
-    <li>@Html.ActionLink("Send Test Email", "SendTestEmail", "Email")</li>
-    <li>@Html.ActionLink("Email History", "EmailHistory", "Email")</li>
-</ol>
-
-<br /><br />
 <a href="https://www.google.com/analytics/web/?authuser=0#report/visitors-overview/a49281453w80996805p83821649/" target="_blank">Google Analytics</a><br />
 <a href="http://www.twitter.com/quilt4net">Twitter</a><br />
 <a href="http://nugetmusthaves.azurewebsites.net/Package/Tharga.Quilt4Net">Nuget statistics</a>

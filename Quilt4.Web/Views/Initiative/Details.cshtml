@@ -1,30 +1,52 @@
-﻿@model Quilt4.Web.Models.Initiative
+﻿@using Castle.Core.Internal
+@using Constants = Quilt4.Web.Models.Constants
+@model Quilt4.Web.Models.InitiativeViewModel
 
 @{
-    ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
-@Html.ActionLink("Members", "Member", new { id = @Model.Id }, null)
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li class="active">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</li>
+</ol>
 
+<h2>Initiative Details</h2>
+@Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
+<br/>
+@Html.ActionLink("Properties", "Edit", new { id = Model.UniqueIdentifier }, null)
+@if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
+{
+    <br />
+    @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)    
+}
 <h2>ClientToken</h2>
 @Html.Raw(@Model.ClientToken)
 
-<h3>Applications</h3>
-@{
-    var applications = Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
-}
 
-@if (Model == null || !applications.Any())
-{ 
-    @Html.Raw("No applications found!")
+@if (Model == null || !Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray().Any())
+{
+    @Html.Raw("<h2>Applications</h2><p>No applications found!</p>")
 }
 else
 {
-    foreach (var application in applications)
-    {        
-        @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
-        <br/>
+    foreach (var group in Model.ApplicationGroups)
+    {
+        @(@group.Name.IsNullOrEmpty() ? Html.Raw("<h2>Applications</h2>") : Html.Raw("<h2>" + @group.Name + "</h2>"))
+
+        if (@group.Name.IsNullOrEmpty())
+        {
+            Html.Raw("<h2>Applications</h2>");
+        }
+        else
+        {
+            Html.Raw("<h2>" + @group.Name + "</h2>");
+        }
+
+        foreach (var application in group.Applications)
+        {
+            @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
+            <br />
+        }
     }
 }

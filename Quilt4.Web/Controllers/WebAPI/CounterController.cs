@@ -4,7 +4,6 @@ using System.Web.Script.Serialization;
 using Quilt4.Interface;
 using Tharga.Quilt4Net;
 using Tharga.Quilt4Net.DataTransfer;
-using Tharga.Quilt4Net.Web;
 
 namespace Quilt4.Web.Controllers.WebAPI
 {

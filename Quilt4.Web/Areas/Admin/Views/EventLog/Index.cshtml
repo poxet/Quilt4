@@ -1,0 +1,33 @@
+﻿@using System.Web.UI.WebControls
+@model Quilt4.Web.Models.EventLogIndexViewModel
+@{
+    ViewBag.Title = "Event Log";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@{ Html.RenderAction("_EventLogStatus", "Action"); }
+
+<table>
+    <tr>
+        <th></th>
+        <th>EntryType</th>
+        <th>TimeGenerated</th>
+        <th>Source</th>
+        <th>Read</th>
+        <th>Message</th>
+    </tr>
+    @foreach (var message in @Model.EventLogData)
+    {
+        <tr>
+            <td><i class="fa @Html.Raw(message.Icon)"></i></td>
+            <td>@Html.Raw(message.EntryType)</td>
+            <td title="@Html.Raw(message.TimeGenerated)">@Html.Raw(message.TimeGenerated.ToTimeAgo()) ago</td>
+            <td>@Html.Raw(message.Source)</td>
+            <td>@Html.Raw(message.Read)</td>
+            <td>@Html.Raw(message.Message)</td>
+        </tr>
+    }
+</table>
+
+@Html.ActionLink("Clear Event Log", "Clear")
+@Html.ActionLink("Mark Event Log as read", "MarkAsRead")

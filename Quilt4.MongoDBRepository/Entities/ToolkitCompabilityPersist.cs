@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using MongoDB.Bson.Serialization.Attributes;
 using Quilt4.Interface;
+using Quilt4.MongoDBRepository.Data;
 
 namespace Quilt4.MongoDBRepository.Entities
 {
@@ -25,7 +26,7 @@ namespace Quilt4.MongoDBRepository.Entities
         {
             if (ExtraElements != null)
             {
-                Compatibility = (bool)ExtraElements["Compatible"] ? (int)ECompatibility.Compable : (int)ECompatibility.Incompatible;
+                Compatibility = (bool)ExtraElements["Compatible"] ? (int)Interface.Compatibility.Compable : (int)Interface.Compatibility.Incompatible;
                 ExtraElements.Remove("Compatible");
 
                 MongoRepository.InvokeRequestUpdateEntityEvent(new RequestUpdateEntityEventArgs("ToolkitCompability", this));

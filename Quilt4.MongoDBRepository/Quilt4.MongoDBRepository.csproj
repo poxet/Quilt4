@@ -112,6 +112,7 @@
     <Compile Include="Entities\IssueTypePersist.cs" />
     <Compile Include="Entities\MachinePersist.cs" />
     <Compile Include="Entities\SessionPersist.cs" />
+    <Compile Include="Entities\SettingPersist.cs" />
     <Compile Include="Entities\ToolkitCompabilityPersist.cs" />
     <Compile Include="Entities\UserPersist.cs" />
     <Compile Include="Membership\ApplicationSignInManager.cs" />

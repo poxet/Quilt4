@@ -21,17 +21,12 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IInitiative> GetInitiativeHeadsByDeveloper(string developerName)
+        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
         {
             throw new NotImplementedException();
         }
@@ -76,6 +71,11 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
+        public IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName)
         {
             throw new NotImplementedException();
@@ -107,6 +107,11 @@ namespace Quilt4.SQLRepository
         }
 
         public void DeleteApplicationVersion(string applicationVersionFingerprint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteApplicationVersionForApplication(Guid applicationVersionId)
         {
             throw new NotImplementedException();
         }
@@ -186,7 +191,12 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, ECompatibility compatibility)
+        public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegisterToolkitCompability(Version serverVersion, DateTime registerDate, string supportToolkitNameVersion, Compatibility compatibility)
         {
             throw new NotImplementedException();
         }
@@ -271,7 +281,22 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IMachine> GetMachinesByApplicationVersions(IEnumerable<string> applicationFingerprints)
+        public void DeleteSessionForApplication(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISession> GetSessionsForUser(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ArchiveApplicationVersion(string versionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IInvitation> GetInvitations(string email)
         {
             throw new NotImplementedException();
         }
