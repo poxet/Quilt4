@@ -100,24 +100,41 @@ namespace Quilt4.Web.Controllers
                 catch (SmtpException e)
                 {
                     TempData["InviteError"] = "Could not connect to the email server";
-                    return RedirectToAction("Member", "Initiative", new { id = initiativeid });
+                    return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeid });
                 }
                 catch (Exception e)
                 {
                     TempData["InviteError"] = "Something went wrong";
-                    return RedirectToAction("Member", "Initiative", new { id = initiativeid });
+                    return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeid });
                 }
             }
 
-            return RedirectToAction("Member", "Initiative", new { id = initiativeid});
+            return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeid });
         }
 
         //GET
-        public ActionResult RemoveMember(string id, string application)
+        public ActionResult RemoveMember(string initiativeUniqueIdentifier, string application)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
@@ -133,26 +150,60 @@ namespace Quilt4.Web.Controllers
 
         //POST
         [HttpPost]
-        public ActionResult RemoveMember(string id, string application, FormCollection collection)
+        public ActionResult RemoveMember(string initiativeUniqueIdentifier, string application, FormCollection collection)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             initiative.RemoveDeveloperRole(application);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Member", "Initiative", new { id = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)) });
+            return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)) });
         }
 
         //Get
-        public ActionResult Member(string id)
+        public ActionResult Member(string initiativeUniqueIdentifier)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
             ViewBag.InviteError = TempData["InviteError"];
                 
@@ -182,17 +233,17 @@ namespace Quilt4.Web.Controllers
             if (inviteEmail.IsNullOrEmpty())
             {
                 TempData["InviteError"] = "Please enter an email adress";
-                return RedirectToAction("Member", "Initiative", new {id = initiativeId});
+                return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeId });
             }
             if (!new EmailAddressAttribute().IsValid(inviteEmail))
             {
                 TempData["InviteError"] = "Please enter a valid email adress";
-                return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeId });
             }
             if (initiative.DeveloperRoles.Any(x => x.DeveloperName == inviteEmail))
             {
                 TempData["InviteError"] = "This developer is already added to the initiative";
-                return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeId });
             }
 
             var invitationCode = initiative.AddDeveloperRolesInvitation(inviteEmail);
@@ -236,7 +287,7 @@ namespace Quilt4.Web.Controllers
                 catch (SmtpException e)
                 {
                     TempData["InviteError"] = "Could not connect to the email server";
-                    return RedirectToAction("Member", "Initiative", new { id = initiativeId });
+                    return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiativeId });
                 }
                 catch (Exception e)
                 {
@@ -248,7 +299,7 @@ namespace Quilt4.Web.Controllers
             //if everything went well, save the initiative
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Member", "Initiative", new { id = collection["InitiativeId"] });
+            return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = collection["InitiativeId"] });
         }
 
         public ActionResult Accept(string id)
@@ -282,12 +333,24 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Initiative/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(string initiativeUniqueIdentifier)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
 
             var initiativeNames = _initiativeBusiness.GetInitiativesByDeveloperOwner(User.Identity.GetUserName()).Select(x => x.Name).ToList();
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(initiativeNames);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString()).ToModel(initiativeNames);
 
             return View(initiative); 
         }
@@ -319,11 +382,28 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Initiative/Edit/5
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string initiativeUniqueIdentifier)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
@@ -340,18 +420,35 @@ namespace Quilt4.Web.Controllers
 
         // POST: Initiative/Edit/5
         [HttpPost]
-        public ActionResult Edit(string id, FormCollection collection)
+        public ActionResult Edit(string initiativeUniqueIdentifier, FormCollection collection)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
             try
             {
                 initiative.Name = collection["Name"];
                 _initiativeBusiness.UpdateInitiative(initiative);
 
-                return RedirectToAction("Details", new { id = initiative.Id });
+                return RedirectToAction("Details", new { initiativeUniqueIdentifier = initiative.Id });
             }
             catch
             {
@@ -360,24 +457,58 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Initiative/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string initiativeUniqueIdentifier)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "No initiative id provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
 
             var developerName = User.Identity.Name;
             var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(ins.Select(x => x.Name));
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString()).ToModel(ins.Select(x => x.Name));
 
             return View(initiative);
         }
 
         // POST: Initiative/Delete/5
         [HttpPost]
-        public ActionResult Delete(string id, FormCollection collection)
+        public ActionResult Delete(string initiativeUniqueIdentifier, FormCollection collection)
         {
-            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
             try
             {

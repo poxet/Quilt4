@@ -5,7 +5,7 @@
 }
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier }, null)</li>
     <li class="active">Users</li>
     <li class="active">@Model.Users.First().UserName</li>
 </ol>
@@ -62,20 +62,18 @@
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th>Machine</th>
     </tr>
-    @foreach (var MachineName in @Model.MachineNames)
-    {
-        if (MachineName == null)
+        @foreach (var MachineName in @Model.MachineNames)
         {
-            <tr>
+        <tr>
+            @if (MachineName == null)
+            {
                 <td>N/A</td>
-            </tr>
-        }
-        else
-        {
-            <tr>
+            }
+            else
+            {
                 <td>@MachineName</td>
-            </tr>
-        }
+            }
+        </tr>
     }
 
 </table>

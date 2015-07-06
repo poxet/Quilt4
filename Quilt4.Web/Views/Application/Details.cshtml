@@ -7,12 +7,12 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = @Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier }, null)</li>
     <li class="active">@Model.Application</li>
 </ol>
 
 <h2>Application Details</h2>
-@Html.ActionLink("Properties", "Edit", new { id = @Model.Initiative, application = @Model.Application }, null)
+@Html.ActionLink("Properties", "Edit", new { initiativeUniqueIdentifier = @Model.Initiative, application = @Model.Application }, null)
 
 <h3>Versions</h3>
 
@@ -50,7 +50,7 @@
 
             <tr>
                 <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br/></td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { initiativeUniqueIdentifier = @Model.Initiative, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br/></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
                 <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>
@@ -101,7 +101,7 @@
                 <tr>
                     <td style="padding: 0 5px;">@version.Version</td>
                     <td style="padding: 0 5px;">@version.Build</td>
-                    <td style="padding: 0 5px;">@*Machines cound*@</td>
+                    <td style="padding: 0 5px;">@*Machines count*@</td>
                     <td style="padding: 0 5px;">@version.Sessions.Count()</td>
                     <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
                     <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>

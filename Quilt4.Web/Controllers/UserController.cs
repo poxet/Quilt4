@@ -57,9 +57,10 @@ namespace Quilt4.Web.Controllers
             var applicationNames = new List<string>();
             foreach (var applicationId in applicationIds)
             {
-                applicationNames.Add(initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Id == applicationId).Name);
+                var singleOrDefault = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Id == applicationId);
+                if (singleOrDefault != null) applicationNames.Add(singleOrDefault.Name);
             }
-            
+
             var machineIds = sessions.GroupBy(x => x.MachineFingerprint).Select(x => x.First().MachineFingerprint).ToArray();
             var machineNames = new List<string>();
             foreach (var machineId in machineIds)

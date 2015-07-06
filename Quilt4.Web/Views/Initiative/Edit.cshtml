@@ -8,7 +8,7 @@
 
 <ol class="breadcrumb">
     <li><a href="~/Initiative">Initiative</a></li>
-    <li><a href="~/Initiative/Details/@Model.UniqueIdentifier">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</a></li>
+    <li>@Html.ActionLink((Model.Name ?? Constants.DefaultInitiativeName), "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.UniqueIdentifier }, null)</li>
     <li class="active">Properties</li>
 </ol>
 
@@ -25,5 +25,5 @@
 
     <br/>
     <input type="submit" value="Save"/>
-    <a href="~/Initiative/Details/@Model.Name">Cancel</a>
+    @Html.ActionLink("Cancel", "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.UniqueIdentifier }, null)
 }

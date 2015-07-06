@@ -10,7 +10,7 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.Initiative.Name ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.UniqueInitiativeIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.Initiative.Name ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.UniqueInitiativeIdentifier }, null)</li>
     <li class="active">Members</li>
 </ol>
 
@@ -54,7 +54,7 @@
 
         @if (Model.IsAllowedToAdministrate)
         {
-            <td style="padding: 0 5px;">@Html.ActionLink("Remove", "RemoveMember", "Initiative", new { id = Model.UniqueInitiativeIdentifier, application = member.DeveloperName }, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink("Remove", "RemoveMember", "Initiative", new { initiativeUniqueIdentifier = Model.UniqueInitiativeIdentifier, application = member.DeveloperName }, null)</td>
         }
         @if (member.RoleName.Equals(RoleNameConstants.Invited) && !User.Identity.Name.Equals(member.DeveloperName))
         {

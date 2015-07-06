@@ -89,9 +89,23 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Application/Details/5
-        public ActionResult Details(string id, string application)
+        public ActionResult Details(string initiativeUniqueIdentifier, string application)
         {
-            var model = GenerateApplicationModel(id, application, false);
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            var model = GenerateApplicationModel(initiativeId.ToString(), application, false);
 
             return View(model);
         }
@@ -126,7 +140,7 @@ namespace Quilt4.Web.Controllers
                 _initiativeBusiness.ArchiveApplicationVersion(version.VersionId);
             }
 
-            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
+            return RedirectToAction("Details", new { initiativeUniqueIdentifier = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
         }
 
         [HttpPost]
@@ -137,13 +151,27 @@ namespace Quilt4.Web.Controllers
                 _initiativeBusiness.DeleteApplicationVersion(version.VersionId);
             }
 
-            return RedirectToAction("Details", new { id = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
+            return RedirectToAction("Details", new { initiativeUniqueIdentifier = model.First().InitiativeIdentifier, application = model.First().ApplicationIdentifier });
         }
 
         // GET: Application/Edit/5
-        public ActionResult Edit(string id, string application)
+        public ActionResult Edit(string initiativeUniqueIdentifier, string application)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id).ToModel(null);
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString()).ToModel(null);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == application)).Name;
 
@@ -151,7 +179,7 @@ namespace Quilt4.Web.Controllers
             {
                 ApplicationGroupName = applicationGroup,
                 TicketPrefix = app.TicketPrefix,
-                InitiativeId = id,
+                InitiativeId = initiativeId.ToString(),
                 ApplicationName = application,
                 DevColor = app.DevColor,
                 CiColor = app.CiColor,
@@ -184,7 +212,7 @@ namespace Quilt4.Web.Controllers
                 else
                 {
                     _initiativeBusiness.UpdateInitiative(initiative);
-                    return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
+                    return RedirectToAction("Details", "Application", new { initiativeUniqueIdentifier = model.InitiativeId, application = model.ApplicationName });
                 }
             }
             else
@@ -195,7 +223,7 @@ namespace Quilt4.Web.Controllers
             applicationGroup.Remove(application);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName});
+            return RedirectToAction("Details", "Application", new { initiativeUniqueIdentifier = model.InitiativeId, application = model.ApplicationName });
         }
     }
 }

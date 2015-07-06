@@ -25,9 +25,28 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: IssueType/Details/5
-        public ActionResult Details(string id, string application, string version, string issueType)
+        public ActionResult Details(string initiativeUniqueIdentifier, string application, string version, string issueType)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Name == application);
             if (app == null) throw new NullReferenceException("Cannot find application").AddData("Application", application);
             var applicationVersions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
@@ -39,7 +58,6 @@ namespace Quilt4.Web.Controllers
             {
                 IssueType = ver.IssueTypes.Single(x => x.Ticket.ToString() == issueType), 
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
-                Initiative = id,
                 Application = application,
                 Version = version,
                 InitiativeName = initiative.Name,

@@ -25,20 +25,20 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Version/Details/5
-        public ActionResult Details(string id, string application, string version)
+        public ActionResult Details(string initiativeUniqueIdentifier, string application, string version)
         {
-            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
             }
 
             if (initiativeId == Guid.Empty)
