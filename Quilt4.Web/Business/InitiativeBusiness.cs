@@ -59,7 +59,8 @@ namespace Quilt4.Web.Business
             var route = string.Empty;
 
             if (url.AbsolutePath.EndsWith("ResendInvite")) { route = url.AbsolutePath.Replace("ResendInvite", ""); }
-            if(url.AbsolutePath.EndsWith("Invite")) { route = url.AbsolutePath.Replace("Invite", ""); }
+            else if(url.AbsolutePath.EndsWith("Invite")) { route = url.AbsolutePath.Replace("Invite", ""); }
+            else { throw new ArgumentException("Invite message not generated in \"ResendInvite\" or \"Invite\" method"); }
 
             var acceptLink = url.GetLeftPart(UriPartial.Authority) + route + "Accept?id=" + initiativeid + "&inviteCode=" + code;
             var declineLink = url.GetLeftPart(UriPartial.Authority) + route + "Decline?id=" + initiativeid + "&inviteCode=" + code;
