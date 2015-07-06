@@ -93,16 +93,16 @@ namespace Quilt4.Web.Controllers
         {
             if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
             }
 
             var model = GenerateApplicationModel(initiativeId.ToString(), application, false);
