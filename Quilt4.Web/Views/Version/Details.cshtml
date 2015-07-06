@@ -24,6 +24,7 @@
         <th style="padding: 0 5px;">Count</th>
         <th style="padding: 0 5px;">Environment</th>
         <th style="padding: 0 5px;">Ticket</th>
+        <th style="padding: 0 5px;">Last Issue</th>
     </tr>
 
     @foreach (var issueType in Model.IssueTypes)
@@ -41,7 +42,7 @@
             </td>
 
             <td style="padding: 0 5px;">@issueType.Ticket</td>
-
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issueType.Issues.OrderBy(x => x.ServerTime).Last().ServerTime">@issueType.Issues.OrderBy(x => x.ServerTime).Last().ServerTime.ToTimeAgo() ago</td>
         </tr>
     }
 
