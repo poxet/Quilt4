@@ -299,16 +299,16 @@ namespace Quilt4.Web.Controllers
         {
             if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Single(x => x.Name == initiativeUniqueIdentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
             }
 
             var initiativeNames = _initiativeBusiness.GetInitiativesByDeveloperOwner(User.Identity.GetUserName()).Select(x => x.Name).ToList();
