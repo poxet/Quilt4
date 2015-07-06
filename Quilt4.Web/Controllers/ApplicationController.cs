@@ -175,6 +175,8 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString()).ToModel(null);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == application)).Name;
+            
+            var environments = _sessionBusiness.GetSessionsForApplications(new List<Guid>() { app.Id }).GroupBy(x => x.Environment).Select(x => x.First()).Select(x => x.Environment).ToArray();
 
             var model = new ApplicationPropetiesModel()
             {
@@ -184,7 +186,8 @@ namespace Quilt4.Web.Controllers
                 ApplicationName = application,
                 DevColor = app.DevColor,
                 CiColor = app.CiColor,
-                ProdColor = app.ProdColor
+                ProdColor = app.ProdColor,
+                Environments = environments,
             };
 
 

@@ -18,18 +18,37 @@
             <td>Ticket Prefix</td>
             <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
         </tr>
-        <tr>
-            <td>Dev color</td>
-            <td>@Html.TextBoxFor(m => m.DevColor)</td>
-        </tr>
-        <tr>
-            <td>CI color</td>
-            <td>@Html.TextBoxFor(m => m.CiColor)</td>
-        </tr>
-        <tr>
-            <td>Prod color</td>
-            <td>@Html.TextBoxFor(m => m.ProdColor)</td>
-        </tr>
+        @foreach (var env in Model.Environments)
+        {
+            if (env.Equals("Dev"))
+            {
+                <tr>
+                    <td>Dev color</td>
+                    <td>@Html.TextBoxFor(m => m.DevColor)</td>
+                </tr>
+            }
+            else if (env.Equals("CI"))
+            {
+                <tr>
+                    <td>CI color</td>
+                    <td>@Html.TextBoxFor(m => m.CiColor)</td>
+                </tr>
+            }
+            else if (env.Equals("Prod"))
+            {
+                <tr>
+                    <td>Prod color</td>
+                    <td>@Html.TextBoxFor(m => m.ProdColor)</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>Something went wrong</td>
+                </tr>
+            }
+        }
+        
         <tr>
             <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>
             <td>@Html.ActionLink("Cancel", "Details", "Application", new { initiativeUniqueIdentifier = @Model.InitiativeId, Application = @Model.ApplicationName }, null)</td>
