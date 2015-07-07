@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Tharga.Quilt4Net;
@@ -25,7 +26,8 @@ namespace Quilt4.Web.Business
 
         public void UpdateInitiative(IInitiative initiative)
         {
-            _repository.UpdateInitiative(initiative);
+            var ini = new Initiative(initiative.Id, initiative.Name, initiative.ClientToken, initiative.OwnerDeveloperName, initiative.DeveloperRoles, initiative.ApplicationGroups.Where(x => x.Applications.Any()));
+            _repository.UpdateInitiative(ini);
         }
 
         public void DeleteInitiative(Guid id)
