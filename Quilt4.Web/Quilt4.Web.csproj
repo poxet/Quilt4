@@ -429,7 +429,7 @@
     <Content Include="Views\Initiative\Index.cshtml" />
     <Content Include="Views\Initiative\Create.cshtml" />
     <Content Include="Views\Initiative\Details.cshtml" />
-    <Content Include="Views\Initiative\Edit.cshtml" />
+    <Content Include="Views\Initiative\Properties.cshtml" />
     <Content Include="Views\Initiative\Delete.cshtml" />
     <Content Include="Areas\Admin\Views\Developer\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Developer\Delete.cshtml" />

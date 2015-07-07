@@ -158,8 +158,6 @@ namespace Quilt4.Web.Controllers
                 ProdColor = app.ProdColor
             };
 
-
-
             return View(model);
         }
 
@@ -177,7 +175,7 @@ namespace Quilt4.Web.Controllers
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {
-                if (!initiative.ApplicationGroups.Single(x => x.Name == model.ApplicationGroupName).Applications.Any(x => x.Name == model.ApplicationName))
+                if (initiative.ApplicationGroups.Single(x => x.Name == model.ApplicationGroupName).Applications.All(x => x.Name != model.ApplicationName))
                 {
                     initiative.ApplicationGroups.Single(x => x.Name == model.ApplicationGroupName).Add(application);
                 }

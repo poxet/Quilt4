@@ -6,5 +6,6 @@ namespace Quilt4.Web.Models
     {
         public string InitiativeId { get; set; }
         public IDeveloperRole Developer { get; set; }
+        public string UniqueInitiativeIdentifier { get; set; }
     }
 }

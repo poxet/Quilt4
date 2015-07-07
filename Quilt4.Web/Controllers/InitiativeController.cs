@@ -51,11 +51,14 @@ namespace Quilt4.Web.Controllers
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
             var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
+            var developerName = User.Identity.Name;
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var model = new InviteMemberModel()
             {
                 InitiativeId = initiativeid,
                 Developer = developerRole,
+                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
             };
             
             return View(model);
@@ -318,8 +321,8 @@ namespace Quilt4.Web.Controllers
             }
         }
 
-        // GET: Initiative/Edit/5
-        public ActionResult Edit(string id)
+        // GET: Initiative/Properties/5
+        public ActionResult Properties(string id)
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
@@ -338,9 +341,9 @@ namespace Quilt4.Web.Controllers
             return View(model);
         }
 
-        // POST: Initiative/Edit/5
+        // POST: Initiative/Properties/5
         [HttpPost]
-        public ActionResult Edit(string id, FormCollection collection)
+        public ActionResult Properties(string id, FormCollection collection)
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 

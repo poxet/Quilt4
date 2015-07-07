@@ -1,12 +1,11 @@
 ﻿@model Quilt4.Web.Models.InitiativeViewModel
 
 @{
-    //ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
-<p>Are you sure you want to delete @Model.Name</p>
+<h2>Delete Initiative</h2>
+<p>Are you sure you want to delete initiative <strong>@Model.Name</strong>.</p>
 @using (Html.BeginForm())
 {
     <input type="submit" value="Delete"/>

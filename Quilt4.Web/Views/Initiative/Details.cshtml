@@ -14,7 +14,7 @@
 <h2>Initiative Details</h2>
 @Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
 <br/>
-@Html.ActionLink("Properties", "Edit", new { id = Model.UniqueIdentifier }, null)
+@Html.ActionLink("Properties", "Properties", new { id = Model.UniqueIdentifier }, null)
 @if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
 {
     <br />
