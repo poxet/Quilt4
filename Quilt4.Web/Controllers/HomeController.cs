@@ -52,12 +52,14 @@ namespace Quilt4.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Search()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Search(SearchModel model)
         {
             if (model.SearchText.IsNullOrEmpty())
