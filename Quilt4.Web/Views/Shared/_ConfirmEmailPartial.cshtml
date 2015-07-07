@@ -1,0 +1,8 @@
+﻿<h2>Confirm Email</h2>
+<p>You need to confirm your email adress to access this page.</p>
+
+@using (Html.BeginForm("ResendConfirmationEmail", "Account"))
+{
+    @Html.TextBox("Email")
+    <input type="submit" value="Resend"/>
+}

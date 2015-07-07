@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -406,6 +407,11 @@ namespace Quilt4.Web.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        public ActionResult ResendConfirmationEmail()
+        {
+            throw new NotImplementedException();
         }
 
         #region Helpers

@@ -14,11 +14,13 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public HomeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness)
+        public HomeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IAccountRepository accountRepository)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
+            _accountRepository = accountRepository;
         }
 
         public ActionResult Index()
@@ -100,6 +102,7 @@ namespace Quilt4.Web.Controllers
             }
 
             model.IssueTypes = issueTypes.OrderBy(x => x.ExceptionTypeName);
+            model.IsConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed;
 
             return View("SearchResults", model);
         }

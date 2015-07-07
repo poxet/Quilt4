@@ -185,6 +185,11 @@ namespace Quilt4.MongoDBRepository
             return ApplicationUserManager.Users.Select(x => x.ToDeveloper());
         }
 
+        public IDeveloper GetUser(string userEmail)
+        {
+            return ApplicationUserManager.Users.Single(x => x.Email == userEmail).ToDeveloper();
+        }
+
         public void DeleteUser(string userId)
         {
             var user = ApplicationUserManager.FindById(userId);

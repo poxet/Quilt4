@@ -41,6 +41,7 @@ namespace Quilt4.Interface
         Task<bool> SendTwoFactorCodeAsync(string provider);
         Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent);
         IEnumerable<IDeveloper> GetUsers();
+        IDeveloper GetUser(string userEmail);
         void DeleteUser(string userId);
         void AssignRole(string userId, string roleName);
     }

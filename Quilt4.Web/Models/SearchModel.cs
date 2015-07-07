@@ -10,5 +10,6 @@ namespace Quilt4.Web.Models
     {
         public string SearchText { get; set; }
         public IEnumerable<IIssueType> IssueTypes { get; set; }
+        public bool IsConfirmed { get; set; }
     }
 }
