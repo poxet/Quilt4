@@ -8,7 +8,7 @@ namespace Quilt4.Interface
     {
         Exception AssureEventLogSource();
         void ClearAll();
-        void WriteToEventLog(Exception exception);
+        void WriteToEventLog(Exception exception, EventLogEntryType eventLogEntryType = EventLogEntryType.Error);
         IEnumerable<EventLogEntry> GetEventLogData();
     }
 }

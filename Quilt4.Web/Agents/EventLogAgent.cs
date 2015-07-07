@@ -67,10 +67,10 @@ namespace Quilt4.Web.Agents
             myLog.WriteEntry(message, eventLogEntryType);
         }
 
-        public void WriteToEventLog(Exception exception)
+        public void WriteToEventLog(Exception exception, EventLogEntryType eventLogEntryType)
         {
             var message = GetMessageFromException(exception);
-            WriteToEventLog(message, EventLogEntryType.Error);
+            WriteToEventLog(message, eventLogEntryType);
         }
 
         private string GetMessageFromException(Exception exception, bool appendStackTrace = true)

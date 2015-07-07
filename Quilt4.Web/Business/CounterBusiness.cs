@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,11 +14,13 @@ namespace Quilt4.Web.Business
     {
         private readonly IInfluxDbAgent _influxDbAgent;
         private readonly IRepository _repository;
+        private readonly IEventLogAgent _eventLogAgent;
 
-        public CounterBusiness(IInfluxDbAgent influxDbAgent, IRepository repository)
+        public CounterBusiness(IInfluxDbAgent influxDbAgent, IRepository repository, IEventLogAgent eventLogAgent)
         {
             _influxDbAgent = influxDbAgent;
             _repository = repository;
+            _eventLogAgent = eventLogAgent;
         }
 
         private void Register(string counterName, Dictionary<string, object>[] datas)
@@ -214,6 +217,10 @@ namespace Quilt4.Web.Business
                     datas.Clear();
                 }
 
+            }
+            catch (Exception exception)
+            {
+                _eventLogAgent.WriteToEventLog(exception, EventLogEntryType.Warning);
             }
             finally
             {
