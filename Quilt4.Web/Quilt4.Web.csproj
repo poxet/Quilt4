@@ -360,6 +360,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\toggleShowEnvironment.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -435,6 +436,7 @@
     <Content Include="Views\Help\EventLog.cshtml" />
     <Content Include="Views\Action\_InitiativeInvitations.cshtml" />
     <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
