@@ -1,7 +1,13 @@
-﻿
+﻿@model Quilt4.Web.Models.SearchModel
+
 @{
     ViewBag.Title = "Search";
 }
 
 <h2>Search</h2>
 
+@using (Html.BeginForm())
+{
+    @Html.TextBoxFor(x => x.SearchText)
+    <input type="submit" value="Search"/>
+}    

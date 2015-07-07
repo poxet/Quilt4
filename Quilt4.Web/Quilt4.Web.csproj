@@ -291,6 +291,7 @@
     <Compile Include="Models\MachineDetailsModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\ResetPasswordViewModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SendCodeViewModel.cs" />
     <Compile Include="Models\SendEmailViewModel.cs" />
     <Compile Include="Models\SetPasswordViewModel.cs" />
@@ -437,6 +438,7 @@
     <Content Include="Views\Action\_InitiativeInvitations.cshtml" />
     <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Home\SearchResults.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
