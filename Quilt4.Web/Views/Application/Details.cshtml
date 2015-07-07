@@ -1,4 +1,5 @@
-﻿@using Quilt4.Web.Models
+﻿@using Microsoft.Ajax.Utilities
+@using Quilt4.Web.Models
 @model ApplicationModel
 @{
     //ViewBag.Title = "Application Details";
@@ -34,7 +35,22 @@
             <th style="padding: 0 5px;">Issues</th>
             <th style="padding: 0 5px;">First</th>
             <th style="padding: 0 5px;">Last</th>
-            <th style="padding: 0 5px;">Environments</th>
+            <th style="padding: 0 5px;">
+                Environments
+                @if (Model.DevColor != null)
+                {
+                    <span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
+                }
+                @if (Model.CiColor != null)
+                {
+                    <span id="CiLegendButton" onclick='toggleShowEnvironment("Ci"); changeButtonStyle("CiLegendButton");' style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
+                }
+                @if (Model.ProdColor != null)
+                {
+                    <span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                }
+            </th>
+                    
         </tr>
 
 
@@ -48,7 +64,7 @@
             @Html.HiddenFor(x => x.Versions[i].UniqueIdentifier)
             @Html.HiddenFor(x => x.Versions[i].VersionId)
 
-            <tr>
+            <tr style="display: table-row">
                 <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
                 <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br /></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
@@ -65,19 +81,19 @@
                         @*@Html.Raw(env + ", ")*@
                         if (env.Equals("Dev"))
                         {
-                            <span style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
+                            <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
                         }
                         else if (env.Equals("CI"))
                         {
-                            <span style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
+                            <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
                         }
                         else if (env.Equals("Prod"))
                         {
-                            <span style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                            <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
                         }
                     }
                     </td>
-                    </tr>
+                </tr>
         }
     </table>
     <br/>
@@ -130,3 +146,38 @@
         </table>
     }
 }
+
+<script type="text/javascript">
+    function toggleShowEnvironment(environment) {
+        var rows;
+
+        if (environment == "Dev") {
+            rows = document.getElementsByClassName("DevColor");
+        } else if (environment == "Ci") {
+            rows = document.getElementsByClassName("CiColor");
+        } else if (environment == "Prod") {
+            rows = document.getElementsByClassName("ProdColor");
+        }
+
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].parentNode.parentNode.style.display == "table-row") {
+                rows[i].parentNode.parentNode.style.display = "none";
+                
+            } else {
+                rows[i].parentNode.parentNode.style.display = "table-row";
+            }
+        }
+    }
+
+    function changeButtonStyle(id) {
+        if (id == "DevLegendButton" || id == "CiLegendButton" || id == "ProdLegendButton") {
+
+            if (document.getElementById(id).style.border == "4px solid rgb(255, 255, 255)") {
+                document.getElementById(id).style.border = "1px solid #000";
+            } else {
+                document.getElementById(id).style.border = "4px solid #fff";
+            }
+            
+        }
+    }
+</script>
