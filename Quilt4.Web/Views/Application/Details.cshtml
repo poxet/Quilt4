@@ -16,6 +16,21 @@
 @Html.ActionLink("Properties", "Edit", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)
 
 <h3>Versions</h3>
+<table>
+    <tr>
+        <th>Dev environment</th>
+        <td style="padding-left: 20px;"><span style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;"></span></td>
+    </tr>
+    <tr>
+        <th>CI environment</th>
+        <td style="padding-left: 20px;"><span style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;"></span></td>
+    </tr>
+    <tr>
+        <th>Prod environment</th>
+        <td style="padding-left: 20px;"><span style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;"></span></td>
+    </tr>
+</table>
+<br/>
 
 @using (Html.BeginForm())
 {
