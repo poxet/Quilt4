@@ -48,6 +48,7 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Id == applicationId);
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
             var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), applicationId.ToString(), version).Version;
 
@@ -67,6 +68,9 @@ namespace Quilt4.Web.Controllers
                 ApplicationVersionId = applicationId.ToString(),
                 //TODO: Add applicationversion id
                 InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)),
+                DevColor = app.DevColor,
+                CiColor = app.CiColor,
+                ProdColor = app.ProdColor,
             };
 
             //TODO: fetch version anmes
