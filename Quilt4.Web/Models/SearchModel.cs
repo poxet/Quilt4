@@ -9,7 +9,7 @@ namespace Quilt4.Web.Models
     public class SearchModel
     {
         public string SearchText { get; set; }
-        public IEnumerable<IIssueType> IssueTypes { get; set; }
+        public IEnumerable<IIssueType> IssueTypeResults { get; set; }
         public bool IsConfirmed { get; set; }
     }
 }

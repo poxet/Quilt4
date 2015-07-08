@@ -60,6 +60,8 @@ namespace Quilt4.Web.Controllers
             return View();
         }
 
+        
+
         [HttpPost]
         [Authorize]
         public ActionResult Search(SearchModel model)
@@ -71,15 +73,21 @@ namespace Quilt4.Web.Controllers
 
             var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
             var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToArray();
-            //var applicationIds = initiatives.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications.Select(y => y.Id));
 
-            var applicationIds = new List<Guid>();
+            var applications = new List<IApplication>();
             foreach (var initiative in initiatives)
             {
-                applicationIds.AddRange(initiative.ApplicationGroups.SelectMany(x => x.Applications).Select(x => x.Id));
+                applications.AddRange(initiative.ApplicationGroups.SelectMany(x => x.Applications));
             }
 
-            //var versions = applicationIds.SelectMany(applicationId => _applicationVersionBusiness.GetApplicationVersions(applicationId));
+            var applicationIds = new List<Guid>();
+            var ticketPrefixs = new List<string>();
+            foreach (var application in applications)
+            {
+                applicationIds.Add(application.Id);
+                ticketPrefixs.Add(application.TicketPrefix);
+            }
+
             var versions = new List<IApplicationVersion>();
             foreach (var applicationId in applicationIds)
             {
@@ -88,20 +96,30 @@ namespace Quilt4.Web.Controllers
 
             var allIssueTypes = versions.SelectMany(x => x.IssueTypes).ToArray();
             
-            var issueTypes = new List<IIssueType>();
+            var issueTypeResults = new List<IIssueType>();
             foreach (var issueType in allIssueTypes)
-            {
+            {   
+                int value;
+                if (int.TryParse(model.SearchText, out value))
+                {
+                    foreach (var issue in issueType.Issues)
+                    if (issueType.Ticket.ToString().Equals(model.SearchText) ||issue.Ticket.ToString().Equals(model.SearchText))
+                    {
+                        issueTypeResults.Add(issueType);
+                    }
+                    
+                }
+
                 if (!issueType.ExceptionTypeName.IsNullOrEmpty())
                 {
                     if (issueType.ExceptionTypeName.Contains(model.SearchText))
                     {
-                        issueTypes.Add(issueType);
+                        issueTypeResults.Add(issueType);
                     }
                 }
-                
             }
 
-            model.IssueTypes = issueTypes.OrderBy(x => x.ExceptionTypeName);
+            model.IssueTypeResults = issueTypeResults;
             model.IsConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed;
 
             return View("SearchResults", model);

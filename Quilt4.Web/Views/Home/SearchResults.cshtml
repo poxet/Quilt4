@@ -7,17 +7,18 @@
 @if (Model.IsConfirmed)
 {
     <h2>Search Results for "@Model.SearchText"</h2>
-    if (Model.IssueTypes.Any())
+    if (Model.IssueTypeResults.Any())
     {
         <table>
             <tr style="border-bottom-color: black; border-bottom-style: solid;">
-                <th style="padding: 0 5px;">Issue Type</th>
+                <th style="padding: 0 5px;">Issue Type)</th>
                 <th style="padding: 0 5px;">Time</th>
                 <th style="padding: 0 5px;">User</th>
                 <th style="padding: 0 5px;">Visible</th>
+                <th style="padding: 0 5px;">Issue Ticket</th>
                 <th style="padding: 0 5px;">Ticket</th>
             </tr>
-            @foreach (var issueType in Model.IssueTypes)
+            @foreach (var issueType in Model.IssueTypeResults)
             {
                 foreach (var issue in issueType.Issues)
                 {
@@ -26,6 +27,7 @@
                         <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issue.ServerTime.ToLocalTime()">@issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
                         <td style="padding: 0 5px;">@issue.UserHandle</td>
                         <td style="padding: 0 5px;">@issue.VisibleToUser</td>
+                        <td style="padding: 0 5px;">@issueType.Ticket</td>
                         <td style="padding: 0 5px;">@issue.Ticket</td>
                     </tr>
                 }
