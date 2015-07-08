@@ -51,8 +51,6 @@ namespace Quilt4.Web.Controllers
             if (app == null) throw new NullReferenceException("Cannot find application").AddData("Application", application);
             var applicationVersions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
             var ver = applicationVersions.SingleOrDefault(x => x.Version == version);
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var model = new IssueTypeModel
             {
@@ -61,7 +59,7 @@ namespace Quilt4.Web.Controllers
                 Application = application,
                 Version = version,
                 InitiativeName = initiative.Name,
-                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)),
+                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 ApplicationName = app.Name,
                 VersionUniqueIdentifier = ver.GetUniqueIdentifier(applicationVersions.Select(x => x.Version))
             };
