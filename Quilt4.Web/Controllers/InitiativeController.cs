@@ -362,14 +362,11 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
-
             var model = new InitiativeViewModel()
             {
                 Id = initiative.Id,
                 Name = initiative.Name,
-                UniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
+                UniqueIdentifier = initiativeUniqueIdentifier
             };
             
             return View(model);
