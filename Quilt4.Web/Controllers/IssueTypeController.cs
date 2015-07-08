@@ -50,7 +50,9 @@ namespace Quilt4.Web.Controllers
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Name == application);
             if (app == null) throw new NullReferenceException("Cannot find application").AddData("Application", application);
             var applicationVersions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
-            var ver = applicationVersions.SingleOrDefault(x => x.Version == version);
+
+            var v = applicationVersions.Where(x => x.Version == version);
+            var ver = v.Count() == 1 ? applicationVersions.Single(x => x.Version == version) : applicationVersions.Single(x => x.Id.Replace(":", "") == version);
 
             var model = new IssueTypeModel
             {
