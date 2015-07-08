@@ -191,6 +191,11 @@ namespace Quilt4.Web.Controllers
                 return View("Error");
             }
 
+            if (_accountRepository.FindById(userId).EMailConfirmed)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             var result = await _accountRepository.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
@@ -415,9 +420,20 @@ namespace Quilt4.Web.Controllers
             return View();
         }
 
-        public ActionResult ResendConfirmationEmail()
+        public async Task<ActionResult> ResendConfirmationEmail()
         {
-            throw new NotImplementedException();
+            var user = _accountRepository.FindById(User.Identity.GetUserId());
+
+            if (!user.EMailConfirmed)
+            {
+                var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(user.UserId);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.UserId, code = token }, protocol: Request.Url.Scheme);
+
+                _emailBusiness.SendEmail(new List<string>() { user.Email }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         #region Helpers
