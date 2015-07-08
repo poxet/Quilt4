@@ -95,20 +95,20 @@ namespace Quilt4.Web.Controllers
         }
 
         //GET
-        public ActionResult RemoveMember(string initiativeUniqueIdentifier, string application)
+        public ActionResult RemoveMember(string uniqueInitiativeIdentifier, string application)
         {
-            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+            if (uniqueInitiativeIdentifier == null) throw new ArgumentNullException("uniqueInitiativeIdentifier", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == uniqueInitiativeIdentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == uniqueInitiativeIdentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(uniqueInitiativeIdentifier)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -117,14 +117,12 @@ namespace Quilt4.Web.Controllers
             }
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var model = new MemberModel
             {
                 DeveloperName = initiative.DeveloperRoles.Single(x => x.DeveloperName == application).DeveloperName,
                 InitiativeName = initiative.Name,
-                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)),
+                UniqueInitiativeIdentifier = uniqueInitiativeIdentifier,
             };
 
             return View(model);
@@ -132,20 +130,20 @@ namespace Quilt4.Web.Controllers
 
         //POST
         [HttpPost]
-        public ActionResult RemoveMember(string initiativeUniqueIdentifier, string application, FormCollection collection)
+        public ActionResult RemoveMember(string uniqueInitiativeIdentifier, string application, FormCollection collection)
         {
-            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+            if (uniqueInitiativeIdentifier == null) throw new ArgumentNullException("uniqueInitiativeIdentifier", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == uniqueInitiativeIdentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == uniqueInitiativeIdentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(uniqueInitiativeIdentifier)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -154,13 +152,11 @@ namespace Quilt4.Web.Controllers
             }
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             initiative.RemoveDeveloperRole(application);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)) });
+            return RedirectToAction("Member", "Initiative", new { initiativeUniqueIdentifier = uniqueInitiativeIdentifier });
         }
 
         //Get
@@ -188,9 +184,6 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
             ViewBag.InviteError = TempData["InviteError"];
-                
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var currentUser = User.Identity.GetUserName();
 
@@ -198,7 +191,7 @@ namespace Quilt4.Web.Controllers
             {
                 Initiative = initiative,
                 IsAllowedToAdministrate = initiative.OwnerDeveloperName == currentUser || initiative.DeveloperRoles.Single(x => x.DeveloperName == User.Identity.Name).RoleName == "Administrator",
-                UniqueInitiativeIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name)),
+                UniqueInitiativeIdentifier = initiativeUniqueIdentifier,
             };
 
             return View(invite);
@@ -369,14 +362,11 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
 
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
-
             var model = new InitiativeViewModel()
             {
                 Id = initiative.Id,
                 Name = initiative.Name,
-                UniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(x => x.Name))
+                UniqueIdentifier = initiativeUniqueIdentifier
             };
             
             return View(model);

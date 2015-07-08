@@ -53,8 +53,6 @@ namespace Quilt4.Web.Controllers
             var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), applicationId.ToString(), version).Version;
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var issue = new IssueViewModel
             {
@@ -67,7 +65,7 @@ namespace Quilt4.Web.Controllers
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
                 ApplicationVersionId = applicationId.ToString(),
                 //TODO: Add applicationversion id
-                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)),
+                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 DevColor = app.DevColor,
                 CiColor = app.CiColor,
                 ProdColor = app.ProdColor,
