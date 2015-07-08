@@ -107,7 +107,7 @@ namespace Quilt4.Web.Controllers
                 IssueType = ver.IssueTypes.Single(x => x.Ticket.ToString() == issueType), 
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
                 Application = application,
-                Version = version,
+                Version = ver.Version,
                 InitiativeName = initiative.Name,
                 InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 ApplicationName = app.Name,
