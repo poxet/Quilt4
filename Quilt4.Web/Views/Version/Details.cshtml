@@ -51,7 +51,7 @@
             <td style="padding: 0 5px;">@issueType.IssueLevel</td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
             <td style="padding: 0 5px;">
-                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
+                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment).Distinct())
                 {
                     if (env.Equals("Dev"))
                     {
