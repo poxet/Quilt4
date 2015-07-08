@@ -30,8 +30,18 @@
     @foreach (var issue in Model.IssueType.Issues)
     {
         <tr>
-            <td style="padding: 0 5px;">@issue.ServerTime</td>
-            <td style="padding: 0 5px;">@Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid)</td>
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issue.ServerTime.ToLocalTime()">@issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
+            <td style="padding: 0 5px;">
+                @if (Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid) > 1)
+                {
+                    @Html.ActionLink(@Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid).ToString(), "Thread", "IssueType", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, issueThread = issue.IssueThreadGuid }, null)
+                }
+                else
+                {
+                    @Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid)
+                }
+
+            </td>
             <td style="padding: 0 5px;">@(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName == null ? Html.Raw("N/A") : Html.Raw(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName))</td>
             <td style="padding: 0 5px;">@(issue.UserHandle == null ? Html.Raw("N/A") : Html.Raw(issue.UserHandle))</td>
             <td style="padding: 0 5px;">@((issue.VisibleToUser == null || issue.VisibleToUser == false) ? "No" : "Yes")</td>

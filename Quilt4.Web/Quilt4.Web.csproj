@@ -282,6 +282,7 @@
     <Compile Include="Models\CreateInitiativeViewModel.cs" />
     <Compile Include="Models\InitiativesViewModel.cs" />
     <Compile Include="Models\InviteMemberModel.cs" />
+    <Compile Include="Models\IssueThreadModel.cs" />
     <Compile Include="Models\IssueViewModel.cs" />
     <Compile Include="Models\IssueTypeModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -440,6 +441,8 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\SearchResults.cshtml" />
     <Content Include="Views\Shared\_ConfirmEmailPartial.cshtml" />
+    <Content Include="Views\Account\ResendConfirmationEmail.cshtml" />
+    <Content Include="Views\IssueType\Thread.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

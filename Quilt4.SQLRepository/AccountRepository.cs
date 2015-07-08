@@ -117,6 +117,11 @@ namespace Quilt4.SQLRepository
             return await ApplicationUserManager.GenerateChangePhoneNumberTokenAsync(userId, number);
         }
 
+        public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GenerateEmailConfirmationTokenAsync(userId);
+        }
+
         public IIdentityMessageService SmsService { get { return ApplicationUserManager.SmsService; } }
 
         public async Task SetTwoFactorEnabledAsync(string userId, bool enabled)
