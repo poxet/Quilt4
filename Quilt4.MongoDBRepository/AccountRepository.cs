@@ -200,6 +200,11 @@ namespace Quilt4.MongoDBRepository
         {
             ApplicationUserManager.AddToRole(userId, roleName);
         }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GenerateEmailConfirmationTokenAsync(userId);
+        }
     }
 
     internal static class Converter2
