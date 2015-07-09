@@ -7,37 +7,40 @@
 @if (Model.IsConfirmed)
 {
     <h2>Search Results for "@Model.SearchText"</h2>
-    if (Model.IssueTypeResults.Any())
+    
+    using (Html.BeginForm("SearchResults", "Home", FormMethod.Get))
     {
-        <table>
-            <tr style="border-bottom-color: black; border-bottom-style: solid;">
-                <th style="padding: 0 5px;">Issue Type)</th>
-                <th style="padding: 0 5px;">Time</th>
-                <th style="padding: 0 5px;">User</th>
-                <th style="padding: 0 5px;">Visible</th>
-                <th style="padding: 0 5px;">Issue Ticket</th>
-                <th style="padding: 0 5px;">Ticket</th>
+        @Html.TextBox("searchText", "", new { value = Model.SearchText });
+        <input type="submit" value="Search" />
+    }
+    
+    <table>
+        <tr style="border-bottom-color: black; border-bottom-style: solid;">
+            <th style="padding: 0 5px;">Initiative</th>
+            <th style="padding: 0 5px;">Application</th>
+            <th style="padding: 0 5px;">Version</th>
+            <th style="padding: 0 5px;">Issue Type</th>
+            <th style="padding: 0 5px;">Time</th>
+            <th style="padding: 0 5px;">Level</th>
+            <th style="padding: 0 5px;">Environment</th>
+            <th style="padding: 0 5px;">IssueType Ticket</th>
+            <th style="padding: 0 5px;">Issue Ticket</th>
+        </tr>
+        @foreach (var row in Model.SearchResultRows)
+        {
+            <tr>
+                <td style="padding: 0 5px;">@row.InitiativeName</td>
+                <td style="padding: 0 5px;">@row.ApplicationName</td>
+                <td style="padding: 0 5px;">@row.Version</td>
+                <td style="padding: 0 5px;">@(row.IssueType.ExceptionTypeName ?? "N/A")</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@row.Issue.ServerTime.ToLocalTime()">@row.Issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">@row.IssueType.IssueLevel</td>
+                <td style="padding: 0 5px;">@row.Environment</td>
+                <td style="padding: 0 5px;">@row.IssueType.Ticket</td>
+                <td style="padding: 0 5px;">@row.Issue.Ticket</td>
             </tr>
-            @foreach (var issueType in Model.IssueTypeResults)
-            {
-                foreach (var issue in issueType.Issues)
-                {
-                    <tr>
-                        <td style="padding: 0 5px;">@issueType.ExceptionTypeName</td>
-                        <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issue.ServerTime.ToLocalTime()">@issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
-                        <td style="padding: 0 5px;">@issue.UserHandle</td>
-                        <td style="padding: 0 5px;">@issue.VisibleToUser</td>
-                        <td style="padding: 0 5px;">@issueType.Ticket</td>
-                        <td style="padding: 0 5px;">@issue.Ticket</td>
-                    </tr>
-                }
-            }
-        </table>
-    }
-    else
-    {
-        <p>No results found</p>
-    }
+        }
+    </table>
 }
 else
 {

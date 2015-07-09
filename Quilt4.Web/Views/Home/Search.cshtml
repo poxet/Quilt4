@@ -1,13 +1,12 @@
-﻿@model Quilt4.Web.Models.SearchModel
-
+﻿
 @{
     ViewBag.Title = "Search";
 }
 
 <h2>Search</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("SearchResults", "Home", FormMethod.Get))
 {
-    @Html.TextBoxFor(x => x.SearchText)
+    @Html.TextBox("searchText", "", new { placeholder = "Search" });
     <input type="submit" value="Search"/>
 }    
