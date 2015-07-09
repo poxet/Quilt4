@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Business
@@ -89,7 +89,6 @@ namespace Quilt4.Web.Business
         public void Create(string developerName, string initiativename)
         {
             developerName = developerName ?? "*";
-
             var initiative = new Initiative(Guid.NewGuid(), initiativename, GenerateClientToken(), developerName, new List<IDeveloperRole>(), new List<ApplicationGroup>());
             _repository.AddInitiative(initiative);
         }
@@ -108,7 +107,7 @@ namespace Quilt4.Web.Business
             var initiativeId = Guid.Empty;
 
             //Try the name as identifier
-            var initiativeHeads = initiativesByDeveloper.Where(x => (x.Name ?? Models.Constants.DefaultInitiativeName) == initiativeIdentifier).ToArray();
+            var initiativeHeads = initiativesByDeveloper.Where(x => (x.Name ?? Constants.DefaultInitiativeName) == initiativeIdentifier).ToArray();
             if (initiativeHeads.Count() == 1)
                 initiativeId = initiativeHeads.Single().Id;
 
@@ -137,7 +136,6 @@ namespace Quilt4.Web.Business
 
         public int GetInitiativeCount()
         {
-
             return _repository.GetInitiativeCount();
         }
 
@@ -235,7 +233,6 @@ namespace Quilt4.Web.Business
 
             foreach (var version in versions)
                 _repository.DeleteApplicationVersion(version.Id);
-                
         }
 
         public void DeleteApplicationVersion(string applicationVersionFingerprint)

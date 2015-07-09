@@ -1,8 +1,33 @@
-﻿@using Quilt4.Web.Models
+﻿@using System.Text.RegularExpressions
+@using Quilt4.Web.Models
 @model IssueTypeModel
 
+@helper FormatStackTrace(string rawStackTrace)
+{
+    //Break lines
+    
+    //TODO: Split on string
+    //TODO: Make code that is not yours, gray
+    //TODO: Color function, file names and line numbers with different coulor.
+
+    var lines = Regex.Matches(rawStackTrace, Environment.NewLine);
+    //var lines = rawStackTrace.Split(Environment.NewLine);
+    
+    //var stackTrace = rawStackTrace.Replace(Environment.NewLine + "   at ", "<br/> at ");
+    //stackTrace = stackTrace.Replace(") in ", ")<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in ");
+    //stackTrace = stackTrace.Replace(":line ", "<strong>:line </strong>");
+
+    var output = "";
+    foreach (var line in lines)
+    {
+        output += line + "</br>";
+    }
+    
+    @Html.Raw(output);
+}
+
 @{
-    ViewBag.Title = "Issuetype Details";
+    //ViewBag.Title = "Issuetype Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,6 +40,15 @@
 </ol>
 
 <h2>Issuetype Details</h2>
+
+<table>
+    <tr>
+        <th>Stack trace</th>
+    </tr>
+    <tr>
+        <td>@FormatStackTrace(Model.IssueType.StackTrace)</td>
+    </tr>
+</table>
 
 <h3>Issues</h3>
 <table>
