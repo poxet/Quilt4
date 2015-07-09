@@ -205,6 +205,12 @@ namespace Quilt4.MongoDBRepository
         {
             return await ApplicationUserManager.GenerateEmailConfirmationTokenAsync(userId);
         }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GeneratePasswordResetTokenAsync(userId);
+        }
+
     }
 
     internal static class Converter2
