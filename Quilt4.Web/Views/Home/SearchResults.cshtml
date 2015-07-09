@@ -29,14 +29,14 @@
         @foreach (var row in Model.SearchResultRows)
         {
             <tr>
-                <td style="padding: 0 5px;">@row.InitiativeName</td>
-                <td style="padding: 0 5px;">@row.ApplicationName</td>
-                <td style="padding: 0 5px;">@row.Version</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.InitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier }, null)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.ApplicationName, "Details", "Application", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier, application = row.ApplicationName}, null)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.Version, "Details", "Version", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier}, null)</td>
                 <td style="padding: 0 5px;">@(row.IssueType.ExceptionTypeName ?? "N/A")</td>
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@row.Issue.ServerTime.ToLocalTime()">@row.Issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
                 <td style="padding: 0 5px;">@row.IssueType.IssueLevel</td>
                 <td style="padding: 0 5px;">@row.Environment</td>
-                <td style="padding: 0 5px;">@row.IssueType.Ticket</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.IssueType.Ticket.ToString(), "Details", "IssueType", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier, issueType = row.IssueType.Ticket.ToString()}, null)</td>
                 <td style="padding: 0 5px;">@row.Issue.Ticket</td>
             </tr>
         }
