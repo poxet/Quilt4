@@ -26,7 +26,6 @@
 }
 
 @{
-    //ViewBag.Title = "Issuetype Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -64,7 +63,7 @@
     {
         <tr>
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issue.ServerTime.ToLocalTime()">@issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
-            <td style="padding: 0 5px;">
+            <td style="padding: 0 5px;" title="@issue.IssueThreadGuid">
                 @if (Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid) > 1)
                 {
                     @Html.ActionLink(@Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid).ToString(), "Thread", "IssueType", new { id = Model.InitiativeUniqueIdentifier, issueThread = issue.IssueThreadGuid }, null)
