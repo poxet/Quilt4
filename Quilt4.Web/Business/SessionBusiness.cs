@@ -160,6 +160,11 @@ namespace Quilt4.Web.Business
             return _repository.GetSessions();
         }
 
+        public ISession GetSession(Guid sessionId)
+        {
+            return _repository.GetSession(sessionId);
+        }
+
         public IEnumerable<ISession> GetSessionsForMachine(Fingerprint machineFingerprint)
         {
             return _repository.GetSessionsForMachine(machineFingerprint);

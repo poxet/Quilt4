@@ -27,11 +27,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     <li>@Html.ActionLink("Initiatives", "Index", "Initiative")</li>
-                    <li>@if(User.Identity.IsAuthenticated){@Html.ActionLink("Search", "Search", "Home")}</li>
+                    <li>@Html.ActionLink("Search", "Search", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

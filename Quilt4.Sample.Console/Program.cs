@@ -25,7 +25,15 @@ namespace Quilt4.Sample.Console
                 //Register exceptions
                 try
                 {
-                    throw new InvalidOperationException("Some exception");
+                    try
+                    {
+                        throw new InvalidOperationException("Some exception");
+                    }
+                    catch (Exception exception)
+                    {
+                        Issue.Register(exception);
+                        throw;
+                    }                    
                 }
                 catch (Exception exception)
                 {

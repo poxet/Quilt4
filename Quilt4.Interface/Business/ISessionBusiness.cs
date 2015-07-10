@@ -14,5 +14,6 @@ namespace Quilt4.Interface
         IEnumerable<ISession> GetSessionsForUser(string userId);
         IEnumerable<ISession> GetSessionsForMachine(string machineId);
         IEnumerable<ISession> GetSessions();
+        ISession GetSession(Guid sessionId);
     }
 }

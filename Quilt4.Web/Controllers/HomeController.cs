@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
-using Castle.Core.Internal;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
@@ -87,7 +86,7 @@ namespace Quilt4.Web.Controllers
             {
                 var applications = initiative.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
                 var initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(initiatives.Select(x => x.Name));
-                
+
                 var versions = new List<IApplicationVersion>();
                 foreach (var application in applications)
                 {
@@ -96,29 +95,23 @@ namespace Quilt4.Web.Controllers
 
                 foreach (var version in versions)
                 {
-                    var sessions = _sessionBusiness.GetSessionsForApplicationVersion(version.Id).ToArray();
-                    var versionUniqueIdentifier = version.GetUniqueIdentifier(versions.Select(x => x.Version));
-
                     foreach (var issueType in version.IssueTypes)
                     {
                         if (issueType.Ticket.ToString().Equals(searchText))
                         {
                             foreach (var issue in issueType.Issues)
                             {
-                                foreach (var session in sessions.Where(x => x.Id == issue.SessionId))
+                                searchResultRows.Add(new SearchResultRowModel()
                                 {
-                                    searchResultRows.Add(new SearchResultRowModel()
-                                    {
-                                        InitiativeName = initiative.Name,
-                                        InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
-                                        ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
-                                        Version = version.Version,
-                                        VersionUniqueIdentifier = versionUniqueIdentifier,
-                                        IssueType = issueType,
-                                        Issue = issue,
-                                        Environment = session.Environment,
-                                    });
-                                }
+                                    InitiativeName = initiative.Name,
+                                    InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                                    ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
+                                    Version = version.Version,
+                                    VersionUniqueIdentifier = version.GetUniqueIdentifier(versions.Select(x => x.Version)),
+                                    IssueType = issueType,
+                                    Issue = issue,
+                                    Environment = GetSession(issue.SessionId).Environment,
+                                });
                             }
                         }
                         else
@@ -127,20 +120,17 @@ namespace Quilt4.Web.Controllers
                             {
                                 if (issue.Ticket.ToString().Equals(searchText))
                                 {
-                                    foreach (var session in sessions.Where(x => x.Id == issue.SessionId))
+                                    searchResultRows.Add(new SearchResultRowModel()
                                     {
-                                        searchResultRows.Add(new SearchResultRowModel()
-                                        {
-                                            InitiativeName = initiative.Name,
-                                            InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
-                                            ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
-                                            Version = version.Version,
-                                            VersionUniqueIdentifier = versionUniqueIdentifier,
-                                            IssueType = issueType,
-                                            Issue = issue,
-                                            Environment = session.Environment,
-                                        });
-                                    }
+                                        InitiativeName = initiative.Name,
+                                        InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                                        ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
+                                        Version = version.Version,
+                                        VersionUniqueIdentifier = version.GetUniqueIdentifier(versions.Select(x => x.Version)),
+                                        IssueType = issueType,
+                                        Issue = issue,
+                                        Environment = GetSession(issue.SessionId).Environment,
+                                    });
                                 }
                                 else
                                 {
@@ -148,20 +138,17 @@ namespace Quilt4.Web.Controllers
                                     {
                                         if (issueType.ExceptionTypeName.Contains(searchText))
                                         {
-                                            foreach (var session in sessions.Where(x => x.Id == issue.SessionId))
+                                            searchResultRows.Add(new SearchResultRowModel()
                                             {
-                                                searchResultRows.Add(new SearchResultRowModel()
-                                                {
-                                                    InitiativeName = initiative.Name,
-                                                    InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
-                                                    ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
-                                                    Version = version.Version,
-                                                    VersionUniqueIdentifier = versionUniqueIdentifier,
-                                                    IssueType = issueType,
-                                                    Issue = issue,
-                                                    Environment = session.Environment,
-                                                });
-                                            }
+                                                InitiativeName = initiative.Name,
+                                                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                                                ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
+                                                Version = version.Version,
+                                                VersionUniqueIdentifier = version.GetUniqueIdentifier(versions.Select(x => x.Version)),
+                                                IssueType = issueType,
+                                                Issue = issue,
+                                                Environment = GetSession(issue.SessionId).Environment,
+                                            });
                                         }
                                     }
                                 }
@@ -231,6 +218,11 @@ namespace Quilt4.Web.Controllers
             //model.IssueTypeResults = issueTypeResults;
             
             return View("SearchResults", model);
+        }
+
+        private ISession GetSession(Guid sessionId)
+        {
+            return _sessionBusiness.GetSession(sessionId);
         }
     }
 }
