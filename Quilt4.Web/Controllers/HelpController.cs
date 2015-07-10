@@ -31,5 +31,11 @@ namespace Quilt4.Web.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult ProtectionOperation()
+        {
+            return View();
+        }
     }
 }

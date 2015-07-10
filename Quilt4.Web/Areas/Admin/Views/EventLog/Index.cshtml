@@ -7,27 +7,22 @@
 
 @{ Html.RenderAction("_EventLogStatus", "Action"); }
 
-<table>
-    <tr>
-        <th></th>
-        <th>EntryType</th>
-        <th>TimeGenerated</th>
-        <th>Source</th>
-        <th>Read</th>
-        <th>Message</th>
-    </tr>
-    @foreach (var message in @Model.EventLogData)
-    {
-        <tr>
-            <td><i class="fa @Html.Raw(message.Icon)"></i></td>
-            <td>@Html.Raw(message.EntryType)</td>
-            <td title="@Html.Raw(message.TimeGenerated)">@Html.Raw(message.TimeGenerated.ToTimeAgo()) ago</td>
-            <td>@Html.Raw(message.Source)</td>
-            <td>@Html.Raw(message.Read)</td>
-            <td>@Html.Raw(message.Message)</td>
-        </tr>
-    }
-</table>
+@foreach (var message in @Model.EventLogData)
+{
+    <div style="border-color: red; border-width: 1px; border-style: dashed;">
+        <div><i class="fa @Html.Raw(message.Icon)"></i>
+        </div>
+        @if (message.Message.Contains("The data protection operation was unsuccessful."))
+        {
+            <div>@Html.ActionLink("Help", "ProtectionOperation", "Help", new { area = "" }, null)</div>
+        }
+        <div>@Html.Raw(message.EntryType)</div>
+        <div title="@Html.Raw(message.TimeGenerated)">@Html.Raw(message.TimeGenerated.ToTimeAgo()) ago</div>
+        <div>@Html.Raw(message.Source)</div>
+        @*<div>@Html.Raw(message.Read)</div>*@
+        <div>@Html.Raw(message.Message)</div>
+    </div>
+}
 
 @Html.ActionLink("Clear Event Log", "Clear")
 @Html.ActionLink("Mark Event Log as read", "MarkAsRead")

@@ -469,6 +469,7 @@
     <Content Include="Views\Shared\_ConfirmEmailPartial.cshtml" />
     <Content Include="Views\Account\ResendConfirmationEmail.cshtml" />
     <Content Include="Views\IssueType\Thread.cshtml" />
+    <Content Include="Views\Help\ProtectionOperation.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

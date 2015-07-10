@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Protection Operation Help";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Protection Operation Help</h2>
+
+<h3>Error</h3>
+<p>The data protection operation was unsuccessful. This may have been caused by not having the user profile loaded for the current thread's user context, which may be the case when the thread is impersonating.</p>
+
+<h3>Possible solution</h3>
+<ol>
+    <li>Open your IIS Manager</li>
+    <li>Find out what AppPool your application is using by selecting your App, right-click on it, and Select Manage Application -> Advanced Settings.</li>
+    <li>After that, on the top left hand side, select Applications Pools, and go ahead and select the App Pool used by your app.</li>
+    <li>Right-click on it, and select Advanced Settings, Go to the Process Model Section and Find the "Load User Profile" Option and set it to true.</li>
+</ol>
