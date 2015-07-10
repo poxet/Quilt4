@@ -9,7 +9,7 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.Initiative.Name ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.UniqueInitiativeIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.Initiative.Name ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.UniqueInitiativeIdentifier }, null)</li>
     <li class="active">Members</li>
 </ol>
 

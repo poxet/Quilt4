@@ -8,12 +8,12 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = @Model.InitiativeUniqueIdentifier }, null)</li>
     <li class="active">@Model.Application</li>
 </ol>
 
 <h2>Application Details</h2>
-@Html.ActionLink("Properties", "Edit", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)
+@Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)
 
 <h3>Versions</h3>
 <table>
@@ -66,7 +66,7 @@
 
             <tr style="display: table-row">
                 <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br /></td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br /></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
                 <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>

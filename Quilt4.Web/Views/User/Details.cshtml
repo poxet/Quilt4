@@ -5,7 +5,7 @@
 }
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
     <li class="active">Users</li>
     <li class="active">@Model.Users.First().UserName</li>
 </ol>

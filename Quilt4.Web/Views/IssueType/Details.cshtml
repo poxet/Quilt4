@@ -22,7 +22,6 @@
     {
         output += line + "</br>";
     }
-    
     @Html.Raw(output);
 }
 
@@ -33,9 +32,9 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier }, null)</li>
-    <li>@Html.ActionLink(Model.ApplicationName, "Details", "Application", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
-    <li>@Html.ActionLink(Model.Version, "Details", "Version", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.VersionUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.ApplicationName, "Details", "Application", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
+    <li>@Html.ActionLink(Model.Version, "Details", "Version", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.VersionUniqueIdentifier }, null)</li>
     <li class="active">@Model.IssueType.ExceptionTypeName</li>
 </ol>
 
@@ -68,7 +67,7 @@
             <td style="padding: 0 5px;">
                 @if (Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid) > 1)
                 {
-                    @Html.ActionLink(@Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid).ToString(), "Thread", "IssueType", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, issueThread = issue.IssueThreadGuid }, null)
+                    @Html.ActionLink(@Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid).ToString(), "Thread", "IssueType", new { id = Model.InitiativeUniqueIdentifier, issueThread = issue.IssueThreadGuid }, null)
                 }
                 else
                 {

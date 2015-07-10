@@ -8,8 +8,8 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier }, null)</li>
-    <li>@Html.ActionLink(@Model.ApplicationName, "Details", "Application", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(@Model.ApplicationName, "Details", "Application", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
     <li class="active">@Model.VersionName</li>
 </ol>
 
@@ -46,7 +46,7 @@
     @foreach (var issueType in Model.IssueTypes)
     {
         <tr style="display: table-row">
-            <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName ?? "N/A", "Details", "IssueType", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName ?? "N/A", "Details", "IssueType", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
             <td style="padding: 0 5px;">@issueType.Message</td>
             <td style="padding: 0 5px;">@issueType.IssueLevel</td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>

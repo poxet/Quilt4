@@ -25,20 +25,20 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Version/Details/5
-        public ActionResult Details(string initiativeUniqueIdentifier, string application, string version)
+        public ActionResult Details(string id, string application, string version)
         {
-            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
+            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -65,7 +65,7 @@ namespace Quilt4.Web.Controllers
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
                 ApplicationVersionId = applicationId.ToString(),
                 //TODO: Add applicationversion id
-                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                InitiativeUniqueIdentifier = id,
                 DevColor = app.DevColor,
                 CiColor = app.CiColor,
                 ProdColor = app.ProdColor,

@@ -1,4 +1,5 @@
-﻿@model Quilt4.Web.Models.IssueThreadModel
+﻿@using Quilt4.Web.Models
+@model IssueThreadModel
 
 @{
     ViewBag.Title = "Thread";
@@ -6,8 +7,8 @@
 }
 
 <ol class="breadcrumb">
-    <li><a href="~/Initiative/">Initiative</a></li>
-    <li><a href="~/Initiative/Details?initiativeUniqueIdentifier=@Model.InitiativeUniqueIdentifier">@Model.InitiativeName</a></li>
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
     <li class="active">Threads</li>
     <li class="active">@Model.Issues.First().IssueThreadGuid</li>
 </ol>

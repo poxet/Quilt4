@@ -9,7 +9,7 @@
 
 @foreach (var initiative in Model.InitiativeInfos)
 {
-    <div>@Html.ActionLink(initiative.Name ?? Constants.DefaultInitiativeName, "Details", new { initiativeUniqueIdentifier = initiative.UniqueIdentifier }, null)</div>
+    <div>@Html.ActionLink(initiative.Name ?? Constants.DefaultInitiativeName, "Details", new { id = initiative.UniqueIdentifier }, null)</div>
 }
 
 @Html.ActionLink("Create new Initiative", "Create", null, new { @class = "btn btn-default" })

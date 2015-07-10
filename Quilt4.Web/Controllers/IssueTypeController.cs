@@ -25,20 +25,20 @@ namespace Quilt4.Web.Controllers
             _userBusiness = userBusiness;
         }
 
-        public ActionResult Thread(string initiativeUniqueIdentifier, string issueThread)
+        public ActionResult Thread(string id, string issueThread)
         {
-            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -62,7 +62,7 @@ namespace Quilt4.Web.Controllers
 
             var model = new IssueThreadModel()
             {
-                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                InitiativeUniqueIdentifier = id,
                 InitiativeName = initiative.Name,
                 Issues = issues,
                 Sessions = sessions,
@@ -73,20 +73,20 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: IssueType/Details/5
-        public ActionResult Details(string initiativeUniqueIdentifier, string application, string version, string issueType)
+        public ActionResult Details(string id, string application, string version, string issueType)
         {
-            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -109,7 +109,7 @@ namespace Quilt4.Web.Controllers
                 Application = application,
                 Version = ver.Version,
                 InitiativeName = initiative.Name,
-                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                InitiativeUniqueIdentifier = id,
                 ApplicationName = app.Name,
                 VersionUniqueIdentifier = ver.GetUniqueIdentifier(applicationVersions.Select(x => x.Version))
             };
