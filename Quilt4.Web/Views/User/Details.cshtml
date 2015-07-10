@@ -1,20 +1,42 @@
-﻿@model Quilt4.Web.Models.UserViewModel
+﻿@using Quilt4.Web.Models
+@model Quilt4.Web.Models.UserViewModel
 @{
     ViewBag.Title = "Details";
 }
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li class="active">Users</li>
+    <li class="active">@Model.Users.First().UserName</li>
+</ol>
 
 <h2>Details</h2>
 
 <table>
+    <h4>Application</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th>Applications</th>
+        <th>Application</th>
     </tr>
-    <tr>
-        <td>Applications</td>
-    </tr>
+    @foreach (var applicationName in @Model.ApplicationNames)
+    {
+        if (applicationName == null)
+        {
+            <tr>
+                <td>N/A</td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>@applicationName</td>
+            </tr>
+        }
+
+    }
+
 </table>
 <table>
-    <h4>Sessions</h4>
+    <h4>Session</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th style="padding: 0 5px;">Start</th>
         <th style="padding: 0 5px;">Environment</th>
@@ -36,9 +58,22 @@
 
 </table>
 <table>
-    <h4>Machines</h4>
+    <h4>Machine</h4>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th></th>
+        <th>Machine</th>
     </tr>
-    <tr><td></td></tr>
+        @foreach (var MachineName in @Model.MachineNames)
+        {
+        <tr>
+            @if (MachineName == null)
+            {
+                <td>N/A</td>
+            }
+            else
+            {
+                <td>@MachineName</td>
+            }
+        </tr>
+    }
+
 </table>

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -14,10 +16,12 @@ namespace Quilt4.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IEmailBusiness _emailBusiness;
 
-        public AccountController(IAccountRepository accountRepository)
+        public AccountController(IAccountRepository accountRepository, IEmailBusiness emailBusiness)
         {
             _accountRepository = accountRepository;
+            _emailBusiness = emailBusiness;
         }
 
         //
@@ -152,11 +156,14 @@ namespace Quilt4.Web.Controllers
                     if (result.Item1.Succeeded)
                     {
                         await _accountRepository.SignInAsync(result.Item2, isPersistent: false, rememberBrowser: false);
-                  
+                        var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(_accountRepository.GetUser(model.Email).UserId);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = _accountRepository.GetUser(model.Email).UserId, code = token }, protocol: Request.Url.Scheme);
+
+                        _emailBusiness.SendEmail(new List<string>() { model.Email }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
                         // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                         // Send an email with this link
                         // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                         return RedirectToLocal(returnUrl); ;
@@ -182,6 +189,11 @@ namespace Quilt4.Web.Controllers
             if (userId == null || code == null)
             {
                 return View("Error");
+            }
+
+            if (_accountRepository.FindById(userId).EMailConfirmed)
+            {
+                return RedirectToAction("Index", "Home");
             }
 
             var result = await _accountRepository.ConfirmEmailAsync(userId, code);
@@ -212,10 +224,15 @@ namespace Quilt4.Web.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
+                var token = await _accountRepository.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { code = token }, protocol: Request.Url.Scheme);
+                _emailBusiness.SendEmail(new List<string>() { model.Email }, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
                 // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
@@ -406,6 +423,22 @@ namespace Quilt4.Web.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        public async Task<ActionResult> ResendConfirmationEmail()
+        {
+            var user = _accountRepository.FindById(User.Identity.GetUserId());
+
+            if (!user.EMailConfirmed)
+            {
+                var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(user.UserId);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.UserId, code = token }, protocol: Request.Url.Scheme);
+
+                _emailBusiness.SendEmail(new List<string>() { user.Email }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         #region Helpers

@@ -27,6 +27,8 @@ namespace Quilt4.Interface
         IList<UserLoginInfo> GetLogins(string userId);
         Task<IdentityResult> RemoveLoginAsync(string userId, UserLoginInfo userLoginInfo);
         Task<string> GenerateChangePhoneNumberTokenAsync(string userId, string number);
+        Task<string> GenerateEmailConfirmationTokenAsync(string userId);
+        Task<string> GeneratePasswordResetTokenAsync(string userId);
         IIdentityMessageService SmsService { get; }
         Task SetTwoFactorEnabledAsync(string userId, bool enabled);
         Task<IdentityResult> ChangePhoneNumberAsync(string userId, string phoneNumber, string code);
@@ -41,6 +43,7 @@ namespace Quilt4.Interface
         Task<bool> SendTwoFactorCodeAsync(string provider);
         Task<SignInStatus> ExternalSignInAsync(ExternalLoginInfo loginInfo, bool isPersistent);
         IEnumerable<IDeveloper> GetUsers();
+        IDeveloper GetUser(string userEmail);
         void DeleteUser(string userId);
         void AssignRole(string userId, string roleName);
     }

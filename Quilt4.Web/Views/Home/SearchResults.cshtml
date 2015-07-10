@@ -1,0 +1,49 @@
+﻿@model Quilt4.Web.Models.SearchModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+@if (Model.IsConfirmed)
+{
+    <h2>Search Results for "@Model.SearchText"</h2>
+    
+    using (Html.BeginForm("SearchResults", "Home", FormMethod.Get))
+    {
+        @Html.TextBox("searchText", "", new { value = Model.SearchText });
+        <input type="submit" value="Search" />
+    }
+    
+    <table>
+        <tr style="border-bottom-color: black; border-bottom-style: solid;">
+            <th style="padding: 0 5px;">Initiative</th>
+            <th style="padding: 0 5px;">Application</th>
+            <th style="padding: 0 5px;">Version</th>
+            <th style="padding: 0 5px;">Issue Type</th>
+            <th style="padding: 0 5px;">Time</th>
+            <th style="padding: 0 5px;">Level</th>
+            <th style="padding: 0 5px;">Environment</th>
+            <th style="padding: 0 5px;">IssueType Ticket</th>
+            <th style="padding: 0 5px;">Issue Ticket</th>
+        </tr>
+        @foreach (var row in Model.SearchResultRows)
+        {
+            <tr>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.InitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier }, null)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.ApplicationName, "Details", "Application", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier, application = row.ApplicationName}, null)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.Version, "Details", "Version", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier}, null)</td>
+                <td style="padding: 0 5px;">@(row.IssueType.ExceptionTypeName ?? "N/A")</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@row.Issue.ServerTime.ToLocalTime()">@row.Issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">@row.IssueType.IssueLevel</td>
+                <td style="padding: 0 5px;">@row.Environment</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@row.IssueType.Ticket.ToString(), "Details", "IssueType", new { initiativeUniqueIdentifier = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier, issueType = row.IssueType.Ticket.ToString()}, null)</td>
+                <td style="padding: 0 5px;">@row.Issue.Ticket</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    @Html.Partial("_ConfirmEmailPartial")
+}
+

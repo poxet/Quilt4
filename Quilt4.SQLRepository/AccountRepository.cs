@@ -117,6 +117,16 @@ namespace Quilt4.SQLRepository
             return await ApplicationUserManager.GenerateChangePhoneNumberTokenAsync(userId, number);
         }
 
+        public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GenerateEmailConfirmationTokenAsync(userId);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GeneratePasswordResetTokenAsync(userId);
+        }
+
         public IIdentityMessageService SmsService { get { return ApplicationUserManager.SmsService; } }
 
         public async Task SetTwoFactorEnabledAsync(string userId, bool enabled)
@@ -185,6 +195,11 @@ namespace Quilt4.SQLRepository
             var creationDate = new DateTime(); //TODO: Fix
             var lastActivityDate = new DateTime(); //TODO: Fix
             return ApplicationUserManager.Users.Select(x => x.ToDeveloper());
+        }
+
+        public IDeveloper GetUser(string userEmail)
+        {
+            return ApplicationUserManager.Users.Single(x => x.Email == userEmail).ToDeveloper();
         }
 
         public void DeleteUser(string userId)

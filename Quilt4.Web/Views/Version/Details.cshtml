@@ -8,12 +8,28 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = Model.InitiativeUniqueIdentifier }, null)</li>
-    <li>@Html.ActionLink(@Model.ApplicationName, "Details", "Application", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(@Model.ApplicationName, "Details", "Application", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName }, null)</li>
     <li class="active">@Model.VersionName</li>
 </ol>
 
 <h2>Version Details</h2>
+
+<table>
+    <tr>
+        <th>Dev environment</th>
+        <td style="padding-left: 20px;"><span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span></td>
+    </tr>
+    <tr>
+        <th>CI environment</th>
+        <td style="padding-left: 20px;"><span id="CiLegendButton" onclick='toggleShowEnvironment("Ci"); changeButtonStyle("CiLegendButton");' style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span></td>
+    </tr>
+    <tr>
+        <th>Prod environment</th>
+        <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
+    </tr>
+</table>
+<br />
 
 <h3>Issue Types</h3>
 <table>
@@ -24,24 +40,36 @@
         <th style="padding: 0 5px;">Count</th>
         <th style="padding: 0 5px;">Environment</th>
         <th style="padding: 0 5px;">Ticket</th>
+        <th style="padding: 0 5px;">Last Issue</th>
     </tr>
 
     @foreach (var issueType in Model.IssueTypes)
     {
-        <tr>
-            <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName, "Details", "IssueType", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
+        <tr style="display: table-row">
+            <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName ?? "N/A", "Details", "IssueType", new { initiativeUniqueIdentifier = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
             <td style="padding: 0 5px;">@issueType.Message</td>
             <td style="padding: 0 5px;">@issueType.IssueLevel</td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
             <td style="padding: 0 5px;">
-                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment))
+                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment).Distinct())
                 {
-                    @Html.Raw(env + ", ")
+                    if (env.Equals("Dev"))
+                    {
+                        <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
+                    }
+                    else if (env.Equals("CI"))
+                    {
+                        <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
+                    }
+                    else if (env.Equals("Prod"))
+                    {
+                        <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                    }
                 }
             </td>
 
             <td style="padding: 0 5px;">@issueType.Ticket</td>
-
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issueType.Issues.OrderBy(x => x.ServerTime).Last().ServerTime">@issueType.Issues.OrderBy(x => x.ServerTime).Last().ServerTime.ToTimeAgo() ago</td>
         </tr>
     }
 
@@ -59,9 +87,22 @@
     </tr>
     @foreach (var session in Model.Sessions)
     {
-        <tr>
+        <tr style="display: table-row">
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@session.ServerStartTime.ToLocalTime()">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-            <td style="padding: 0 5px;">@session.Environment</td>
+            <td style="padding: 0 5px;">
+                @if (session.Environment.Equals("Dev"))
+                {
+                <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
+                }
+                else if (session.Environment.Equals("CI"))
+                {
+                <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
+                }
+                else if (session.Environment.Equals("Prod"))
+                {
+                <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                }
+            </td>
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
             <td style="padding: 0 5px;">@Html.ActionLink(@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = session.MachineFingerprint}, null)</td>
 
@@ -96,7 +137,7 @@
     @foreach (var user in Model.Users)
     {
         <tr>
-            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { applicationVersionId = @Model.ApplicationVersionId, userId = user.Id }, null)</td>
+            <td style="padding: 0 5px;">@Html.ActionLink(@user.UserName, "Details", "User", new { initiativeidentifier = @Model.InitiativeUniqueIdentifier, userId = user.Id }, null)</td>
         </tr>
     }
 </table>
@@ -127,17 +168,19 @@
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         <th>Machine</th>
     </tr>
-@foreach (var machine in @Model.Machines.Distinct())
-{
-    <tr>
-        @if (machine.Name.IsNullOrEmpty()) 
-        { 
-            <td style="padding: 0 5px;">@Html.Raw("N/A")</td>
-        }
-        else
-        {
-            <td style="padding: 0 5px;">@Html.ActionLink(@machine.Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = machine.Id }, null)</td>
-        }
-    </tr>
-}
+    @foreach (var machine in @Model.Machines.Distinct())
+    {
+        <tr>
+            @if (machine.Name.IsNullOrEmpty())
+            {
+                <td style="padding: 0 5px;">@Html.Raw("N/A")</td>
+            }
+            else
+            {
+                <td style="padding: 0 5px;">@Html.ActionLink(@machine.Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = machine.Id }, null)</td>
+            }
+        </tr>
+    }
 </table>
+
+<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>

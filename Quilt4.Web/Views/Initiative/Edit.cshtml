@@ -1,0 +1,29 @@
+﻿@using Quilt4.Web.Models
+@model Quilt4.Web.Models.InitiativeViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ol class="breadcrumb">
+    <li><a href="~/Initiative">Initiative</a></li>
+    <li>@Html.ActionLink((Model.Name ?? Constants.DefaultInitiativeName), "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.UniqueIdentifier }, null)</li>
+    <li class="active">Properties</li>
+</ol>
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <th>Initiative Name</th>
+            <td>@Html.TextBoxFor(x => x.Name)</td>
+        </tr>
+    </table>
+
+    <br/>
+    <input type="submit" value="Save"/>
+    @Html.ActionLink("Cancel", "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.UniqueIdentifier }, null)
+}

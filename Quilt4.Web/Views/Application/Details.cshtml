@@ -1,4 +1,5 @@
-﻿@using Quilt4.Web.Models
+﻿@using Microsoft.Ajax.Utilities
+@using Quilt4.Web.Models
 @model ApplicationModel
 @{
     //ViewBag.Title = "Application Details";
@@ -7,14 +8,29 @@
 
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
-    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = @Model.InitiativeUniqueIdentifier }, null)</li>
+    <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier }, null)</li>
     <li class="active">@Model.Application</li>
 </ol>
 
 <h2>Application Details</h2>
-@Html.ActionLink("Properties", "Edit", new { id = @Model.Initiative, application = @Model.Application }, null)
+@Html.ActionLink("Properties", "Edit", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)
 
 <h3>Versions</h3>
+<table>
+    <tr>
+        <th>Dev environment</th>
+        <td style="padding-left: 20px;"><span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span></td>
+    </tr>
+    <tr>
+        <th>CI environment</th>
+        <td style="padding-left: 20px;"><span id="CiLegendButton" onclick='toggleShowEnvironment("Ci"); changeButtonStyle("CiLegendButton");' style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span></td>
+    </tr>
+    <tr>
+        <th>Prod environment</th>
+        <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
+    </tr>
+</table>
+<br/>
 
 @using (Html.BeginForm())
 {
@@ -48,9 +64,9 @@
             @Html.HiddenFor(x => x.Versions[i].UniqueIdentifier)
             @Html.HiddenFor(x => x.Versions[i].VersionId)
 
-            <tr>
+            <tr style="display: table-row">
                 <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.Initiative, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br/></td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { initiativeUniqueIdentifier = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br /></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
                 <td style="padding: 0 5px;">@*@version.Machines.Count()*@</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>
@@ -62,10 +78,22 @@
 
                     @foreach (var env in Model.Versions[i].Sessions.Select(x => x.Environment).Distinct())
                     {
-                        @Html.Raw(env + ", ")
+                        @*@Html.Raw(env + ", ")*@
+                        if (env.Equals("Dev"))
+                        {
+                            <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
+                        }
+                        else if (env.Equals("CI"))
+                        {
+                            <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
+                        }
+                        else if (env.Equals("Prod"))
+                        {
+                            <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                        }
                     }
-                </td>
-            </tr>
+                    </td>
+                </tr>
         }
     </table>
     <br/>
@@ -101,7 +129,7 @@
                 <tr>
                     <td style="padding: 0 5px;">@version.Version</td>
                     <td style="padding: 0 5px;">@version.Build</td>
-                    <td style="padding: 0 5px;">@*Machines cound*@</td>
+                    <td style="padding: 0 5px;">@*Machines count*@</td>
                     <td style="padding: 0 5px;">@version.Sessions.Count()</td>
                     <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
                     <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
@@ -118,3 +146,5 @@
         </table>
     }
 }
+
+<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>

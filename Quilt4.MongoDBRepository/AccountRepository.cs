@@ -185,6 +185,11 @@ namespace Quilt4.MongoDBRepository
             return ApplicationUserManager.Users.Select(x => x.ToDeveloper());
         }
 
+        public IDeveloper GetUser(string userEmail)
+        {
+            return ApplicationUserManager.Users.Single(x => x.Email == userEmail).ToDeveloper();
+        }
+
         public void DeleteUser(string userId)
         {
             var user = ApplicationUserManager.FindById(userId);
@@ -195,6 +200,17 @@ namespace Quilt4.MongoDBRepository
         {
             ApplicationUserManager.AddToRole(userId, roleName);
         }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GenerateEmailConfirmationTokenAsync(userId);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(string userId)
+        {
+            return await ApplicationUserManager.GeneratePasswordResetTokenAsync(userId);
+        }
+
     }
 
     internal static class Converter2

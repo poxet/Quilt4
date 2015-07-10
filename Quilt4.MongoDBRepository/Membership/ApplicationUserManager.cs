@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace Quilt4.MongoDBRepository.Membership
 {
@@ -14,11 +16,15 @@ namespace Quilt4.MongoDBRepository.Membership
             : base(store)
         {
             _store = store;
+
+            var provider = new DpapiDataProtectionProvider("Sample");
+            this.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
         }
 
         public static ApplicationUserManager Create()
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>("Mongo"));
+
             InvokeApplicationUserManagerCreatedEvent(manager);
             return manager;
         }

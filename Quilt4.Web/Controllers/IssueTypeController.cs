@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -24,26 +25,91 @@ namespace Quilt4.Web.Controllers
             _userBusiness = userBusiness;
         }
 
-        // GET: IssueType/Details/5
-        public ActionResult Details(string id, string application, string version, string issueType)
+        public ActionResult Thread(string initiativeUniqueIdentifier, string issueThread)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            var applicationIds = initiative.ApplicationGroups.SelectMany(x => x.Applications).Select(x => x.Id).ToArray();
+
+            var versions = new List<IApplicationVersion>();
+            
+            foreach (var applicationId in applicationIds)
+            {
+                versions.AddRange(_applicationVersionBusiness.GetApplicationVersions(applicationId));
+            }
+
+            var issues = versions.SelectMany(x => x.IssueTypes).SelectMany(x => x.Issues).Where(x => x.IssueThreadGuid == Guid.Parse(issueThread)).ToArray();
+            var sessions = _sessionBusiness.GetSessionsForApplications(applicationIds).ToArray();
+            var users = sessions.Select(x => _userBusiness.GetUser(x.UserFingerprint));
+
+            var model = new IssueThreadModel()
+            {
+                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                InitiativeName = initiative.Name,
+                Issues = issues,
+                Sessions = sessions,
+                Users = users,
+            };
+
+            return View(model);
+        }
+
+        // GET: IssueType/Details/5
+        public ActionResult Details(string initiativeUniqueIdentifier, string application, string version, string issueType)
+        {
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("initiativeUniqueIdentifier", "InitiativeId was not provided.");
+
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
+            var initiativeId = Guid.Empty;
+
+            if (i.Count() == 1)//Name is unique
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
+            }
+            else//go with id
+            {
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
+            }
+
+            if (initiativeId == Guid.Empty)
+            {
+                throw new NullReferenceException("No initiative found for the specified uid.");
+            }
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Name == application);
             if (app == null) throw new NullReferenceException("Cannot find application").AddData("Application", application);
             var applicationVersions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
-            var ver = applicationVersions.SingleOrDefault(x => x.Version == version);
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
+
+            var v = applicationVersions.Where(x => x.Version == version);
+            var ver = v.Count() == 1 ? applicationVersions.Single(x => x.Version == version) : applicationVersions.Single(x => x.Id.Replace(":", "") == version);
 
             var model = new IssueTypeModel
             {
                 IssueType = ver.IssueTypes.Single(x => x.Ticket.ToString() == issueType), 
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
-                Initiative = id,
                 Application = application,
-                Version = version,
+                Version = ver.Version,
                 InitiativeName = initiative.Name,
-                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)),
+                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 ApplicationName = app.Name,
                 VersionUniqueIdentifier = ver.GetUniqueIdentifier(applicationVersions.Select(x => x.Version))
             };

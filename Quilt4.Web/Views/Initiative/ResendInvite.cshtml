@@ -10,5 +10,6 @@
 @using (@Html.BeginForm())
 {
     <input type="submit" value="Yes"/>
+    -->@Html.ActionLink("Cancel", "Member", "Initiative", new { initiativeUniqueIdentifier = @Model.InitiativeId}, null)<--
     @Html.ActionLink("Cancel", "Member", "Initiative", new { id = @Model.UniqueInitiativeIdentifier }, null)
 }

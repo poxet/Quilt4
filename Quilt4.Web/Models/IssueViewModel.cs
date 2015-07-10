@@ -17,5 +17,8 @@ namespace Quilt4.Web.Models
         public string ApplicationVersionId { get; set; }
         public string UniqueIdentifier { get; set; }
         public string VersionName { get; set; }
+        public string DevColor { get; set; }
+        public string CiColor { get; set; }
+        public string ProdColor { get; set; }
     }
 }

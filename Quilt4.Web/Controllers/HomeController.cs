@@ -1,6 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
+using Castle.Core.Internal;
 using Quilt4.Interface;
+using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
 
 namespace Quilt4.Web.Controllers
@@ -8,10 +13,16 @@ namespace Quilt4.Web.Controllers
     public class HomeController : Controller
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly IApplicationVersionBusiness _applicationVersionBusiness;
+        private readonly IAccountRepository _accountRepository;
+        private readonly ISessionBusiness _sessionBusiness;
 
-        public HomeController(IInitiativeBusiness initiativeBusiness)
+        public HomeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IAccountRepository accountRepository, ISessionBusiness sessionBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
+            _applicationVersionBusiness = applicationVersionBusiness;
+            _accountRepository = accountRepository;
+            _sessionBusiness = sessionBusiness;
         }
 
         public ActionResult Index()
@@ -43,6 +54,183 @@ namespace Quilt4.Web.Controllers
             ViewBag.Quilt4IsEnabled = Configuration.Enabled;
 
             return View();
+        }
+
+        [Authorize]
+        public ActionResult Search()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult SearchResults(string searchText)
+        {
+            var model = new SearchModel()
+            {
+                IsConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed,
+                SearchText = searchText,
+            };
+
+            if (!model.IsConfirmed)
+            {
+                return View("SearchResults", model);
+            }
+
+            var searchResultRows = new List<SearchResultRowModel>();
+
+            var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
+            var initiatives = _initiativeBusiness.GetInitiatives().ToArray();
+            var userInitiatives = initiativeHeads.Select(initiativeHead => initiatives.Single(x => x.Id == initiativeHead.Id)).ToArray();
+
+            foreach (var initiative in userInitiatives)
+            {
+                var applications = initiative.ApplicationGroups.SelectMany(x => x.Applications).ToArray();
+                var initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(initiatives.Select(x => x.Name));
+                
+                var versions = new List<IApplicationVersion>();
+                foreach (var application in applications)
+                {
+                    versions.AddRange(_applicationVersionBusiness.GetApplicationVersions(application.Id));
+                }
+
+                foreach (var version in versions)
+                {
+                    var sessions = _sessionBusiness.GetSessionsForApplicationVersion(version.Id).ToArray();
+                    var versionUniqueIdentifier = version.GetUniqueIdentifier(versions.Select(x => x.Version));
+
+                    foreach (var issueType in version.IssueTypes)
+                    {
+                        if (issueType.Ticket.ToString().Equals(searchText))
+                        {
+                            foreach (var issue in issueType.Issues)
+                            {
+                                foreach (var session in sessions.Where(x => x.Id == issue.SessionId))
+                                {
+                                    searchResultRows.Add(new SearchResultRowModel()
+                                    {
+                                        InitiativeName = initiative.Name,
+                                        InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                                        ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
+                                        Version = version.Version,
+                                        VersionUniqueIdentifier = versionUniqueIdentifier,
+                                        IssueType = issueType,
+                                        Issue = issue,
+                                        Environment = session.Environment,
+                                    });
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var issue in issueType.Issues)
+                            {
+                                if (issue.Ticket.ToString().Equals(searchText))
+                                {
+                                    foreach (var session in sessions.Where(x => x.Id == issue.SessionId))
+                                    {
+                                        searchResultRows.Add(new SearchResultRowModel()
+                                        {
+                                            InitiativeName = initiative.Name,
+                                            InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                                            ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
+                                            Version = version.Version,
+                                            VersionUniqueIdentifier = versionUniqueIdentifier,
+                                            IssueType = issueType,
+                                            Issue = issue,
+                                            Environment = session.Environment,
+                                        });
+                                    }
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrEmpty(issueType.ExceptionTypeName))
+                                    {
+                                        if (issueType.ExceptionTypeName.Contains(searchText))
+                                        {
+                                            foreach (var session in sessions.Where(x => x.Id == issue.SessionId))
+                                            {
+                                                searchResultRows.Add(new SearchResultRowModel()
+                                                {
+                                                    InitiativeName = initiative.Name,
+                                                    InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                                                    ApplicationName = applications.Single(x => x.Id == version.ApplicationId).Name,
+                                                    Version = version.Version,
+                                                    VersionUniqueIdentifier = versionUniqueIdentifier,
+                                                    IssueType = issueType,
+                                                    Issue = issue,
+                                                    Environment = session.Environment,
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            model.SearchResultRows = searchResultRows;
+
+            
+
+            //if (searchText.IsNullOrEmpty())
+            //{
+            //    return RedirectToAction("Search","Home");
+            //}
+
+            //var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
+            //var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToArray();
+
+            //var applications = new List<IApplication>();
+            //foreach (var initiative in initiatives)
+            //{
+            //    applications.AddRange(initiative.ApplicationGroups.SelectMany(x => x.Applications));
+            //}
+
+            //var applicationIds = new List<Guid>();
+            //var ticketPrefixs = new List<string>();
+            //foreach (var application in applications)
+            //{
+            //    applicationIds.Add(application.Id);
+            //    ticketPrefixs.Add(application.TicketPrefix);
+            //}
+
+            //var versions = new List<IApplicationVersion>();
+            //foreach (var applicationId in applicationIds)
+            //{
+            //    versions.AddRange(_applicationVersionBusiness.GetApplicationVersions(applicationId));
+            //}
+
+            //var allIssueTypes = versions.SelectMany(x => x.IssueTypes).ToArray();
+            
+            //var issueTypeResults = new List<IIssueType>();
+            //foreach (var issueType in allIssueTypes)
+            //{   
+            //    int value;
+            //    if (int.TryParse(model.SearchText, out value))
+            //    {
+            //        foreach (var issue in issueType.Issues)
+            //        if (issueType.Ticket.ToString().Equals(model.SearchText) ||issue.Ticket.ToString().Equals(model.SearchText))
+            //        {
+            //            issueTypeResults.Add(issueType);
+            //        }
+                    
+            //    }
+
+            //    if (!issueType.ExceptionTypeName.IsNullOrEmpty())
+            //    {
+            //        if (issueType.ExceptionTypeName.Contains(model.SearchText))
+            //        {
+            //            issueTypeResults.Add(issueType);
+            //        }
+            //    }
+            //}
+
+            //model.IssueTypeResults = issueTypeResults;
+            
+            return View("SearchResults", model);
         }
     }
 }

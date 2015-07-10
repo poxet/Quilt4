@@ -25,20 +25,20 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Version/Details/5
-        public ActionResult Details(string id, string application, string version)
+        public ActionResult Details(string initiativeUniqueIdentifier, string application, string version)
         {
-            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
+            if (initiativeUniqueIdentifier == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
+            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == initiativeUniqueIdentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == initiativeUniqueIdentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
+                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(initiativeUniqueIdentifier)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -48,12 +48,11 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Id == applicationId);
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
             var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), applicationId.ToString(), version).Version;
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
-            var developerName = User.Identity.Name;
-            var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
 
             var issue = new IssueViewModel
             {
@@ -66,7 +65,10 @@ namespace Quilt4.Web.Controllers
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
                 ApplicationVersionId = applicationId.ToString(),
                 //TODO: Add applicationversion id
-                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(ins.Select(xx => xx.Name)),
+                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
+                DevColor = app.DevColor,
+                CiColor = app.CiColor,
+                ProdColor = app.ProdColor,
             };
 
             //TODO: fetch version anmes
@@ -79,7 +81,7 @@ namespace Quilt4.Web.Controllers
             //issue.Ticket = ver.IssueTypes.Select(x => x.Ticket.ToString());
 
 
-            var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
+            var users = issue.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList().GroupBy(x => x.Id).Select(x => x.First());
 
             issue.Users = users;
 

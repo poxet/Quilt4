@@ -12,13 +12,14 @@
 </ol>
 
 <h2>Initiative Details</h2>
-@Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
+@Html.ActionLink("Members", "Member", new { initiativeUniqueIdentifier = Model.UniqueIdentifier }, null)
 <br/>
 @Html.ActionLink("Properties", "Properties", new { id = Model.UniqueIdentifier }, null)
+--->@Html.ActionLink("Properties", "Edit", new { initiativeUniqueIdentifier = Model.UniqueIdentifier }, null)<---
 @if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
 {
     <br />
-    @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)    
+    @Html.ActionLink("Delete", "Delete", new { initiativeUniqueIdentifier = Model.UniqueIdentifier }, null)    
 }
 <h2>ClientToken</h2>
 @Html.Raw(@Model.ClientToken)
@@ -45,7 +46,7 @@ else
 
         foreach (var application in group.Applications)
         {
-            @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
+            @Html.ActionLink(@application.Name, "Details", "Application", new { initiativeUniqueIdentifier = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
             <br />
         }
     }

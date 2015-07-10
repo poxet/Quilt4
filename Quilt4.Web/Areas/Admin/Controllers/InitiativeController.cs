@@ -91,6 +91,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             }
 
             initiative.AddDeveloperRolesInvitation(collection["InviteEmail"]);
+            _initiativeBusiness.UpdateInitiative(initiative);
             _initiativeBusiness.ConfirmInvitation(initiative.Id, collection["InviteEmail"]);
 
             return RedirectToAction("Member", new { initiativeId = collection["InitiativeId"] });

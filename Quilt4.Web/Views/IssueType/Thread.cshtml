@@ -1,0 +1,42 @@
+﻿@model Quilt4.Web.Models.IssueThreadModel
+
+@{
+    ViewBag.Title = "Thread";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ol class="breadcrumb">
+    <li><a href="~/Initiative/">Initiative</a></li>
+    <li><a href="~/Initiative/Details?initiativeUniqueIdentifier=@Model.InitiativeUniqueIdentifier">@Model.InitiativeName</a></li>
+    <li class="active">Threads</li>
+    <li class="active">@Model.Issues.First().IssueThreadGuid</li>
+</ol>
+
+<h2>Thread</h2>
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Time</th>
+        <th style="padding: 0 5px;">User</th>
+        <th style="padding: 0 5px;">Handle</th>
+        <th style="padding: 0 5px;">Visible</th>
+        <th style="padding: 0 5px;">Environment</th>
+        <th style="padding: 0 5px;">Ticket</th>
+    </tr>
+    @foreach (var issue in Model.Issues)
+    {
+        <tr>
+            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issue.ServerTime.ToLocalTime()">@issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
+            <td style="padding: 0 5px;">@(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName == null ? Html.Raw("N/A") : Html.Raw(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName))</td>
+            <td style="padding: 0 5px;">@issue.UserHandle</td>
+            <td style="padding: 0 5px;">@issue.VisibleToUser</td>
+            <td style="padding: 0 5px;">
+                @foreach (var environment in Model.Sessions.Where(x => x.Id == issue.SessionId).Select(x => x.Environment))
+                {
+                    @Html.Raw(environment + " ")
+                }
+            </td>
+            <td style="padding: 0 5px;">@issue.Ticket</td>
+        </tr>
+    }
+</table>
+

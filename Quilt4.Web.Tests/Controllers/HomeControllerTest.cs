@@ -14,7 +14,10 @@ namespace Quilt4.Web.Tests.Controllers
         {
             // Arrange
             var initiativeBusinessMock = new Mock<IInitiativeBusiness>(MockBehavior.Strict);
-            var controller = new HomeController(initiativeBusinessMock.Object);
+            var applicationVersionBusinessMock = new Mock<IApplicationVersionBusiness>(MockBehavior.Strict);
+            var accountRepositoryMock = new Mock<IAccountRepository>(MockBehavior.Strict);
+            var sessionBusinessMock = new Mock<ISessionBusiness>(MockBehavior.Strict);
+            var controller = new HomeController(initiativeBusinessMock.Object, applicationVersionBusinessMock.Object, accountRepositoryMock.Object, sessionBusinessMock.Object);
 
             // Act
             var result = controller.Index() as ViewResult;
@@ -28,7 +31,10 @@ namespace Quilt4.Web.Tests.Controllers
         {
             // Arrange
             var initiativeBusinessMock = new Mock<IInitiativeBusiness>(MockBehavior.Strict);
-            var controller = new HomeController(initiativeBusinessMock.Object);
+            var applicationVersionBusinessMock = new Mock<IApplicationVersionBusiness>(MockBehavior.Strict);
+            var accountRepositoryMock = new Mock<IAccountRepository>(MockBehavior.Strict);
+            var sessionBusinessMock = new Mock<ISessionBusiness>(MockBehavior.Strict);
+            var controller = new HomeController(initiativeBusinessMock.Object, applicationVersionBusinessMock.Object, accountRepositoryMock.Object, sessionBusinessMock.Object);
 
             // Act
             var result = controller.About() as ViewResult;
@@ -42,7 +48,10 @@ namespace Quilt4.Web.Tests.Controllers
         {
             // Arrange
             var initiativeBusinessMock = new Mock<IInitiativeBusiness>(MockBehavior.Strict);
-            var controller = new HomeController(initiativeBusinessMock.Object);
+            var applicationVersionBusinessMock = new Mock<IApplicationVersionBusiness>(MockBehavior.Strict);
+            var accountRepositoryMock = new Mock<IAccountRepository>(MockBehavior.Strict);
+            var sessionBusinessMock = new Mock<ISessionBusiness>(MockBehavior.Strict);
+            var controller = new HomeController(initiativeBusinessMock.Object, applicationVersionBusinessMock.Object, accountRepositoryMock.Object, sessionBusinessMock.Object);
 
             // Act
             var result = controller.Contact() as ViewResult;

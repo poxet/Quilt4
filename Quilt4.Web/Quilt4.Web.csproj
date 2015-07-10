@@ -262,6 +262,7 @@
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VersionController.cs" />
+    <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="ExceptionHandlingAttribute.cs" />
     <Compile Include="Extensions\DateExtensions.cs" />
     <Compile Include="Extensions\InitiativeExtensions.cs" />
@@ -305,15 +306,18 @@
     <Compile Include="Models\CreateInitiativeViewModel.cs" />
     <Compile Include="Models\InitiativesViewModel.cs" />
     <Compile Include="Models\InviteMemberModel.cs" />
+    <Compile Include="Models\IssueThreadModel.cs" />
     <Compile Include="Models\IssueViewModel.cs" />
     <Compile Include="Models\IssueTypeModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ManageLoginsViewModel.cs" />
     <Compile Include="Models\ConfigureTwoFactorViewModel.cs" />
     <Compile Include="Models\MemberModel.cs" />
+    <Compile Include="Models\MachineDetailsModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\SendEmailViewModel.cs" />
     <Compile Include="Models\ResetPasswordViewModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\SendCodeViewModel.cs" />
     <Compile Include="Models\SetPasswordViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
@@ -384,6 +388,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\toggleShowEnvironment.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -423,6 +428,7 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Machine\Details.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Help\Details.cshtml" />
@@ -445,6 +451,7 @@
     <Content Include="Views\Version\Details.cshtml" />
     <Content Include="Views\IssueType\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Initiative\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Initiative\Member.cshtml" />
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Initiative\Accept.cshtml" />
     <Content Include="Views\Initiative\Decline.cshtml" />
@@ -456,6 +463,12 @@
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\Help\EventLog.cshtml" />
     <Content Include="Views\Action\_InitiativeInvitations.cshtml" />
+    <Content Include="Views\Application\ConfirmArchiveVersions.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Home\SearchResults.cshtml" />
+    <Content Include="Views\Shared\_ConfirmEmailPartial.cshtml" />
+    <Content Include="Views\Account\ResendConfirmationEmail.cshtml" />
+    <Content Include="Views\IssueType\Thread.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
