@@ -47,6 +47,8 @@ namespace Quilt4.Web.Agents
 
         public async Task<ISerie> QueryLastAsync(string counterName)
         {
+            if (_influxDb == null) throw new NullReferenceException("No influxDb agent instance.");
+                
             var response = await _influxDb.QueryAsync(_influxDbSetting.DatabaseName, "SELECT * FROM \"" + counterName + "\" LIMIT 1", TimeUnit.Seconds);
             foreach (var serie in response)
             {

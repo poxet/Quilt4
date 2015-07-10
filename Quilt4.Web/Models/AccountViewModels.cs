@@ -8,5 +8,8 @@ namespace Quilt4.Web.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        public string ErrorMessage { get; set; }
+        public bool EmailEnabled { get; set; }
     }
 }

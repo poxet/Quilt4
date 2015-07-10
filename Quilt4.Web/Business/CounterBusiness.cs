@@ -42,6 +42,7 @@ namespace Quilt4.Web.Business
 
         private ISerie QueryLast(string counterName)
         {
+            if (!_influxDbAgent.IsEnabled) throw new InvalidOperationException("InfluxDb agent is not enabled.");
             var task = Task<ISerie>.Run(async () => await _influxDbAgent.QueryLastAsync(counterName));
             return task.Result;
         }
@@ -156,11 +157,13 @@ namespace Quilt4.Web.Business
 
         public void ClearSessionCounters()
         {
-            //TODO:
+            if (!_influxDbAgent.IsEnabled)
+                throw new InvalidOperationException("InflixDb agent is not enabled.");
+
             Clear("Session");
         }
 
-        public DateTime GetLastSessionCounterTime()
+        private DateTime GetLastSessionCounterTime()
         {
             var lastItem = QueryLast("Session");
             if (lastItem == null)
@@ -178,6 +181,9 @@ namespace Quilt4.Web.Business
 
         private void UpdateSessionCountersEx()
         {
+            if (!_influxDbAgent.IsEnabled) 
+                return;
+
             var mutex = new Mutex(false, "UpdateSessionCounters");
             try
             {

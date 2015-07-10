@@ -17,11 +17,13 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IEmailBusiness _emailBusiness;
+        private readonly ISettingsBusiness _settingsBusiness;
 
-        public AccountController(IAccountRepository accountRepository, IEmailBusiness emailBusiness)
+        public AccountController(IAccountRepository accountRepository, IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness)
         {
             _accountRepository = accountRepository;
             _emailBusiness = emailBusiness;
+            _settingsBusiness = settingsBusiness;
         }
 
         //
@@ -205,7 +207,7 @@ namespace Quilt4.Web.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
-            return View();
+            return View(new ForgotPasswordViewModel { EmailEnabled = _settingsBusiness.GetEmailSetting().SendEMailEnabled });
         }
 
         //
@@ -215,30 +217,41 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await _accountRepository.FindByNameAsync(model.Email);
-                if (user == null || !(await _accountRepository.IsEmailConfirmedAsync(user.Id)))
+                if (ModelState.IsValid)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
+                    var user = await _accountRepository.FindByNameAsync(model.Email);
+                    if (user == null || !(await _accountRepository.IsEmailConfirmedAsync(user.Id)))
+                    {
+                        // Don't reveal that the user does not exist or is not confirmed
+                        return View("ForgotPasswordConfirmation");
+                    }
+
+                    var token = await _accountRepository.GeneratePasswordResetTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { code = token }, protocol: Request.Url.Scheme);
+                    if (!_emailBusiness.SendEmail(new List<string>() { model.Email }, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>"))
+                    {
+                        return View("ForgotPassword", new ForgotPasswordViewModel { Email = model.Email, ErrorMessage = "EMail was not sent." });
+                    }
+
+                    return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                    // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // return RedirectToAction("ForgotPasswordConfirmation", "Account");
                 }
 
-                var token = await _accountRepository.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { code = token }, protocol: Request.Url.Scheme);
-                _emailBusiness.SendEmail(new List<string>() { model.Email }, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                return RedirectToAction("ForgotPasswordConfirmation", "Account");
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                // If we got this far, something failed, redisplay form
+                return View(model);
             }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            catch (Exception exception)
+            {
+                model.ErrorMessage = exception.Message;
+                return View(model);
+            }
         }
 
         //

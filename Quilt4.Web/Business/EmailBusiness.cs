@@ -18,12 +18,12 @@ namespace Quilt4.Web.Business
             _settingsBusiness = settingsBusiness;
         }
 
-        public void SendEmail(IEnumerable<string> tos, string subject, string body)
+        public bool SendEmail(IEnumerable<string> tos, string subject, string body)
         {
             var emailSetting = _settingsBusiness.GetEmailSetting();
 
             if (!emailSetting.SendEMailEnabled)
-                return;
+                return false;
 
             var smtpClient = new SmtpClient(emailSetting.SmtpServerAdress, emailSetting.SmtpServerPort);
             if (!string.IsNullOrEmpty(emailSetting.Username))
@@ -51,6 +51,8 @@ namespace Quilt4.Web.Business
                     _repository.LogEmail(emailSetting.SupportEmailAddress, to, subject, body, DateTime.Now, status, errorMessage);
                 }
             }
+
+            return true;
         }
 
         public IEnumerable<IEmail> GetLastHundredEmails()
