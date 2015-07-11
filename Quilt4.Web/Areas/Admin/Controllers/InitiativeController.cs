@@ -121,9 +121,9 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         public ActionResult Edit(Web.Models.InitiativeViewModel model)
         {
             _initiativeBusiness.UpdateInitiative(model.Id, model.Name, model.ClientToken, model.OwnerDeveloperName);
-            var initiative = _initiativeBusiness.GetInitiative(model.Id);
-            initiative.AddDeveloperRolesInvitation(model.OwnerDeveloperName);
-            _initiativeBusiness.ConfirmInvitation(model.Id, model.OwnerDeveloperName);
+            //var initiative = _initiativeBusiness.GetInitiative(model.Id);
+            //initiative.AddDeveloperRolesInvitation(model.OwnerDeveloperName);
+            //_initiativeBusiness.ConfirmInvitation(model.Id, model.OwnerDeveloperName);
             return RedirectToAction("Index");
         }
     }

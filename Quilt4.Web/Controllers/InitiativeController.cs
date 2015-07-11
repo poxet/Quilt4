@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Mail;
 using System.Web.Mvc;
-using System.Web.UI;
 using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
@@ -34,11 +33,10 @@ namespace Quilt4.Web.Controllers
             {
                 var developerName = User.Identity.Name;
                 var ins = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
-                var allInitiatives = _initiativeBusiness.GetInitiatives().ToArray();
 
                 var initiatives = new InitiativesViewModel
                 {
-                    InitiativeInfos = ins.Select(x => new InitiativeViewModel { Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName, UniqueIdentifier = x.GetUniqueIdentifier(allInitiatives.Select(xx => xx.Name)) }),
+                    InitiativeInfos = ins.Select(x => new InitiativeViewModel { Name = x.Name, ClientToken = x.ClientToken, Id = x.Id, OwnerDeveloperName = x.OwnerDeveloperName, UniqueIdentifier = x.GetUniqueIdentifier(ins.Select(xx => xx.Name)) }),
                 };
                 return View(initiatives);
             }
