@@ -18,7 +18,7 @@
             <td>Ticket Prefix</td>
             <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
         </tr>
-        @foreach (var env in Model.Environments)
+        @*@foreach (var env in Model.Environments)
         {
             if (env.Equals("Dev"))
             {
@@ -43,11 +43,11 @@
             }
             else
             {
-                @*<tr>
+                <tr>
                     <td>Something went wrong</td>
-                </tr>*@
+                </tr>
             }
-        }
+        }*@
         
         <tr>
             <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>

@@ -66,9 +66,6 @@ namespace Quilt4.Web.Controllers
                 ApplicationVersionId = applicationId.ToString(),
                 //TODO: Add applicationversion id
                 InitiativeUniqueIdentifier = id,
-                DevColor = app.DevColor,
-                CiColor = app.CiColor,
-                ProdColor = app.ProdColor,
             };
 
             //TODO: fetch version anmes
