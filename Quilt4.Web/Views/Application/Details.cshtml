@@ -10,14 +10,7 @@
     <li class="active">@Model.Application</li>
 </ol>
 
-@if (@ViewBag.IsArchive)
-{
-    <h2>Application Archive</h2>
-}
-else
-{
-    <h2>Application Details</h2>
-}
+<h2>@ViewBag.Title</h2>
 
 @Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br/>
 @if (@ViewBag.IsArchive)
@@ -28,6 +21,17 @@ else
 {
     @Html.ActionLink("Archive", "Archive", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
 }
+
+<h3>Environments</h3>
+<table>
+    @foreach (var environment in @Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name))
+    {
+        <tr>
+            <th>@Html.Raw(environment.Key)</th>
+            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Key)LegendButton" onclick='toggleShowEnvironment("@environment.Key"); changeButtonStyle("@environment.Key");' style="background-color: #@environment.First().Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Key"></span></td>
+        </tr>
+    }
+</table>
 
 <h3>Versions</h3>
 
@@ -74,7 +78,7 @@ else
                 <td style="padding: 0 5px;">
                     @foreach (var env in Model.Versions[i].Environments)
                     {
-                        <span class="DevColor" style="background-color: #@env.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env.Name"></span>
+                        <span class="@Html.Raw(env.Name)Color" style="background-color: #@env.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env.Name"></span>
                     }
                 </td>
             </tr>
@@ -150,5 +154,6 @@ else
             </table>
         }
     }
+*@
 
-    <script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>*@
+<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>

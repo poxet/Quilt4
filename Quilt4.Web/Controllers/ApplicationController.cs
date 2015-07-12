@@ -96,6 +96,7 @@ namespace Quilt4.Web.Controllers
             var model = GetApplicationModel(initiative, application, versions);
 
             @ViewBag.IsArchive = false;
+            @ViewBag.Title = "Application Details";
             return View(model);
         }
 
@@ -110,6 +111,7 @@ namespace Quilt4.Web.Controllers
             var model = GetApplicationModel(initiative, application, archivedVersions);
 
             @ViewBag.IsArchive = true;
+            @ViewBag.Title = "Application Archive";
             return View("Details", model);
         }
 
