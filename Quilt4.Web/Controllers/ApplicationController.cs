@@ -27,138 +27,43 @@ namespace Quilt4.Web.Controllers
             _sessionBusiness = sessionBusiness;
         }
 
-        public ApplicationViewModel GetApplicationModel(IInitiative initiative, string application, bool showArchivedVersions)
+        public ApplicationViewModel GetApplicationModel(IInitiative initiative, string application, IEnumerable<IApplicationVersion> versions)
         {
-            ////var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId);
-            ////var initiative = _initiativeBusiness.GetInitiative(initiativeId);
             var developerName = User.Identity.Name;
             var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
-            //var initiatives = initiativeHeads.Select(head => _initiativeBusiness.GetInitiative(head.Id)).ToArray();
-
-            //var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
-            //var applicationId = app.Id;
-            //var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
-            //var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(applicationId).ToArray();
-            //var versionNames = versions.Select(x => x.Version);
-
-            //var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { applicationId }).ToArray();
-
-            ////var machines = _machineBusiness.GetMachinesByApplicationVersions(versionIds);
+            var initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(initiativeHeads.Select(xx => xx.Name));
 
             var model = new ApplicationViewModel
             {
                 InitiativeId = initiative.Id,
                 InitiativeName = initiative.Name,
-                InitiativeUniqueIdentifier = initiative.GetUniqueIdentifier(initiativeHeads.Select(xx => xx.Name)),
+                InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 Application = application,
                 
-            //    Versions = versions.Select(x => new VersionViewModel
-            //    {
-            //        Version = x.Version,
-            //        VersionId = x.Id,
-            //        Build = x.BuildTime.ToString(),
-            //        IssueTypes = x.IssueTypes,
-            //        UniqueIdentifier = x.GetUniqueIdentifier(versionNames),
-            //        InitiativeIdentifier = initiativeId,
-            //        ApplicationIdentifier = application,
-
-            //        //TODO: This is sloooooow ... fix this
-            //        //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
-            //        //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
-
-            //        Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id),
-            //    }).OrderByDescending(y => y.Version).ToList(),
+                Versions = versions.Select(x => new VersionViewModel
+                {
+                    Checked = false,
+                    Build = x.BuildTime == null ? string.Empty : x.BuildTime.Value.ToLocalTime().ToDateTimeString(),
+                    VersionId = x.Id,
+                    Version = x.Version,
+                    VersionIdentifier = x.GetUniqueIdentifier(versions.Select(y => y.Version)),
+                    ApplicationIdentifier = application,
+                    InitiativeIdentifier = initiativeUniqueIdentifier,
+                    MachineCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
+                    SessionCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
+                    IssueTypeCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
+                    IssueCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
+                    FirstSessionTime = new DateTime(), //TODO: Load data (If slow, populate data when the list has already loaded)
+                    LastSessionTime = new DateTime(), //TODO: Load data (If slow, populate data when the list has already loaded)
+                    Environments = new List<EnvironmentViewModel>
+                    {
+                        new EnvironmentViewModel { Name = "A", Colour = "faf567" }, 
+                        new EnvironmentViewModel { Name = "B", Colour = "1a65f7" }
+                    }, //TODO: Load data (If slow, populate data when the list has already loaded)
+                }).OrderByDescending(y => y.Version).ToList(),
             };
 
-            //var apps = new List<IApplication>();
-            //if (app.DevColor.IsNullOrEmpty() || app.CiColor.IsNullOrEmpty() || app.ProdColor.IsNullOrEmpty())
-            //{
-            //    foreach (var i in initiatives)
-            //    {
-            //        foreach (var a in i.ApplicationGroups.SelectMany(x => x.Applications))
-            //        {
-            //            apps.Add(a);
-            //        }
-            //    }
-
-            //    if (!app.DevColor.IsNullOrEmpty())
-            //    {
-            //        model.DevColor = app.DevColor;
-            //    }
-            //    else
-            //    {
-            //        var devColors = apps.Select(x => x.DevColor);
-            //        foreach (var devColor in devColors)
-            //        {
-            //            if (!devColor.IsNullOrEmpty())
-            //            {
-            //                app.DevColor = devColor;
-            //                model.DevColor = devColor;
-            //                break;
-            //            }
-            //        }
-            //        if (model.DevColor.IsNullOrEmpty())
-            //        {
-            //            app.DevColor = "#00297A";
-            //            model.DevColor = "#00297A";
-            //        }
-            //    }
-
-            //    if (!app.CiColor.IsNullOrEmpty())
-            //    {
-            //        model.CiColor = app.CiColor;
-            //    }
-            //    else
-            //    {
-            //        var ciColors = apps.Select(x => x.CiColor);
-            //        foreach (var ciColor in ciColors)
-            //        {
-            //            if (!ciColor.IsNullOrEmpty())
-            //            {
-            //                app.CiColor = ciColor;
-            //                model.CiColor = ciColor;
-            //                break;
-            //            }
-            //        }
-            //        if (model.CiColor.IsNullOrEmpty())
-            //        {
-            //            app.CiColor = "#1947A3";
-            //            model.CiColor = "#1947A3";
-            //        }
-            //    }
-
-            //    if (!app.ProdColor.IsNullOrEmpty())
-            //    {
-            //        model.ProdColor = app.ProdColor;
-            //    }
-            //    else
-            //    {
-            //        var prodColors = apps.Select(x => x.ProdColor);
-            //        foreach (var prodColor in prodColors)
-            //        {
-            //            if (!prodColor.IsNullOrEmpty())
-            //            {
-            //                app.ProdColor = prodColor;
-            //                model.ProdColor = prodColor;
-            //                break;
-            //            }
-            //        }
-            //        if (model.ProdColor.IsNullOrEmpty())
-            //        {
-            //            app.ProdColor = "#8099CC";
-            //            model.ProdColor = "#8099CC";
-            //        }
-            //    }
-            //    _initiativeBusiness.UpdateInitiative(initiative);
-            //}
-            //else
-            //{
-            //    model.DevColor = app.DevColor;
-            //    model.CiColor = app.CiColor;
-            //    model.ProdColor = app.ProdColor;
-            //}
-            
             //if (showArchivedVersions)
             //{
             //    model.ShowArchivedVersions = true;
@@ -186,31 +91,42 @@ namespace Quilt4.Web.Controllers
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
+            var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
+            var model = GetApplicationModel(initiative, application, versions);
 
-            var model = GetApplicationModel(initiative, application, false);
-
+            @ViewBag.IsArchive = false;
             return View(model);
         }
 
+        // GET: Application/Archive/5
+        public ActionResult Archive(string id, string application)
+        {
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
+            var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(app.Id).ToArray();
+            var model = GetApplicationModel(initiative, application, archivedVersions);
+
+            @ViewBag.IsArchive = true;
+            return View("Details", model);
+        }
+
         [HttpPost]
-        public ActionResult Details(ApplicationViewModel model, FormCollection collection)
+        public ActionResult Confirm(ApplicationViewModel model, FormCollection collection)
         {
             switch (collection["submit"])
             {
-                //case "Delete Versions" :
-                //    var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
-                //    return View("ConfirmDeleteVersions", checkedVersions);
-                    
-                //case "Archive Versions" :
-                //    checkedVersions = model.Versions.Where(x => x.Checked).ToList();
-                //    return View("ConfirmArchiveVersions", checkedVersions);
+                case "Delete":
+                    var checkedVersions = model.Versions.Where(x => x.Checked).ToList();
+                    return View("ConfirmDeleteVersions", checkedVersions);
 
-                case "Show Archived Versions":
-                    var initiative = _initiativeBusiness.GetInitiative(model.InitiativeId);
-                    var newModel = GetApplicationModel(initiative, model.Application, true);
-                    return View(newModel);
-                    
-                default :
+                case "Archive":
+                    checkedVersions = model.Versions.Where(x => x.Checked).ToList();
+                    return View("ConfirmArchiveVersions", checkedVersions);
+                
+                default:
                     throw new ArgumentOutOfRangeException(string.Format("Submit button has an invalid value, {0}.", collection["submit"]));
             }
         }

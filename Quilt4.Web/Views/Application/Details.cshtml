@@ -10,27 +10,28 @@
     <li class="active">@Model.Application</li>
 </ol>
 
-<h2>Application Details</h2>
-@Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)
+@if (@ViewBag.IsArchive)
+{
+    <h2>Application Archive</h2>
+}
+else
+{
+    <h2>Application Details</h2>
+}
 
-@*<h3>Versions</h3>
-<table>
-    <tr>
-        <th>Dev environment</th>
-        <td style="padding-left: 20px;"><span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span></td>
-    </tr>
-    <tr>
-        <th>CI environment</th>
-        <td style="padding-left: 20px;"><span id="CiLegendButton" onclick='toggleShowEnvironment("Ci"); changeButtonStyle("CiLegendButton");' style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span></td>
-    </tr>
-    <tr>
-        <th>Prod environment</th>
-        <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
-    </tr>
-</table>
-<br/>
+@Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br/>
+@if (@ViewBag.IsArchive)
+{
+    @Html.ActionLink("Details", "Details", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
+}
+else
+{
+    @Html.ActionLink("Archive", "Archive", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
+}
 
-@using (Html.BeginForm())
+<h3>Versions</h3>
+
+@using (Html.BeginForm("Confirm", "Application"))
 {
     @Html.HiddenFor(x => x.InitiativeId)
     @Html.HiddenFor(x => x.InitiativeName)
@@ -51,95 +52,103 @@
             <th style="padding: 0 5px;">Environments</th>
         </tr>
 
-        @for (var i = 0; i < Model.Versions.Count(); i++)
+        @for (var i = 0; i < Model.Versions.Count; i++)
         {
             @Html.HiddenFor(x => x.Versions[i].Version)
             @Html.HiddenFor(x => x.Versions[i].Build)
             @Html.HiddenFor(x => x.Versions[i].ApplicationIdentifier)
             @Html.HiddenFor(x => x.Versions[i].InitiativeIdentifier)
-            @Html.HiddenFor(x => x.Versions[i].UniqueIdentifier)
+            @Html.HiddenFor(x => x.Versions[i].VersionIdentifier)
             @Html.HiddenFor(x => x.Versions[i].VersionId)
 
             <tr style="display: table-row">
-                <td>@Html.CheckBoxFor(x => Model.Versions[i].Checked)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].UniqueIdentifier }, null)<br /></td>
+                <td>@Html.CheckBoxFor(x => x.Versions[i].Checked)</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].VersionIdentifier }, null)<br/></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
-                <td style="padding: 0 5px;">@version.Machines.Count()</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].Sessions.Count()</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.Count()</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypes.SelectMany(x => x.Issues).Count()</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@Model.Versions[i].Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@Model.Versions[i].Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].MachineCount</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].SessionCount</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypeCount</td>
+                <td style="padding: 0 5px;">@Model.Versions[i].IssueCount</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].FirstSessionTime">@Model.Versions[i].FirstSessionTime.ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].LastSessionTime">@Model.Versions[i].LastSessionTime.ToTimeAgo() ago</td>
                 <td style="padding: 0 5px;">
-
-                    @foreach (var env in Model.Versions[i].Sessions.Select(x => x.Environment).Distinct())
+                    @foreach (var env in Model.Versions[i].Environments)
                     {
-                        if (env.Equals("Dev"))
-                        {
-                            <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
-                        }
-                        else if (env.Equals("CI"))
-                        {
-                            <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
-                        }
-                        else if (env.Equals("Prod"))
-                        {
-                            <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
-                        }
+                        <span class="DevColor" style="background-color: #@env.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env.Name"></span>
                     }
-                    </td>
-                </tr>
+                </td>
+            </tr>
         }
     </table>
     <br/>
-    <input type="submit" name="submit" id="submit" value="Delete Versions"/>
-    <input type="submit" name="submit" id="submit" value="Archive Versions"/>
+    <input type="submit" name="submit" id="submit" value="Delete"/>
+    if (!@ViewBag.IsArchive)
+    {
+        <input type="submit" name="submit" id="submit" value="Archive"/>
+    }
 }
 
-@using (Html.BeginForm())
-{
-    @Html.HiddenFor(x => x.InitiativeId)
-    @Html.HiddenFor(x => x.Application)
-    <h3>Archived Versions</h3>
-    if (!Model.ShowArchivedVersions)
+
+@*<table>
+        <tr>
+            <th>Dev environment</th>
+            <td style="padding-left: 20px;"><span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span></td>
+        </tr>
+        <tr>
+            <th>CI environment</th>
+            <td style="padding-left: 20px;"><span id="CiLegendButton" onclick='toggleShowEnvironment("Ci"); changeButtonStyle("CiLegendButton");' style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span></td>
+        </tr>
+        <tr>
+            <th>Prod environment</th>
+            <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
+        </tr>
+    </table>
+    <br/>
+
+    @using (Html.BeginForm())
     {
-        <input type="submit" name="submit" id="submit" value="Show Archived Versions" />
-    }
-    else
-    {
-        <table>
-            <tr style="border-bottom-color: black; border-bottom-style: solid;">
-                <th style="padding: 0 5px;">Version</th>
-                <th style="padding: 0 5px;">Build</th>
-                <th style="padding: 0 5px;">Machines</th>
-                <th style="padding: 0 5px;">Sessions</th>
-                <th style="padding: 0 5px;">Issue Types</th>
-                <th style="padding: 0 5px;">Issues</th>
-                <th style="padding: 0 5px;">First</th>
-                <th style="padding: 0 5px;">Last</th>
-                <th style="padding: 0 5px;">Environments</th>
-            </tr>
-            @foreach (var version in Model.ArchivedVersions)
-            {
-                <tr>
-                    <td style="padding: 0 5px;">@version.Version</td>
-                    <td style="padding: 0 5px;">@version.Build</td>
-                    <td style="padding: 0 5px;">Machines count</td>
-                    <td style="padding: 0 5px;">@version.Sessions.Count()</td>
-                    <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
-                    <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
-                    <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-                    <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
-                    <td style="padding: 0 5px;">
-                        @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
-                        {
-                            @Html.Raw(env + ", ")
-                        }
-                    </td>
+        @Html.HiddenFor(x => x.InitiativeId)
+        @Html.HiddenFor(x => x.Application)
+        <h3>Archived Versions</h3>
+        if (!Model.ShowArchivedVersions)
+        {
+            <input type="submit" name="submit" id="submit" value="Show Archived Versions" />
+        }
+        else
+        {
+            <table>
+                <tr style="border-bottom-color: black; border-bottom-style: solid;">
+                    <th style="padding: 0 5px;">Version</th>
+                    <th style="padding: 0 5px;">Build</th>
+                    <th style="padding: 0 5px;">Machines</th>
+                    <th style="padding: 0 5px;">Sessions</th>
+                    <th style="padding: 0 5px;">Issue Types</th>
+                    <th style="padding: 0 5px;">Issues</th>
+                    <th style="padding: 0 5px;">First</th>
+                    <th style="padding: 0 5px;">Last</th>
+                    <th style="padding: 0 5px;">Environments</th>
                 </tr>
-            }
-        </table>
+                @foreach (var version in Model.ArchivedVersions)
+                {
+                    <tr>
+                        <td style="padding: 0 5px;">@version.Version</td>
+                        <td style="padding: 0 5px;">@version.Build</td>
+                        <td style="padding: 0 5px;">Machines count</td>
+                        <td style="padding: 0 5px;">@version.Sessions.Count()</td>
+                        <td style="padding: 0 5px;">@version.IssueTypes.Count()</td>
+                        <td style="padding: 0 5px;">@version.IssueTypes.SelectMany(x => x.Issues).Count()</td>
+                        <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderBy(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                        <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime()">@version.Sessions.OrderByDescending(x => x.ServerStartTime).First().ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
+                        <td style="padding: 0 5px;">
+                            @foreach (var env in version.Sessions.Select(x => x.Environment).Distinct())
+                            {
+                                @Html.Raw(env + ", ")
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
     }
-}
 
-<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>*@
+    <script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>*@

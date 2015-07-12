@@ -4,6 +4,11 @@ namespace Quilt4.Web
 {
     public static class DateExtensions
     {
+        public static string ToDateTimeString(this DateTime date)
+        {
+            return date.ToShortDateString() + " " + date.ToLongTimeString();
+        }
+
         public static string ToTimeAgo(this DateTime date)
         {
             var dateTime = DateTime.Now;

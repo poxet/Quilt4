@@ -292,6 +292,7 @@
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DeveloperRoleViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\EnvironmentViewModel.cs" />
     <Compile Include="Models\EventLogIndexViewModel.cs" />
     <Compile Include="Models\EventLogItemModel.cs" />
     <Compile Include="Models\EventLogStatusViewModel.cs" />

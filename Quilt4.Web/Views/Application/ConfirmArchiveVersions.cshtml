@@ -12,7 +12,7 @@
     <ul>
         @for (var i = 0; i < Model.Count; i++)
         {
-            @Html.HiddenFor(x => Model[i].UniqueIdentifier)
+            @Html.HiddenFor(x => Model[i].VersionIdentifier)
             @Html.HiddenFor(x => Model[i].ApplicationIdentifier)
             @Html.HiddenFor(x => Model[i].InitiativeIdentifier)
             @Html.HiddenFor(x => Model[i].VersionId)
