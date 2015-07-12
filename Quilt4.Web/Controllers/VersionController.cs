@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -27,36 +27,16 @@ namespace Quilt4.Web.Controllers
         // GET: Version/Details/5
         public ActionResult Details(string id, string application, string version)
         {
-            if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
-
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
-            var initiativeId = Guid.Empty;
-
-            if (i.Count() == 1)//Name is unique
-            {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
-            }
-            else//go with id
-            {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
-            }
-
-            if (initiativeId == Guid.Empty)
-            {
-                throw new NullReferenceException("No initiative found for the specified uid.");
-            }
-
-            var initiative = _initiativeBusiness.GetInitiative(initiativeId);
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
-            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Id == applicationId);
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
-            var versionName = _applicationVersionBusiness.GetApplicationVersion(initiativeId.ToString(), applicationId.ToString(), version).Version;
+            var versionName = _applicationVersionBusiness.GetApplicationVersion(initiative.Id.ToString(), applicationId.ToString(), version).Version;
 
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
 
             var issue = new IssueViewModel
             {
-                InitiativeId = initiativeId.ToString(),
+                InitiativeId = initiative.Id.ToString(),
                 InitiativeName = initiative.Name,
                 ApplicationName = application,
                 Version = version,
