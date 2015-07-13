@@ -10,43 +10,48 @@
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
     <li class="active">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</li>
 </ol>
+@if(Model.IsConfirmed){
+    <h2>Initiative Details</h2>
+    @Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
+    <br/>
+    @Html.ActionLink("Properties", "Properties", new { id = Model.UniqueIdentifier }, null)
+    if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
+    {
+        <br />
+        @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)    
+    }
+    <h2>ClientToken</h2>
+    @Html.Raw(@Model.ClientToken)
 
-<h2>Initiative Details</h2>
-@Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
-<br/>
-@Html.ActionLink("Properties", "Properties", new { id = Model.UniqueIdentifier }, null)
-@if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
-{
-    <br />
-    @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)    
-}
-<h2>ClientToken</h2>
-@Html.Raw(@Model.ClientToken)
 
+    if (Model == null || !Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray().Any())
+    {
+        @Html.Raw("<h2>Applications</h2><p>No applications found!</p>")
+    }
+    else
+    {
+        foreach (var group in Model.ApplicationGroups)
+        {
+            @(@group.Name.IsNullOrEmpty() ? Html.Raw("<h2>Applications</h2>") : Html.Raw("<h2>" + @group.Name + "</h2>"))
 
-@if (Model == null || !Model.ApplicationGroups.SelectMany(x => x.Applications).ToArray().Any())
-{
-    @Html.Raw("<h2>Applications</h2><p>No applications found!</p>")
+            if (@group.Name.IsNullOrEmpty())
+            {
+                Html.Raw("<h2>Applications</h2>");
+            }
+            else
+            {
+                Html.Raw("<h2>" + @group.Name + "</h2>");
+            }
+
+            foreach (var application in group.Applications)
+            {
+                @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
+                <br />
+            }
+        }
+    }
 }
 else
 {
-    foreach (var group in Model.ApplicationGroups)
-    {
-        @(@group.Name.IsNullOrEmpty() ? Html.Raw("<h2>Applications</h2>") : Html.Raw("<h2>" + @group.Name + "</h2>"))
-
-        if (@group.Name.IsNullOrEmpty())
-        {
-            Html.Raw("<h2>Applications</h2>");
-        }
-        else
-        {
-            Html.Raw("<h2>" + @group.Name + "</h2>");
-        }
-
-        foreach (var application in group.Applications)
-        {
-            @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
-            <br />
-        }
-    }
+    @Html.Partial("_ConfirmEmailPartial")
 }
