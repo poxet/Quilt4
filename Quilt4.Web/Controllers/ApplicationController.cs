@@ -34,6 +34,8 @@ namespace Quilt4.Web.Controllers
 
             var initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(initiativeHeads.Select(xx => xx.Name));
 
+            var applicationVersions = versions as IApplicationVersion[] ?? versions.ToArray();
+
             var model = new ApplicationViewModel
             {
                 InitiativeId = initiative.Id,
@@ -41,46 +43,28 @@ namespace Quilt4.Web.Controllers
                 InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 Application = application,
                 
-                Versions = versions.Select(x => new VersionViewModel
+                Versions = applicationVersions.Select(x => new VersionViewModel
                 {
                     Checked = false,
                     Build = x.BuildTime == null ? string.Empty : x.BuildTime.Value.ToLocalTime().ToDateTimeString(),
                     VersionId = x.Id,
                     Version = x.Version,
-                    VersionIdentifier = x.GetUniqueIdentifier(versions.Select(y => y.Version)),
+                    VersionIdentifier = x.GetUniqueIdentifier(applicationVersions.Select(y => y.Version)),
                     ApplicationIdentifier = application,
                     InitiativeIdentifier = initiativeUniqueIdentifier,
-                    MachineCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
-                    SessionCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
-                    IssueTypeCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
-                    IssueCount = -1, //TODO: Load data (If slow, populate data when the list has already loaded)
-                    FirstSessionTime = new DateTime(), //TODO: Load data (If slow, populate data when the list has already loaded)
-                    LastSessionTime = new DateTime(), //TODO: Load data (If slow, populate data when the list has already loaded)
-                    Environments = new List<EnvironmentViewModel>
+                    IssueTypeCount = x.IssueTypes.Count(),
+                    IssueCount = x.IssueTypes.SelectMany(y => y.Issues).Count(),
+                    MachineCount = -1,
+                    SessionCount = -1, //TODO: Ta bort denna property och ladda med jquery.
+                    FirstSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
+                    LastSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
+                    Environments = new List<EnvironmentViewModel> //TODO: Ta bort denna property och ladda med jquery.
                     {
                         new EnvironmentViewModel { Name = "A", Colour = "faf567" }, 
                         new EnvironmentViewModel { Name = "B", Colour = "1a65f7" }
                     }, //TODO: Load data (If slow, populate data when the list has already loaded)
                 }).OrderByDescending(y => y.Version).ToList(),
             };
-
-            //if (showArchivedVersions)
-            //{
-            //    model.ShowArchivedVersions = true;
-            //    model.ArchivedVersions = archivedVersions.Select(x => new VersionViewModel
-            //    {
-            //        Version = x.Version,
-            //        VersionId = x.Id,
-            //        Build = x.BuildTime.ToString(),
-            //        IssueTypes = x.IssueTypes,
-
-            //        //TODO: This is sloooooow ... fix this
-            //        //Machines = _machineBusiness.GetMachinesByApplicationVersion(x.Id),
-            //        //Machines = machines.Where(z => sessions.Any(y => y.ApplicationVersionId == x.Id && y.MachineFingerprint == z.Id)),
-
-            //        Sessions = sessions.Where(y => y.ApplicationVersionId == x.Id).ToArray(),
-            //    }).OrderByDescending(y => y.Version).ToList();
-            //}
 
             return model;
         }
@@ -98,6 +82,27 @@ namespace Quilt4.Web.Controllers
             @ViewBag.IsArchive = false;
             @ViewBag.Title = "Application Details";
             return View(model);
+        }
+
+        public JsonResult Sessions(string id, string application)
+        {
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
+            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id });
+
+            var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
+
+            //TODO: Här skall data som first, last och en lista med environments och dess färger med.
+            var ss = versions.Select(x => new
+            {
+                Id = x.Id,
+                SessionCount = sessions.Count(y => y.ApplicationVersionId == x.Id)
+            }).ToArray();
+
+            var response = Json(ss, JsonRequestBehavior.AllowGet);
+            return response;
         }
 
         // GET: Application/Archive/5
