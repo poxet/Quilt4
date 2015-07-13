@@ -26,7 +26,8 @@ namespace Quilt4.Web.Controllers
         // GET: Machine
         public ActionResult Index()
         {
-            return View();
+            throw new NotImplementedException("View is missing.");
+            //return View();
         }
 
         public ActionResult Details(string initiativeId, string machineId)

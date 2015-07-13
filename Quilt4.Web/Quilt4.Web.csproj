@@ -286,12 +286,13 @@
     <Compile Include="Models\AddPhoneNumberViewModel.cs" />
     <Compile Include="Models\AdminIndexViewModel.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
-    <Compile Include="Models\ApplicationModel.cs" />
+    <Compile Include="Models\ApplicationViewModel.cs" />
     <Compile Include="Models\ApplicationPropetiesModel.cs" />
     <Compile Include="Models\ChangePasswordViewModel.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DeveloperRoleViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\EnvironmentViewModel.cs" />
     <Compile Include="Models\EventLogIndexViewModel.cs" />
     <Compile Include="Models\EventLogItemModel.cs" />
     <Compile Include="Models\EventLogStatusViewModel.cs" />

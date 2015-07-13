@@ -25,7 +25,8 @@ namespace Quilt4.Web.Controllers
         // GET: User
         public ActionResult Index()
         {
-            return View();
+            throw new NotImplementedException("View is missing.");
+            //return View();
         }
 
         public ActionResult Details(string initiativeidentifier, string userId)

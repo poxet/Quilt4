@@ -448,6 +448,7 @@ namespace Quilt4.MongoDBRepository
         {
             var query = Query.EQ("_id", applicationVersionFingerprint);
             Database.GetCollection("ApplicationVersion").Remove(query, WriteConcern.Acknowledged);
+            Database.GetCollection("ApplicationVersionArchive").Remove(query, WriteConcern.Acknowledged);
         }
 
         public void DeleteApplicationVersionForApplication(Guid applicationId)

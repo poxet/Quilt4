@@ -16,7 +16,7 @@ namespace Quilt4.Web.Controllers
 
         public static Application ToModel(this IApplication item)
         {
-            return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix, item.DevColor, item.CiColor, item.ProdColor);
+            return new Application(item.Id,item.Name,item.FirstRegistered,item.TicketPrefix);
         }
 
         public static InitiativeViewModel ToModel(this IInitiative item, IEnumerable<string> allInitiativeNames)
@@ -39,11 +39,11 @@ namespace Quilt4.Web.Controllers
             return response;
         }
 
-        public static Models.DeveloperRoleViewModel ToModel(this IDeveloperRole item)
+        public static DeveloperRoleViewModel ToModel(this IDeveloperRole item)
         { 
-            return new Models.DeveloperRoleViewModel
+            return new DeveloperRoleViewModel
             {
-                DeveloperName = item.DeveloperName
+                DeveloperName = item.DeveloperName,                
             };
         }
     }

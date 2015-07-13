@@ -19,7 +19,8 @@ namespace Quilt4.Web.Controllers
         // GET: Session
         public ActionResult Index()
         {
-            return View();
+            throw new NotImplementedException("View is missing.");
+            //return View();
         }
 
         public ActionResult Details(string applicationVersionId, string sessionId)

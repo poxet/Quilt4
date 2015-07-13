@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Cache;
-using System.Web;
-using System.Web.UI;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
@@ -199,12 +196,10 @@ namespace Quilt4.Web.Business
 
             var applicationGroup = GetDefaultApplicationGroup(initiative);
 
-            application = new Application(Guid.NewGuid(), applicationName, DateTime.UtcNow, null, null, null, null);
+            application = new Application(Guid.NewGuid(), applicationName, DateTime.UtcNow, null);
             applicationGroup.Add(application);
 
             _repository.UpdateInitiative(initiative);
-
-            //_counterBusiness.RegisterApplication(initiative, application);
 
             return application;
         }
