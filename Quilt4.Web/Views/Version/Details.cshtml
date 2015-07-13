@@ -15,6 +15,7 @@
 
 <h2>Version Details</h2>
 
+<h4>Environment legend</h4>
 <table>
     <tr>
         <th>Dev environment</th>
@@ -29,7 +30,23 @@
         <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
     </tr>
 </table>
-<br />
+<br/>
+<h4>Level Legend</h4>
+<table>
+    <tr>
+        <th>Error</th>
+        <td style="padding-left: 20px;"><span id="ErrorLegendButton" onclick='changeButtonStyle("Error"); changeButtonStyle("ErrorLegendButton");' style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span></td>
+    </tr>
+    <tr>
+        <th>Warning</th>
+        <td style="padding-left: 20px;"><span id="WarningLegendButton" onclick='changeButtonStyle("Warning"); changeButtonStyle("WarningLegendButton");' style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span></td>
+    </tr>
+    <tr>
+        <th>Information</th>
+        <td style="padding-left: 20px;"><span id="InformationLegendButton" onclick='changeButtonStyle("Information"); changeButtonStyle("InformationLegendButton");' style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span></td>
+    </tr>
+</table>
+
 
 <h3>Issue Types</h3>
 <table>
@@ -48,7 +65,20 @@
         <tr style="display: table-row">
             <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName ?? "N/A", "Details", "IssueType", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
             <td style="padding: 0 5px;">@issueType.Message</td>
-            <td style="padding: 0 5px;">@issueType.IssueLevel</td>
+            <td style="padding: 0 5px;">
+                @if (@issueType.IssueLevel.ToString() == "Error")
+                {
+                    <span id="ErrorLegendButton" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
+                }
+                @if (@issueType.IssueLevel.ToString() == "Warning")
+                {
+                    <span id="WarningLegendButton" style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span>
+                }
+                @if (@issueType.IssueLevel.ToString() == "Information")
+                {
+                    <span id="InformationLegendButton" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
+                }
+            </td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
             <td style="padding: 0 5px;">
                 @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment).Distinct())

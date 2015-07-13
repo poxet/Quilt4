@@ -21,4 +21,5 @@ namespace Quilt4.Web.Models
         public string CiColor { get; set; }
         public string ProdColor { get; set; }
     }
+
 }
