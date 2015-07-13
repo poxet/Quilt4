@@ -347,5 +347,13 @@ namespace Quilt4.Web.Controllers
                 return View();
             }
         }
+
+        public ActionResult EditEnvironmentColors(string userId)
+        {
+            var environmentColors = _initiativeBusiness.GetEnvironmentColors(userId).First();
+
+            throw new NotImplementedException();
+            return View();
+        }
     }
 }

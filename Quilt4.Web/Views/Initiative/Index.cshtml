@@ -1,9 +1,15 @@
-﻿@using Quilt4.Web.Models
+﻿@using Microsoft.AspNet.Identity
+@using Quilt4.Web.Models
+@using Constants = Quilt4.Web.Models.Constants
 @model InitiativesViewModel
 @{
     ViewBag.Title = "Initiatives";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
+
+@Html.ActionLink("Change Environment Colors", "EditEnvironmentColors", "Initiative", new { userId = User.Identity.GetUserId()}, null)
 
 <h2>@ViewBag.Title</h2>
 

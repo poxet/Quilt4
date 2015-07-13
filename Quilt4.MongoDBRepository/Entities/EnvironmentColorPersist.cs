@@ -8,7 +8,7 @@ namespace Quilt4.MongoDBRepository.Entities
 {
     class EnvironmentColorPersist
     {
-        public string UserId { get; internal set; }
-        public IEnumerable<IDictionary<string, string>> EnvironmentColors { get; internal set; }
+        public string Id { get; internal set; }
+        public IDictionary<string, string> EnvironmentColors { get; internal set; }
     }
 }

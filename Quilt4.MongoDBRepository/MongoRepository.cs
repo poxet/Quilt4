@@ -357,20 +357,24 @@ namespace Quilt4.MongoDBRepository
             return sessions;
         }
 
-        public IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId)
+        public IDictionary<string, string> GetEnvironmentColors(string userId)
         {
-            var environmentColors = Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Single(x => x.UserId == userId).EnvironmentColors;
+            if (!Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Any()) return new Dictionary<string, string>();
+
+            var environmentColors = Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Single(x => x.Id == userId).EnvironmentColors;
             return environmentColors;
         }
 
-        public void UpdateEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        public void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
         {
-            Database.GetCollection("EnvironmentColor").Save(new EnvironmentColorPersist() { UserId = userId, EnvironmentColors = environmentColors }, WriteConcern.Acknowledged);
+            var environmentPersist = new EnvironmentColorPersist() { Id = userId, EnvironmentColors = environmentColors };
+            Database.GetCollection("EnvironmentColor").Save(environmentPersist, WriteConcern.Acknowledged);
         }
 
-        public void AddEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        public void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
         {
-            Database.GetCollection("EnvironmentColor").Insert(new EnvironmentColorPersist() { UserId = userId, EnvironmentColors = environmentColors }, WriteConcern.Acknowledged);
+            var environmentPersist = new EnvironmentColorPersist() { Id = userId, EnvironmentColors = environmentColors };
+            Database.GetCollection("EnvironmentColor").Insert(environmentPersist, WriteConcern.Acknowledged);
         }
 
         public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds)
@@ -488,7 +492,12 @@ namespace Quilt4.MongoDBRepository
 
         public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
         {
-            throw new NotImplementedException();
+            var i = GetInitiatives().Where(x => x.OwnerDeveloperName == developerName || x.DeveloperRoles.Any(y => y.DeveloperName == developerName)).ToArray();
+            var a = i.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications).ToArray();
+            var response = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => a.Any(y => y.Id == x.ApplicationId)).Select(x => x.ToEntity()).ToArray();
+            return response;
+
+            //throw new NotImplementedException();
             ////TODO: Rewrite this to a direct mongodb query
             //var initiatives = GetInitiativesByDeveloper(developerName);
             //var applications = initiatives.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications);

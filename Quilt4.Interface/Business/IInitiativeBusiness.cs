@@ -24,8 +24,8 @@ namespace Quilt4.Interface
         void DeleteApplicationVersion(string applicationVersionFingerprint);
         void ArchiveApplicationVersion(string versionId);
         IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId);
-        void UpdateEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors);
-        void AddEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors);
+        void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
+        void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         IInitiative GetInitiativeByInviteCode(string inviteCode);
         void ConfirmInvitation(Guid initiativeId, string developerName);
         void DeclineInvitation(string inviteCode);

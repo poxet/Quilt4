@@ -1,21 +1,25 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
-using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
+using Constants = Quilt4.Web.Models.Constants;
 
 namespace Quilt4.Web.Business
 {
     public class InitiativeBusiness : IInitiativeBusiness
     {
         private readonly IRepository _repository;
+        private readonly IAccountRepository _accountRepository;
         private readonly ICounterBusiness _counterBusiness;
 
-        public InitiativeBusiness(IRepository repository, ICounterBusiness counterBusiness)
+        public InitiativeBusiness(IRepository repository, IAccountRepository accountRepository, ICounterBusiness counterBusiness)
         {
             _repository = repository;
+            _accountRepository = accountRepository;
             _counterBusiness = counterBusiness;
         }
 
@@ -257,17 +261,74 @@ namespace Quilt4.Web.Business
 
         public IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId)//IDeveloper.UserId
         {
-            return _repository.GetEnvironmentColors(userId);
+            var environmentColors = _repository.GetEnvironmentColors(userId);
+            var colors = new Dictionary<string, string>();
+            foreach (var e in environmentColors)
+            {
+                colors.Add(e.Key.Substring(4), e.Value);
+            }
+            var user = _accountRepository.FindById(userId);
+            var environments = _repository.GetSessionsForDeveloper(user.UserName).Select(x => x.Environment).Distinct().ToArray();
+            
+
+            if (environmentColors.IsNullOrEmpty())
+            {
+                foreach (var environment in environments)
+                {
+                    environmentColors.Add(environment, GetRandomEnvironmentColor());
+                }
+                
+                AddEnvironmentColors(userId, environmentColors);
+                yield return environmentColors;
+            }
+            else
+            {
+                foreach (var environment in environments)
+                {
+                    if (!colors.ContainsKey(environment))
+                    {
+                        colors.Add(environment, GetRandomEnvironmentColor());
+                    }
+                }
+
+                UpdateEnvironmentColors(userId, colors);
+                yield return environmentColors;
+            }
         }
 
-        public void UpdateEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        private string GetRandomEnvironmentColor()
         {
-            _repository.UpdateEnvironmentColors(userId, environmentColors);
+            var rng = new Random();
+            var r = rng.Next(10, 250);
+            var g = rng.Next(10, 250);
+            var b = rng.Next(200, 250);
+            return r.ToString("x2") + g.ToString("x2") + b.ToString("x2");
         }
 
-        public void AddEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        public void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
         {
-            _repository.AddEnvironmentColors(userId, environmentColors);
+            var colors = new Dictionary<string, string>();
+            foreach (var e in environmentColors)
+            {
+                if (!e.Key.StartsWith("_Env"))
+                {
+                    colors.Add(e.Key.Insert(0, "_Env"), e.Value);
+                }
+            }
+            _repository.UpdateEnvironmentColors(userId, colors);
+        }
+
+        public void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
+        {
+            var colors = new Dictionary<string, string>();
+            foreach (var e in environmentColors)
+            {
+                if (!e.Key.StartsWith("_Env"))
+                {
+                    colors.Add(e.Key.Insert(0, "_Env"), e.Value);
+                }
+            }
+            _repository.AddEnvironmentColors(userId, colors);
         }
 
         public IInitiative GetInitiativeByInviteCode(string inviteCode)
