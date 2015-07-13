@@ -1,14 +1,14 @@
 ﻿@using Quilt4.Web.Models
-@model ApplicationViewModel
+@model IEnumerable<EnvironmentViewModel>
 
 <h3>Environments</h3>
 <table>
     @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
-    @foreach (var environment in @Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name))
+    @foreach (var environment in @Model.GroupBy(x => x.Name).Select(x => x.First()))
     {
         <tr>
-            <th>@Html.Raw(environment.Key)</th>
-            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Key)LegendButton" onclick='toggleShowEnvironment("@environment.Key"); changeButtonStyle("@environment.Key");' style="background-color: #@environment.First().Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Key"></span></td>
+            <th>@Html.Raw(environment.Name)</th>
+            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Name)LegendButton" onclick='toggleShowEnvironment("@environment.Name"); changeButtonStyle("@environment.Name");' style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span></td>
         </tr>
     }
 </table>

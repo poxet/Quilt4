@@ -22,8 +22,8 @@ else
     @Html.ActionLink("Archive", "Archive", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
 }
 
-@*Environment*@
-@Html.Partial("_EnvironmentLegendPartial")
+@*Environment Legend*@
+@Html.Partial("_EnvironmentLegendPartial", Model.Versions.SelectMany(x => x.Environments)))
 
 <h3>Versions</h3>
 
