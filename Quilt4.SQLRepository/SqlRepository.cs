@@ -305,5 +305,20 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -255,6 +255,21 @@ namespace Quilt4.Web.Business
             _repository.ArchiveApplicationVersion(versionId);
         }
 
+        public IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId)//IDeveloper.UserId
+        {
+            return _repository.GetEnvironmentColors(userId);
+        }
+
+        public void UpdateEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        {
+            _repository.UpdateEnvironmentColors(userId, environmentColors);
+        }
+
+        public void AddEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        {
+            _repository.AddEnvironmentColors(userId, environmentColors);
+        }
+
         public IInitiative GetInitiativeByInviteCode(string inviteCode)
         {
             throw new NotImplementedException();

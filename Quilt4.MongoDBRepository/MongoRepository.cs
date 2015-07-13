@@ -357,6 +357,22 @@ namespace Quilt4.MongoDBRepository
             return sessions;
         }
 
+        public IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId)
+        {
+            var environmentColors = Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Single(x => x.UserId == userId).EnvironmentColors;
+            return environmentColors;
+        }
+
+        public void UpdateEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        {
+            Database.GetCollection("EnvironmentColor").Save(new EnvironmentColorPersist() { UserId = userId, EnvironmentColors = environmentColors }, WriteConcern.Acknowledged);
+        }
+
+        public void AddEnvironmentColors(string userId, IEnumerable<IDictionary<string, string>> environmentColors)
+        {
+            Database.GetCollection("EnvironmentColor").Insert(new EnvironmentColorPersist() { UserId = userId, EnvironmentColors = environmentColors }, WriteConcern.Acknowledged);
+        }
+
         public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds)
         {
             var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationIds.Contains(x.ApplicationId)).ToArray();
