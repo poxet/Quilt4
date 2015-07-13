@@ -20,6 +20,7 @@ namespace Quilt4.Web.Models
         public string DevColor { get; set; }
         public string CiColor { get; set; }
         public string ProdColor { get; set; }
+        public List<EnvironmentViewModel> Environments { get; set; }
     }
 
 }

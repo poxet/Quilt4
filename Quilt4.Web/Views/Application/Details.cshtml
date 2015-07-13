@@ -23,7 +23,7 @@ else
 }
 
 @*Environment Legend*@
-@Html.Partial("_EnvironmentLegendPartial", Model.Versions.SelectMany(x => x.Environments)))
+@Html.Partial("_EnvironmentLegendPartial", Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name).Select(x => x.First()))
 
 <h3>Versions</h3>
 

@@ -4,7 +4,7 @@
 <h3>Environments</h3>
 <table>
     @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
-    @foreach (var environment in @Model.GroupBy(x => x.Name).Select(x => x.First()))
+    @foreach (var environment in @Model)
     {
         <tr>
             <th>@Html.Raw(environment.Name)</th>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
@@ -29,10 +30,21 @@ namespace Quilt4.Web.Controllers
         {
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
-            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId);
+            var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
             var versionName = _applicationVersionBusiness.GetApplicationVersion(initiative.Id.ToString(), applicationId.ToString(), version).Version;
 
+            //var versionIds = versions.Select(v => v.Id).ToArray();
+
+            //change to EnvironmentViewModel when fixed
+            //var environments = new List<string>();
+            //foreach (var versionId in versionIds)
+            //{
+            //    environments.Add(_sessionBusiness.GetSessionsForApplicationVersion(versionId).Select(x => x.Environment));
+            //}
+
             var ver = versions.Single(x => x.Id.Replace(":", "") == version || x.Version == version);
+
+            //var sessions = _sessionBusiness.GetSessionsForApplicationVersion();
 
             var issue = new IssueViewModel
             {
@@ -44,11 +56,8 @@ namespace Quilt4.Web.Controllers
                 IssueTypes = ver.IssueTypes,
                 Sessions = _sessionBusiness.GetSessionsForApplicationVersion(ver.Id),
                 ApplicationVersionId = applicationId.ToString(),
-                //TODO: Add applicationversion id
                 InitiativeUniqueIdentifier = id,
             };
-
-            //TODO: fetch version anmes
             issue.UniqueIdentifier = issue.GetUniqueIdentifier(versionName);
 
             //issue.ExceptionTypeName = ver.IssueTypes.Select(x => x.ExceptionTypeName);

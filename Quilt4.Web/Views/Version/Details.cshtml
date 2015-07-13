@@ -16,6 +16,7 @@
 
 <h2>Version Details</h2>
 
+@*TODO:@Html.Partial("_EnvironmentLegendPartial", @Model.Environments.GroupBy(x => x.Name).Select(x => x.First()))*@
 <h4>Environment legend</h4>
 <table>
     <tr>
