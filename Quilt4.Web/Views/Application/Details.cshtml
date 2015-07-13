@@ -22,19 +22,8 @@ else
     @Html.ActionLink("Archive", "Archive", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
 }
 
-<!-- TODO: Bryt ut till en separat kontroll så att den kan återanvändas på andra sidor -->
-<h3>Environments</h3>
-<table>
-    @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
-    @foreach (var environment in @Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name))
-    {
-        <tr>
-            <th>@Html.Raw(environment.Key)</th>
-            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Key)LegendButton" onclick='toggleShowEnvironment("@environment.Key"); changeButtonStyle("@environment.Key");' style="background-color: #@environment.First().Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Key"></span></td>
-        </tr>
-    }
-</table>
-<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>
+@*Environment Legend*@
+@Html.Partial("_EnvironmentLegendPartial", Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name).Select(x => x.First()))
 
 <h3>Versions</h3>
 

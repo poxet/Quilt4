@@ -1,4 +1,5 @@
 ﻿@using Castle.Core.Internal
+@using Quilt4.Web.Models
 @using Constants = Quilt4.Web.Models.Constants
 @model Quilt4.Web.Models.IssueViewModel
 
@@ -15,7 +16,9 @@
 
 <h2>Version Details</h2>
 
-@*<table>
+@*TODO:@Html.Partial("_EnvironmentLegendPartial", @Model.Environments.GroupBy(x => x.Name).Select(x => x.First()))*@
+<h4>Environment legend</h4>
+<table>
     <tr>
         <th>Dev environment</th>
         <td style="padding-left: 20px;"><span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span></td>
@@ -29,7 +32,9 @@
         <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
     </tr>
 </table>
-<br />*@
+<br/>
+
+@Html.Partial("_IssueLevelLegendPartial")
 
 <h3>Issue Types</h3>
 <table>
@@ -48,10 +53,23 @@
         <tr style="display: table-row">
             <td style="padding: 0 5px;">@Html.ActionLink(@issueType.ExceptionTypeName ?? "N/A", "Details", "IssueType", new { id = Model.InitiativeUniqueIdentifier, application = Model.ApplicationName, version = Model.UniqueIdentifier, issueType = @issueType.Ticket }, null)</td>
             <td style="padding: 0 5px;">@issueType.Message</td>
-            <td style="padding: 0 5px;">@issueType.IssueLevel</td>
+            <td style="padding: 0 5px;">
+                @if (@issueType.IssueLevel.ToString() == "Error")
+                {
+                    <span class ="Error" id="ErrorLegendButton" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
+                }
+                @if (@issueType.IssueLevel.ToString() == "Warning")
+                {
+                    <span class="Warning" id="WarningLegendButton" style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span>
+                }
+                @if (@issueType.IssueLevel.ToString() == "Warning")
+                {
+                    <span class="Information" id="InformationLegendButton" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
+                }
+            </td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
             <td style="padding: 0 5px;">
-                @*@foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment).Distinct())
+                @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment).Distinct())
                 {
                     if (env.Equals("Dev"))
                     {
@@ -65,7 +83,7 @@
                     {
                         <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
                     }
-                }*@
+                }
             </td>
 
             <td style="padding: 0 5px;">@issueType.Ticket</td>
@@ -90,7 +108,7 @@
         <tr style="display: table-row">
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@session.ServerStartTime.ToLocalTime()">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;">
-                @*@if (session.Environment.Equals("Dev"))
+                @if (session.Environment.Equals("Dev"))
                 {
                 <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
                 }
@@ -101,7 +119,7 @@
                 else if (session.Environment.Equals("Prod"))
                 {
                 <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
-                }*@
+                }
             </td>
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
             <td style="padding: 0 5px;">@Html.ActionLink(@Model.Machines.Single(x => x.Id == session.MachineFingerprint).Name, "Details", "Machine", new { initiativeId = Model.InitiativeId, machineId = session.MachineFingerprint}, null)</td>

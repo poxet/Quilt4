@@ -23,6 +23,7 @@ namespace Quilt4.Web.Models
         public IIssueType IssueType { get; set; }
         public IIssue Issue { get; set; }
         public string Environment { get; set; }
+        //public List<EnvironmentViewModel> Environments { get; set; }
     }
 
 }

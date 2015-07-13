@@ -18,12 +18,14 @@ namespace Quilt4.Web.Controllers
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IEmailBusiness _emailBusiness;
         private readonly ISettingsBusiness _settingsBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public InitiativeController(IInitiativeBusiness initiativeBusiness, IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness)
+        public InitiativeController(IInitiativeBusiness initiativeBusiness, IEmailBusiness emailBusiness, ISettingsBusiness settingsBusiness, IAccountRepository accountRepository)
         {
             _initiativeBusiness = initiativeBusiness;
             _emailBusiness = emailBusiness;
             _settingsBusiness = settingsBusiness;
+            _accountRepository = accountRepository;
         }
 
         private InitiativeViewModel GetInitiativeViewModel(string id)
@@ -250,7 +252,16 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
+            var isConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed;
             var initiative = GetInitiativeViewModel(id);
+
+            if (!isConfirmed)
+            {
+                return View(new InitiativeViewModel() { IsConfirmed = isConfirmed, Name = initiative.Name});
+            }
+            
+            
+            initiative.IsConfirmed = isConfirmed;
 
             return View(initiative); 
         }
