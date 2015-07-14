@@ -16,23 +16,7 @@
 
 <h2>Version Details</h2>
 
-@*TODO:@Html.Partial("_EnvironmentLegendPartial", @Model.Environments.GroupBy(x => x.Name).Select(x => x.First()))*@
-<h4>Environment legend</h4>
-<table>
-    <tr>
-        <th>Dev environment</th>
-        <td style="padding-left: 20px;"><span id="DevLegendButton" onclick='toggleShowEnvironment("Dev"); changeButtonStyle("DevLegendButton");' style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span></td>
-    </tr>
-    <tr>
-        <th>CI environment</th>
-        <td style="padding-left: 20px;"><span id="CiLegendButton" onclick='toggleShowEnvironment("Ci"); changeButtonStyle("CiLegendButton");' style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span></td>
-    </tr>
-    <tr>
-        <th>Prod environment</th>
-        <td style="padding-left: 20px;"><span id="ProdLegendButton" onclick='toggleShowEnvironment("Prod"); changeButtonStyle("ProdLegendButton");' style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span></td>
-    </tr>
-</table>
-<br/>
+@Html.Partial("_EnvironmentLegendPartial", @Model.Environments)
 
 @Html.Partial("_IssueLevelLegendPartial")
 
@@ -71,17 +55,12 @@
             <td style="padding: 0 5px;">
                 @foreach (var env in Model.Sessions.Where(x => issueType.Issues.Any(y => y.SessionId == x.Id)).Select(x => x.Environment).Distinct())
                 {
-                    if (env.Equals("Dev"))
+                    foreach (var environment in Model.Environments)
                     {
-                        <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
-                    }
-                    else if (env.Equals("CI"))
-                    {
-                        <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
-                    }
-                    else if (env.Equals("Prod"))
-                    {
-                        <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                        if (env.Equals(environment.Name))
+                        {
+                            <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
+                        }
                     }
                 }
             </td>
@@ -108,17 +87,12 @@
         <tr style="display: table-row">
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@session.ServerStartTime.ToLocalTime()">@session.ServerStartTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;">
-                @if (session.Environment.Equals("Dev"))
+                @foreach (var environment in Model.Environments)
                 {
-                <span class="DevColor" style="background-color: @Model.DevColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Dev"></span>
-                }
-                else if (session.Environment.Equals("CI"))
-                {
-                <span class="CiColor" style="background-color: @Model.CiColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="CI"></span>
-                }
-                else if (session.Environment.Equals("Prod"))
-                {
-                <span class="ProdColor" style="background-color: @Model.ProdColor; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Prod"></span>
+                    if (session.Environment.Equals(environment.Name))
+                    {
+                        <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
+                    }
                 }
             </td>
             <td style="padding: 0 5px;">@Model.Users.First(x => x.Id == session.UserFingerprint).UserName</td>
@@ -200,5 +174,3 @@
         </tr>
     }
 </table>
-
-<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>
