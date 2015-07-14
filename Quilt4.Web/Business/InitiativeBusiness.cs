@@ -275,11 +275,11 @@ namespace Quilt4.Web.Business
             {
                 foreach (var environment in environments)
                 {
-                    environmentColors.Add(environment, GetRandomEnvironmentColor());
+                    colors.Add(environment, GetRandomEnvironmentColor());
                 }
                 
-                AddEnvironmentColors(userId, environmentColors);
-                yield return environmentColors;
+                AddEnvironmentColors(userId, colors);
+                yield return colors;
             }
             else
             {
@@ -292,7 +292,7 @@ namespace Quilt4.Web.Business
                 }
 
                 UpdateEnvironmentColors(userId, colors);
-                yield return environmentColors;
+                yield return colors;
             }
         }
 
@@ -314,6 +314,10 @@ namespace Quilt4.Web.Business
                 {
                     colors.Add(e.Key.Insert(0, "_Env"), e.Value);
                 }
+                else
+                {
+                    colors.Add(e.Key, e.Value);
+                }
             }
             _repository.UpdateEnvironmentColors(userId, colors);
         }
@@ -326,6 +330,10 @@ namespace Quilt4.Web.Business
                 if (!e.Key.StartsWith("_Env"))
                 {
                     colors.Add(e.Key.Insert(0, "_Env"), e.Value);
+                }
+                else
+                {
+                    colors.Add(e.Key, e.Value);
                 }
             }
             _repository.AddEnvironmentColors(userId, colors);
