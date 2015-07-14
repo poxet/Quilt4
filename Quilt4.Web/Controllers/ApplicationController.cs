@@ -83,14 +83,14 @@ namespace Quilt4.Web.Controllers
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
-            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id });
+            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id }).ToArray();
 
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
             var vers = versions.Select(x =>
             {
-                var ss = sessions as ISession[] ?? sessions.ToArray();
+                var ss = sessions.Where(y => y.ApplicationVersionId == x.Id).ToArray();
                 return new
                 {
                     Id = x.Id,
