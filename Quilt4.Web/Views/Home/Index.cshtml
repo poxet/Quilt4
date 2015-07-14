@@ -1,4 +1,5 @@
-﻿@model Quilt4.Web.Models.FiveLatestIssuesModel
+﻿@using Castle.Core.Internal
+@model Quilt4.Web.Models.FiveLatestIssuesModel
 @{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,28 +10,32 @@
     @{ Html.RenderAction("_EventLogAlert", "Action", new { area = "Admin" }); }
     @{ Html.RenderAction("_InitiativeInvitations", "Action"); }
 </div>
-
-<table>
-    <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th style="padding: 0 5px;">Issue Type Name</th>
-        <th style="padding: 0 5px;">Level</th>
-        <th style="padding: 0 5px;">Time</th>
-        <th style="padding: 0 5px;">Visible</th>
-        <th style="padding: 0 5px;">IssueType Ticket</th>
-        <th style="padding: 0 5px;">Issue Ticket</th>
-    </tr>
-    @foreach (var item in Model.ItemsInIssueModel)
-    {
-        <tr>
-            <td style="padding: 0 5px;">@item.IssueTypeName</td>
-            <td style="padding: 0 5px;">@item.IssueTypeLevel</td>
-            <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@item.IssueTime.ToLocalTime()">@item.IssueTime.ToLocalTime().ToTimeAgo() ago</td>
-            <td style="padding: 0 5px;">@item.IssueVisible</td>
-            <td style="padding: 0 5px;">@item.IssueTypeTicket</td>
-            <td style="padding: 0 5px;">@item.IssueTicket</td>
-
+@if (!Model.ItemsInIssueModel.IsNullOrEmpty())
+{
+    <table>
+        <tr style="border-bottom-color: black; border-bottom-style: solid;">
+            <th style="padding: 0 5px;">Issue Type Name</th>
+            <th style="padding: 0 5px;">Level</th>
+            <th style="padding: 0 5px;">Time</th>
+            <th style="padding: 0 5px;">Visible</th>
+            <th style="padding: 0 5px;">IssueType Ticket</th>
+            <th style="padding: 0 5px;">Issue Ticket</th>
         </tr>
-    }
+
+        @foreach (var item in Model.ItemsInIssueModel)
+        {
+            <tr>
+                <td style="padding: 0 5px;">@item.IssueTypeName</td>
+                <td style="padding: 0 5px;">@item.IssueTypeLevel</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@item.IssueTime.ToLocalTime()">@item.IssueTime.ToLocalTime().ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;">@item.IssueVisible</td>
+                <td style="padding: 0 5px;">@item.IssueTypeTicket</td>
+                <td style="padding: 0 5px;">@item.IssueTicket</td>
+            </tr>
+        }
+    </table>
+}
+    
    
-</table>
+
 
