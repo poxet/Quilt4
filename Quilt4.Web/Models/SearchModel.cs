@@ -11,6 +11,7 @@ namespace Quilt4.Web.Models
         public string SearchText { get; set; }
         public bool IsConfirmed { get; set; }
         public IEnumerable<SearchResultRowModel> SearchResultRows { get; set; }
+        public List<EnvironmentViewModel> Environments { get; set; }
     }
 
     public class SearchResultRowModel
@@ -23,7 +24,6 @@ namespace Quilt4.Web.Models
         public IIssueType IssueType { get; set; }
         public IIssue Issue { get; set; }
         public string Environment { get; set; }
-        //public List<EnvironmentViewModel> Environments { get; set; }
     }
 
 }

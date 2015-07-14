@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 using Tharga.Quilt4Net;
@@ -196,64 +197,14 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
+
             model.SearchResultRows = searchResultRows;
-
-            
-
-            //if (searchText.IsNullOrEmpty())
-            //{
-            //    return RedirectToAction("Search","Home");
-            //}
-
-            //var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
-            //var initiatives = initiativeHeads.Select(initiativeHead => _initiativeBusiness.GetInitiative(initiativeHead.Id)).ToArray();
-
-            //var applications = new List<IApplication>();
-            //foreach (var initiative in initiatives)
-            //{
-            //    applications.AddRange(initiative.ApplicationGroups.SelectMany(x => x.Applications));
-            //}
-
-            //var applicationIds = new List<Guid>();
-            //var ticketPrefixs = new List<string>();
-            //foreach (var application in applications)
-            //{
-            //    applicationIds.Add(application.Id);
-            //    ticketPrefixs.Add(application.TicketPrefix);
-            //}
-
-            //var versions = new List<IApplicationVersion>();
-            //foreach (var applicationId in applicationIds)
-            //{
-            //    versions.AddRange(_applicationVersionBusiness.GetApplicationVersions(applicationId));
-            //}
-
-            //var allIssueTypes = versions.SelectMany(x => x.IssueTypes).ToArray();
-            
-            //var issueTypeResults = new List<IIssueType>();
-            //foreach (var issueType in allIssueTypes)
-            //{   
-            //    int value;
-            //    if (int.TryParse(model.SearchText, out value))
-            //    {
-            //        foreach (var issue in issueType.Issues)
-            //        if (issueType.Ticket.ToString().Equals(model.SearchText) ||issue.Ticket.ToString().Equals(model.SearchText))
-            //        {
-            //            issueTypeResults.Add(issueType);
-            //        }
-                    
-            //    }
-
-            //    if (!issueType.ExceptionTypeName.IsNullOrEmpty())
-            //    {
-            //        if (issueType.ExceptionTypeName.Contains(model.SearchText))
-            //        {
-            //            issueTypeResults.Add(issueType);
-            //        }
-            //    }
-            //}
-
-            //model.IssueTypeResults = issueTypeResults;
+            model.Environments = environments.Select(x => new EnvironmentViewModel()
+            {
+                Name = x.Key,
+                Colour = x.Value,
+            }).ToList();
             
             return View("SearchResults", model);
         }
