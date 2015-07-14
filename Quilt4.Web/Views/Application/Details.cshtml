@@ -61,18 +61,18 @@ else
                 <td>@Html.CheckBoxFor(x => x.Versions[i].Checked)</td>
                 <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].VersionIdentifier }, null)<br/></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].MachineCount</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].SessionCount</td>
+                <td style="padding: 0 5px;"><div id="Machine-@Model.Versions[i].VersionId" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td style="padding: 0 5px;"><div id="Session-@Model.Versions[i].VersionId" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueTypeCount</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueCount</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].FirstSessionTime">@Model.Versions[i].FirstSessionTime.ToTimeAgo() ago</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@Model.Versions[i].LastSessionTime">@Model.Versions[i].LastSessionTime.ToTimeAgo() ago</td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."></td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."></td>
                 <td style="padding: 0 5px;">
                     @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
-                    @foreach (var env in Model.Versions[i].Environments)
+                    @*@foreach (var env in Model.Versions[i].Environments)
                     {
                         <span class="@Html.Raw(env.Name)Color" style="background-color: #@env.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env.Name"></span>
-                    }
+                    }*@
                 </td>
             </tr>
         }
@@ -93,8 +93,11 @@ else
         function getSessions() {
             var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Sessions";
             $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
-                //TODO: Placera ut data på rätt ställe i listan
-                alert(data);
+                $.each(data, function(i, item) {
+                    var oDiv = document.getElementById('Session-' + item.Id);
+                    oDiv.style.removeProperty("background-image");
+                    oDiv.innerHTML = item.SessionCount;
+                });
             });
         }
 
