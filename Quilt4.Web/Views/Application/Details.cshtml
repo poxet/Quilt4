@@ -91,7 +91,7 @@ else
     $(document).ready(function () {
 
         function getSessions() {
-            var url = "/Application/Sessions";
+            var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Sessions";
             $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
                 //TODO: Placera ut data på rätt ställe i listan
                 alert(data);
