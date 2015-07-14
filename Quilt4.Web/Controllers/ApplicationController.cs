@@ -54,15 +54,6 @@ namespace Quilt4.Web.Controllers
                     InitiativeIdentifier = initiativeUniqueIdentifier,
                     IssueTypeCount = x.IssueTypes.Count(),
                     IssueCount = x.IssueTypes.SelectMany(y => y.Issues).Count(),
-                    MachineCount = -1,
-                    SessionCount = -1, //TODO: Ta bort denna property och ladda med jquery.
-                    FirstSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
-                    LastSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
-                    Environments = new List<EnvironmentViewModel> //TODO: Ta bort denna property och ladda med jquery.
-                    {
-                        new EnvironmentViewModel { Name = "A", Colour = "faf567" }, 
-                        new EnvironmentViewModel { Name = "B", Colour = "1a65f7" }
-                    }, //TODO: Load data (If slow, populate data when the list has already loaded)
                 }).OrderByDescending(y => y.Version).ToList(),
             };
 
@@ -97,13 +88,20 @@ namespace Quilt4.Web.Controllers
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
-            var ss = versions.Select(x => new
+            var vers = versions.Select(x =>
             {
-                Id = x.Id,
-                SessionCount = sessions.Count(y => y.ApplicationVersionId == x.Id)
+                var ss = sessions as ISession[] ?? sessions.ToArray();
+                return new
+                {
+                    Id = x.Id,
+                    SessionCount = ss.Count(y => y.ApplicationVersionId == x.Id),
+                    First = ss.Min(y => y.ServerStartTime).ToLocalTime().ToTimeAgo(),
+                    Last = ss.Max(y => y.ServerStartTime).ToLocalTime().ToTimeAgo(),
+                    Environments = ss.GroupBy(y => y.Environment).Select(z => new { Name = z.Key, Color = "666666" })
+                };
             }).ToArray();
 
-            var response = Json(ss, JsonRequestBehavior.AllowGet);
+            var response = Json(vers, JsonRequestBehavior.AllowGet);
             return response;
         }
 

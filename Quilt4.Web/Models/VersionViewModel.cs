@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Quilt4.Web.Models
+﻿namespace Quilt4.Web.Models
 {
     public class VersionViewModel
     {
@@ -14,11 +11,5 @@ namespace Quilt4.Web.Models
         public string ApplicationIdentifier { get; set; }
         public int IssueTypeCount { get; set; }
         public int IssueCount { get; set; }
-        //TODO: Ta bort dessa properties. De skall laddas separat med ett jquery anrop.
-        public int MachineCount { get; set; }
-        public int SessionCount { get; set; }
-        public DateTime FirstSessionTime { get; set; }
-        public DateTime LastSessionTime { get; set; }
-        public List<EnvironmentViewModel> Environments { get; set; }
     }
 }

@@ -23,7 +23,7 @@ else
 }
 
 @*Environment Legend*@
-@Html.Partial("_EnvironmentLegendPartial", Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name).Select(x => x.First()))
+@*@Html.Partial("_EnvironmentLegendPartial", Model.Versions.SelectMany(x => x.Environments).GroupBy(x => x.Name).Select(x => x.First()))*@
 
 <h3>Versions</h3>
 
@@ -65,8 +65,8 @@ else
                 <td style="padding: 0 5px;"><div id="Session-@Model.Versions[i].VersionId" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueTypeCount</td>
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueCount</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."></td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."></td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-First-@Model.Versions[i].VersionId"></div></td>
+                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-Last-@Model.Versions[i].VersionId"></div></td>
                 <td style="padding: 0 5px;">
                     @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
                     @*@foreach (var env in Model.Versions[i].Environments)
@@ -97,6 +97,9 @@ else
                     var oDiv = document.getElementById('Session-' + item.Id);
                     oDiv.style.removeProperty("background-image");
                     oDiv.innerHTML = item.SessionCount;
+
+                    document.getElementById('Session-First-' + item.Id).innerHTML = item.First;
+                    document.getElementById('Session-Last-' + item.Id).innerHTML = item.Last;
                 });
             });
         }

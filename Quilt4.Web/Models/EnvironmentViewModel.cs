@@ -3,6 +3,6 @@
     public class EnvironmentViewModel
     {
         public string Name { get; set; }
-        public string Colour { get; set; }
+        public string Color { get; set; }
     }
 }

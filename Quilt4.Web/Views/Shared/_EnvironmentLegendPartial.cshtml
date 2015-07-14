@@ -8,7 +8,7 @@
     {
         <tr>
             <th>@Html.Raw(environment.Name)</th>
-            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Name)LegendButton" onclick='toggleShowEnvironment("@environment.Name"); changeButtonStyle("@environment.Name");' style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span></td>
+            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Name)LegendButton" onclick='toggleShowEnvironment("@environment.Name"); changeButtonStyle("@environment.Name");' style="background-color: #@environment.Color; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span></td>
         </tr>
     }
 </table>
