@@ -299,6 +299,7 @@
     <Compile Include="Models\ExternalLoginConfirmationViewModel.cs" />
     <Compile Include="Models\ExternalLoginListViewModel.cs" />
     <Compile Include="Models\FactorViewModel.cs" />
+    <Compile Include="Models\FiveLatestIssuesModel.cs" />
     <Compile Include="Models\ForgotViewModel.cs" />
     <Compile Include="Models\IndexViewModel.cs" />
     <Compile Include="Models\InitiativeInvitationModel.cs" />

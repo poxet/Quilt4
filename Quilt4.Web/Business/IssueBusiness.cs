@@ -186,6 +186,18 @@ namespace Quilt4.Web.Business
             return response;
         }
 
+        public IEnumerable<IIssueType> GetLatestIssueTypesByEmail(string userEmail)
+        {
+            var versions = _repository.GetApplicationVersionsForDeveloper(userEmail).ToArray();
+            var issueTypes = versions.SelectMany(x => x.IssueTypes).ToArray();
+            var fiveLatestIssue = issueTypes.Where(x => x.IssueLevel == IssueLevel.Error).SelectMany(x => x.Issues).OrderByDescending(x => x.ServerTime).Take(5).ToArray();
+            //var selectedIssueTypes = issueTypes.Where(x => x.Issues.Equals(fiveLatestIssue));
+            var selectedIssueTypes = fiveLatestIssue.SelectMany(x => issueTypes.Where(y => y.Issues.Contains(x))).ToArray();
+
+
+            return selectedIssueTypes;
+        }
+
         private ApplicationData GetApplicationData(RegisterIssueRequest request, ISession session)
         {
             ApplicationData ad;

@@ -15,18 +15,56 @@ namespace Quilt4.Web.Controllers
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly IAccountRepository _accountRepository;
         private readonly ISessionBusiness _sessionBusiness;
+        private readonly IIssueBusiness _issueBusiness;
 
-        public HomeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IAccountRepository accountRepository, ISessionBusiness sessionBusiness)
+        public HomeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IAccountRepository accountRepository, ISessionBusiness sessionBusiness, IIssueBusiness issueBusiness)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _accountRepository = accountRepository;
             _sessionBusiness = sessionBusiness;
+            _issueBusiness = issueBusiness;
         }
 
         public ActionResult Index()
         {
-            return View();
+            
+            if (User.Identity.IsAuthenticated) { 
+                var userEmail = User.Identity.Name;
+
+                var issueTypes = _issueBusiness.GetLatestIssueTypesByEmail(userEmail).Distinct().ToArray();
+                var issues = issueTypes.SelectMany(x => x.Issues).OrderByDescending(x => x.ServerTime).Distinct().Take(5).ToArray();
+                var model = new FiveLatestIssuesModel();
+
+
+                var list = new List<ItemsInIssueModel>();
+
+                foreach (var issueType in issueTypes)
+                {
+                    foreach (var issue in issues)
+                    {
+                        if (issueType.Issues.Any(x => x.Id == issue.Id))
+                        {
+                            var itemInModel = new ItemsInIssueModel
+                            {
+                                IssueTypeName = issueType.ExceptionTypeName,
+                                IssueTypeLevel = issueType.IssueLevel.ToString(),
+                                IssueTime = issue.ServerTime,
+                                IssueVisible = issue.VisibleToUser.ToString(),
+                                IssueTypeTicket = issueType.Ticket,
+                                IssueTicket = issue.Ticket,
+                            };
+                            list.Add(itemInModel);
+                        }
+                    }
+                }
+
+                model.ItemsInIssueModel = list.OrderByDescending(x => x.IssueTime).ToArray();
+                return View(model);
+
+            }
+
+            return View(new FiveLatestIssuesModel());
         }
 
         public ActionResult About()
