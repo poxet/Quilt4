@@ -95,14 +95,25 @@ namespace Quilt4.Web.Controllers
                 {
                     Id = x.Id,
                     SessionCount = ss.Count(y => y.ApplicationVersionId == x.Id),
-                    First = ss.Min(y => y.ServerStartTime).ToLocalTime().ToTimeAgo(),
-                    Last = ss.Max(y => y.ServerStartTime).ToLocalTime().ToTimeAgo(),
-                    Environments = ss.GroupBy(y => y.Environment).Select(z => new { Name = z.Key, Color = "666666" })
+                    First = ss.Any() ? ss.Min(y => y.ServerStartTime).ToLocalTime().ToTimeAgo() : "N/A",
+                    Last = ss.Any() ? ss.Max(y => y.ServerStartTime).ToLocalTime().ToTimeAgo() : "N/A",
+                    Environments = ss.GroupBy(y => y.Environment).Select(z => new
+                    {
+                        Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
+                        Color = GetEnvironmentColor(z.Key)
+                    })
                 };
             }).ToArray();
 
             var response = Json(vers, JsonRequestBehavior.AllowGet);
             return response;
+        }
+
+        private string GetEnvironmentColor(string environmentName)
+        {
+            var developerName = User.Identity.GetUserName();
+            //TODO: Get color by environment and developer here.
+            return "666666";
         }
 
         // GET: Application/Archive/5

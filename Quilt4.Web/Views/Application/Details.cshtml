@@ -95,17 +95,20 @@ else
             $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
                 $.each(data, function(i, item) {
                     var oDiv = document.getElementById('Session-' + item.Id);
-                    oDiv.style.removeProperty("background-image");
-                    oDiv.innerHTML = item.SessionCount;
 
-                    document.getElementById('Session-First-' + item.Id).innerHTML = item.First;
-                    document.getElementById('Session-Last-' + item.Id).innerHTML = item.Last;
+                    if (oDiv != null) {
+                        oDiv.style.removeProperty("background-image");
+                        oDiv.innerHTML = item.SessionCount;
 
-                    var envs = '';
-                    $.each(item.Environments, function (j, env) {
-                        envs = envs + '<span class="Color" style="background-color: #' + env.Color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
-                    });
-                    document.getElementById('Session-Environments-' + item.Id).innerHTML = envs;
+                        document.getElementById('Session-First-' + item.Id).innerHTML = item.First;
+                        document.getElementById('Session-Last-' + item.Id).innerHTML = item.Last;
+
+                        var envs = '';
+                        $.each(item.Environments, function(j, env) {
+                            envs = envs + '<span class="Color" style="background-color: #' + env.Color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
+                        });
+                        document.getElementById('Session-Environments-' + item.Id).innerHTML = envs;
+                    }
                 });
             });
         }
