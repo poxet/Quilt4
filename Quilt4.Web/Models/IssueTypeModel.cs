@@ -14,5 +14,6 @@ namespace Quilt4.Web.Models
         public string InitiativeName { get; set; }
         public string ApplicationName { get; set; }
         public string VersionUniqueIdentifier { get; set; }
+        public List<EnvironmentViewModel> Environments { get; set; }
     }
 }

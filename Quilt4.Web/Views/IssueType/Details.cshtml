@@ -48,6 +48,8 @@
     </tr>
 </table>
 
+@Html.Partial("_EnvironmentLegendPartial", Model.Environments)
+
 <h3>Issues</h3>
 <table>
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
@@ -61,7 +63,7 @@
     </tr>
     @foreach (var issue in Model.IssueType.Issues)
     {
-        <tr>
+        <tr style="display: table-row;">
             <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@issue.ServerTime.ToLocalTime()">@issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
             <td style="padding: 0 5px;" title="@issue.IssueThreadGuid">
                 @if (Model.IssueType.Issues.Count(x => x.IssueThreadGuid == issue.IssueThreadGuid) > 1)
@@ -77,10 +79,18 @@
             <td style="padding: 0 5px;">@(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName == null ? Html.Raw("N/A") : Html.Raw(Model.Users.First(x => x.Id == Model.Sessions.First(y => y.Id == issue.SessionId).UserFingerprint).UserName))</td>
             <td style="padding: 0 5px;">@(issue.UserHandle == null ? Html.Raw("N/A") : Html.Raw(issue.UserHandle))</td>
             <td style="padding: 0 5px;">@((issue.VisibleToUser == null || issue.VisibleToUser == false) ? "No" : "Yes")</td>
-            <td style="padding: 0 5px;">@foreach (var env in Model.Sessions.Where(x => x.Id == issue.SessionId).Select(x => x.Environment))
-                                        {
-                                            @Html.Raw(env + ", ")
-                                        }  </td>
+            <td style="padding: 0 5px;">
+                @foreach (var env in Model.Sessions.Where(x => x.Id == issue.SessionId).Select(x => x.Environment))
+                {
+                    foreach (var environment in Model.Environments)
+                    {
+                        if (env.Equals(environment.Name))
+                        {
+                            <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
+                        }
+                    }
+                }
+            </td>
             <td style="padding: 0 5px;">@issue.Ticket</td>
         </tr>
     }
