@@ -360,7 +360,7 @@ namespace Quilt4.MongoDBRepository
 
         public IDictionary<string, string> GetEnvironmentColors(string userId)
         {
-            if (!Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Any()) return new Dictionary<string, string>();
+            if (!Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Any(x => x.Id == userId)) return new Dictionary<string, string>();
 
             var environmentColors = Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().Single(x => x.Id == userId).EnvironmentColors;
             return environmentColors;

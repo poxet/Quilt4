@@ -1,0 +1,25 @@
+﻿@model IDictionary<string, string>
+
+@{
+    ViewBag.Title = "EditEnvironmentColors";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EditEnvironmentColors</h2>
+@using (Html.BeginForm())
+{
+    <table>
+        <tr><th>Environment</th><th>Color</th></tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*TODO: Use input type=color for colorselection*@
+                <td>@(string.IsNullOrEmpty(item.Key) ? @Html.Raw("(empty string)") : @Html.Raw(item.Key))</td>
+                <td># @Html.TextBox("_Env" + item.Key, item.Value)</td>
+            </tr>
+        }
+    </table>
+    <input type="submit" value="Update Colors"/>
+    @Html.ActionLink("Cancel", "Index", "Initiative")
+}
+

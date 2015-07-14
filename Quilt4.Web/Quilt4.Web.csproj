@@ -474,6 +474,7 @@
     <Content Include="Views\Help\ProtectionOperation.cshtml" />
     <Content Include="Views\Shared\_EnvironmentLegendPartial.cshtml" />
     <Content Include="Views\Shared\_IssueLevelLegendPartial.cshtml" />
+    <Content Include="Views\Initiative\EditEnvironmentColors.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
