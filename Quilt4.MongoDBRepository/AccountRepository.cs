@@ -225,6 +225,13 @@ namespace Quilt4.MongoDBRepository
             return await ApplicationUserManager.UpdateAsync(user);
         }
 
+        public async Task<IdentityResult> UpdateEmailAsync(string id, string newEmail)
+        {
+            var user = ApplicationUserManager.FindById(id);
+            user.Email = newEmail;
+            user.EmailConfirmed = false;
+            return await ApplicationUserManager.UpdateAsync(user);
+        }
     }
 
     internal static class Converter2
