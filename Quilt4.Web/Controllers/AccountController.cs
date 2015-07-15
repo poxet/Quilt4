@@ -150,11 +150,10 @@ namespace Quilt4.Web.Controllers
             if (ModelState.IsValid)
             {
                 //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                if (!_accountRepository.GetUsers().Where(x => x.Email == model.Email).Any())
+                if (!_accountRepository.GetUsers().Any(x => x.Email == model.Email) && !_accountRepository.GetUsers().Any(x => x.UserName == model.UserName))
                 {
-                    
                 
-                var result = await _accountRepository.CreateAsync(model.Email, model.Email, model.Password);
+                    var result = await _accountRepository.CreateAsync(model.UserName, model.Email, model.Password);
                     if (result.Item1.Succeeded)
                     {
                         await _accountRepository.SignInAsync(result.Item2, isPersistent: false, rememberBrowser: false);
@@ -175,7 +174,14 @@ namespace Quilt4.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.EmailAlreadyUsed = "This email is already in use!";
+                    if (_accountRepository.GetUsers().Any(x => x.Email == model.Email))
+                    {
+                        ViewBag.EmailAlreadyUsed = "This email is already in use!";
+                    }
+                    if (_accountRepository.GetUsers().Any(x => x.UserName == model.UserName))
+                    {
+                        ViewBag.UserNameAlreadyUsed = "This username is already in use!";
+                    }
                     return View();
                 }
             }
