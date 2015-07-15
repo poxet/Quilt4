@@ -47,9 +47,19 @@ namespace Quilt4.Web.Controllers
                 return View(model);
             }
 
+            string email;
+            if (!_accountRepository.GetUsers().Any(x => x.Email == model.User))
+            {
+                email = _accountRepository.GetUsers().Any(x => x.UserName == model.User) ? _accountRepository.GetUsers().Single(x => x.UserName == model.User).Email : model.User;
+            }
+            else
+            {
+                email = model.User;
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await _accountRepository.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await _accountRepository.PasswordSignInAsync(email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
