@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Quilt4.Interface;
 
 namespace Quilt4.Web.Models
 {
@@ -20,5 +21,6 @@ namespace Quilt4.Web.Models
         public DateTime FirstSessionTime { get; set; }
         public DateTime LastSessionTime { get; set; }
         public List<EnvironmentViewModel> Environments { get; set; }
+        public IEnumerable<string> Environment { get; set; }
     }
 }

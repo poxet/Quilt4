@@ -43,6 +43,7 @@ namespace Quilt4.Web.Controllers
                 InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 Application = application,
                 
+                
                 Versions = applicationVersions.Select(x => new VersionViewModel
                 {
                     Checked = false,
@@ -58,13 +59,12 @@ namespace Quilt4.Web.Controllers
                     SessionCount = -1, //TODO: Ta bort denna property och ladda med jquery.
                     FirstSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
                     LastSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
-                    Environments = new List<EnvironmentViewModel> //TODO: Ta bort denna property och ladda med jquery.
-                    {
-                        new EnvironmentViewModel { Name = "A", Colour = "faf567" }, 
-                        new EnvironmentViewModel { Name = "B", Colour = "1a65f7" }
-                    }, //TODO: Load data (If slow, populate data when the list has already loaded)
+                    Environment = _sessionBusiness.GetSessionsForApplicationVersion(x.Id).Select(y => y.Environment).Distinct(),
                 }).OrderByDescending(y => y.Version).ToList(),
             };
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
+
+            model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Colour = x.Value}).ToList();
 
             return model;
         }
