@@ -221,6 +221,20 @@ namespace Quilt4.SQLRepository
 
             throw new NotImplementedException();
         }
+
+        public async Task<IApplicationUser> FindAsync(string userName, string password)
+        {
+            return await ApplicationUserManager.FindAsync(userName, password);
+        }
+
+        public async Task<IdentityResult> UpdateUsernameAsync(string userId, string newUsername)
+        {
+            var user = ApplicationUserManager.FindById(userId);
+            user.UserName = newUsername;
+
+            return await ApplicationUserManager.UpdateAsync(user);
+        }
+
     }
 
     internal static class Converter2

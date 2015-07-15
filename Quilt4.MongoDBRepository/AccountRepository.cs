@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.MongoDBRepository.Membership;
+using IUser = Microsoft.AspNet.Identity.IUser;
 
 namespace Quilt4.MongoDBRepository
 {
@@ -209,6 +210,19 @@ namespace Quilt4.MongoDBRepository
         public async Task<string> GeneratePasswordResetTokenAsync(string userId)
         {
             return await ApplicationUserManager.GeneratePasswordResetTokenAsync(userId);
+        }
+
+        public async Task<IApplicationUser> FindAsync(string userName, string password)
+        {
+            return await ApplicationUserManager.FindAsync(userName, password);
+        }
+
+        public async Task<IdentityResult> UpdateUsernameAsync(string userId, string newUsername)
+        {
+            var user = ApplicationUserManager.FindById(userId);
+            user.UserName = newUsername;
+
+            return await ApplicationUserManager.UpdateAsync(user);
         }
 
     }

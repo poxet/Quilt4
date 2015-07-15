@@ -288,7 +288,9 @@
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\ApplicationViewModel.cs" />
     <Compile Include="Models\ApplicationPropetiesModel.cs" />
+    <Compile Include="Models\ChangeEmailModel.cs" />
     <Compile Include="Models\ChangePasswordViewModel.cs" />
+    <Compile Include="Models\ChangeUsernameModel.cs" />
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DeveloperRoleViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
@@ -475,6 +477,8 @@
     <Content Include="Views\Shared\_EnvironmentLegendPartial.cshtml" />
     <Content Include="Views\Shared\_IssueLevelLegendPartial.cshtml" />
     <Content Include="Views\Initiative\EditEnvironmentColors.cshtml" />
+    <Content Include="Views\Manage\ChangeUsername.cshtml" />
+    <Content Include="Views\Manage\ChangeEmail.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

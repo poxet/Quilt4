@@ -372,5 +372,41 @@ namespace Quilt4.Web.Controllers
         }
 
 #endregion
+
+        public ActionResult ChangeUsername()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeUsername(ChangeUsernameModel model)
+        {
+            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
+            
+            var userAsync = await _accountRepository.FindAsync(username, model.Password);
+
+            if (userAsync == null)
+            {
+                ViewBag.WrongPassword = "Incorrect password!";
+                return View();
+            }
+
+            await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
+
+            return Redirect("Index");
+        }
+
+        public ActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmail(ChangeEmailModel model)
+        {
+            return Redirect("Index");
+        }
     }
 }
