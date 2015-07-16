@@ -9,7 +9,7 @@ namespace Quilt4.Interface
 {
     public interface IAccountRepository
     {
-        Task<SignInStatus> PasswordSignInAsync(string email, string password, bool rememberMe, bool shouldLockout);
+        Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool rememberMe, bool shouldLockout);
         Task<bool> HasBeenVerifiedAsync();
         Task<IApplicationUser> FindByIdAsync(string userId);
         Task<string> GetVerifiedUserIdAsync();

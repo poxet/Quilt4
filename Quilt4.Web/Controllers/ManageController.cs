@@ -419,16 +419,21 @@ namespace Quilt4.Web.Controllers
             var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
 
             var userAsync = await _accountRepository.FindAsync(username, model.Password);
-
+            
             if (userAsync == null)
             {
                 ViewBag.WrongPassword = "Incorrect password!";
                 return View();
             }
 
-            await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
-            await _accountRepository.UpdateSecurityStampAsync(userAsync.Id);
-            //TODO: Uppdatera session cookien
+            var result = await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
+            if (result.Succeeded)
+            {
+                await _accountRepository.UpdateSecurityStampAsync(userAsync.Id);
+                userAsync = await _accountRepository.FindAsync(model.NewUsername, model.Password);
+                AuthenticationManager.SignOut();
+                var x = await _accountRepository.PasswordSignInAsync(userAsync.UserName, model.Password, false, false);
+            }
 
             return Redirect("Index");
         }
