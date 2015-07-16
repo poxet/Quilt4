@@ -42,37 +42,67 @@ function toggleLevelFilterButton(level) {
 
 function toggleLevelRows(level) {
     var rows;
+    var elements;
+    var checked;
+    var i;
+    var j;
 
     if (level == "Error") {
-        var error = getCookie("ErrorFilterButton");
         rows = document.getElementsByClassName("Error");
-        for(var i = 0; i < rows.length; i++) {
-            if (error == "Checked") {
-                //alert(rows[i].parentNode.parentNode);
+        for (i = 0; i < rows.length; i++) {
+            elements = $(rows[i].parentNode).children("span");
+            checked = 0;
+
+            for (j = 0; j < elements.length; j++) {
+                if (getCookie(elements[j].className + "FilterButton") == "Checked") {
+                    checked++;
+                }
+            }
+
+            if (checked == elements.length) {
                 rows[i].parentNode.parentNode.style.display = "none";
+
             } else {
-                //alert(rows[i].parentNode.parentNode);
                 rows[i].parentNode.parentNode.style.display = "table-row";
             }
         }
     }
     if (level == "Warning") {
-        var warning = getCookie("WarningFilterButton");
         rows = document.getElementsByClassName("Warning");
-        for (var i = 0; i < rows.length; i++) {
-            if (warning == "Checked") {
+        for (i = 0; i < rows.length; i++) {
+            elements = $(rows[i].parentNode).children("span");
+            checked = 0;
+
+            for (j = 0; j < elements.length; j++) {
+                if (getCookie(elements[j].className + "FilterButton") == "Checked") {
+                    checked++;
+                }
+            }
+
+            if (checked == elements.length) {
                 rows[i].parentNode.parentNode.style.display = "none";
+
             } else {
                 rows[i].parentNode.parentNode.style.display = "table-row";
             }
         }
     }
     if (level == "Information") {
-        var information = getCookie("InformationFilterButton");
         rows = document.getElementsByClassName("Information");
-        for (var i = 0; i < rows.length; i++) {
-            if (information == "Checked") {
+        for (i = 0; i < rows.length; i++) {
+
+            elements = $(rows[i].parentNode).children("span");
+            checked = 0;
+
+            for (j = 0; j < elements.length; j++) {
+                if (getCookie(elements[j].className + "FilterButton") == "Checked") {
+                    checked++;
+                }
+            }
+
+            if (checked == elements.length) {
                 rows[i].parentNode.parentNode.style.display = "none";
+
             } else {
                 rows[i].parentNode.parentNode.style.display = "table-row";
             }
