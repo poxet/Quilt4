@@ -46,6 +46,8 @@ namespace Quilt4.Web.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
+                UserName = User.Identity.GetUserName(),
+                Email = User.Identity.Name,
                 PhoneNumber = await _accountRepository.GetPhoneNumberAsync(User.Identity.GetUserId()),
                 TwoFactor = await _accountRepository.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
                 Logins = await _accountRepository.GetLoginsAsync(User.Identity.GetUserId()),
