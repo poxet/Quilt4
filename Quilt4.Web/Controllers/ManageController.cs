@@ -385,17 +385,17 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeUsername(ChangeUsernameModel model)
         {
-            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
+            //var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
             
-            var userAsync = await _accountRepository.FindAsync(username, model.Password);
+            //var userAsync = await _accountRepository.FindAsync(username, model.Password);
 
-            if (userAsync == null)
-            {
-                ViewBag.WrongPassword = "Incorrect password!";
-                return View();
-            }
+            //if (userAsync == null)
+            //{
+            //    ViewBag.WrongPassword = "Incorrect password!";
+            //    return View();
+            //}
 
-            await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
+            //await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
 
             return Redirect("Index");
         }
@@ -409,24 +409,24 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeEmail(ChangeEmailModel model)
         {
-            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
+            //var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
 
-            var userAsync = await _accountRepository.FindAsync(username, model.Password);
+            //var userAsync = await _accountRepository.FindAsync(username, model.Password);
 
-            if (userAsync == null)
-            {
-                ViewBag.WrongPassword = "Incorrect password!";
-                return View();
-            }
+            //if (userAsync == null)
+            //{
+            //    ViewBag.WrongPassword = "Incorrect password!";
+            //    return View();
+            //}
 
-            var result = await _accountRepository.UpdateEmailAsync(userAsync.Id, model.NewEmail);
+            //var result = await _accountRepository.UpdateEmailAsync(userAsync.Id, model.NewEmail);
 
-            if (result.Succeeded)
-            {
-                var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(userAsync.Id);
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userAsync.Id, code = token }, protocol: Request.Url.Scheme);
-                _emailBusiness.SendEmail(new List<string>() { model.NewEmail }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-            }
+            //if (result.Succeeded)
+            //{
+            //    var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(userAsync.Id);
+            //    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userAsync.Id, code = token }, protocol: Request.Url.Scheme);
+            //    _emailBusiness.SendEmail(new List<string>() { model.NewEmail }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            //}
 
             return Redirect("Index");
         }
