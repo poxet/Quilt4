@@ -416,17 +416,19 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeUsername(ChangeUsernameModel model)
         {
-            //var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
-            
-            //var userAsync = await _accountRepository.FindAsync(username, model.Password);
+            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
 
-            //if (userAsync == null)
-            //{
-            //    ViewBag.WrongPassword = "Incorrect password!";
-            //    return View();
-            //}
+            var userAsync = await _accountRepository.FindAsync(username, model.Password);
 
-            //await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
+            if (userAsync == null)
+            {
+                ViewBag.WrongPassword = "Incorrect password!";
+                return View();
+            }
+
+            await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
+            await _accountRepository.UpdateSecurityStampAsync(userAsync.Id);
+            //TODO: Uppdatera session cookien
 
             return Redirect("Index");
         }

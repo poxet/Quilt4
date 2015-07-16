@@ -235,6 +235,11 @@ namespace Quilt4.SQLRepository
             return await ApplicationUserManager.UpdateAsync(user);
         }
 
+        public async Task<IdentityResult> UpdateSecurityStampAsync(string userId)
+        {
+            return await ApplicationUserManager.UpdateSecurityStampAsync(userId);
+        }
+
         public async Task<IdentityResult> UpdateEmailAsync(string id, string newEmail)
         {
             throw new NotImplementedException();
