@@ -318,12 +318,12 @@ namespace Quilt4.Web.Business
 
                 foreach (var environment in environments)
                 {
-                    if (allEnvironments.Any(x => x.Equals(environment)))
+                    if (allEnvironments.Any(x => string.Compare(x, environment, StringComparison.InvariantCultureIgnoreCase) == 0))
                     {
                         var colorDictionary = GetColorForEnvironment(environment);
                         string value;
                         colorDictionary.TryGetValue("_Env" + environment, out value);
-                        colors.Add(environment, value);
+                        colors.Add(environment ?? Constants.DefaultEnvironmentName, value);
                     }
                     else
                     {

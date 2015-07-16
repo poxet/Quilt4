@@ -114,7 +114,7 @@ namespace Quilt4.Web.Controllers
                 VersionUniqueIdentifier = ver.GetUniqueIdentifier(applicationVersions.Select(x => x.Version))
             };
             var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
-            model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Colour = x.Value }).ToList();
+            model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Color = x.Value }).ToList();
 
             model.Users = model.Sessions.Select(user => _userBusiness.GetUser(user.UserFingerprint)).ToList();
             

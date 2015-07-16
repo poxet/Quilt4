@@ -203,7 +203,7 @@ namespace Quilt4.Web.Controllers
             model.Environments = environments.Select(x => new EnvironmentViewModel()
             {
                 Name = x.Key,
-                Colour = x.Value,
+                Color = x.Value,
             }).ToList();
             
             return View("SearchResults", model);
