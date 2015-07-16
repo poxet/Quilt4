@@ -21,5 +21,8 @@ namespace Quilt4.Web.Models
         public string IssueVisible { get; set; }
         public int IssueTypeTicket { get; set; }
         public int IssueTicket { get; set; }
+        public string InitativeId { get; set; }
+        public string ApplicationName { get; set; }
+        public string ApplicationVersion { get; set; }
     }
 }

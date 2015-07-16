@@ -25,7 +25,7 @@
         @foreach (var item in Model.ItemsInIssueModel)
         {
             <tr>
-                <td style="padding: 0 5px;">@item.IssueTypeName</td>
+                <td style="padding: 0 5px;">@Html.ActionLink(@item.IssueTypeName, "Details", "IssueType", new { id = @item.InitativeId, application = @item.ApplicationName, version = @item.ApplicationVersion.Replace(":", ""), issueType = @item.IssueTypeTicket }, null)</td>
                 <td style="padding: 0 5px;">@item.IssueTypeLevel</td>
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@item.IssueTime.ToLocalTime()">@item.IssueTime.ToLocalTime().ToTimeAgo() ago</td>
                 <td style="padding: 0 5px;">@item.IssueVisible</td>

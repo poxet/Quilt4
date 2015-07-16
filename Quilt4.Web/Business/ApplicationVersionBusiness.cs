@@ -72,6 +72,12 @@ namespace Quilt4.Web.Business
             return applicationVersion;
         }
 
+        public IApplicationVersion GetApplicationVersionByIssue(Guid issueId)
+        {
+            var applicationVersion = _repository.GetApplicationVersionByIssue(issueId);
+            return applicationVersion;
+        }
+
         private IApplicationVersion RegisterExistingApplicationVersionUsage(Fingerprint applicationVersionFingerprint, Guid applicationId)
         {
             var response = _repository.GetApplicationVersion(applicationVersionFingerprint);
@@ -82,7 +88,6 @@ namespace Quilt4.Web.Business
             }
             return response;
         }
-
 
         public IApplicationVersion GetApplicationVersion(string initiativeId, string applicationId, string applicationVersionUniqueIdentifier)
         {

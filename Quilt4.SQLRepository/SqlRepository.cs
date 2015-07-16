@@ -330,5 +330,15 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public IApplicationVersion GetApplicationVersionByIssue(Guid issueId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IApplication GetapplicationByVersion(string versionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

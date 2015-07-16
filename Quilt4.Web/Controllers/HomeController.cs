@@ -32,11 +32,12 @@ namespace Quilt4.Web.Controllers
             
             if (User.Identity.IsAuthenticated) { 
                 var userEmail = User.Identity.Name;
-
                 var issueTypes = _issueBusiness.GetLatestIssueTypesByEmail(userEmail).Distinct().ToArray();
                 var issues = issueTypes.SelectMany(x => x.Issues).OrderByDescending(x => x.ServerTime).Distinct().Take(5).ToArray();
                 var model = new FiveLatestIssuesModel();
 
+                IApplicationVersion version;
+                IApplication application;
 
                 var list = new List<ItemsInIssueModel>();
 
@@ -46,6 +47,8 @@ namespace Quilt4.Web.Controllers
                     {
                         if (issueType.Issues.Any(x => x.Id == issue.Id))
                         {
+                            version = _applicationVersionBusiness.GetApplicationVersionByIssue(issue.Id);
+                            application = _initiativeBusiness.GetApplicationByVersion(version.Id);
                             var itemInModel = new ItemsInIssueModel
                             {
                                 IssueTypeName = issueType.ExceptionTypeName,
@@ -54,6 +57,10 @@ namespace Quilt4.Web.Controllers
                                 IssueVisible = issue.VisibleToUser.ToString(),
                                 IssueTypeTicket = issueType.Ticket,
                                 IssueTicket = issue.Ticket,
+                                ApplicationVersion = version.Id,
+                                ApplicationName = application.Name,
+                                InitativeId = _initiativeBusiness.GetInitiativeByApplication(application.Id).Id.ToString(),
+                                
                             };
                             list.Add(itemInModel);
                         }

@@ -81,5 +81,7 @@ namespace Quilt4.Interface
         void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         void ArchiveSessionsForApplicationVersion(string versionId);
         void DeleteSession(Guid sessionId);
+        IApplicationVersion GetApplicationVersionByIssue(Guid issueId);
+        IApplication GetapplicationByVersion(string versionId);
     }
 }

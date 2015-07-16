@@ -70,6 +70,20 @@ namespace Quilt4.Web.Business
             return initiative.OwnerDeveloperName + " want to invite you to initiative " + initiative.Name + " at Quilt4. <br/><br/><a href='" + acceptLink + "'>Accept</a><br/><a href='" + declineLink + "'>Decline</a>";
         }
 
+        public IApplication GetApplicationByVersion(string versionId)
+        {
+            var application = _repository.GetapplicationByVersion(versionId);
+
+            return application;
+        }
+
+        //public string GetInitiativeByApplication(Guid applicationId)
+        //{
+        //    var initative = _repository.GetInitiativeByApplication(applicationId);
+        //    return initative;
+        //}
+
+
         private IEnumerable<IInitiativeHead> GetHeadsByDeveloper(string developerName, string[] roleNames)
         {
             var initiatives = _repository.GetInitiativeHeadsByDeveloper(developerName, roleNames).ToList();

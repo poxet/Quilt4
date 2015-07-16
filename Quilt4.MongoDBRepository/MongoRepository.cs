@@ -407,6 +407,29 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("Session").Remove(query, WriteConcern.Acknowledged);
         }
 
+        public IApplicationVersion GetApplicationVersionByIssue(Guid issueId)
+        {
+            var applicationVersion = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().Single(x => x.IssueTypes.Any(y => y.Issues.Any(z => z.Id == issueId))).ToEntity();
+            return applicationVersion;
+        }
+
+        public IApplication GetapplicationByVersion(string versionId)
+        {
+            var sessions = GetSessionsForApplicationVersion(versionId);
+            
+            //var application = sessions.Select(x => Database.GetCollection("Initiative").FindAllAs<ApplicationPersist>().Single(y => y.Id == x.ApplicationId)).First().ToEntity();
+            IApplication application;
+            foreach (var session in sessions)
+            {
+                if (Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications).Any(x => x.Id == session.ApplicationId))
+                {
+                    application = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications).Single(x => x.Id == session.ApplicationId).ToEntity();
+                    return application;
+                }
+            }
+            return null;
+        }
+
         public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds)
         {
             var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationIds.Contains(x.ApplicationId)).ToArray();
