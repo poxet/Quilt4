@@ -49,6 +49,6 @@ namespace Quilt4.Interface
         Task<IApplicationUser> FindAsync(string userName, string password);
         Task<IdentityResult> UpdateUsernameAsync(string userId, string newUsername);
         Task<IdentityResult> UpdateSecurityStampAsync(string userId);
-        //Task<IdentityResult> UpdateEmailAsync(string id, string newEmail);
+        Task<IdentityResult> UpdateEmailAsync(string id, string newEmail);
     }
 }

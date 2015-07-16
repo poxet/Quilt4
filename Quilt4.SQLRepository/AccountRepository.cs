@@ -242,7 +242,10 @@ namespace Quilt4.SQLRepository
 
         public async Task<IdentityResult> UpdateEmailAsync(string id, string newEmail)
         {
-            throw new NotImplementedException();
+            var user = ApplicationUserManager.FindById(id);
+            user.Email = newEmail;
+            user.EmailConfirmed = false;
+            return await ApplicationUserManager.UpdateAsync(user);
         }
     }
 

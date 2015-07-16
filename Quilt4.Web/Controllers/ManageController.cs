@@ -49,8 +49,8 @@ namespace Quilt4.Web.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                UserName = User.Identity.GetUserName(),
-                Email = User.Identity.Name,
+                UserName = _accountRepository.FindById(User.Identity.GetUserId()).UserName,
+                Email = _accountRepository.FindById(User.Identity.GetUserId()).Email,
                 PhoneNumber = await _accountRepository.GetPhoneNumberAsync(User.Identity.GetUserId()),
                 TwoFactor = await _accountRepository.GetTwoFactorEnabledAsync(User.Identity.GetUserId()),
                 Logins = await _accountRepository.GetLoginsAsync(User.Identity.GetUserId()),
@@ -432,7 +432,7 @@ namespace Quilt4.Web.Controllers
                 await _accountRepository.UpdateSecurityStampAsync(userAsync.Id);
                 userAsync = await _accountRepository.FindAsync(model.NewUsername, model.Password);
                 AuthenticationManager.SignOut();
-                var x = await _accountRepository.PasswordSignInAsync(userAsync.UserName, model.Password, false, false);
+                await _accountRepository.PasswordSignInAsync(userAsync.UserName, model.Password, false, false);
             }
 
             return Redirect("Index");
@@ -447,24 +447,29 @@ namespace Quilt4.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangeEmail(ChangeEmailModel model)
         {
-            //var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
+            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
 
-            //var userAsync = await _accountRepository.FindAsync(username, model.Password);
+            var userAsync = await _accountRepository.FindAsync(username, model.Password);
 
-            //if (userAsync == null)
-            //{
-            //    ViewBag.WrongPassword = "Incorrect password!";
-            //    return View();
-            //}
+            if (userAsync == null)
+            {
+                ViewBag.WrongPassword = "Incorrect password!";
+                return View();
+            }
 
-            //var result = await _accountRepository.UpdateEmailAsync(userAsync.Id, model.NewEmail);
+            var result = await _accountRepository.UpdateEmailAsync(userAsync.Id, model.NewEmail);
 
-            //if (result.Succeeded)
-            //{
-            //    var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(userAsync.Id);
-            //    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userAsync.Id, code = token }, protocol: Request.Url.Scheme);
-            //    _emailBusiness.SendEmail(new List<string>() { model.NewEmail }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-            //}
+            if (result.Succeeded)
+            {
+                await _accountRepository.UpdateSecurityStampAsync(userAsync.Id);
+                var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(userAsync.Id);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userAsync.Id, code = token }, protocol: Request.Url.Scheme);
+                _emailBusiness.SendEmail(new List<string>() { model.NewEmail }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                //update session cookie
+                userAsync = await _accountRepository.FindAsync(username, model.Password);
+                AuthenticationManager.SignOut();
+                await _accountRepository.PasswordSignInAsync(userAsync.UserName, model.Password, false, false);
+            }
 
             return Redirect("Index");
         }
