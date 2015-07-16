@@ -7,10 +7,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
-@Html.ActionLink("Change Environment Colors", "EditEnvironmentColors", "Initiative", new { userId = User.Identity.GetUserName()}, null)
-
 <h2>@ViewBag.Title</h2>
 
 @foreach (var initiative in Model.InitiativeInfos)

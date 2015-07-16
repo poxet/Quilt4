@@ -478,7 +478,7 @@
     <Content Include="Views\Help\ProtectionOperation.cshtml" />
     <Content Include="Views\Shared\_EnvironmentLegendPartial.cshtml" />
     <Content Include="Views\Shared\_IssueLevelLegendPartial.cshtml" />
-    <Content Include="Views\Initiative\EditEnvironmentColors.cshtml" />
+    <Content Include="Views\Manage\EditEnvironmentColors.cshtml" />
     <Content Include="Views\Manage\ChangeUsername.cshtml" />
     <Content Include="Views\Manage\ChangeEmail.cshtml" />
     <None Include="Web.CI.config">

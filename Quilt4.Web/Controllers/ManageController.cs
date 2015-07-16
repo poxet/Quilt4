@@ -16,11 +16,14 @@ namespace Quilt4.Web.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IEmailBusiness _emailBusiness;
+        private readonly IInitiativeBusiness _initiativeBusiness;
 
-        public ManageController(IAccountRepository accountRepository, IEmailBusiness emailBusiness)
+
+        public ManageController(IAccountRepository accountRepository, IEmailBusiness emailBusiness, IInitiativeBusiness initiativeBusiness)
         {
             _accountRepository = accountRepository;
             _emailBusiness = emailBusiness;
+            _initiativeBusiness = initiativeBusiness;
         }
 
         //
@@ -54,6 +57,32 @@ namespace Quilt4.Web.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(User.Identity.GetUserId())
             };
             return View(model);
+        }
+
+        public ActionResult EditEnvironmentColors()
+        {
+            //TODO: If provided is not the userName, but the userId, find the userId by the userName.
+            var environmentColors = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId());
+
+            return View(environmentColors);
+        }
+
+        [HttpPost]
+        public ActionResult EditEnvironmentColors(FormCollection collection)
+        {
+            var colors = new Dictionary<string, string>();
+
+            for (var i = 0; i < collection.Count; i++)
+            {
+                var key = collection.GetKey(i);
+                var value = collection.ToValueProvider().GetValue(key);
+                colors.Add(key, value.AttemptedValue);
+            }
+
+            _initiativeBusiness.UpdateEnvironmentColors(User.Identity.GetUserId(), colors);
+
+
+            return RedirectToAction("Index", "Initiative");
         }
 
         //
