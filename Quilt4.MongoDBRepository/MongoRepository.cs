@@ -360,20 +360,20 @@ namespace Quilt4.MongoDBRepository
 
         public IDictionary<string, string> GetEnvironmentColors(string userName)
         {
-            var environmentColors = Database.GetCollection("EnvironmentColor").FindAllAs<EnvironmentColorPersist>().SingleOrDefault(x => x.Id == userName);
+            var environmentColors = Database.GetCollection("UserProperties").FindAllAs<UserPropertiesPersist>().SingleOrDefault(x => x.Id == userName);
             return environmentColors == null ? new Dictionary<string, string>() : environmentColors.EnvironmentColors;
         }
 
         public void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
         {
-            var environmentPersist = new EnvironmentColorPersist() { Id = userId, EnvironmentColors = environmentColors };
-            Database.GetCollection("EnvironmentColor").Save(environmentPersist, WriteConcern.Acknowledged);
+            var environmentPersist = new UserPropertiesPersist() { Id = userId, EnvironmentColors = environmentColors };
+            Database.GetCollection("UserProperties").Save(environmentPersist, WriteConcern.Acknowledged);
         }
 
         public void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
         {
-            var environmentPersist = new EnvironmentColorPersist() { Id = userId, EnvironmentColors = environmentColors };
-            Database.GetCollection("EnvironmentColor").Insert(environmentPersist, WriteConcern.Acknowledged);
+            var environmentPersist = new UserPropertiesPersist() { Id = userId, EnvironmentColors = environmentColors };
+            Database.GetCollection("UserProperties").Insert(environmentPersist, WriteConcern.Acknowledged);
         }
 
         public void ArchiveSessionsForApplicationVersion(string versionId)
