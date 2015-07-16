@@ -82,7 +82,7 @@ namespace Quilt4.Web.Controllers
             _initiativeBusiness.UpdateEnvironmentColors(User.Identity.GetUserId(), colors);
 
 
-            return RedirectToAction("Index", "Initiative");
+            return RedirectToAction("Index", "Home");
         }
 
         //
