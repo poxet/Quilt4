@@ -300,9 +300,10 @@ namespace Quilt4.Web.Business
             return d;
         }
 
-        public IDictionary<string, string> GetEnvironmentColors(string userName)
+        public IDictionary<string, string> GetEnvironmentColors(string userId)
         {
-            var environmentColors = _repository.GetEnvironmentColors(userName);
+            var environmentColors = _repository.GetEnvironmentColors(userId);
+            var userName = _accountRepository.FindById(userId).UserName;
             var colors = new Dictionary<string, string>();
             foreach (var e in environmentColors)
             {
@@ -330,7 +331,7 @@ namespace Quilt4.Web.Business
                     }
                 }
                 
-                AddEnvironmentColors(userName, colors);
+                AddEnvironmentColors(userId, colors);
                 return colors;
             }
             else
@@ -356,7 +357,7 @@ namespace Quilt4.Web.Business
                     }
                 }
 
-                UpdateEnvironmentColors(userName, colors);
+                UpdateEnvironmentColors(userId, colors);
                 return colors;
             }
         }

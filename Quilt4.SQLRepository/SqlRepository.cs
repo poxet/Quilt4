@@ -306,7 +306,7 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IDictionary<string, string> GetEnvironmentColors(string userName)
+        public IDictionary<string, string> GetEnvironmentColors(string userId)
         {
             throw new NotImplementedException();
         }

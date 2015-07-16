@@ -358,9 +358,9 @@ namespace Quilt4.MongoDBRepository
             return sessions;
         }
 
-        public IDictionary<string, string> GetEnvironmentColors(string userName)
+        public IDictionary<string, string> GetEnvironmentColors(string userId)
         {
-            var environmentColors = Database.GetCollection("UserProperties").FindAllAs<UserPropertiesPersist>().SingleOrDefault(x => x.Id == userName);
+            var environmentColors = Database.GetCollection("UserProperties").FindAllAs<UserPropertiesPersist>().SingleOrDefault(x => x.Id == userId);
             return environmentColors == null ? new Dictionary<string, string>() : environmentColors.EnvironmentColors;
         }
 
