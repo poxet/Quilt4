@@ -79,5 +79,7 @@ namespace Quilt4.Interface
         IDictionary<string, string> GetEnvironmentColors(string userId);
         void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
+        void ArchiveSessionsForApplicationVersion(string versionId);
+        void DeleteSession(Guid sessionId);
     }
 }

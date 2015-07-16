@@ -59,7 +59,8 @@ namespace Quilt4.Web.Controllers
                     SessionCount = -1, //TODO: Ta bort denna property och ladda med jquery.
                     FirstSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
                     LastSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
-                    Environment = _sessionBusiness.GetSessionsForApplicationVersion(x.Id).Select(y => y.Environment).Distinct(),
+                    //Environment = _sessionBusiness.GetSessionsForApplicationVersion(x.Id).Select(y => y.Environment).Distinct(), TODO: Laddar superlångsamt
+                    Environment = null,
                 }).OrderByDescending(y => y.Version).ToList(),
             };
             var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
