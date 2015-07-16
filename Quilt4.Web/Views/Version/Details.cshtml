@@ -40,15 +40,15 @@
             <td style="padding: 0 5px;">
                 @if (@issueType.IssueLevel.ToString() == "Error")
                 {
-                    <span class ="Error" id="ErrorLegendButton" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
+                    <span class ="Error" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
                 }
                 @if (@issueType.IssueLevel.ToString() == "Warning")
                 {
-                    <span class="Warning" id="WarningLegendButton" style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span>
+                    <span class="Warning" style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span>
                 }
                 @if (@issueType.IssueLevel.ToString() == "Warning")
                 {
-                    <span class="Information" id="InformationLegendButton" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
+                    <span class="Information" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
                 }
             </td>
             <td style="padding: 0 5px;">@issueType.Issues.Count()</td>
@@ -174,3 +174,7 @@
         </tr>
     }
 </table>
+
+<script type="text/javascript">
+    updateLevelRows();
+</script>

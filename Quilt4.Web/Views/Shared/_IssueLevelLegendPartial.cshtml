@@ -3,16 +3,19 @@
 <table>
     <tr>
         <th>Error</th>
-        <td style="padding-left: 20px;"><span id="ErrorLegendButton" onclick=' toggleShowIssueLevel("Error"); changeButtonStyle("Error"); changeButtonStyle("ErrorLegendButton");' style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span></td>
+        <td style="padding-left: 20px;"><span id="ErrorFilterButton" onclick='toggleLevelFilterButton("Error")' style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span></td>
     </tr>
     <tr>
         <th>Warning</th>
-        <td style="padding-left: 20px;"><span id="WarningLegendButton" onclick='toggleShowIssueLevel("Warning"); changeButtonStyle("Warning"); changeButtonStyle("WarningLegendButton");' style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span></td>
+        <td style="padding-left: 20px;"><span id="WarningFilterButton" onclick='toggleLevelFilterButton("Warning")' style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span></td>
     </tr>
     <tr>
         <th>Information</th>
-        <td style="padding-left: 20px;"><span id="InformationLegendButton" onclick='toggleShowIssueLevel("Information"); changeButtonStyle("Information"); changeButtonStyle("InformationLegendButton");' style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span></td>
+        <td style="padding-left: 20px;"><span id="InformationFilterButton" onclick='toggleLevelFilterButton("Information")' style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span></td>
     </tr>
 </table>
 
-<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>
+<script type="text/javascript" src="~/Scripts/levelFilter.js"></script>
+<script type="text/javascript">
+    setLevelFilterButtonStyle();
+</script>

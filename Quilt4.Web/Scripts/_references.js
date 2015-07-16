@@ -15,3 +15,4 @@
 /// <reference path="admin/morris.min.js" />
 /// <reference path="admin/raphael-min.js" />
 /// <reference path="admin/sb-admin-2.js" />
+/// <reference path="levelfilter.js" />

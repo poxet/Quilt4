@@ -18,6 +18,7 @@ function toggleShowIssueLevel(level) {
     for (var i = 0; i < rows.length; i++) {
         if (rows[i].parentNode.parentNode.style.display == "table-row") {
             rows[i].parentNode.parentNode.style.display = "none";
+            
 
         } else {
             rows[i].parentNode.parentNode.style.display = "table-row";
