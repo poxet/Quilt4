@@ -1,4 +1,5 @@
-﻿namespace Quilt4.Web.Models
+﻿using Quilt4.Interface;
+namespace Quilt4.Web.Models
 {
     public class VersionViewModel
     {
@@ -11,5 +12,6 @@
         public string ApplicationIdentifier { get; set; }
         public int IssueTypeCount { get; set; }
         public int IssueCount { get; set; }
+        //public IEnumerable<string> Environment { get; set; }
     }
 }

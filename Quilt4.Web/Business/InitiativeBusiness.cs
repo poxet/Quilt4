@@ -257,6 +257,7 @@ namespace Quilt4.Web.Business
         public void ArchiveApplicationVersion(string versionId)
         {
             _repository.ArchiveApplicationVersion(versionId);
+            _repository.ArchiveSessionsForApplicationVersion(versionId);
         }
 
         private IDictionary<string, string> GetColorForEnvironment(string environment)
@@ -280,8 +281,7 @@ namespace Quilt4.Web.Business
                 }
             }
 
-            var userIds = users.Select(x => _accountRepository.FindById(x.UserId)).Select(x => x.UserId);
-            var c = userIds.Select(x => _repository.GetEnvironmentColors(x)).ToArray();
+            var c = users.Select(x => _repository.GetEnvironmentColors(x.UserName)).ToArray();
 
             foreach (var colorDictionary in c)
             {
@@ -300,16 +300,15 @@ namespace Quilt4.Web.Business
             return d;
         }
 
-        public IEnumerable<IDictionary<string, string>> GetEnvironmentColors(string userId)//IDeveloper.UserId
+        public IDictionary<string, string> GetEnvironmentColors(string userName)
         {
-            var environmentColors = _repository.GetEnvironmentColors(userId);
+            var environmentColors = _repository.GetEnvironmentColors(userName);
             var colors = new Dictionary<string, string>();
             foreach (var e in environmentColors)
             {
                 colors.Add(e.Key.Substring(4), e.Value);
             }
-            var user = _accountRepository.FindById(userId);
-            var environments = _repository.GetSessionsForDeveloper(user.UserName).Select(x => x.Environment).Distinct().ToArray();
+            var environments = _repository.GetSessionsForDeveloper(userName).Select(x => x.Environment).Distinct().ToArray();
             
 
             if (environmentColors.IsNullOrEmpty())
@@ -331,8 +330,8 @@ namespace Quilt4.Web.Business
                     }
                 }
                 
-                AddEnvironmentColors(userId, colors);
-                yield return colors;
+                AddEnvironmentColors(userName, colors);
+                return colors;
             }
             else
             {
@@ -340,24 +339,25 @@ namespace Quilt4.Web.Business
 
                 foreach (var environment in environments)
                 {
-                    if (!colors.ContainsKey(environment))
+                    var env = environment ?? Constants.DefaultEnvironmentName;
+                    if (!colors.ContainsKey(env))
                     {
-                        if (allEnvironments.Any(x => x.Equals(environment)))
+                        if (allEnvironments.Any(x => x.Equals(env)))
                         {
-                            var colorDictionary = GetColorForEnvironment(environment);
+                            var colorDictionary = GetColorForEnvironment(env);
                             string value;
-                            colorDictionary.TryGetValue(environment, out value);
-                            colors.Add(environment, value);
+                            colorDictionary.TryGetValue(env, out value);
+                            colors.Add(env, value);
                         }
                         else
                         {
-                            colors.Add(environment, GetRandomEnvironmentColor());
+                            colors.Add(env, GetRandomEnvironmentColor());
                         }
                     }
                 }
 
-                UpdateEnvironmentColors(userId, colors);
-                yield return colors;
+                UpdateEnvironmentColors(userName, colors);
+                return colors;
             }
         }
 

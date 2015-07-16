@@ -47,9 +47,19 @@ namespace Quilt4.Web.Controllers
                 return View(model);
             }
 
+            string email;
+            if (!_accountRepository.GetUsers().Any(x => x.Email == model.User))
+            {
+                email = _accountRepository.GetUsers().Any(x => x.UserName == model.User) ? _accountRepository.GetUsers().Single(x => x.UserName == model.User).Email : model.User;
+            }
+            else
+            {
+                email = model.User;
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await _accountRepository.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await _accountRepository.PasswordSignInAsync(email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -150,11 +160,10 @@ namespace Quilt4.Web.Controllers
             if (ModelState.IsValid)
             {
                 //var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                if (!_accountRepository.GetUsers().Where(x => x.Email == model.Email).Any())
+                if (!_accountRepository.GetUsers().Any(x => x.Email == model.Email) && !_accountRepository.GetUsers().Any(x => x.UserName == model.UserName))
                 {
-                    
                 
-                var result = await _accountRepository.CreateAsync(model.Email, model.Email, model.Password);
+                    var result = await _accountRepository.CreateAsync(model.UserName, model.Email, model.Password);
                     if (result.Item1.Succeeded)
                     {
                         await _accountRepository.SignInAsync(result.Item2, isPersistent: false, rememberBrowser: false);
@@ -175,7 +184,14 @@ namespace Quilt4.Web.Controllers
                 }
                 else
                 {
-                    ViewBag.EmailAlreadyUsed = "This email is already in use!";
+                    if (_accountRepository.GetUsers().Any(x => x.Email == model.Email))
+                    {
+                        ViewBag.EmailAlreadyUsed = "This email is already in use!";
+                    }
+                    if (_accountRepository.GetUsers().Any(x => x.UserName == model.UserName))
+                    {
+                        ViewBag.UserNameAlreadyUsed = "This username is already in use!";
+                    }
                     return View();
                 }
             }

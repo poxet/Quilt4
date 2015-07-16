@@ -76,8 +76,10 @@ namespace Quilt4.Interface
         void ArchiveApplicationVersion(string versionId);
         IEnumerable<IInvitation> GetInvitations(string email);
         IEnumerable<ISession> GetSessions();
-        IDictionary<string, string> GetEnvironmentColors(string userId);
+        IDictionary<string, string> GetEnvironmentColors(string userName);
         void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
+        void ArchiveSessionsForApplicationVersion(string versionId);
+        void DeleteSession(Guid sessionId);
     }
 }

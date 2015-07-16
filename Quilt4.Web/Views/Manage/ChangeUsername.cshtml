@@ -1,0 +1,34 @@
+﻿@model Quilt4.Web.Models.ChangeUsernameModel
+
+@{
+    ViewBag.Title = "Change Username";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Change Username</h2>
+
+@using (Html.BeginForm("ChangeUsername", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewUsername, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.NewUsername, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            <span style="color: red;">@ViewBag.WrongPassword</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Change username" class="btn btn-default" />
+        </div>
+    </div>
+
+}
+

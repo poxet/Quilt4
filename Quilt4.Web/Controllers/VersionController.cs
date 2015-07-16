@@ -58,7 +58,7 @@ namespace Quilt4.Web.Controllers
                 ApplicationVersionId = applicationId.ToString(),
                 InitiativeUniqueIdentifier = id,
             };
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserName());
 
             issue.Environments = environments.Select(x => new EnvironmentViewModel { Name = x.Key, Color = x.Value}).ToList();
             issue.UniqueIdentifier = issue.GetUniqueIdentifier(versionName);

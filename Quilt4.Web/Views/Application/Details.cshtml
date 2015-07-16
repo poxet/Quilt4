@@ -23,6 +23,7 @@ else
 }
 
 @*Environment Legend*@
+@*@Html.Partial("_EnvironmentLegendPartial", Model.Environments)*@
 @Html.Partial("_EnvironmentLegendPartial", new List<EnvironmentViewModel>())
 
 <h3>Versions</h3>
@@ -68,10 +69,16 @@ else
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-First-@Model.Versions[i].VersionId"></div></td>
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-Last-@Model.Versions[i].VersionId"></div></td>
                 <td style="padding: 0 5px;"><div id="Session-Environments-@Model.Versions[i].VersionId"></div>
-                    @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
                     @*@foreach (var env in Model.Versions[i].Environments)
+                    @foreach (var env in Model.Versions[i].Environment)
                     {
-                        <span class="@Html.Raw(env.Name)Color" style="background-color: #@env.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env.Name"></span>
+                        foreach (var environment in Model.Environments)
+                        {
+                            if (env.Equals(environment.Name))
+                            {
+                                <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
+                            }
+                        }
                     }*@
                 </td>
             </tr>
@@ -88,11 +95,11 @@ else
 <!-- När sidan har laddats in skall ytterligare data börja laddas in. -->
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         function getSessions() {
             var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Sessions";
-            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
+            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function(data) {
                 $.each(data, function(i, item) {
                     var oDiv = document.getElementById('Session-' + item.Id);
 
@@ -115,7 +122,19 @@ else
         }
 
         getSessions();
-
     });
 
+
+    $(document).ready(function() {
+
+
+        function getMachines() {
+            var url = "/Application/Machines";
+            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function(data) {
+                alert(data);
+            });
+        }
+
+        getMachines();
+    });
 </script>

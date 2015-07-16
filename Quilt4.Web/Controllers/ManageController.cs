@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -14,10 +15,12 @@ namespace Quilt4.Web.Controllers
     public class ManageController : Controller
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IEmailBusiness _emailBusiness;
 
-        public ManageController(IAccountRepository accountRepository)
+        public ManageController(IAccountRepository accountRepository, IEmailBusiness emailBusiness)
         {
             _accountRepository = accountRepository;
+            _emailBusiness = emailBusiness;
         }
 
         //
@@ -372,5 +375,60 @@ namespace Quilt4.Web.Controllers
         }
 
 #endregion
+
+        public ActionResult ChangeUsername()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeUsername(ChangeUsernameModel model)
+        {
+            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
+            
+            var userAsync = await _accountRepository.FindAsync(username, model.Password);
+
+            if (userAsync == null)
+            {
+                ViewBag.WrongPassword = "Incorrect password!";
+                return View();
+            }
+
+            await _accountRepository.UpdateUsernameAsync(userAsync.Id, model.NewUsername);
+
+            return Redirect("Index");
+        }
+
+        public ActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmail(ChangeEmailModel model)
+        {
+            var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
+
+            var userAsync = await _accountRepository.FindAsync(username, model.Password);
+
+            if (userAsync == null)
+            {
+                ViewBag.WrongPassword = "Incorrect password!";
+                return View();
+            }
+
+            var result = await _accountRepository.UpdateEmailAsync(userAsync.Id, model.NewEmail);
+
+            if (result.Succeeded)
+            {
+                var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(userAsync.Id);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userAsync.Id, code = token }, protocol: Request.Url.Scheme);
+                _emailBusiness.SendEmail(new List<string>() { model.NewEmail }, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            }
+
+            return Redirect("Index");
+        }
     }
 }

@@ -306,7 +306,7 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IDictionary<string, string> GetEnvironmentColors(string userId)
+        public IDictionary<string, string> GetEnvironmentColors(string userName)
         {
             throw new NotImplementedException();
         }
@@ -317,6 +317,16 @@ namespace Quilt4.SQLRepository
         }
 
         public void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ArchiveSessionsForApplicationVersion(string versionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSession(Guid sessionId)
         {
             throw new NotImplementedException();
         }

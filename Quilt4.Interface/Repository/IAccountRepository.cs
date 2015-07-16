@@ -46,5 +46,8 @@ namespace Quilt4.Interface
         IDeveloper GetUser(string userEmail);
         void DeleteUser(string userId);
         void AssignRole(string userId, string roleName);
+        Task<IApplicationUser> FindAsync(string userName, string password);
+        Task<IdentityResult> UpdateUsernameAsync(string userId, string newUsername);
+        Task<IdentityResult> UpdateEmailAsync(string id, string newEmail);
     }
 }

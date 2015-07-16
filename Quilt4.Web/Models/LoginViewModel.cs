@@ -5,9 +5,8 @@ namespace Quilt4.Web.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Email/Username")]
+        public string User { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

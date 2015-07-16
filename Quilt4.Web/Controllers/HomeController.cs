@@ -197,7 +197,7 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserName());
 
             model.SearchResultRows = searchResultRows;
             model.Environments = environments.Select(x => new EnvironmentViewModel()
