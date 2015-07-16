@@ -9,6 +9,7 @@ namespace Quilt4.MongoDBRepository.Entities
     class UserPropertiesPersist
     {
         public string Id { get; internal set; }
+        public string Username { get; internal set; }
         public IDictionary<string, string> EnvironmentColors { get; internal set; }
     }
 }
