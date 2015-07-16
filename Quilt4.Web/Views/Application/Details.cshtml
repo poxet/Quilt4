@@ -70,7 +70,7 @@ else
                 <td style="padding: 0 5px;">
                     @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
 
-                    @foreach (var env in Model.Versions[i].Environment)
+                    @*@foreach (var env in Model.Versions[i].Environment)
                     {
                         foreach (var environment in Model.Environments)
                         {
@@ -79,7 +79,7 @@ else
                                 <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
                             }
                         }
-                    }
+                    }*@
                 </td>
             </tr>
         }

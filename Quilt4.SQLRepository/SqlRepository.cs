@@ -320,5 +320,15 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public void ArchiveSessionsForApplicationVersion(string versionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteSession(Guid sessionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

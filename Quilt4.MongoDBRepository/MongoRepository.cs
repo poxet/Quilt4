@@ -378,6 +378,26 @@ namespace Quilt4.MongoDBRepository
             Database.GetCollection("EnvironmentColor").Insert(environmentPersist, WriteConcern.Acknowledged);
         }
 
+        public void ArchiveSessionsForApplicationVersion(string versionId)
+        {
+            var sessions = GetSessionsForApplicationVersion(versionId);
+            //Insert into SessionArchive
+            //Remove from Session
+
+            foreach (var session in sessions)
+            {
+                Database.GetCollection("SessionArchive").Insert(session.ToPersist(), WriteConcern.Acknowledged);
+                DeleteSession(session.Id);
+            }
+            
+        }
+
+        public void DeleteSession(Guid sessionId)
+        {
+            var query = Query.EQ("Id", sessionId);
+            Database.GetCollection("Session").Remove(query, WriteConcern.Acknowledged);
+        }
+
         public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds)
         {
             var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationIds.Contains(x.ApplicationId)).ToArray();

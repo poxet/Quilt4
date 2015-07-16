@@ -257,6 +257,7 @@ namespace Quilt4.Web.Business
         public void ArchiveApplicationVersion(string versionId)
         {
             _repository.ArchiveApplicationVersion(versionId);
+            _repository.ArchiveSessionsForApplicationVersion(versionId);
         }
 
         private IDictionary<string, string> GetColorForEnvironment(string environment)
