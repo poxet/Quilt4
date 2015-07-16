@@ -95,18 +95,30 @@ else
 <!-- När sidan har laddats in skall ytterligare data börja laddas in. -->
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(document).ready(function() {
 
         function getSessions() {
             var url = "/Application/Sessions";
-            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
+            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function(data) {
                 //TODO: Placera ut data på rätt ställe i listan
                 alert(data);
             });
         }
 
         getSessions();
-
     });
 
+
+    $(document).ready(function() {
+
+
+        function getMachines() {
+            var url = "/Application/Machines";
+            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function(data) {
+                alert(data);
+            });
+        }
+
+        getMachines();
+    });
 </script>

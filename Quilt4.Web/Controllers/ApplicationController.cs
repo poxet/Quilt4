@@ -105,6 +105,38 @@ namespace Quilt4.Web.Controllers
             return response;
         }
 
+        public JsonResult Machines(string id, string application)
+        {
+            if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
+
+            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
+            var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
+            var machines = new List<IMachine>();
+            foreach (var version in versions)
+            {
+                machines.AddRange(_machineBusiness.GetMachinesByApplicationVersion(version.Id));
+            }
+            //var sessions = _machineBusiness.GetMachinesByApplicationVersions()
+
+            //var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
+
+            //TODO: Här skall data som first, last och en lista med environments och dess färger med.
+            
+            foreach (var version in versions)
+            {
+                
+            }
+            var ss = versions.Select(x => new
+
+            {
+                MachineCount = machines.Count()
+            }).ToArray();
+
+            var response = Json(ss, JsonRequestBehavior.AllowGet);
+            return response;
+        }
+
         // GET: Application/Archive/5
         public ActionResult Archive(string id, string application)
         {
