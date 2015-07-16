@@ -124,17 +124,13 @@ namespace Quilt4.Web.Controllers
 
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
             
-            foreach (var version in versions)
-            {
-                
-            }
-            var ss = versions.Select(x => new
+            var ms = versions.Select(x => new
 
             {
                 MachineCount = machines.Count()
             }).ToArray();
 
-            var response = Json(ss, JsonRequestBehavior.AllowGet);
+            var response = Json(ms, JsonRequestBehavior.AllowGet);
             return response;
         }
 
