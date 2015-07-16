@@ -76,13 +76,13 @@ namespace Quilt4.Web.Controllers
             {
                 var key = collection.GetKey(i);
                 var value = collection.ToValueProvider().GetValue(key);
-                colors.Add(key, value.AttemptedValue);
+                colors.Add(key, value.AttemptedValue.Replace("#", ""));
             }
 
             _initiativeBusiness.UpdateEnvironmentColors(User.Identity.GetUserId(), colors);
 
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Manage");
         }
 
         //

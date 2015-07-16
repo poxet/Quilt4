@@ -9,17 +9,19 @@
 @using (Html.BeginForm())
 {
     <table>
-        <tr><th>Environment</th><th>Color</th></tr>
+        <tr><th style="padding: 0 5px;">Environment</th><th style="padding: 0 5px;">Color</th></tr>
         @foreach (var item in Model)
         {
             <tr>
                 @*TODO: Use input type=color for colorselection*@
-                <td>@(string.IsNullOrEmpty(item.Key) ? @Html.Raw("(empty string)") : @Html.Raw(item.Key))</td>
-                <td># @Html.TextBox("_Env" + item.Key, item.Value)</td>
+                <td style="padding: 0 5px;">@(string.IsNullOrEmpty(item.Key) ? @Html.Raw("(empty string)") : @Html.Raw(item.Key))</td>
+                <td style="padding: 0 5px;"><input style="width: 30px; height: 30px;" type="color" value="#@item.Value" id="@Html.Raw("_Env" + @item.Key)" name="@Html.Raw("_Env" + @item.Key)"/></td>
+                @*<td># @Html.TextBox("_Env" + item.Key, item.Value)</td>*@
             </tr>
         }
     </table>
+    <br/>
     <input type="submit" value="Update Colors"/>
-    @Html.ActionLink("Cancel", "Index", "Home")
+    @Html.ActionLink("Cancel", "Index", "Manage")
 }
 
