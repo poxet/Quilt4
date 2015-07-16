@@ -359,9 +359,10 @@ namespace Quilt4.Web.Controllers
             }
         }
 
-        public ActionResult EditEnvironmentColors(string userId)
+        public ActionResult EditEnvironmentColors(string userName)
         {
-            var environmentColors = _initiativeBusiness.GetEnvironmentColors(userId).First();
+            //TODO: If provided is not the userName, but the userId, find the userId by the userName.
+            var environmentColors = _initiativeBusiness.GetEnvironmentColors(userName);
             
             return View(environmentColors);
         }

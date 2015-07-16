@@ -9,7 +9,7 @@
 
 
 
-@Html.ActionLink("Change Environment Colors", "EditEnvironmentColors", "Initiative", new { userId = User.Identity.GetUserId()}, null)
+@Html.ActionLink("Change Environment Colors", "EditEnvironmentColors", "Initiative", new { userId = User.Identity.GetUserName()}, null)
 
 <h2>@ViewBag.Title</h2>
 

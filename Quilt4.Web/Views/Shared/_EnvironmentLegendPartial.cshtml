@@ -2,14 +2,22 @@
 @model IEnumerable<EnvironmentViewModel>
 
 <h3>Environments</h3>
-<table>
-    @*TODO: Environments skall inte komma med när man listan laddas från början, det kommer först senare vid ett jquery anrop. Ta bort denna kod när det funkar!*@
+<div id="Environment-Legend-Container">
+</div>
+<script type="text/javascript">
+    function addEnvironmentToLegend(name, color) {
+        var container = document.getElementById('Environment-Legend-Container');
+
+        var nm = 'Environment-Legend-' + name;
+        if (document.getElementById(nm) == null) {
+            container.innerHTML = container.innerHTML + '<div id="' + nm + '"><span style="background-color: #' + color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;"></span>' + name + '</div>';
+        }
+    }
+
     @foreach (var environment in @Model)
     {
-        <tr>
-            <th>@Html.Raw(environment.Name)</th>
-            <td style="padding-left: 20px;"><span id="@Html.Raw(environment.Name)LegendButton" onclick='toggleShowEnvironment("@environment.Name"); changeButtonStyle("@environment.Name");' style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span></td>
-        </tr>
+        @Html.Raw("addEnvironmentToLegend('" + environment.Name + "', '" + environment.Color + "');")
     }
-</table>
+
+</script>
 <script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>

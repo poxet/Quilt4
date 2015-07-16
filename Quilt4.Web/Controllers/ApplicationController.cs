@@ -55,17 +55,10 @@ namespace Quilt4.Web.Controllers
                     InitiativeIdentifier = initiativeUniqueIdentifier,
                     IssueTypeCount = x.IssueTypes.Count(),
                     IssueCount = x.IssueTypes.SelectMany(y => y.Issues).Count(),
-                    MachineCount = -1,
-                    SessionCount = -1, //TODO: Ta bort denna property och ladda med jquery.
-                    FirstSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
-                    LastSessionTime = new DateTime(), //TODO: Ta bort denna property och ladda med jquery.
-                    //Environment = _sessionBusiness.GetSessionsForApplicationVersion(x.Id).Select(y => y.Environment).Distinct(), TODO: Laddar superlångsamt
-                    Environment = null,
                 }).OrderByDescending(y => y.Version).ToList(),
             };
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
-
-            model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Colour = x.Value}).ToList();
+            //var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
+            //model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Color = x.Value}).ToList();
 
             return model;
         }
@@ -82,27 +75,40 @@ namespace Quilt4.Web.Controllers
 
             @ViewBag.IsArchive = false;
             @ViewBag.Title = "Application Details";
+            @ViewBag.SiteRoot = GetSiteRoot();
             return View(model);
         }
 
+        // GET: Application/Sessions/A/B
         public JsonResult Sessions(string id, string application)
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
             var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
-            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id });
+            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id }).ToArray();
 
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
-            var ss = versions.Select(x => new
+            var vers = versions.Select(x =>
             {
-                Id = x.Id,
-                SessionCount = sessions.Count(y => y.ApplicationVersionId == x.Id)
+                var ss = sessions.Where(y => y.ApplicationVersionId == x.Id).ToArray();
+                return new
+                {
+                    Id = x.Id,
+                    SessionCount = ss.Count(y => y.ApplicationVersionId == x.Id),
+                    First = ss.Any() ? ss.Min(y => y.ServerStartTime).ToLocalTime().ToTimeAgo() : "N/A",
+                    Last = ss.Any() ? ss.Max(y => y.ServerStartTime).ToLocalTime().ToTimeAgo() : "N/A",
+                    Environments = ss.GroupBy(y => y.Environment).Select(z => new
+                    {
+                        Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
+                        Color = GetEnvironmentColor(z.Key)
+                    })
+                };
             }).ToArray();
 
-            var response = Json(ss, JsonRequestBehavior.AllowGet);
+            var response = Json(vers, JsonRequestBehavior.AllowGet);
             return response;
         }
 
@@ -131,6 +137,13 @@ namespace Quilt4.Web.Controllers
             }).ToArray();
 
             var response = Json(ms, JsonRequestBehavior.AllowGet);
+            return response;
+        }
+
+        private string GetEnvironmentColor(string environmentName)
+        {
+            var cols = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserName());
+            var response = cols[environmentName];
             return response;
         }
 
@@ -242,6 +255,30 @@ namespace Quilt4.Web.Controllers
             _initiativeBusiness.UpdateInitiative(initiative);
 
             return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName });
+        }
+
+        public static string GetSiteRoot()
+        {
+            string port = System.Web.HttpContext.Current.Request.ServerVariables["SERVER_PORT"];
+            if (port == null || port == "80" || port == "443")
+                port = "";
+            else
+                port = ":" + port;
+
+            string protocol = System.Web.HttpContext.Current.Request.ServerVariables["SERVER_PORT_SECURE"];
+            if (protocol == null || protocol == "0")
+                protocol = "http://";
+            else
+                protocol = "https://";
+
+            string sOut = protocol + System.Web.HttpContext.Current.Request.ServerVariables["SERVER_NAME"] + port + System.Web.HttpContext.Current.Request.ApplicationPath;
+
+            if (sOut.EndsWith("/"))
+            {
+                sOut = sOut.Substring(0, sOut.Length - 1);
+            }
+
+            return sOut;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Quilt4.Web.Models
         public string Application { get; set; }
         public string InitiativeUniqueIdentifier { get; set; }
         public List<VersionViewModel> Versions { get; set; }
-        public List<EnvironmentViewModel> Environments { get; set; }
+        //public List<EnvironmentViewModel> Environments { get; set; }
         //public bool ShowArchivedVersions { get; set; }
         //public List<VersionViewModel> ArchivedVersions { get; set; }
     }
