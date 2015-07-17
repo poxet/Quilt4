@@ -10,56 +10,53 @@
     @{ Html.RenderAction("_InitiativeInvitations", "Action"); }
 </div>
 
-<table>
-    <tr style="border-bottom-color: black; border-bottom-style: solid;">
-        <th style="padding: 0 5px;">Issue Type Name</th>
-        <th style="padding: 0 5px;">Level</th>
-        <th style="padding: 0 5px;">Time</th>
-        <th style="padding: 0 5px;">Visible</th>
-        <th style="padding: 0 5px;">IssueType Ticket</th>
-        <th style="padding: 0 5px;">Issue Ticket</th>
-    </tr>
-
-    @for (var i = 0; i < 5; i++)
-    {
-        <tr>
-            
-            <td><div id="IssueName-@i" style="background-image: url('../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-            <td><div id="Level-@i" style="background-image: url('../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-            <td><div id="Time-@i" style="background-image: url('../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-            <td><div id="Visible-@i" style="background-image: url('../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-            <td><div id="IssueTypeTicket-@i" style="background-image: url('../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-            <td><div id="IssueTicket-@i" style="background-image: url('../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-            
+@if (User.Identity.IsAuthenticated)
+{
+    <table>
+        <tr style="border-bottom-color: black; border-bottom-style: solid;">
+            <th style="padding: 0 5px;">Issue Type Name</th>
+            <th style="padding: 0 5px;">Level</th>
+            <th style="padding: 0 5px;">Time</th>
+            <th style="padding: 0 5px;">Visible</th>
+            <th style="padding: 0 5px;">IssueType Ticket</th>
+            <th style="padding: 0 5px;">Issue Ticket</th>
         </tr>
-    }
-</table>
 
+        @for (var i = 0; i < 5; i++)
+        {
+            <tr>
+
+                <td><div id="IssueName-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td><div id="Level-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td><div id="Time-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td><div id="Visible-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td><div id="IssueTypeTicket-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td><div id="IssueTicket-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+
+            </tr>
+        }
+    </table>
     
-
     <script type="text/javascript">
-        $(document).ready(function () {
+    $(document).ready(function () {
 
 
-            function getIssues() {
-                var url = "/Home/Issues";
-                $.getJSON(url, {}, function (data) {
-                    alert(data);
-                    //TODO:Display data
-                    //$.each(data, function (i, item) {
-                        //var issueNameDiv = document.getElementById("IssueName-" + i);
-                        //issueNameDiv.removeProperty("background-image");
-                        //issueNameDiv.innerHTML = item.IssueTypeName;
-                    //});
-                        
-                    
-                });
-            }
+        function getIssues() {
+            var url = "/Home/Issues";
+            $.getJSON(url, {}, function (data) {
+                alert(data);
+                //TODO:Display data
+                //$.each(data, function (i, item) {
+                //var issueNameDiv = document.getElementById("IssueName-" + i);
+                //issueNameDiv.removeProperty("background-image");
+                //issueNameDiv.innerHTML = item.IssueTypeName;
+                //});
 
-            getIssues();
-        });
+
+            });
+        }
+
+        getIssues();
+    });
     </script>
-
-
-
-
+}
