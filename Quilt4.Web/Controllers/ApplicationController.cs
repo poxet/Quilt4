@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -128,12 +129,15 @@ namespace Quilt4.Web.Controllers
             //var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
-            
-            var ms = versions.Select(x => new
+            var ms = new List<object>();
+            foreach (var version in versions)
             {
-                Id = x.Id,
-                MachineCount = _machineBusiness.GetMachinesByApplicationVersion(x.Id).Count(),
-            }).ToArray();
+                ms.Add(new
+                {
+                    Id = version.Id,
+                    MachineCount = _machineBusiness.GetMachinesByApplicationVersion(version.Id).Count(), //TODO: this method is super slow, takes ~0,5sek per version
+                });
+            }
 
             var response = Json(ms, JsonRequestBehavior.AllowGet);
             return response;
