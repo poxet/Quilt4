@@ -261,14 +261,14 @@ namespace Quilt4.MongoDBRepository
             return invitations;
         }
 
-        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
+        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerEmail, string[] roleNames)
         {
             var initiativePersists = Database.GetCollection("Initiative").FindAllAs<InitiativePersist>().Where(x => 
                 x.OwnerDeveloperName == "*"
-                || (roleNames.Contains(RoleNameConstants.Owner) && string.Compare(x.OwnerDeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                || (roleNames.Contains(RoleNameConstants.Owner) && string.Compare(x.OwnerDeveloperName, developerEmail, StringComparison.InvariantCultureIgnoreCase) == 0)
                 || (x.DeveloperRoles != null 
-                    && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
-                        && string.Compare(xx.InviteEMail, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 
+                    && x.DeveloperRoles.Any(xx => string.Compare(xx.DeveloperName, developerEmail, StringComparison.InvariantCultureIgnoreCase) == 0 
+                        && string.Compare(xx.InviteEMail, developerEmail, StringComparison.InvariantCultureIgnoreCase) == 0 
                         && roleNames.Any(z => string.Compare(z, xx.RoleName, StringComparison.InvariantCultureIgnoreCase) == 0))
                     )
                 );
@@ -332,9 +332,9 @@ namespace Quilt4.MongoDBRepository
             return response;
         }
 
-        public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName)
+        public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerEmail)
         {
-            var applicationIds = GetSessionsForDeveloper(developerName).GroupBy(x => x.ApplicationId);
+            var applicationIds = GetSessionsForDeveloper(developerEmail).GroupBy(x => x.ApplicationId);
             var applicationVersion = Database.GetCollection("ApplicationVersion").FindAllAs<ApplicationVersionPersist>().Where(x => applicationIds.Any(y => y.Key == x.ApplicationId));
             var result = applicationVersion.Select(x => x.ToEntity());
             return result;
@@ -543,9 +543,9 @@ namespace Quilt4.MongoDBRepository
             return response;
         }
 
-        public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
+        public IEnumerable<ISession> GetSessionsForDeveloper(string developerEmail)
         {
-            var i = GetInitiatives().Where(x => x.OwnerDeveloperName == developerName || x.DeveloperRoles.Any(y => y.DeveloperName == developerName)).ToArray();
+            var i = GetInitiatives().Where(x => x.OwnerDeveloperName == developerEmail || x.DeveloperRoles.Any(y => y.DeveloperName == developerEmail)).ToArray();
             var a = i.SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications).ToArray();
             var response = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => a.Any(y => y.Id == x.ApplicationId)).Select(x => x.ToEntity()).ToArray();
             return response;

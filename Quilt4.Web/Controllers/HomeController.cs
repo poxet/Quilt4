@@ -30,8 +30,8 @@ namespace Quilt4.Web.Controllers
         public ActionResult Index()
         {
             
-            if (User.Identity.IsAuthenticated) { 
-                var userEmail = User.Identity.Name;
+            if (User.Identity.IsAuthenticated) {
+                var userEmail = _accountRepository.FindById(User.Identity.GetUserId()).Email;
                 var issueTypes = _issueBusiness.GetLatestIssueTypesByEmail(userEmail).Distinct().ToArray();
                 var issues = issueTypes.SelectMany(x => x.Issues).OrderByDescending(x => x.ServerTime).Distinct().Take(5).ToArray();
                 var model = new FiveLatestIssuesModel();
@@ -113,7 +113,7 @@ namespace Quilt4.Web.Controllers
         {
             var model = new SearchModel()
             {
-                IsConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed,
+                IsConfirmed = _accountRepository.GetUser(_accountRepository.FindById(User.Identity.GetUserId()).Email).EMailConfirmed,
                 SearchText = searchText,
             };
 
@@ -124,7 +124,7 @@ namespace Quilt4.Web.Controllers
 
             var searchResultRows = new List<SearchResultRowModel>();
 
-            var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
+            var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email);
             var initiatives = _initiativeBusiness.GetInitiatives().ToArray();
             var userInitiatives = initiativeHeads.Select(initiativeHead => initiatives.Single(x => x.Id == initiativeHead.Id)).ToArray();
 
@@ -204,7 +204,7 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserName());
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId());
 
             model.SearchResultRows = searchResultRows;
             model.Environments = environments.Select(x => new EnvironmentViewModel()

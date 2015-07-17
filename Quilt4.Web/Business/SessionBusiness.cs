@@ -135,9 +135,9 @@ namespace Quilt4.Web.Business
             return _repository.GetSessionsForApplication(applicationId).OrderByDescending(x => x.ServerStartTime);
         }
 
-        public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
+        public IEnumerable<ISession> GetSessionsForDeveloper(string developerEmail)
         {
-            return _repository.GetSessionsForDeveloper(developerName).OrderByDescending(x => x.ServerStartTime);
+            return _repository.GetSessionsForDeveloper(developerEmail).OrderByDescending(x => x.ServerStartTime);
         }
 
         public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> initiativeId)

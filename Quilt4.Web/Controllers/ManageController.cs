@@ -33,7 +33,7 @@ namespace Quilt4.Web.Controllers
             //Make two first users admin
             if (_accountRepository.GetUsers().Count() <= 2 && !User.IsInRole("Admin"))
             {
-                var user = _accountRepository.GetUsers().Single(x => x.Email == User.Identity.Name);
+                var user = _accountRepository.GetUsers().Single(x => x.Email == _accountRepository.FindById(User.Identity.GetUserId()).Email);
                 _accountRepository.AssignRole(user.UserId, "Admin");
             }
 

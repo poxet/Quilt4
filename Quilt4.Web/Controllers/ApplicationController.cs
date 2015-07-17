@@ -17,19 +17,21 @@ namespace Quilt4.Web.Controllers
         private readonly IMachineBusiness _machineBusiness;
         private readonly IIssueBusiness _issueBusiness;
         private readonly ISessionBusiness _sessionBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness, IIssueBusiness issueBusiness, ISessionBusiness sessionBusiness) 
+        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness, IIssueBusiness issueBusiness, ISessionBusiness sessionBusiness, IAccountRepository accountRepository) 
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _machineBusiness = machineBusiness;
             _issueBusiness = issueBusiness;
             _sessionBusiness = sessionBusiness;
+            _accountRepository = accountRepository;
         }
 
         public ApplicationViewModel GetApplicationModel(IInitiative initiative, string application, IEnumerable<IApplicationVersion> versions)
         {
-            var developerName = User.Identity.Name;
+            var developerName = _accountRepository.FindById(User.Identity.GetUserId()).Email;
             var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloperOwner(developerName).ToArray();
 
             var initiativeUniqueIdentifier = initiative.GetUniqueIdentifier(initiativeHeads.Select(xx => xx.Name));
@@ -68,7 +70,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
             var model = GetApplicationModel(initiative, application, versions);
@@ -84,7 +86,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id }).ToArray();
 
@@ -116,7 +118,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
             var machines = new List<IMachine>();
@@ -142,7 +144,7 @@ namespace Quilt4.Web.Controllers
 
         private string GetEnvironmentColor(string environmentName)
         {
-            var cols = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserName());
+            var cols = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId());
             var response = cols[environmentName];
             return response;
         }
@@ -152,7 +154,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var archivedVersions = _applicationVersionBusiness.GetArchivedApplicationVersions(app.Id).ToArray();
             var model = GetApplicationModel(initiative, application, archivedVersions);
@@ -207,7 +209,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
 
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == application)).Name;
@@ -229,7 +231,7 @@ namespace Quilt4.Web.Controllers
         [HttpPost]
         public ActionResult Edit(ApplicationPropetiesModel model, FormCollection collection)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), model.InitiativeId);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, model.InitiativeId);
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;

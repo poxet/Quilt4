@@ -11,7 +11,7 @@ namespace Quilt4.Interface
 
         //IEnumerable<IInitiative> GetInitiativesByDeveloper(string developerName);
         IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId);
-        IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames);
+        IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerEmail, string[] roleNames);
         IEnumerable<IInitiative> GetInitiatives();
         IInitiative GetInitiative(Guid initiativeId);
         IInitiative GetInitiativeByClientToken(string clientToken);
@@ -22,7 +22,7 @@ namespace Quilt4.Interface
         IEnumerable<IApplicationVersion> GetApplicationVersions();
         IEnumerable<IApplicationVersion> GetApplicationVersions(Guid applicationId);
         IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId);
-        IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName);
+        IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerEmail);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> applicationIds);
         IEnumerable<IApplicationVersion> GetApplicationVersionsForMachine(string machineId);
         void UpdateSessionUsage(Guid sessionId, DateTime serverLastKnown);
@@ -36,7 +36,7 @@ namespace Quilt4.Interface
         ISession GetSession(Guid id);
         IEnumerable<ISession> GetSessionsForApplicationVersion(string applicationVersionId);
         IEnumerable<ISession> GetSessionsForApplication(Guid applicationId);
-        IEnumerable<ISession> GetSessionsForDeveloper(string developerName);
+        IEnumerable<ISession> GetSessionsForDeveloper(string developerEmail);
         IEnumerable<ISession> GetSessionsForMachine(string machineFingerprint);
         //IEnumerable<ISession> GetActiveSessions(int timeoutSeconds);
         void EndSession(Guid sessionId, DateTime serverEndTime);

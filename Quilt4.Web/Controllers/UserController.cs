@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
+using IUser = Quilt4.Interface.IUser;
 
 namespace Quilt4.Web.Controllers
 {
@@ -13,13 +15,15 @@ namespace Quilt4.Web.Controllers
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly ISessionBusiness _sessionBusiness;
         private readonly IMachineBusiness _machineBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public UserController(IUserBusiness userBusiness, IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IMachineBusiness machineBusiness)
+        public UserController(IUserBusiness userBusiness, IInitiativeBusiness initiativeBusiness, ISessionBusiness sessionBusiness, IMachineBusiness machineBusiness, IAccountRepository accountRepository)
         {
             _userBusiness = userBusiness;
             _initiativeBusiness = initiativeBusiness;
             _sessionBusiness = sessionBusiness;
             _machineBusiness = machineBusiness;
+            _accountRepository = accountRepository;
         }
 
         // GET: User
@@ -33,16 +37,16 @@ namespace Quilt4.Web.Controllers
         {
             if (initiativeidentifier == null) throw new ArgumentNullException("initiativeidentifier", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Where(x => x.Name == initiativeidentifier).ToArray();
+            var i = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).Where(x => x.Name == initiativeidentifier).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Single(x => x.Name == initiativeidentifier).Id;
+                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).Single(x => x.Name == initiativeidentifier).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).Single(x => x.Id == Guid.Parse(initiativeidentifier)).Id;
+                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).Single(x => x.Id == Guid.Parse(initiativeidentifier)).Id;
             }
 
             if (initiativeId == Guid.Empty)
