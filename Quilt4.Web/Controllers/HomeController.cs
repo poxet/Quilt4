@@ -77,7 +77,8 @@ namespace Quilt4.Web.Controllers
             return response;
         }
 
-
+            return View(new FiveLatestIssuesModel());
+        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -116,7 +117,7 @@ namespace Quilt4.Web.Controllers
         {
             var model = new SearchModel()
             {
-                IsConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed,
+                IsConfirmed = _accountRepository.GetUser(_accountRepository.FindById(User.Identity.GetUserId()).Email).EMailConfirmed,
                 SearchText = searchText,
             };
 
@@ -127,7 +128,7 @@ namespace Quilt4.Web.Controllers
 
             var searchResultRows = new List<SearchResultRowModel>();
 
-            var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name);
+            var initiativeHeads = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email);
             var initiatives = _initiativeBusiness.GetInitiatives().ToArray();
             var userInitiatives = initiativeHeads.Select(initiativeHead => initiatives.Single(x => x.Id == initiativeHead.Id)).ToArray();
 
@@ -207,7 +208,7 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserName());
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId());
 
             model.SearchResultRows = searchResultRows;
             model.Environments = environments.Select(x => new EnvironmentViewModel()

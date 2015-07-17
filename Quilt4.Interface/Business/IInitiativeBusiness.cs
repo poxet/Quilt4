@@ -5,15 +5,15 @@ namespace Quilt4.Interface
 {
     public interface IInitiativeBusiness
     {
-        void Create(string developerName, string initiativename);
-        IEnumerable<IInitiativeHead> GetInitiativesByDeveloperOwner(string developerName);
-        IEnumerable<IInitiativeHead> GetInitiativesByDeveloper(string developerName);
+        void Create(string developerEmail, string initiativename);
+        IEnumerable<IInitiativeHead> GetInitiativesByDeveloperOwner(string developerEmail);
+        IEnumerable<IInitiativeHead> GetInitiativesByDeveloper(string developerEmail);
         IEnumerable<IApplicationGroup> GetApplicationGroups(Guid initiativeId);
         IApplication RegisterApplication(IClientToken clientToken, string applicationName, string applicationVersionFingerprint);
         IEnumerable<IInitiative> GetInitiatives();
         IEnumerable<IIssue> GetIssueStatistics(DateTime fromDate, DateTime toDate);
         IInitiative GetInitiative(Guid id);
-        IInitiative GetInitiative(string developerName, string initiativeIdentifier);
+        IInitiative GetInitiative(string developerEmail, string initiativeIdentifier);
         int GetInitiativeCount();
         int GetApplicationCount();
         int GetIssueTypeCount();
@@ -27,7 +27,7 @@ namespace Quilt4.Interface
         void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         //void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         IInitiative GetInitiativeByInviteCode(string inviteCode);
-        void ConfirmInvitation(Guid initiativeId, string developerName);
+        void ConfirmInvitation(Guid initiativeId, string developerEmail);
         void DeclineInvitation(string inviteCode);
         IEnumerable<IInvitation> GetInvitations(string email);
         string GenerateInviteMessage(string initiativeid, string code, string message, Uri url);

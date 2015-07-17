@@ -84,28 +84,28 @@ namespace Quilt4.Web.Business
         //}
 
 
-        private IEnumerable<IInitiativeHead> GetHeadsByDeveloper(string developerName, string[] roleNames)
+        private IEnumerable<IInitiativeHead> GetHeadsByDeveloper(string developerEmail, string[] roleNames)
         {
-            var initiatives = _repository.GetInitiativeHeadsByDeveloper(developerName, roleNames).ToList();
+            var initiatives = _repository.GetInitiativeHeadsByDeveloper(developerEmail, roleNames).ToList();
             if (!initiatives.Any())
             {
-                var defaultInitiative = new Initiative(Guid.NewGuid(), null, GenerateClientToken(), developerName ?? "*", new List<IDeveloperRole>(), new List<ApplicationGroup>());
+                var defaultInitiative = new Initiative(Guid.NewGuid(), null, GenerateClientToken(), developerEmail ?? "*", new List<IDeveloperRole>(), new List<ApplicationGroup>());
                 initiatives.Insert(0, defaultInitiative);
                 _repository.AddInitiative(defaultInitiative);
             }
             return initiatives;
         }
 
-        public IEnumerable<IInitiativeHead> GetInitiativesByDeveloperOwner(string developerName)
+        public IEnumerable<IInitiativeHead> GetInitiativesByDeveloperOwner(string developerEmail)
         {
-            var initiatives = GetHeadsByDeveloper(developerName, new[] { RoleNameConstants.Owner }).ToArray();
+            var initiatives = GetHeadsByDeveloper(developerEmail, new[] { RoleNameConstants.Owner }).ToArray();
             var response = initiatives.OrderBy(x => x.Name);
             return response;
         }
 
-        public IEnumerable<IInitiativeHead> GetInitiativesByDeveloper(string developerName)
+        public IEnumerable<IInitiativeHead> GetInitiativesByDeveloper(string developerEmail)
         {
-            var initiatives = GetHeadsByDeveloper(developerName, new[] { RoleNameConstants.Owner, RoleNameConstants.Administrator }).ToArray();
+            var initiatives = GetHeadsByDeveloper(developerEmail, new[] { RoleNameConstants.Owner, RoleNameConstants.Administrator }).ToArray();
             var response = initiatives.OrderBy(x => x.Name);
             return response;
         }
@@ -116,10 +116,10 @@ namespace Quilt4.Web.Business
             return response;
         }
 
-        public void Create(string developerName, string initiativename)
+        public void Create(string developerEmail, string initiativename)
         {
-            developerName = developerName ?? "*";
-            var initiative = new Initiative(Guid.NewGuid(), initiativename, GenerateClientToken(), developerName, new List<IDeveloperRole>(), new List<ApplicationGroup>());
+            developerEmail = developerEmail ?? "*";
+            var initiative = new Initiative(Guid.NewGuid(), initiativename, GenerateClientToken(), developerEmail, new List<IDeveloperRole>(), new List<ApplicationGroup>());
             _repository.AddInitiative(initiative);
         }
 
@@ -128,11 +128,11 @@ namespace Quilt4.Web.Business
             return _repository.GetInitiative(initiativeId);
         }
 
-        public IInitiative GetInitiative(string developerName, string initiativeIdentifier)
+        public IInitiative GetInitiative(string developerEmail, string initiativeIdentifier)
         {
             //The initiativeIdentifier can be the name, id or client token of the initiative.
 
-            var initiativesByDeveloper = _repository.GetInitiativeHeadsByDeveloper(developerName, new[] { RoleNameConstants.Owner, RoleNameConstants.Administrator }).ToArray();
+            var initiativesByDeveloper = _repository.GetInitiativeHeadsByDeveloper(developerEmail, new[] { RoleNameConstants.Owner, RoleNameConstants.Administrator }).ToArray();
 
             var initiativeId = Guid.Empty;
 
@@ -158,7 +158,7 @@ namespace Quilt4.Web.Business
             }
 
             if (initiativeId == Guid.Empty)
-                throw new InvalidOperationException("Cannot find a single initiative with the provided identifier for the developer.").AddData("developerName", developerName).AddData("initiativeIdentifier", initiativeIdentifier);
+                throw new InvalidOperationException("Cannot find a single initiative with the provided identifier for the developer.").AddData("developerName", developerEmail).AddData("initiativeIdentifier", initiativeIdentifier);
 
             var initiative = GetInitiative(initiativeId);
             return initiative;
@@ -446,13 +446,13 @@ namespace Quilt4.Web.Business
             _repository.UpdateInitiative(initiative);
         }
 
-        public void ConfirmInvitation(Guid initiativeId, string developerName)
+        public void ConfirmInvitation(Guid initiativeId, string developerEmail)
         {
             var initiative = _repository.GetInitiative(initiativeId);
 
-            var item = initiative.DeveloperRoles.FirstOrDefault(x => string.Compare(x.DeveloperName, developerName, StringComparison.InvariantCultureIgnoreCase) == 0 || string.Compare(x.InviteEMail, developerName, StringComparison.InvariantCultureIgnoreCase) == 0);
-            if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation for developer.")).AddData("InitiativeId", initiativeId).AddData("DeveloperName", developerName);
-            item.DeveloperName = developerName;
+            var item = initiative.DeveloperRoles.FirstOrDefault(x => string.Compare(x.DeveloperName, developerEmail, StringComparison.InvariantCultureIgnoreCase) == 0 || string.Compare(x.InviteEMail, developerEmail, StringComparison.InvariantCultureIgnoreCase) == 0);
+            if (item == null) throw new NullReferenceException(string.Format("Cannot find invitation for developer.")).AddData("InitiativeId", initiativeId).AddData("DeveloperName", developerEmail);
+            item.DeveloperName = developerEmail;
             item.RoleName = RoleNameConstants.Administrator;
             item.InviteResponseTime = DateTime.Now;
             item.InviteCode = string.Empty;

@@ -16,13 +16,15 @@ namespace Quilt4.Web.Controllers
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly ISessionBusiness _sessionBusiness;
         private readonly IUserBusiness _userBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness)
+        public IssueTypeController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IAccountRepository accountRepository)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _sessionBusiness = sessionBusiness;
             _userBusiness = userBusiness;
+            _accountRepository = accountRepository;
         }
 
         public ActionResult Thread(string id, string issueThread)
@@ -77,16 +79,16 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "InitiativeId was not provided.");
 
-            var i = _initiativeBusiness.GetInitiatives().Where(x => x.Name == id).ToArray();
+            var i = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).Where(x => x.Name == id).ToArray();
             var initiativeId = Guid.Empty;
 
             if (i.Count() == 1)//Name is unique
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Name == id).Id;
+                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).Single(x => x.Name == id).Id;
             }
             else//go with id
             {
-                initiativeId = _initiativeBusiness.GetInitiatives().Single(x => x.Id == Guid.Parse(id)).Id;
+                initiativeId = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).Single(x => x.Id == Guid.Parse(id)).Id;
             }
 
             if (initiativeId == Guid.Empty)
@@ -94,7 +96,7 @@ namespace Quilt4.Web.Controllers
                 throw new NullReferenceException("No initiative found for the specified uid.");
             }
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), initiativeId.ToString());
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, initiativeId.ToString());
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).SingleOrDefault(x => x.Name == application);
             if (app == null) throw new NullReferenceException("Cannot find application").AddData("Application", application);
             var applicationVersions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();

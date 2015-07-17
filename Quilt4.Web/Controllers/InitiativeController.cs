@@ -30,7 +30,7 @@ namespace Quilt4.Web.Controllers
 
         private InitiativeViewModel GetInitiativeViewModel(string id)
         {
-            var developerName = User.Identity.Name;
+            var developerName = _accountRepository.FindById(User.Identity.GetUserId()).Email;
             var initiatives = _initiativeBusiness.GetInitiativesByDeveloper(developerName).ToArray();
             var initiative = _initiativeBusiness.GetInitiative(developerName, id).ToModel(initiatives.Select(x => x.Name));
             return initiative;
@@ -41,7 +41,7 @@ namespace Quilt4.Web.Controllers
         {
             try
             {
-                var ins = _initiativeBusiness.GetInitiativesByDeveloper(User.Identity.Name).ToArray();
+                var ins = _initiativeBusiness.GetInitiativesByDeveloper(_accountRepository.FindById(User.Identity.GetUserId()).Email).ToArray();
 
                 var initiatives = new InitiativesViewModel
                 {
@@ -60,7 +60,7 @@ namespace Quilt4.Web.Controllers
         {
             var initiative = _initiativeBusiness.GetInitiative(Guid.Parse(initiativeid));
             var developerRole = initiative.DeveloperRoles.Single(x => x.InviteCode == code);
-            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(User.Identity.Name).ToArray();
+            var ins = _initiativeBusiness.GetInitiativesByDeveloperOwner(_accountRepository.FindById(User.Identity.GetUserId()).Email).ToArray();
 
             var model = new InviteMemberModel()
             {
@@ -126,7 +126,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.Name, id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
 
             initiative.RemoveDeveloperRole(application);
             _initiativeBusiness.UpdateInitiative(initiative);
@@ -139,12 +139,12 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var developerName = User.Identity.Name;
+            var developerName = _accountRepository.FindById(User.Identity.GetUserId()).Email;
             var initiative = _initiativeBusiness.GetInitiative(developerName, id);
 
             ViewBag.InviteError = TempData["InviteError"];
 
-            var currentUser = User.Identity.GetUserName();
+            var currentUser = _accountRepository.FindById(User.Identity.GetUserId()).Email;
 
             var invite = new InviteModel
             {
@@ -235,7 +235,7 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
-            _initiativeBusiness.ConfirmInvitation(initiative.Id, User.Identity.Name);
+            _initiativeBusiness.ConfirmInvitation(initiative.Id, _accountRepository.FindById(User.Identity.GetUserId()).Email);
 
             return View((object)initiative.Name);
         }
@@ -252,7 +252,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var isConfirmed = _accountRepository.GetUser(User.Identity.Name).EMailConfirmed;
+            var isConfirmed = _accountRepository.GetUser(_accountRepository.FindById(User.Identity.GetUserId()).Email).EMailConfirmed;
             var initiative = GetInitiativeViewModel(id);
 
             if (!isConfirmed)
@@ -280,7 +280,7 @@ namespace Quilt4.Web.Controllers
             {
                 if (createInitiative == null) throw new ArgumentNullException("createInitiative");
 
-                var developerName = User.Identity.GetUserName();
+                var developerName = _accountRepository.FindById(User.Identity.GetUserId()).Email;
                 _initiativeBusiness.Create(developerName, createInitiative.Name);
 
                 return RedirectToAction("Index");
@@ -315,7 +315,7 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.Name, id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
 
             try
             {

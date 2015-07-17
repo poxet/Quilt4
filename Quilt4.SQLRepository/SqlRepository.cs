@@ -76,7 +76,7 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName)
+        public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerEmail)
         {
             throw new NotImplementedException();
         }

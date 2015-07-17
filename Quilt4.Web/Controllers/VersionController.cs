@@ -15,20 +15,22 @@ namespace Quilt4.Web.Controllers
         private readonly ISessionBusiness _sessionBusiness;
         private readonly IUserBusiness _userBusiness;
         private readonly IMachineBusiness _machineBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public VersionController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness)
+        public VersionController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, ISessionBusiness sessionBusiness, IUserBusiness userBusiness, IMachineBusiness machineBusiness, IAccountRepository accountRepository)
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _sessionBusiness = sessionBusiness;
             _userBusiness = userBusiness;
             _machineBusiness = machineBusiness;
+            _accountRepository = accountRepository;
         }
 
         // GET: Version/Details/5
         public ActionResult Details(string id, string application, string version)
         {
-            var initiative = _initiativeBusiness.GetInitiative(User.Identity.GetUserName(), id);
+            var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var applicationId = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application).Id;
             var versions = _applicationVersionBusiness.GetApplicationVersions(applicationId).ToArray();
             var versionName = _applicationVersionBusiness.GetApplicationVersion(initiative.Id.ToString(), applicationId.ToString(), version).Version;

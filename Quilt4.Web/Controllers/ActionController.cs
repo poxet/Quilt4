@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
 
@@ -9,10 +10,12 @@ namespace Quilt4.Web.Controllers
     public class ActionController : Controller
     {
         private readonly IInitiativeBusiness _initiativeBusiness;
+        private readonly IAccountRepository _accountRepository;
 
-        public ActionController(IInitiativeBusiness initiativeBusiness)
+        public ActionController(IInitiativeBusiness initiativeBusiness, IAccountRepository accountRepository)
         {
             _initiativeBusiness = initiativeBusiness;
+            _accountRepository = accountRepository;
         }
 
         // GET: Action
@@ -21,7 +24,7 @@ namespace Quilt4.Web.Controllers
             var invitations = new List<InitiativeInvitationModel>();
             if (User.Identity.IsAuthenticated)
             {
-                invitations = _initiativeBusiness.GetInvitations(User.Identity.Name).Select(x => new InitiativeInvitationModel
+                invitations = _initiativeBusiness.GetInvitations(_accountRepository.FindById(User.Identity.GetUserId()).Email).Select(x => new InitiativeInvitationModel
                 {
                     InitiativeId = x.InitiativeId,
                     InitiativeName = x.InitiativeName,
