@@ -60,7 +60,16 @@ else
 
             <tr style="display: table-row">
                 <td>@Html.CheckBoxFor(x => x.Versions[i].Checked)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].VersionIdentifier }, null)<br/></td>
+                <td style="padding: 0 5px;">
+                    @if (ViewBag.IsArchive)
+                    {
+                        @Model.Versions[i].Version
+                    }
+                    else
+                    {
+                        @Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].VersionIdentifier }, null)<br/>
+                    }
+                </td>
                 <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
                 <td style="padding: 0 5px;"><div id="Machine-@Model.Versions[i].VersionId" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
                 <td style="padding: 0 5px;"><div id="Session-@Model.Versions[i].VersionId" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
