@@ -77,8 +77,6 @@ namespace Quilt4.Web.Controllers
             return response;
         }
 
-            return View(new FiveLatestIssuesModel());
-        }
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
