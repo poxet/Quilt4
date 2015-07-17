@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
@@ -29,15 +30,11 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult Index()
         {
-            
             if (User.Identity.IsAuthenticated) { 
                 var userEmail = User.Identity.Name;
-                var versions = _applicationVersionBusiness.GetApplicationVersionsForDeveloper(userEmail);
-                var issueTypes = versions.SelectMany(x => x.IssueTypes).ToArray();
+                var issueTypes = _issueBusiness.GetIssueTypesForDeveloper(userEmail).ToArray();
                 var fiveIssues = _issueBusiness.GetFiveLatestErrorIssusByIssueTypes(issueTypes).ToArray();
-
                 var selectedIssueTypes = fiveIssues.SelectMany(x => issueTypes.Where(y => y.Issues.Contains(x))).Distinct().ToArray();
-
                 var model = new FiveLatestIssuesModel();
 
                 IApplicationVersion version;

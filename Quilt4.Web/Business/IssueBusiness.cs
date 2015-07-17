@@ -186,10 +186,15 @@ namespace Quilt4.Web.Business
             return response;
         }
 
-        public IEnumerable<IIssue> GetFiveLatestErrorIssusByIssueTypes(IIssueType[] issueTypes)
+        public IEnumerable<IIssue> GetFiveLatestErrorIssusByIssueTypes(IEnumerable<IIssueType> issueTypes)
         {
             var fiveIssues = issueTypes.Where(x => x.IssueLevel == IssueLevel.Error).SelectMany(x => x.Issues).OrderByDescending(x => x.ServerTime).Take(5).ToArray();
             return fiveIssues;
+        }
+
+        public IEnumerable<IIssueType> GetIssueTypesForDeveloper(string userEmail)
+        {
+            return _repository.GetApplicationVersionsForDeveloper(userEmail).SelectMany(x => x.IssueTypes).ToArray();
         }
 
         private ApplicationData GetApplicationData(RegisterIssueRequest request, ISession session)

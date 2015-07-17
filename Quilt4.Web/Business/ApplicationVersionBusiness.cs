@@ -135,11 +135,6 @@ namespace Quilt4.Web.Business
             _repository.DeleteApplicationVersion(applicationVersionFingerprint);
         }
 
-        public IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName)
-        {
-            return _repository.GetApplicationVersionsForDeveloper(developerName);
-        }
-
         public IEnumerable<IApplicationVersion> GetApplicationVersionsForApplications(IEnumerable<Guid> initiativeId)
         {
             return _repository.GetApplicationVersionsForApplications(initiativeId);

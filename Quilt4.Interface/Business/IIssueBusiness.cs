@@ -8,6 +8,7 @@ namespace Quilt4.Interface
     {
         ILogResponse RegisterIssue(Exception exception, IssueLevel issueLevel);
         RegisterIssueResponse RegisterIssue(RegisterIssueRequest data);
-        IEnumerable<IIssue> GetFiveLatestErrorIssusByIssueTypes(IIssueType[] issueTypes);
+        IEnumerable<IIssue> GetFiveLatestErrorIssusByIssueTypes(IEnumerable<IIssueType> issueTypes);
+        IEnumerable<IIssueType> GetIssueTypesForDeveloper(string userEmail);
     }
 }

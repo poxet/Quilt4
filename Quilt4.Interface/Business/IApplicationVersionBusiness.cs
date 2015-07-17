@@ -11,6 +11,5 @@ namespace Quilt4.Interface
         IApplicationVersion GetApplicationVersion(string initiativeId, string applicationId, string applicationVersionUniqueIdentifier);
         IEnumerable<IApplicationVersion> GetArchivedApplicationVersions(Guid applicationId);
         IApplicationVersion GetApplicationVersionByIssue(Guid issueId);
-        IEnumerable<IApplicationVersion> GetApplicationVersionsForDeveloper(string developerName);
     }
 }
