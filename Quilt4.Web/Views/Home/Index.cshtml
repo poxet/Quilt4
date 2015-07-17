@@ -1,5 +1,5 @@
 ﻿@using Castle.Core.Internal
-@model Quilt4.Web.Models.FiveLatestIssuesModel
+@*@model Quilt4.Web.Models.FiveLatestIssuesModel*@
 @{
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,32 +10,57 @@
     @{ Html.RenderAction("_EventLogAlert", "Action", new { area = "Admin" }); }
     @{ Html.RenderAction("_InitiativeInvitations", "Action"); }
 </div>
-@if (!Model.ItemsInIssueModel.IsNullOrEmpty())
-{
-    <table>
-        <tr style="border-bottom-color: black; border-bottom-style: solid;">
-            <th style="padding: 0 5px;">Issue Type Name</th>
-            <th style="padding: 0 5px;">Level</th>
-            <th style="padding: 0 5px;">Time</th>
-            <th style="padding: 0 5px;">Visible</th>
-            <th style="padding: 0 5px;">IssueType Ticket</th>
-            <th style="padding: 0 5px;">Issue Ticket</th>
-        </tr>
 
-        @foreach (var item in Model.ItemsInIssueModel)
-        {
-            <tr>
-                <td style="padding: 0 5px;">@Html.ActionLink(@item.IssueTypeName, "Details", "IssueType", new { id = @item.InitativeId, application = @item.ApplicationName, version = @item.ApplicationVersion.Replace(":", ""), issueType = @item.IssueTypeTicket }, null)</td>
-                <td style="padding: 0 5px;">@item.IssueTypeLevel</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@item.IssueTime.ToLocalTime()">@item.IssueTime.ToLocalTime().ToTimeAgo() ago</td>
-                <td style="padding: 0 5px;">@item.IssueVisible</td>
-                <td style="padding: 0 5px;">@item.IssueTypeTicket</td>
-                <td style="padding: 0 5px;">@item.IssueTicket</td>
-            </tr>
-        }
-    </table>
-}
+<table>
+    <tr style="border-bottom-color: black; border-bottom-style: solid;">
+        <th style="padding: 0 5px;">Issue Type Name</th>
+        <th style="padding: 0 5px;">Level</th>
+        <th style="padding: 0 5px;">Time</th>
+        <th style="padding: 0 5px;">Visible</th>
+        <th style="padding: 0 5px;">IssueType Ticket</th>
+        <th style="padding: 0 5px;">Issue Ticket</th>
+    </tr>
+
+    @for (var i = 0; i < 5; i++)
+    {
+        <tr>
+            
+            <td><div id="IssueName-@i" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+            <td><div id="Level-@i" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+            <td><div id="Time-@i" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+            <td><div id="Visible-@i" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+            <td><div id="IssueTypeTicket-@i" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+            <td><div id="IssueTicket-@i" style="background-image: url('../../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+            
+        </tr>
+    }
+</table>
+
     
-   
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            function getIssues() {
+                var url = "/Home/Issues";
+                $.getJSON(url, {}, function (data) {
+                    alert(data);
+                    //TODO:Display data
+                    //$.each(data, function (i, item) {
+                        //var issueNameDiv = document.getElementById("IssueName-" + i);
+                        //issueNameDiv.removeProperty("background-image");
+                        //issueNameDiv.innerHTML = item.IssueTypeName;
+                    });
+                        
+                    
+                });
+            }
+
+            getIssues();
+        });
+    </script>
+
+
 
 

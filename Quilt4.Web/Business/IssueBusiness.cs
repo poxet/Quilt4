@@ -194,7 +194,8 @@ namespace Quilt4.Web.Business
 
         public IEnumerable<IIssueType> GetIssueTypesForDeveloper(string userEmail)
         {
-            return _repository.GetApplicationVersionsForDeveloper(userEmail).SelectMany(x => x.IssueTypes).ToArray();
+            var issuetypes = _repository.GetApplicationVersionsForDeveloper(userEmail).SelectMany(x => x.IssueTypes).ToArray();
+            return issuetypes;
         }
 
         private ApplicationData GetApplicationData(RegisterIssueRequest request, ISession session)
