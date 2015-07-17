@@ -130,20 +130,21 @@ else
             });
         }
 
-        getSessions();
-    });
-
-
-    $(document).ready(function() {
-
-
         function getMachines() {
             var url = "/Application/Machines";
-            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function(data) {
-                alert(data);
+            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
+                $.each(data, function (i, item) {
+                    var oDiv = document.getElementById("Machine-" + item.Id);
+                    if (oDiv != null) {
+                        oDiv.style.removeProperty("background-image");
+                        oDiv.innerHTML = item.MachineCount;
+                    }
+                });
             });
         }
 
+        getSessions();
         getMachines();
+
     });
 </script>

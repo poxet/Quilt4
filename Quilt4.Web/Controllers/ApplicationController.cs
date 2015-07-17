@@ -105,7 +105,8 @@ namespace Quilt4.Web.Controllers
                     Environments = ss.GroupBy(y => y.Environment).Select(z => new
                     {
                         Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
-                        Color = GetEnvironmentColor(z.Key)
+                        //Color = GetEnvironmentColor(z.Key) //TODO: Fungerar inte, ger ObjectDisposedException
+                        Color = "000000"
                     })
                 };
             }).ToArray();
@@ -121,11 +122,7 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
-            var machines = new List<IMachine>();
-            foreach (var version in versions)
-            {
-                machines.AddRange(_machineBusiness.GetMachinesByApplicationVersion(version.Id));
-            }
+            
             //var sessions = _machineBusiness.GetMachinesByApplicationVersions()
 
             //var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
@@ -133,9 +130,9 @@ namespace Quilt4.Web.Controllers
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
             
             var ms = versions.Select(x => new
-
             {
-                MachineCount = machines.Count()
+                Id = x.Id,
+                MachineCount = _machineBusiness.GetMachinesByApplicationVersion(x.Id).Count(),
             }).ToArray();
 
             var response = Json(ms, JsonRequestBehavior.AllowGet);
