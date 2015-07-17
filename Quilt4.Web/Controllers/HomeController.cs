@@ -30,48 +30,6 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult Index()
         {
-            //if (User.Identity.IsAuthenticated) { 
-            //    var userEmail = User.Identity.Name;
-            //    var issueTypes = _issueBusiness.GetIssueTypesForDeveloper(userEmail).ToArray();
-            //    var fiveIssues = _issueBusiness.GetFiveLatestErrorIssusByIssueTypes(issueTypes).ToArray();
-            //    var selectedIssueTypes = fiveIssues.SelectMany(x => issueTypes.Where(y => y.Issues.Contains(x))).Distinct().ToArray();
-            //    var model = new FiveLatestIssuesModel();
-
-            //    IApplicationVersion version;
-            //    IApplication application;
-
-            //    var list = new List<ItemsInIssueModel>();
-
-            //    foreach (var issueType in selectedIssueTypes)
-            //    {
-            //        foreach (var issue in fiveIssues)
-            //        {
-            //            if (issueType.Issues.Any(x => x.Id == issue.Id))
-            //            {
-            //                version = _applicationVersionBusiness.GetApplicationVersionByIssue(issue.Id);
-            //                application = _initiativeBusiness.GetApplicationByVersion(version.Id);
-            //                var itemInModel = new ItemsInIssueModel
-            //                {
-            //                    IssueTypeName = issueType.ExceptionTypeName,
-            //                    IssueTypeLevel = issueType.IssueLevel.ToString(),
-            //                    IssueTime = issue.ServerTime,
-            //                    IssueVisible = issue.VisibleToUser.ToString(),
-            //                    IssueTypeTicket = issueType.Ticket,
-            //                    IssueTicket = issue.Ticket,
-            //                    ApplicationVersion = version.Id,
-            //                    ApplicationName = application.Name,
-            //                    InitativeId = _initiativeBusiness.GetInitiativeByApplication(application.Id).Id.ToString(),
-                                
-            //                };
-            //                list.Add(itemInModel);
-            //            }
-            //        }
-            //    }
-
-            //    model.ItemsInIssueModel = list.OrderByDescending(x => x.IssueTime).ToArray();
-            //    return View();
-
-            //}
 
             return View();
         }
