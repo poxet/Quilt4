@@ -32,8 +32,12 @@ namespace Quilt4.Web.Controllers
             
             if (User.Identity.IsAuthenticated) { 
                 var userEmail = User.Identity.Name;
-                var issueTypes = _issueBusiness.GetLatestIssueTypesByEmail(userEmail).Distinct().ToArray();
-                var issues = issueTypes.SelectMany(x => x.Issues).OrderByDescending(x => x.ServerTime).Distinct().Take(5).ToArray();
+                var versions = _applicationVersionBusiness.GetApplicationVersionsForDeveloper(userEmail);
+                var issueTypes = versions.SelectMany(x => x.IssueTypes).ToArray();
+                var fiveIssues = _issueBusiness.GetFiveLatestErrorIssusByIssueTypes(issueTypes).ToArray();
+
+                var selectedIssueTypes = fiveIssues.SelectMany(x => issueTypes.Where(y => y.Issues.Contains(x))).Distinct().ToArray();
+
                 var model = new FiveLatestIssuesModel();
 
                 IApplicationVersion version;
@@ -41,9 +45,9 @@ namespace Quilt4.Web.Controllers
 
                 var list = new List<ItemsInIssueModel>();
 
-                foreach (var issueType in issueTypes)
+                foreach (var issueType in selectedIssueTypes)
                 {
-                    foreach (var issue in issues)
+                    foreach (var issue in fiveIssues)
                     {
                         if (issueType.Issues.Any(x => x.Id == issue.Id))
                         {
