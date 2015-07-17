@@ -314,10 +314,10 @@ namespace Quilt4.Web.Business
             return d;
         }
 
-        public IDictionary<string, string> GetEnvironmentColors(string userId)
+        public IDictionary<string, string> GetEnvironmentColors(string userId, string userName)
         {
             var environmentColors = _repository.GetEnvironmentColors(userId);
-            var userName = _accountRepository.FindById(userId).UserName;
+            
             var colors = new Dictionary<string, string>();
             foreach (var e in environmentColors)
             {

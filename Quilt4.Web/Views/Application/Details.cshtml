@@ -104,7 +104,7 @@ else
 <!-- När sidan har laddats in skall ytterligare data börja laddas in. -->
 <script type="text/javascript">
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         function getSessions() {
             var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Sessions";
@@ -131,7 +131,7 @@ else
         }
 
         function getMachines() {
-            var url = "/Application/Machines";
+            var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Machines";
             $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application' }, function (data) {
                 $.each(data, function (i, item) {
                     var oDiv = document.getElementById("Machine-" + item.Id);

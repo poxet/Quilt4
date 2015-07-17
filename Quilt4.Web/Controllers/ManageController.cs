@@ -62,7 +62,7 @@ namespace Quilt4.Web.Controllers
         public ActionResult EditEnvironmentColors()
         {
             //TODO: If provided is not the userName, but the userId, find the userId by the userName.
-            var environmentColors = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId());
+            var environmentColors = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
 
             return View(environmentColors);
         }

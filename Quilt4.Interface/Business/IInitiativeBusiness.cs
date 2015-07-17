@@ -23,7 +23,7 @@ namespace Quilt4.Interface
         void DeleteInitiative(Guid id);
         void DeleteApplicationVersion(string applicationVersionFingerprint);
         void ArchiveApplicationVersion(string versionId);
-        IDictionary<string, string> GetEnvironmentColors(string userName);
+        IDictionary<string, string> GetEnvironmentColors(string userId, string userName);
         void UpdateEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         //void AddEnvironmentColors(string userId, IDictionary<string, string> environmentColors);
         IInitiative GetInitiativeByInviteCode(string inviteCode);

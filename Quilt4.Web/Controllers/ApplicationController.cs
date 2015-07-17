@@ -106,8 +106,8 @@ namespace Quilt4.Web.Controllers
                     Environments = ss.GroupBy(y => y.Environment).Select(z => new
                     {
                         Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
-                        //Color = GetEnvironmentColor(z.Key) //TODO: Fungerar inte, ger ObjectDisposedException
-                        Color = "000000"
+                        //Color = GetEnvironmentColor(z.Key) //TODO: ger ObjectDisposedException ibland
+                        Color = "000fff",
                     })
                 };
             }).ToArray();
@@ -123,12 +123,7 @@ namespace Quilt4.Web.Controllers
             var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
             var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
-            
-            //var sessions = _machineBusiness.GetMachinesByApplicationVersions()
 
-            //var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
-
-            //TODO: Här skall data som first, last och en lista med environments och dess färger med.
             var ms = new List<object>();
             foreach (var version in versions)
             {
@@ -145,7 +140,8 @@ namespace Quilt4.Web.Controllers
 
         private string GetEnvironmentColor(string environmentName)
         {
-            var cols = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId());
+            var userName = _accountRepository.FindById(User.Identity.GetUserId());
+            var cols = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
             var response = cols[environmentName];
             return response;
         }
