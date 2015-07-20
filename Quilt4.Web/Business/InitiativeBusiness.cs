@@ -53,9 +53,10 @@ namespace Quilt4.Web.Business
             return initiatives;
         }
 
-        public IEnumerable<IInvitation> GetInvitations(string email)
+        public IEnumerable<IInvitation> GetInvitations(string userId)
         {
-            return _repository.GetInvitations(email);
+            var user = _accountRepository.FindById(userId);
+            return _repository.GetInvitations(user.Email);
         }
 
         public string GenerateInviteMessage(string initiativeid, string code, string message, Uri url)

@@ -24,7 +24,7 @@ namespace Quilt4.Web.Controllers
             var invitations = new List<InitiativeInvitationModel>();
             if (User.Identity.IsAuthenticated)
             {
-                invitations = _initiativeBusiness.GetInvitations(_accountRepository.FindById(User.Identity.GetUserId()).Email).Select(x => new InitiativeInvitationModel
+                invitations = _initiativeBusiness.GetInvitations(User.Identity.GetUserId()).Select(x => new InitiativeInvitationModel
                 {
                     InitiativeId = x.InitiativeId,
                     InitiativeName = x.InitiativeName,

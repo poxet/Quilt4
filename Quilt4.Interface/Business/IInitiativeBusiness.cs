@@ -29,7 +29,7 @@ namespace Quilt4.Interface
         IInitiative GetInitiativeByInviteCode(string inviteCode);
         void ConfirmInvitation(Guid initiativeId, string developerEmail);
         void DeclineInvitation(string inviteCode);
-        IEnumerable<IInvitation> GetInvitations(string email);
+        IEnumerable<IInvitation> GetInvitations(string userId);
         string GenerateInviteMessage(string initiativeid, string code, string message, Uri url);
         IApplication GetApplicationByVersion(string versionId);
         IInitiative GetInitiativeByApplication(Guid applicationId);
