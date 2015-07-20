@@ -378,12 +378,12 @@ namespace Quilt4.MongoDBRepository
             {
                 environmentPersist = Database.GetCollection("UserProperties").FindAllAs<UserPropertiesPersist>().Single(x => x.Id == userId);
                 environmentPersist.EnvironmentColors = environmentColors;
-                Database.GetCollection("UserProperties").Insert(environmentPersist, WriteConcern.Acknowledged);
+                Database.GetCollection("UserProperties").Save(environmentPersist, WriteConcern.Acknowledged);
             }
             else
             {
                 environmentPersist = new UserPropertiesPersist() { Id = userId, EnvironmentColors = environmentColors };
-                Database.GetCollection("UserProperties").Save(environmentPersist, WriteConcern.Acknowledged);
+                Database.GetCollection("UserProperties").Insert(environmentPersist, WriteConcern.Acknowledged);
             }
         }
 
