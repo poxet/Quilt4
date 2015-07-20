@@ -15,9 +15,30 @@
     }
 
     @Html.Partial("_EnvironmentLegendPartial", Model.Environments)
-    
-    @Html.Partial("_IssueLevelLegendPartial")
-    
+
+    //@Html.Partial("_IssueLevelLegendPartial")
+
+    <h4>Level Legend</h4>
+    <table>
+        <tr>
+            <th>Error</th>
+            <td style="padding-left: 20px;"><span id="ErrorFilterButton" onclick='toggleLevelFilterButton("Error")' style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span></td>
+        </tr>
+        <tr>
+            <th>Warning</th>
+            <td style="padding-left: 20px;"><span id="WarningFilterButton" onclick='toggleLevelFilterButton("Warning")' style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span></td>
+        </tr>
+        <tr>
+            <th>Information</th>
+            <td style="padding-left: 20px;"><span id="InformationFilterButton" onclick='toggleLevelFilterButton("Information")' style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span></td>
+        </tr>
+    </table>
+
+    <script type="text/javascript" src="~/Scripts/searchFilter.js"></script>
+    <script type="text/javascript">
+        setLevelFilterButtonStyle();
+    </script>
+
     <table>
         <tr style="border-bottom-color: black; border-bottom-style: solid;">
             <th style="padding: 0 5px;">Initiative</th>
@@ -41,15 +62,15 @@
                 <td style="padding: 0 5px;">
                     @if (@row.IssueType.IssueLevel.ToString() == "Error")
                     {
-                        <span class="Error" id="ErrorLegendButton" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
+                        <span class="Error" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
                     }
                     @if (@row.IssueType.IssueLevel.ToString() == "Warning")
                     {
-                        <span class="Warning" id="WarningLegendButton" style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span>
+                        <span class="Warning" style="background-color: yellow; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Warning"></span>
                     }
-                    @if (@row.IssueType.IssueLevel.ToString() == "Warning")
+                    @if (@row.IssueType.IssueLevel.ToString() == "Information")
                     {
-                        <span class="Information" id="InformationLegendButton" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
+                        <span class="Information" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
                     }
                 </td>
                 <td style="padding: 0 5px;">
@@ -66,6 +87,9 @@
             </tr>
         }
     </table>
+    <script type="text/javascript">
+        updateLevelRows();
+    </script>
 }
 else
 {
