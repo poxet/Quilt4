@@ -417,12 +417,19 @@ namespace Quilt4.Web.Controllers
         public async Task<ActionResult> ChangeUsername(ChangeUsernameModel model)
         {
             var username = _accountRepository.FindById(User.Identity.GetUserId()).UserName;
-
             var userAsync = await _accountRepository.FindAsync(username, model.Password);
-            
-            if (userAsync == null)
+            var allUsernames = _accountRepository.GetUsers().Select(x => x.UserName).ToArray();
+
+            if (allUsernames.Any(x => x.Equals(model.NewUsername)) || userAsync == null)
             {
-                ViewBag.WrongPassword = "Incorrect password!";
+                if (allUsernames.Any(x => x.Equals(model.NewUsername)))
+                {
+                    ViewBag.UsernameAlreadyExists = "Username already exists!";
+                }
+                if (userAsync == null)
+                {
+                    ViewBag.WrongPassword = "Incorrect password!";
+                }
                 return View();
             }
 
