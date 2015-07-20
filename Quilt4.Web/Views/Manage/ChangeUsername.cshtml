@@ -7,9 +7,14 @@
 
 <h2>Change Username</h2>
 
-@using (Html.BeginForm("ChangeUsername", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ChangeUsername", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    //must be here because chrome ignores autocomplete=off
+    <input style="display:none" type="text" name="fakeusernameremembered" />
+    <input style="display:none" type="password" name="fakepasswordremembered" />
 
     <div class="form-group">
         @Html.LabelFor(m => m.NewUsername, new { @class = "col-md-2 control-label" })
@@ -29,6 +34,8 @@
             <input type="submit" value="Change username" class="btn btn-default" />
         </div>
     </div>
-
 }
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

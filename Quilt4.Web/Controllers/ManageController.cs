@@ -409,7 +409,11 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult ChangeUsername()
         {
-            return View();
+            var model = new ChangeUsernameModel()
+            {
+                NewUsername = _accountRepository.FindById(User.Identity.GetUserId()).UserName,
+            };
+            return View(model);
         }
 
         [HttpPost]
@@ -440,7 +444,11 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult ChangeEmail()
         {
-            return View();
+            var model = new ChangeEmailModel()
+            {
+                NewEmail = _accountRepository.FindById(User.Identity.GetUserId()).Email,
+            };
+            return View(model);
         }
 
         [HttpPost]
