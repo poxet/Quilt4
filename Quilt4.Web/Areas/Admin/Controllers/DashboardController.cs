@@ -64,11 +64,14 @@ namespace Quilt4.Web.Areas.Admin.Controllers
             adminViewModel.SendEMailEnabled = emailSetting.SendEMailEnabled.ToString();
             adminViewModel.EMailConfirmationEnabled = emailSetting.EMailConfirmationEnabled.ToString();
 
-            adminViewModel.InfluxDbEnabled = _influxDbAgent.IsEnabled;
-            adminViewModel.InfluxDbOnline = _influxDbAgent.CanConnect();
-            adminViewModel.InfluxDbUrl = _influxDbAgent.GetSetting().Url;
-            adminViewModel.InfluxDbName = _influxDbAgent.GetSetting().DatabaseName;
-            adminViewModel.InfluxDbVersion = _influxDbAgent.GetDatabaseVersion();
+            if (_influxDbAgent.IsEnabled)
+            {
+                adminViewModel.InfluxDbEnabled = _influxDbAgent.IsEnabled;
+                adminViewModel.InfluxDbOnline = _influxDbAgent.CanConnect();
+                adminViewModel.InfluxDbUrl = _influxDbAgent.GetSetting().Url;
+                adminViewModel.InfluxDbName = _influxDbAgent.GetSetting().DatabaseName;
+                adminViewModel.InfluxDbVersion = _influxDbAgent.GetDatabaseVersion();
+            }
 
             return View(adminViewModel);
         }
