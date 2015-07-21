@@ -2,27 +2,20 @@
 function updateRows() {
     var parameters = window.location.href.split("?").pop();
     var keys = parameters.split("&");
-    keys.shift();//remove searhText
-    console.log(keys);
-
-    //Show row ONLY if all keys is set to show
-    //If no keys, show all
-
+    keys.shift();//removes searhText
+    
     var rows = document.getElementById("resultlist").getElementsByTagName("tr");
-    //console.log(rows);
 
     if (keys.length > 0) {
         for (var i = 1; i < rows.length; i++) {
             var showcount = 0;
             var childs = rows[i].getElementsByTagName("td");
-            console.log("Childs: " + childs.length);
+
             for (var j = 0; j < childs.length; j++) {
-                //console.log(childs[j].className + ": " + getUrl(childs[j].className));
                 if (getUrl(childs[j].className) == "Show") {
                     showcount++;
                 }
             }
-            //console.log("----------------------------");
 
             if (keys.length == showcount) {
                 rows[i].style.display = "table-row";
@@ -76,11 +69,11 @@ function toggleLevelFilterButton(level) {
 }
 
 //VERSIONFILTER
-function toggleVersionFilterButton(version) {
+function setVersionFilterButtonStyle(version) {
     var url = getUrl("Version-" + version);
 
     if (url == "Show") {
-        document.getElementById("Initiative-" + version).style.padding = "5px";
+        document.getElementById("Version-" + version).style.padding = "5px";
     }
 }
 
@@ -96,11 +89,12 @@ function toggleVersionFilterButton(version) {
     updateRows();
 }
 //APPLICATIONFILTER
-function toggleApplicationFilterButton(application) {
+function setApplicationFilterButtonStyle(application) {
+    console.log(application);
     var url = getUrl("Application-" + application);
 
     if (url == "Show") {
-        document.getElementById("Initiative-" + application).style.padding = "5px";
+        document.getElementById("Application-" + application).style.padding = "5px";
     }
 }
 
@@ -122,9 +116,7 @@ function setInitiativeFilterButtonStyle(initiativeName) {
     
     if (url == "Show") {
         document.getElementById("Initiative-" + initiativeName).style.padding = "5px";
-    } //else {
-    //    document.getElementById("Initiative-" + initiativeName).style.padding = "10px";
-    //}
+    }
 }
 
 function toggleInitiativeFilterButton(initiativeName) {

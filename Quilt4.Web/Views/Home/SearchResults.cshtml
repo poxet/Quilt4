@@ -40,12 +40,19 @@
     <script type="text/javascript" src="~/Scripts/searchFilter.js"></script>
     
     <script type="text/javascript">
-        setLevelFilterButtonStyle();
-        @foreach (var initiativeName in Model.SearchResultRows.Select(x => x.InitiativeName).Distinct())
-        {
-            @Html.Raw("setInitiativeFilterButtonStyle('" + (initiativeName ?? Constants.DefaultInitiativeName) + "');");
-        }
-        
+    setLevelFilterButtonStyle();
+    @foreach (var initiativeName in Model.SearchResultRows.Select(x => x.InitiativeName).Distinct())
+    {
+        @Html.Raw("setInitiativeFilterButtonStyle('" + (initiativeName ?? Constants.DefaultInitiativeName) + "');");
+    }
+    @foreach (var application in Model.SearchResultRows.Select(x => x.ApplicationName).Distinct())
+    {
+        @Html.Raw("setApplicationFilterButtonStyle('" + application + "');");
+    }
+    @foreach (var version in Model.SearchResultRows.Select(x => x.Version).Distinct())
+    {
+        @Html.Raw("setVersionFilterButtonStyle('" + version + "');");
+    }
     </script>
 
     <table id="resultlist">
