@@ -59,6 +59,7 @@
     <Compile Include="DataBaseInfo.cs" />
     <Compile Include="Developer.cs" />
     <Compile Include="EmailSetting.cs" />
+    <Compile Include="GoogleAuthSetting.cs" />
     <Compile Include="Invitation.cs" />
     <Compile Include="IssueLevelExtensions.cs" />
     <Compile Include="Link.cs" />

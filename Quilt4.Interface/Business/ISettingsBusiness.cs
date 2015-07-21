@@ -16,5 +16,6 @@ namespace Quilt4.Interface
         IInfluxDbSetting GetInfluxDBSetting();
         void SetEventLogReadDate(DateTime dateTime);
         DateTime GetEventLogReadDate();
+        IGoogleAuthSetting GetGoogleAuthSetting();
     }
 }

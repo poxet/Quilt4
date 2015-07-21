@@ -105,6 +105,7 @@
     <Compile Include="Entity\IEmailSetting.cs" />
     <Compile Include="Agent\IEventLogAgent.cs" />
     <Compile Include="Entity\IFingerprint.cs" />
+    <Compile Include="Entity\IGoogleAuthSetting.cs" />
     <Compile Include="Entity\IInitiative.cs" />
     <Compile Include="Business\IInitiativeBusiness.cs" />
     <Compile Include="Entity\IInitiativeHead.cs" />

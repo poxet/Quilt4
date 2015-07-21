@@ -11,7 +11,8 @@ namespace Quilt4.Web
         public void Configuration(IAppBuilder app)
         {
             var factory = MvcApplication.Container.Resolve<IRepositoryHandler>();
-            ConfigureAuth(app, factory);
+            var settingsBusiness = MvcApplication.Container.Resolve<ISettingsBusiness>();
+            ConfigureAuth(app, factory, settingsBusiness);
         }
     }
 }

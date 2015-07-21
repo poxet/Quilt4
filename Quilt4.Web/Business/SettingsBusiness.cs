@@ -61,6 +61,11 @@ namespace Quilt4.Web.Business
             _repository.SetSetting(new Setting(name, value, type.ToString(), encrypt));
         }
 
+        public IGoogleAuthSetting GetGoogleAuthSetting()
+        {
+            return new GoogleAuthSetting(GetSettingValue("GoogleAuthClientId", string.Empty), GetSettingValue("GoogleAuthClientSecret", string.Empty));
+        }
+
         public IEmailSetting GetEmailSetting()
         {
             return new EmailSetting(GetSettingValue("SupportEmailAddress", "info@quilt4net.com"), GetSettingValue("SmtpServerAddress", "smtp.quilt4net.com"), GetSettingValue("SmtpServerPort", 587), GetSettingValue("SendEMailEnabled", false), GetSettingValue("EMailConfirmationEnabled", false), GetSettingValue("SmtpUserName", string.Empty), GetSettingValue("SmtpPassword", string.Empty, true));

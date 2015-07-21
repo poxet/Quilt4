@@ -5,13 +5,14 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using Quilt4.Interface;
+using Quilt4.Web.Business;
 
 namespace Quilt4.Web
 {
     public partial class Startup
     {
         // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
-        public void ConfigureAuth(IAppBuilder app, IRepositoryHandler factory)
+        public void ConfigureAuth(IAppBuilder app, IRepositoryHandler factory, ISettingsBusiness settingsBusiness)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
             //factory.RegisterApplicationDbContext(app);
@@ -58,11 +59,15 @@ namespace Quilt4.Web
             //   appId: "",
             //   appSecret: "");
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            var googleSetting = settingsBusiness.GetGoogleAuthSetting();
+            if (!(string.IsNullOrEmpty(googleSetting.ClientId) || string.IsNullOrEmpty(googleSetting.ClientSecret)))
             {
-                ClientId = "158318680363-rhaekhrols59uja9g8de8lu2ed98tkiu.apps.googleusercontent.com",
-                ClientSecret = "xPmI8z03HqGhZKpNeytveSUs"
-            });
+                app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+                 {
+                     ClientId = googleSetting.ClientId,
+                     ClientSecret = googleSetting.ClientSecret,
+                 });
+            }
         }
     }
 }
