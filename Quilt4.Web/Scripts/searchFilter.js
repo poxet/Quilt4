@@ -1,4 +1,5 @@
-﻿function updateLevelRows() {
+﻿//LEVELFILTER
+function updateLevelRows() {
     toggleLevelRows("Error");
     toggleLevelRows("Warning");
     toggleLevelRows("Information");
@@ -111,6 +112,45 @@ function toggleLevelRows(level) {
     }
 }
 
+//INITIATIVEFILTER
+function setInitiativeFilterButtonStyle(initiativeName) {
+    var url = getUrl("Initiative-" + initiativeName);
+    
+    if (url == "Checked") {
+        document.getElementById("Initiative-" + initiativeName).style.padding = "5px";
+    } else {
+        document.getElementById("Initiative-" + initiativeName).style.padding = "10px";
+    }
+}
+
+function toggleInitiativeFilterButton(initiativeName) {
+    if (document.getElementById(initiativeName).style.padding == "10px") {
+        document.getElementById(initiativeName).style.padding = "5px";
+        setUrl(initiativeName, "Checked");
+    } else {
+        document.getElementById(initiativeName).style.padding = "10px";
+        setUrl(initiativeName, "UnChecked");
+    }
+
+    toggleInitiativeRows(initiativeName);
+}
+
+function toggleInitiativeRows(initiativeName) {//read values from url and set rows to show/hide
+    var url = getUrl(initiativeName);
+    var rows = document.getElementsByClassName(initiativeName);
+
+    if (url == "Checked") {
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].parentNode.style.display = "none";
+        }
+    } else {
+        for (var j = 0; j < rows.length; j++) {
+            rows[j].parentNode.style.display = "table-row";
+        }
+    }
+}
+
+//URL
 function setUrl(name, value) {
     var parameters = window.location.href.split("?").pop();
     var keys = parameters.split("&");

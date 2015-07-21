@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Quilt4.Web.Models.SearchResultRowModel>
+<h4>Initiatives Legend</h4>
+<div id="Initiative-Legend-Container">
+</div>
+<script type="text/javascript">
+    function addInitiativeToLegend(name) {
+        var container = document.getElementById("Initiative-Legend-Container");
+        var i = "Initiative-" + name;
+
+        if (document.getElementById(i) == null) {
+            container.innerHTML = container.innerHTML + "<span id='" + i + "' style='padding:10px;border:1px solid #000;margin-right:20px;' onclick='toggleInitiativeFilterButton(\"Initiative-" + name + "\")'>" + name + "</span>";
+        }
+    }
+
+    @foreach (var initiativeName in Model.Select(x => x.InitiativeName).Distinct())
+    {
+        @Html.Raw("addInitiativeToLegend('" + initiativeName + "');")
+    }
+
+</script>
