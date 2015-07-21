@@ -483,6 +483,8 @@
     <Content Include="Views\Manage\ChangeUsername.cshtml" />
     <Content Include="Views\Manage\ChangeEmail.cshtml" />
     <Content Include="Views\Shared\_InitiativeLegendPartial.cshtml" />
+    <Content Include="Views\Shared\_ApplicationLegendPartial.cshtml" />
+    <Content Include="Views\Shared\_VersionLegendPartial.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

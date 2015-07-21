@@ -1,0 +1,21 @@
+﻿@using Quilt4.Web.Models
+@model IEnumerable<Quilt4.Web.Models.SearchResultRowModel>
+<h4>Applications Legend</h4>
+<div id="Version-Legend-Container">
+</div>
+<script type="text/javascript">
+    function addVersionToLegend(name) {
+        var container = document.getElementById("Version-Legend-Container");
+        var i = "Version-" + name;
+
+        if (document.getElementById(i) == null) {
+            container.innerHTML = container.innerHTML + "<span id='" + i + "' style='padding:10px;border:1px solid #000;margin-right:20px;' onclick='toggleVersionFilterButton(\"Version-" + name + "\")'>" + name + "</span>";
+        }
+    }
+
+    @foreach (var versionName in Model.Select(x => x.Version).Distinct())
+    {
+        @Html.Raw("addVersionToLegend('" + versionName + "');");
+    }
+
+</script>

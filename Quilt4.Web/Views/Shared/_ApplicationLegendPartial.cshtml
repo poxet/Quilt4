@@ -1,0 +1,21 @@
+﻿@using Quilt4.Web.Models
+@model IEnumerable<Quilt4.Web.Models.SearchResultRowModel>
+<h4>Applications Legend</h4>
+<div id="Application-Legend-Container">
+</div>
+<script type="text/javascript">
+    function addApplicationToLegend(name) {
+        var container = document.getElementById("Application-Legend-Container");
+        var i = "Application-" + name;
+
+        if (document.getElementById(i) == null) {
+            container.innerHTML = container.innerHTML + "<span id='" + i + "' style='padding:10px;border:1px solid #000;margin-right:20px;' onclick='toggleApplicationFilterButton(\"Application-" + name + "\")'>" + name + "</span>";
+        }
+    }
+
+    @foreach (var applicationName in Model.Select(x => x.ApplicationName).Distinct())
+    {
+        @Html.Raw("addApplicationToLegend('" + applicationName + "');");
+    }
+
+</script>

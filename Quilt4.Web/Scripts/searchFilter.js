@@ -1,28 +1,61 @@
-﻿//LEVELFILTER
-function updateLevelRows() {
-    toggleLevelRows("Error");
-    toggleLevelRows("Warning");
-    toggleLevelRows("Information");
+﻿//Common
+function updateRows() {
+    var parameters = window.location.href.split("?").pop();
+    var keys = parameters.split("&");
+    keys.shift();//remove searhText
+    console.log(keys);
+
+    //Show row ONLY if all keys is set to show
+    //If no keys, show all
+
+    var rows = document.getElementById("resultlist").getElementsByTagName("tr");
+    //console.log(rows);
+
+    if (keys.length > 0) {
+        for (var i = 1; i < rows.length; i++) {
+            var showcount = 0;
+            var childs = rows[i].getElementsByTagName("td");
+            console.log("Childs: " + childs.length);
+            for (var j = 0; j < childs.length; j++) {
+                //console.log(childs[j].className + ": " + getUrl(childs[j].className));
+                if (getUrl(childs[j].className) == "Show") {
+                    showcount++;
+                }
+            }
+            //console.log("----------------------------");
+
+            if (keys.length == showcount) {
+                rows[i].style.display = "table-row";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    } else {
+        for (var a = 1; a < rows.length; a++) {
+            rows[a].style.display = "table-row";
+        }
+    }
 }
 
+//LEVELFILTER
 function setLevelFilterButtonStyle() {
     var error = getUrl("ErrorFilterButton");
     var warning = getUrl("WarningFilterButton");
     var information = getUrl("InformationFilterButton");
 
-    if (error == "Checked") {
+    if (error == "Show") {
         document.getElementById("ErrorFilterButton").style.border = "4px solid #fff";
     } else {
         document.getElementById("ErrorFilterButton").style.border = "1px solid #000";
     }
 
-    if (warning == "Checked") {
+    if (warning == "Show") {
         document.getElementById("WarningFilterButton").style.border = "4px solid #fff";
     } else {
         document.getElementById("WarningFilterButton").style.border = "1px solid #000";
     }
 
-    if (information == "Checked") {
+    if (information == "Show") {
         document.getElementById("InformationFilterButton").style.border = "4px solid #fff";
     } else {
         document.getElementById("InformationFilterButton").style.border = "1px solid #000";
@@ -33,121 +66,77 @@ function setLevelFilterButtonStyle() {
 function toggleLevelFilterButton(level) {
     if (document.getElementById(level + "FilterButton").style.border == "4px solid rgb(255, 255, 255)") {
         document.getElementById(level + "FilterButton").style.border = "1px solid #000";
-        setUrl(level + "FilterButton", "UnChecked");
+        setUrl(level + "FilterButton", "Hide");
     } else {
         document.getElementById(level + "FilterButton").style.border = "4px solid #fff";
-        setUrl(level + "FilterButton", "Checked");
+        setUrl(level + "FilterButton", "Show");
     }
 
-    toggleLevelRows(level);
+    updateRows();
 }
 
-function toggleLevelRows(level) {
-    var rows;
-    var elements;
-    var checked;
-    var i;
-    var j;
+//VERSIONFILTER
+function toggleVersionFilterButton(version) {
+    var url = getUrl("Version-" + version);
 
-    if (level == "Error") {
-        rows = document.getElementsByClassName("Error");
-        for (i = 0; i < rows.length; i++) {
-            elements = $(rows[i].parentNode).children("span");
-            checked = 0;
-
-            for (j = 0; j < elements.length; j++) {
-                if (getUrl(elements[j].className + "FilterButton") == "Checked") {
-                    checked++;
-                }
-            }
-
-            if (checked == elements.length) {
-                rows[i].parentNode.parentNode.style.display = "none";
-
-            } else {
-                rows[i].parentNode.parentNode.style.display = "table-row";
-            }
-        }
+    if (url == "Show") {
+        document.getElementById("Initiative-" + version).style.padding = "5px";
     }
-    if (level == "Warning") {
-        rows = document.getElementsByClassName("Warning");
-        for (i = 0; i < rows.length; i++) {
-            elements = $(rows[i].parentNode).children("span");
-            checked = 0;
+}
 
-            for (j = 0; j < elements.length; j++) {
-                if (getUrl(elements[j].className + "FilterButton") == "Checked") {
-                    checked++;
-                }
-            }
-
-            if (checked == elements.length) {
-                rows[i].parentNode.parentNode.style.display = "none";
-
-            } else {
-                rows[i].parentNode.parentNode.style.display = "table-row";
-            }
-        }
+function toggleVersionFilterButton(version) {
+    if (document.getElementById(version).style.padding == "10px") {
+        document.getElementById(version).style.padding = "5px";
+        setUrl(version, "Show");
+    } else {
+        document.getElementById(version).style.padding = "10px";
+        setUrl(version, "Hide");
     }
-    if (level == "Information") {
-        rows = document.getElementsByClassName("Information");
-        for (i = 0; i < rows.length; i++) {
 
-            elements = $(rows[i].parentNode).children("span");
-            checked = 0;
+    updateRows();
+}
+//APPLICATIONFILTER
+function toggleApplicationFilterButton(application) {
+    var url = getUrl("Application-" + application);
 
-            for (j = 0; j < elements.length; j++) {
-                if (getUrl(elements[j].className + "FilterButton") == "Checked") {
-                    checked++;
-                }
-            }
-
-            if (checked == elements.length) {
-                rows[i].parentNode.parentNode.style.display = "none";
-
-            } else {
-                rows[i].parentNode.parentNode.style.display = "table-row";
-            }
-        }
+    if (url == "Show") {
+        document.getElementById("Initiative-" + application).style.padding = "5px";
     }
+}
+
+function toggleApplicationFilterButton(application) {
+    if (document.getElementById(application).style.padding == "10px") {
+        document.getElementById(application).style.padding = "5px";
+        setUrl(application, "Show");
+    } else {
+        document.getElementById(application).style.padding = "10px";
+        setUrl(application, "Hide");
+    }
+
+    updateRows();
 }
 
 //INITIATIVEFILTER
 function setInitiativeFilterButtonStyle(initiativeName) {
     var url = getUrl("Initiative-" + initiativeName);
     
-    if (url == "Checked") {
+    if (url == "Show") {
         document.getElementById("Initiative-" + initiativeName).style.padding = "5px";
-    } else {
-        document.getElementById("Initiative-" + initiativeName).style.padding = "10px";
-    }
+    } //else {
+    //    document.getElementById("Initiative-" + initiativeName).style.padding = "10px";
+    //}
 }
 
 function toggleInitiativeFilterButton(initiativeName) {
     if (document.getElementById(initiativeName).style.padding == "10px") {
         document.getElementById(initiativeName).style.padding = "5px";
-        setUrl(initiativeName, "Checked");
+        setUrl(initiativeName, "Show");
     } else {
         document.getElementById(initiativeName).style.padding = "10px";
-        setUrl(initiativeName, "UnChecked");
+        setUrl(initiativeName, "Hide");
     }
 
-    toggleInitiativeRows(initiativeName);
-}
-
-function toggleInitiativeRows(initiativeName) {//read values from url and set rows to show/hide
-    var url = getUrl(initiativeName);
-    var rows = document.getElementsByClassName(initiativeName);
-
-    if (url == "Checked") {
-        for (var i = 0; i < rows.length; i++) {
-            rows[i].parentNode.style.display = "none";
-        }
-    } else {
-        for (var j = 0; j < rows.length; j++) {
-            rows[j].parentNode.style.display = "table-row";
-        }
-    }
+    updateRows();
 }
 
 //URL
@@ -157,9 +146,7 @@ function setUrl(name, value) {
 
     for (var i = 0; i < keys.length; i++) {
         if (keys[i].indexOf(name.replace("Button", "")) >= 0) {
-            var x = keys[i].replace(keys[i].split("=").pop(), value);
-            var url = window.location.href.replace(keys[i], x);
-            window.history.replaceState("", "", url);
+            window.history.replaceState("", "", window.location.href.replace("&" + keys[i], ""));
             return;
         }
     }
@@ -175,4 +162,5 @@ function getUrl(name) {
             return keys[i].split("=").pop();
         }
     }
+    return "";
 }

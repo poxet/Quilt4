@@ -1,4 +1,5 @@
-﻿@model Quilt4.Web.Models.SearchModel
+﻿@using Quilt4.Web.Models
+@model Quilt4.Web.Models.SearchModel
 
 @{
     ViewBag.Title = "title";
@@ -15,8 +16,10 @@
     }
     
     @Html.Partial("_InitiativeLegendPartial", Model.SearchResultRows)
-    
-    @Html.Partial("_EnvironmentLegendPartial", Model.Environments)
+    @Html.Partial("_ApplicationLegendPartial", Model.SearchResultRows)
+    @Html.Partial("_VersionLegendPartial", Model.SearchResultRows)
+
+    //@Html.Partial("_EnvironmentLegendPartial", Model.Environments)
 
     <h4>Level Legend</h4>
     <table>
@@ -40,12 +43,12 @@
         setLevelFilterButtonStyle();
         @foreach (var initiativeName in Model.SearchResultRows.Select(x => x.InitiativeName).Distinct())
         {
-            @Html.Raw("setInitiativeFilterButtonStyle('" + initiativeName + "');");
+            @Html.Raw("setInitiativeFilterButtonStyle('" + (initiativeName ?? Constants.DefaultInitiativeName) + "');");
         }
         
     </script>
 
-    <table>
+    <table id="resultlist">
         <tr style="border-bottom-color: black; border-bottom-style: solid;">
             <th style="padding: 0 5px;">Initiative</th>
             <th style="padding: 0 5px;">Application</th>
@@ -60,12 +63,12 @@
         @foreach (var row in Model.SearchResultRows)
         {
             <tr style="display: table-row">
-                <td class="Initiative-@row.InitiativeName" style="padding: 0 5px;">@Html.ActionLink(@row.InitiativeName, "Details", "Initiative", new { id = row.InitiativeUniqueIdentifier }, null)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@row.ApplicationName, "Details", "Application", new { id = row.InitiativeUniqueIdentifier, application = row.ApplicationName }, null)</td>
-                <td style="padding: 0 5px;">@Html.ActionLink(@row.Version, "Details", "Version", new { id = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier }, null)</td>
+                <td class="@Html.Raw("Initiative-" + (row.InitiativeName ?? Constants.DefaultInitiativeName))" style="padding: 0 5px;">@Html.ActionLink(@row.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = row.InitiativeUniqueIdentifier }, null)</td>
+                <td class="@row.ApplicationName" style="padding: 0 5px;">@Html.ActionLink(@row.ApplicationName, "Details", "Application", new { id = row.InitiativeUniqueIdentifier, application = row.ApplicationName }, null)</td>
+                <td class="@row.Version" style="padding: 0 5px;">@Html.ActionLink(@row.Version, "Details", "Version", new { id = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier }, null)</td>
                 <td style="padding: 0 5px;">@(row.IssueType.ExceptionTypeName ?? "N/A")</td>
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="@row.Issue.ServerTime.ToLocalTime()">@row.Issue.ServerTime.ToLocalTime().ToTimeAgo() ago</td>
-                <td style="padding: 0 5px;">
+                <td class="@row.IssueType.IssueLevel.ToString()" style="padding: 0 5px;">
                     @if (@row.IssueType.IssueLevel.ToString() == "Error")
                     {
                         <span class="Error" style="background-color: red; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Error"></span>
@@ -94,11 +97,7 @@
         }
     </table>
     <script type="text/javascript">
-        updateLevelRows();
-        @foreach (var initiativeName in Model.SearchResultRows.Select(x => x.InitiativeName).Distinct())
-        {
-            @Html.Raw("toggleInitiativeRows('Initiative-" + initiativeName + "');")
-        }
+        updateRows();
     </script>
 }
 else
