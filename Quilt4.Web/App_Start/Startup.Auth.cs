@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
 using Owin;
 using Quilt4.Interface;
 
@@ -57,11 +58,11 @@ namespace Quilt4.Web
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "158318680363-rhaekhrols59uja9g8de8lu2ed98tkiu.apps.googleusercontent.com",
+                ClientSecret = "xPmI8z03HqGhZKpNeytveSUs"
+            });
         }
     }
 }
