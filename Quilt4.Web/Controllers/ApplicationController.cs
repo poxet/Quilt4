@@ -256,7 +256,7 @@ namespace Quilt4.Web.Controllers
             return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName });
         }
 
-        public static string GetSiteRoot()
+        public static string GetSiteRoot()//Move this method to a better place
         {
             string port = System.Web.HttpContext.Current.Request.ServerVariables["SERVER_PORT"];
             if (port == null || port == "80" || port == "443")

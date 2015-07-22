@@ -26,12 +26,12 @@
         {
             <tr>
 
-                <td><div id="IssueName-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td><div id="Level-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td><div id="Time-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td><div id="Visible-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td><div id="IssueTypeTicket-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td><div id="IssueTicket-@i" style="background-image: url('Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
+                <td><div id="IssueName-@i" style="background-image: url('Content/Images/ajax-loader.gif'); background-repeat: no-repeat; width: 16px; height: 16px;"></div></td>
+                <td><div id="Level-@i" style="background-image: url('Content/Images/ajax-loader.gif'); background-repeat: no-repeat; width: 16px; height: 16px;"></div></td>
+                <td><div id="Time-@i" data-toggle="tooltip" data-placement="bottom" title="Loading..." style="background-image: url('Content/Images/ajax-loader.gif'); background-repeat: no-repeat; width: 16px; height: 16px;"></div></td>
+                <td><div id="Visible-@i" style="background-image: url('Content/Images/ajax-loader.gif'); background-repeat: no-repeat; width: 16px; height: 16px;"></div></td>
+                <td><div id="IssueTypeTicket-@i" style="background-image: url('Content/Images/ajax-loader.gif'); background-repeat: no-repeat; width: 16px; height: 16px;"></div></td>
+                <td><div id="IssueTicket-@i" style="background-image: url('Content/Images/ajax-loader.gif');  background-repeat: no-repeat; width: 16px; height: 16px;"></div></td>
 
             </tr>
         }
@@ -42,17 +42,58 @@
 
 
         function getIssues() {
-            var url = "/Home/Issues";
+            var url = "@Html.Raw(ViewBag.SiteRoot)/Home/Issues";
             $.getJSON(url, {}, function (data) {
-                alert(data);
-                //TODO:Display data
-                //$.each(data, function (i, item) {
-                //var issueNameDiv = document.getElementById("IssueName-" + i);
-                //issueNameDiv.removeProperty("background-image");
-                //issueNameDiv.innerHTML = item.IssueTypeName;
-                //});
+                $.each(data, function (i, item) {
+                    var issueNameDiv = document.getElementById("IssueName-" + i);
+                    if (issueNameDiv != null) {
+                        issueNameDiv.style.removeProperty("background-image");
+                        issueNameDiv.style.removeProperty("width");
+                        issueNameDiv.style.removeProperty("height");
+                        issueNameDiv.innerHTML = item.IssueTypeName;
+                    }
+                    
+                    var levelDiv = document.getElementById("Level-" + i);
+                    if (levelDiv != null) {
+                        levelDiv.style.removeProperty("background-image");
+                        levelDiv.style.removeProperty("width");
+                        levelDiv.style.removeProperty("height");
+                        levelDiv.innerHTML = item.IssueTypeLevel;
+                    }
 
+                    var timeDiv = document.getElementById("Time-" + i);
+                    if (timeDiv != null) {
+                        timeDiv.style.removeProperty("background-image");
+                        timeDiv.style.removeProperty("width");
+                        timeDiv.style.removeProperty("height");
+                        timeDiv.innerHTML = item.IssueTimeAgo;
+                        timeDiv.title = item.IssueTime;
+                    }
 
+                    var visibleDiv = document.getElementById("Visible-" + i);
+                    if (visibleDiv != null) {
+                        visibleDiv.style.removeProperty("background-image");
+                        visibleDiv.style.removeProperty("width");
+                        visibleDiv.style.removeProperty("height");
+                        visibleDiv.innerHTML = item.IssueVisible;
+                    }
+
+                    var issueTypeTicketDiv = document.getElementById("IssueTypeTicket-" + i);
+                    if (issueTypeTicketDiv != null) {
+                        issueTypeTicketDiv.style.removeProperty("background-image");
+                        issueTypeTicketDiv.style.removeProperty("width");
+                        issueTypeTicketDiv.style.removeProperty("height");
+                        issueTypeTicketDiv.innerHTML = item.IssueTypeTicket;//TODO: Make this a link
+                    }
+
+                    var issueTicketDiv = document.getElementById("IssueTicket-" + i);
+                    if (issueTicketDiv != null) {
+                        issueTicketDiv.style.removeProperty("background-image");
+                        issueTicketDiv.style.removeProperty("width");
+                        issueTicketDiv.style.removeProperty("height");
+                        issueTicketDiv.innerHTML = item.IssueTicket;
+                    }
+                });
             });
         }
 

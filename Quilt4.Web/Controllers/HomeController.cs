@@ -30,20 +30,16 @@ namespace Quilt4.Web.Controllers
 
         public ActionResult Index()
         {
-
+            ViewBag.SiteRoot = ApplicationController.GetSiteRoot();//Move this method
             return View();
         }
 
         public JsonResult Issues()
         {
-            var userEmail = User.Identity.Name;
+            var userEmail = _accountRepository.FindById(User.Identity.GetUserId()).Email;
             var issueTypes = _issueBusiness.GetIssueTypesForDeveloper(userEmail).ToArray();
             var fiveIssues = _issueBusiness.GetFiveLatestErrorIssusByIssueTypes(issueTypes).ToArray();
             var selectedIssueTypes = fiveIssues.SelectMany(x => issueTypes.Where(y => y.Issues.Contains(x))).Distinct().ToArray();
-            var model = new FiveLatestIssuesModel();
-
-            IApplicationVersion version;
-            IApplication application;
 
             var list = new List<object>();
 
@@ -53,13 +49,14 @@ namespace Quilt4.Web.Controllers
                 {
                     if (issueType.Issues.Any(x => x.Id == issue.Id))
                     {
-                        version = _applicationVersionBusiness.GetApplicationVersionByIssue(issue.Id);
-                        application = _initiativeBusiness.GetApplicationByVersion(version.Id);
+                        var version = _applicationVersionBusiness.GetApplicationVersionByIssue(issue.Id);
+                        var application = _initiativeBusiness.GetApplicationByVersion(version.Id);
                         list.Add(new
                         {
                             IssueTypeName = issueType.ExceptionTypeName,
                             IssueTypeLevel = issueType.IssueLevel.ToString(),
-                            IssueTime = issue.ServerTime,
+                            IssueTimeAgo = issue.ServerTime.ToLocalTime().ToTimeAgo(),
+                            IssueTime = issue.ServerTime.ToLocalTime().ToDateTimeString(),
                             IssueVisible = issue.VisibleToUser.ToString(),
                             IssueTypeTicket = issueType.Ticket,
                             IssueTicket = issue.Ticket,
