@@ -7,22 +7,30 @@ function updateRows() {
     var rows = document.getElementById("resultlist").getElementsByTagName("tr");
 
     if (keys.length > 0) {
-        for (var i = 1; i < rows.length; i++) {
-            var showcount = 0;
-            var childs = rows[i].getElementsByTagName("td");
+        var rowsToShow = [];
 
+        for (var i = 1; i < rows.length; i++) {
+            var childs = rows[i].getElementsByTagName("td");
             for (var j = 0; j < childs.length; j++) {
                 if (getUrl(childs[j].className) == "Show") {
-                    showcount++;
+                    rowsToShow.push(childs[j].parentNode);
                 }
             }
-
-            if (keys.length == showcount) {
-                rows[i].style.display = "table-row";
-            } else {
-                rows[i].style.display = "none";
-            }
         }
+        
+        var uniqueRowsToShow = [];
+        $.each(rowsToShow, function (i, el) {
+            if ($.inArray(el, uniqueRowsToShow) === -1) uniqueRowsToShow.push(el);
+        });
+        
+        for (var b = 1; b < rows.length; b++) {//Hide all rows except first, (th)
+            rows[b].style.display = "none";
+        }
+        
+        for (var c = 0; c < uniqueRowsToShow.length; c++) {
+            uniqueRowsToShow[c].style.display = "table-row";
+        }
+
     } else {
         for (var a = 1; a < rows.length; a++) {
             rows[a].style.display = "table-row";
@@ -90,7 +98,6 @@ function toggleVersionFilterButton(version) {
 }
 //APPLICATIONFILTER
 function setApplicationFilterButtonStyle(application) {
-    console.log(application);
     var url = getUrl("Application-" + application);
 
     if (url == "Show") {
