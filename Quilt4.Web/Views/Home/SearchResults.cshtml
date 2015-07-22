@@ -19,8 +19,8 @@
         @Html.Partial("_InitiativeLegendPartial", Model.SearchResultRows)
         @Html.Partial("_ApplicationLegendPartial", Model.SearchResultRows)
         @Html.Partial("_VersionLegendPartial", Model.SearchResultRows)
-
-        @*@Html.Partial("_EnvironmentLegendPartial", Model.Environments)*@
+        @* TODO: Skicka bara de environments som finns i resultatet. typ Snittet av Model.Environments och Model.SearchResultRows.Select(x => x.Environment) *@
+        @Html.Partial("_EnvironmentLegendPartial", Model.Environments)
 
         <h4>Level Legend</h4>
         <table>
@@ -48,14 +48,30 @@
     {
         @Html.Raw("setInitiativeFilterButtonStyle('" + (initiativeName ?? Constants.DefaultInitiativeName) + "');");
     }
+
     @foreach (var application in Model.SearchResultRows.Select(x => x.ApplicationName).Distinct())
     {
         @Html.Raw("setApplicationFilterButtonStyle('" + application + "');");
     }
+
     @foreach (var version in Model.SearchResultRows.Select(x => x.Version).Distinct())
     {
         @Html.Raw("setVersionFilterButtonStyle('" + version + "');");
     }
+
+    @foreach (var environment in Model.SearchResultRows.Select(x => x.Environment).Distinct())
+    {
+        var y = Model.SearchResultRows.Select(x => x.Environment).Distinct().ToArray();
+        if (string.IsNullOrEmpty(environment))
+        {
+            @Html.Raw("setEnvironmentFilterButtonStyle('" + Constants.DefaultEnvironmentName + "');");
+        }
+        else
+        {
+            @Html.Raw("setEnvironmentFilterButtonStyle('" + environment + "');");
+        }
+    }
+
     </script>
 
     <table id="resultlist">
@@ -92,15 +108,25 @@
                         <span class="Information" style="background-color: green; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="Information"></span>
                     }
                 </td>
-                <td style="padding: 0 5px;">
-                    @foreach (var environment in Model.Environments)
+                @foreach (var environment in Model.Environments)
+                {
+                    if (row.Environment.Equals(environment.Name))
                     {
-                        if (row.Environment.Equals(environment.Name))
+                        if (string.IsNullOrEmpty(environment.Name))
                         {
-                            <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Color; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
+                            <td class="Environment-@Constants.DefaultEnvironmentName" style="padding: 0 5px;">
+                                <span class="@Html.Raw(Constants.DefaultEnvironmentName + "Color")" style="background-color: #@environment.Color; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@Constants.DefaultEnvironmentName"></span>
+                            </td>
                         }
+                        else
+                        {
+                            <td class="Environment-@environment.Name" style="padding: 0 5px;">
+                                <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Color; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
+                            </td>
+                        }
+
                     }
-                </td>
+                }
                 <td style="padding: 0 5px;">@Html.ActionLink(@row.IssueType.Ticket.ToString(), "Details", "IssueType", new { id = row.InitiativeUniqueIdentifier, application = row.ApplicationName, version = row.VersionUniqueIdentifier, issueType = row.IssueType.Ticket.ToString() }, null)</td>
                 <td style="padding: 0 5px;">@row.Issue.Ticket</td>
             </tr>

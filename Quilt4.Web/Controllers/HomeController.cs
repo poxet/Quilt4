@@ -204,6 +204,7 @@ namespace Quilt4.Web.Controllers
             }
 
             var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
+            
 
             model.SearchResultRows = searchResultRows;
             model.Environments = environments.Select(x => new EnvironmentViewModel()
@@ -211,6 +212,7 @@ namespace Quilt4.Web.Controllers
                 Name = x.Key,
                 Color = x.Value,
             }).ToList();
+
             
             return View("SearchResults", model);
         }

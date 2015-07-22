@@ -1,7 +1,7 @@
 ﻿@using Quilt4.Web.Models
 @model IEnumerable<EnvironmentViewModel>
 
-<h3>Environments</h3>
+<h4>Environments</h4>
 <div id="Environment-Legend-Container">
 </div>
 <script type="text/javascript">
@@ -10,14 +10,13 @@
 
         var nm = 'Environment-Legend-' + name;
         if (document.getElementById(nm) == null) {
-            container.innerHTML = container.innerHTML + '<div id="' + nm + '"><span style="background-color: #' + color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;"></span>' + name + '</div>';
+            container.innerHTML = container.innerHTML + '<div><span id="' + nm + '" onclick="toggleEnvironmentFilterButton(\'' + name + '\')" style="background-color: #' + color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;"></span>' + name + '</div>';
         }
     }
 
     @foreach (var environment in @Model)
     {
-        @Html.Raw("addEnvironmentToLegend('" + environment.Name + "', '" + environment.Color + "');")
+        @(string.IsNullOrEmpty(environment.Name) ? @Html.Raw("addEnvironmentToLegend('" + Constants.DefaultEnvironmentName + "', '" + environment.Color + "');") : @Html.Raw("addEnvironmentToLegend('" + environment.Name + "', '" + environment.Color + "');"));
     }
 
 </script>
-<script type="text/javascript" src="~/Scripts/toggleShowEnvironment.js"></script>

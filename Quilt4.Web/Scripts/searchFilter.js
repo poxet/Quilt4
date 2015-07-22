@@ -38,6 +38,23 @@ function updateRows() {
     }
 }
 
+//ENVIRONMENTFILTER
+function setEnvironmentFilterButtonStyle(environment) {
+    var env = getUrl("Environment-Legend-" + environment);
+    //alert(environment + ":" + env);
+    alert("Environment-Legend-" + environment + ": " + env);
+
+    if (env == "Show") {
+        document.getElementById("Environment-Legend-" + environment).style.border = "4px solid #fff";
+    } else {
+        document.getElementById("Environment-Legend-" + environment).style.border = "1px solid #000";
+    }
+}
+
+function toggleEnvironmentFilterButton(environment) {
+    alert(environment);
+}
+
 //LEVELFILTER
 function setLevelFilterButtonStyle() {
     var error = getUrl("ErrorFilterButton");
