@@ -16,16 +16,14 @@ namespace Quilt4.Web.Controllers
         private readonly IInitiativeBusiness _initiativeBusiness;
         private readonly IApplicationVersionBusiness _applicationVersionBusiness;
         private readonly IMachineBusiness _machineBusiness;
-        private readonly IIssueBusiness _issueBusiness;
         private readonly ISessionBusiness _sessionBusiness;
         private readonly IAccountRepository _accountRepository;
 
-        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness, IIssueBusiness issueBusiness, ISessionBusiness sessionBusiness, IAccountRepository accountRepository) 
+        public ApplicationController(IInitiativeBusiness initiativeBusiness, IApplicationVersionBusiness applicationVersionBusiness, IMachineBusiness machineBusiness, ISessionBusiness sessionBusiness, IAccountRepository accountRepository) 
         {
             _initiativeBusiness = initiativeBusiness;
             _applicationVersionBusiness = applicationVersionBusiness;
             _machineBusiness = machineBusiness;
-            _issueBusiness = issueBusiness;
             _sessionBusiness = sessionBusiness;
             _accountRepository = accountRepository;
         }
@@ -106,8 +104,7 @@ namespace Quilt4.Web.Controllers
                     Environments = ss.GroupBy(y => y.Environment).Select(z => new
                     {
                         Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
-                        //Color = GetEnvironmentColor(z.Key) //TODO: ger ObjectDisposedException ibland
-                        Color = "ffffff",
+                        Color = "ffffff",//Temp value, actual color loaded with jquery later on
                     })
                 };
             }).ToArray();
@@ -135,14 +132,6 @@ namespace Quilt4.Web.Controllers
             }
 
             var response = Json(ms, JsonRequestBehavior.AllowGet);
-            return response;
-        }
-
-        private string GetEnvironmentColor(string environmentName)
-        {
-            var userName = _accountRepository.FindById(User.Identity.GetUserId());
-            var cols = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
-            var response = cols[environmentName];
             return response;
         }
 

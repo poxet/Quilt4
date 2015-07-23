@@ -32,6 +32,11 @@ else
 
 @using (Html.BeginForm("Confirm", "Application"))
 {
+    foreach (var env in Model.Environments)
+    {
+        @(string.IsNullOrEmpty(env.Name) ? @Html.Hidden("Hidden-" + Constants.DefaultEnvironmentName, env.Color) : @Html.Hidden("Hidden-" + env.Name, env.Color))
+    }
+    
     @Html.HiddenFor(x => x.InitiativeId)
     @Html.HiddenFor(x => x.InitiativeName)
     @Html.HiddenFor(x => x.InitiativeUniqueIdentifier)
@@ -122,9 +127,13 @@ else
                         document.getElementById('Session-Last-' + item.Id).innerHTML = item.Last;
 
                         var envs = '';
-                        $.each(item.Environments, function(j, env) {
-                            envs = envs + '<span class="Environment-' + env.Name + '" style="background-color: #' + env.Color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
-                            addEnvironmentToLegend(env.Name, env.Color);
+                        var envName = '';
+                        $.each(item.Environments, function (j, env) {
+                            envName = env.Name;
+                            var color = document.getElementById("Hidden-" + envName).value;
+
+                            envs = envs + '<span class="Environment-' + env.Name + '" style="background-color: #' + color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
+                            addEnvironmentToLegend(env.Name, color);
                         });
                         document.getElementById('Session-Environments-' + item.Id).innerHTML = envs;
                     }
