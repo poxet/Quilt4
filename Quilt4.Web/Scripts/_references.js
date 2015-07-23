@@ -17,3 +17,4 @@
 /// <reference path="admin/sb-admin-2.js" />
 /// <reference path="levelfilter.js" />
 /// <reference path="searchfilter.js" />
+/// <reference path="environmentfilter.js" />

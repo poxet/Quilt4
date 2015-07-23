@@ -26,6 +26,8 @@ else
 @*@Html.Partial("_EnvironmentLegendPartial", Model.Environments)*@
 @Html.Partial("_EnvironmentLegendPartial", new List<EnvironmentViewModel>())
 
+<script type="text/javascript" src="~/Scripts/environmentFilter.js"></script>
+
 <h3>Versions</h3>
 
 @using (Html.BeginForm("Confirm", "Application"))
@@ -121,7 +123,7 @@ else
 
                         var envs = '';
                         $.each(item.Environments, function(j, env) {
-                            envs = envs + '<span class="Color" style="background-color: #' + env.Color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
+                            envs = envs + '<span class="Environment-' + env.Name + '" style="background-color: #' + env.Color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
                             addEnvironmentToLegend(env.Name, env.Color);
                         });
                         document.getElementById('Session-Environments-' + item.Id).innerHTML = envs;
