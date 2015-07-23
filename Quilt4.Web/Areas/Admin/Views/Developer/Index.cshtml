@@ -5,6 +5,11 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
+@if (!string.IsNullOrEmpty(ViewBag.ConfirmEmailError))
+{
+    <p style="color: red;">@ViewBag.ConfirmEmailError</p>
+}
+
 <table class="dataTable">
     <tr style="border-bottom-color: black; border-bottom-style: solid;">
         @*<th style="padding: 0 5px;">Id</th>*@

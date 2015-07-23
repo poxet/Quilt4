@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Quilt4.Interface;
 
@@ -20,6 +21,7 @@ namespace Quilt4.Web.Areas.Admin.Controllers
         // GET: Admin/Developer/Index
         public ActionResult Index()
         {
+            ViewBag.ConfirmEmailError = TempData["ConfirmEmailError"];
             var users = _accountRepository.GetUsers();
             return View(users);
         }
@@ -41,11 +43,17 @@ namespace Quilt4.Web.Areas.Admin.Controllers
 
         // POST: Admin/Developer/ConfirmDeveloperEMail
         [HttpPost]
-        public ActionResult ConfirmDeveloperEMail(string id, FormCollection collection)
+        public async Task<ActionResult> ConfirmDeveloperEMail(string id, FormCollection collection)
         {
-            _accountRepository.ConfirmEmailAsync(id, null);
-           
+            var token = await _accountRepository.GenerateEmailConfirmationTokenAsync(id);
+            var result = await _accountRepository.ConfirmEmailAsync(id, token);
+
+            if (!result.Succeeded)
+            {
+                TempData["ConfirmEmailError"] = "Could not confirm developer!";
+            }
             return RedirectToAction("Index", "Developer");
+
         }
 
         // GET: Admin/Developer/Delete/5
