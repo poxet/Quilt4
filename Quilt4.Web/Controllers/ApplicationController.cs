@@ -81,15 +81,15 @@ namespace Quilt4.Web.Controllers
         }
 
         // GET: Application/Sessions/A/B
-        public JsonResult Sessions(string id, string application)
+        public JsonResult Sessions(string id, string application, bool archived)
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
             var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
-            var sessions = _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id }).ToArray();
+            var sessions = archived ? _sessionBusiness.GetArchivedSessionsForApplications(new List<Guid> { app.Id }).ToArray() : _sessionBusiness.GetSessionsForApplications(new List<Guid> { app.Id }).ToArray();
 
-            var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
+            var versions = archived ? _applicationVersionBusiness.GetArchivedApplicationVersions(app.Id).ToArray() : _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
             //TODO: Här skall data som first, last och en lista med environments och dess färger med.
             var vers = versions.Select(x =>
@@ -113,13 +113,13 @@ namespace Quilt4.Web.Controllers
             return response;
         }
 
-        public JsonResult Machines(string id, string application)
+        public JsonResult Machines(string id, string application, bool archived)
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
             var initiative = _initiativeBusiness.GetInitiative(_accountRepository.FindById(User.Identity.GetUserId()).Email, id);
             var app = initiative.ApplicationGroups.SelectMany(x => x.Applications).Single(x => x.Name == application);
-            var versions = _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
+            var versions = archived ? _applicationVersionBusiness.GetArchivedApplicationVersions(app.Id).ToArray() : _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
             var ms = new List<object>();
             foreach (var version in versions)

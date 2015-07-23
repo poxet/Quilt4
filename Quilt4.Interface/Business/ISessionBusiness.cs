@@ -11,6 +11,7 @@ namespace Quilt4.Interface
         void EndSession(Guid sessionId);
         IEnumerable<ISession> GetSessionsForApplicationVersion(string applicationVersionId);
         IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds);
+        IEnumerable<ISession> GetArchivedSessionsForApplications(IEnumerable<Guid> applicationsIds); 
         IEnumerable<ISession> GetSessionsForUser(string userId);
         IEnumerable<ISession> GetSessionsForMachine(string machineId);
         IEnumerable<ISession> GetSessions();
