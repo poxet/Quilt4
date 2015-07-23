@@ -41,9 +41,7 @@ function updateRows() {
 //ENVIRONMENTFILTER
 function setEnvironmentFilterButtonStyle(environment) {
     var env = getUrl("Environment-Legend-" + environment);
-    //alert(environment + ":" + env);
-    alert("Environment-Legend-" + environment + ": " + env);
-
+    
     if (env == "Show") {
         document.getElementById("Environment-Legend-" + environment).style.border = "4px solid #fff";
     } else {
@@ -52,7 +50,15 @@ function setEnvironmentFilterButtonStyle(environment) {
 }
 
 function toggleEnvironmentFilterButton(environment) {
-    alert(environment);
+    if (document.getElementById("Environment-Legend-" + environment).style.border == "4px solid rgb(255, 255, 255)") {
+        document.getElementById("Environment-Legend-" + environment).style.border = "1px solid #000";
+        setUrl("Environment-" + environment, "Hide");
+    } else {
+        document.getElementById("Environment-Legend-" + environment).style.border = "4px solid #fff";
+        setUrl("Environment-" + environment, "Show");
+    }
+
+    updateRows();
 }
 
 //LEVELFILTER
