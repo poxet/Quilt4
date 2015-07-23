@@ -60,9 +60,26 @@ namespace Quilt4.Web.Controllers
                 ApplicationVersionId = applicationId.ToString(),
                 InitiativeUniqueIdentifier = id,
             };
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
+            var allEnvironments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
+            var envs = issue.Sessions.Select(x => x.Environment).Distinct();
 
-            issue.Environments = environments.Select(x => new EnvironmentViewModel { Name = x.Key, Color = x.Value}).ToList();
+            var environments = new List<EnvironmentViewModel>();
+            foreach (var environment in envs)
+            {
+                if (allEnvironments.ContainsKey(environment))
+                {
+                    string color;
+                    allEnvironments.TryGetValue(environment, out color);
+                    environments.Add(new EnvironmentViewModel()
+                    {
+                        Name = environment,
+                        Color = color,
+                    });
+                }
+            }
+
+            //issue.Environments = environments.Select(x => new EnvironmentViewModel { Name = x.Key, Color = x.Value}).ToList();
+            issue.Environments = environments;
             issue.UniqueIdentifier = issue.GetUniqueIdentifier(versionName);
 
             //issue.ExceptionTypeName = ver.IssueTypes.Select(x => x.ExceptionTypeName);

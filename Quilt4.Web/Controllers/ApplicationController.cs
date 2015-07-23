@@ -60,8 +60,8 @@ namespace Quilt4.Web.Controllers
                     IssueCount = x.IssueTypes.SelectMany(y => y.Issues).Count(),
                 }).OrderByDescending(y => y.Version).ToList(),
             };
-            //var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId()).First();
-            //model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Color = x.Value}).ToList();
+            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(),_accountRepository.FindById(User.Identity.GetUserId()).UserName);
+            model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Color = x.Value}).ToList();
 
             return model;
         }
@@ -107,7 +107,7 @@ namespace Quilt4.Web.Controllers
                     {
                         Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
                         //Color = GetEnvironmentColor(z.Key) //TODO: ger ObjectDisposedException ibland
-                        Color = "000fff",
+                        Color = "ffffff",
                     })
                 };
             }).ToArray();
