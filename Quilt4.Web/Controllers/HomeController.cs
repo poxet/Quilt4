@@ -203,16 +203,26 @@ namespace Quilt4.Web.Controllers
                 }
             }
 
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
-            
+            var allEnvironments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName);
+            var environmentsInResult = searchResultRows.Select(x => x.Environment).Distinct();
+
+            var environments = new List<EnvironmentViewModel>();
+            foreach (var env in environmentsInResult)
+            {
+                if (allEnvironments.ContainsKey(env))
+                {
+                    string color;
+                    allEnvironments.TryGetValue(env, out color);
+                    environments.Add(new EnvironmentViewModel()
+                    {
+                        Name = env,
+                        Color = color,
+                    });
+                }
+            }
 
             model.SearchResultRows = searchResultRows;
-            model.Environments = environments.Select(x => new EnvironmentViewModel()
-            {
-                Name = x.Key,
-                Color = x.Value,
-            }).ToList();
-
+            model.Environments = environments;
             
             return View("SearchResults", model);
         }

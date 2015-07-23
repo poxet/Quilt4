@@ -19,7 +19,6 @@
         @Html.Partial("_InitiativeLegendPartial", Model.SearchResultRows)
         @Html.Partial("_ApplicationLegendPartial", Model.SearchResultRows)
         @Html.Partial("_VersionLegendPartial", Model.SearchResultRows)
-        @* TODO: Skicka bara de environments som finns i resultatet. typ Snittet av Model.Environments och Model.SearchResultRows.Select(x => x.Environment) *@
         @Html.Partial("_EnvironmentLegendPartial", Model.Environments)
 
         <h4>Level Legend</h4>
