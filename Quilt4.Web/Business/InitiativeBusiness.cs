@@ -318,13 +318,15 @@ namespace Quilt4.Web.Business
         public IDictionary<string, string> GetEnvironmentColors(string userId, string userName)
         {
             var environmentColors = _repository.GetEnvironmentColors(userId);
+
+            var devEmail = _accountRepository.GetUsers().Single(x => x.UserName == userName).Email;
             
             var colors = new Dictionary<string, string>();
             foreach (var e in environmentColors)
             {
                 colors.Add(e.Key.Substring(4), e.Value);
             }
-            var environments = _repository.GetSessionsForDeveloper(userName).Select(x => x.Environment).Distinct().ToArray();
+            var environments = _repository.GetSessionsForDeveloper(devEmail).Select(x => x.Environment).Distinct().ToArray();
             
 
             if (environmentColors.IsNullOrEmpty())
@@ -351,7 +353,7 @@ namespace Quilt4.Web.Business
             }
             else
             {
-                var allEnvironments = _repository.GetSessions().Select(x => x.Environment).Distinct().ToArray();
+                var allEnvironments = _repository.GetSessions().Select(x => x.Environment ?? "").Distinct().ToArray();
 
                 foreach (var environment in environments)
                 {
