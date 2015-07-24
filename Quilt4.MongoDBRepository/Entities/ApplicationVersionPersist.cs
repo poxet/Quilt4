@@ -16,6 +16,7 @@ namespace Quilt4.MongoDBRepository.Entities
         public bool Ignore { get; internal set; }
         public string SupportToolkitNameVersion { get; internal set; }
         public DateTime? BuildTime { get; internal set; }
+        public List<string> Environments { get; internal set; }
 
         [BsonExtraElements]
         private IDictionary<string, object> ExtraElements { get; set; }

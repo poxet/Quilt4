@@ -16,8 +16,9 @@ namespace Quilt4.BusinessEntities
         private string _responseMesssage;
         private bool _isOfficial;
         private bool _ignore;
+        private List<string> _environments;
 
-        public ApplicationVersion(Fingerprint id, Guid applicationId, string version, IEnumerable<IIssueType> issueTypes, string responseMesssage, bool isOfficial, bool ignore, string supportToolkitNameVersion, DateTime? buildTime)
+        public ApplicationVersion(Fingerprint id, Guid applicationId, string version, IEnumerable<IIssueType> issueTypes, string responseMesssage, bool isOfficial, bool ignore, string supportToolkitNameVersion, DateTime? buildTime, List<string> environments )
         {
             _id = id;
             _applicationId = applicationId;
@@ -28,6 +29,7 @@ namespace Quilt4.BusinessEntities
             _ignore = ignore;
             _supportToolkitNameVersion = supportToolkitNameVersion;
             _buildTime = buildTime;
+            _environments = environments;
         }
 
         public string Id { get { return _id; } }
@@ -45,6 +47,7 @@ namespace Quilt4.BusinessEntities
 
         public string SupportToolkitNameVersion { get { return _supportToolkitNameVersion; } }
         public DateTime? BuildTime { get { return _buildTime; } }
+        public List<string> Environments { get { return _environments;} set { _environments = value; }}
 
         public void Add(IIssueType issueType)
         {

@@ -15,6 +15,7 @@ namespace Quilt4.Interface
         bool Ignore { get; }
         string SupportToolkitNameVersion { get; }
         DateTime? BuildTime { get; }
+        List<string> Environments { get; set; } 
 
         //TODO: REFACTOR: Move thees functions to the business layer
         void Add(IIssueType issueType);

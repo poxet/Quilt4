@@ -118,7 +118,7 @@ namespace Quilt4.MongoDBRepository.Data
         public static IApplicationVersion ToEntity(this ApplicationVersionPersist item)
         {
             if (item == null) return null;
-            var response = new ApplicationVersion(item.Id, item.ApplicationId, item.Version, item.IssueTypes.Select(x => x.ToEntity()), item.ResponseMessage, item.IsOfficial, item.Ignore, item.SupportToolkitNameVersion, item.BuildTime);
+            var response = new ApplicationVersion(item.Id, item.ApplicationId, item.Version, item.IssueTypes.Select(x => x.ToEntity()), item.ResponseMessage, item.IsOfficial, item.Ignore, item.SupportToolkitNameVersion, item.BuildTime, item.Environments);
             return response;
         }
 
