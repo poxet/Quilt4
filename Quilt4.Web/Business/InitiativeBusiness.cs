@@ -311,12 +311,13 @@ namespace Quilt4.Web.Business
             }
 
             var d = new Dictionary<string, string>();
-            d.Add("_Env" + environment, GetRandomEnvironmentColor());
+            d.Add(environment, GetRandomEnvironmentColor());
             return d;
         }
 
         public IDictionary<string, string> GetEnvironmentColors(string userId, string userName)
         {
+            //return new Dictionary<string, string>();
             var environmentColors = _repository.GetEnvironmentColors(userId);
 
             var devEmail = _accountRepository.GetUsers().Single(x => x.UserName == userName).Email;
@@ -395,7 +396,7 @@ namespace Quilt4.Web.Business
             {
                 if (!e.Key.StartsWith("_Env"))
                 {
-                    colors.Add(e.Key.Insert(0, "_Env"), e.Value);
+                    colors.Add(e.Key.Insert(0, "_Env").Replace(".", ""), e.Value);
                 }
                 else
                 {
@@ -412,7 +413,7 @@ namespace Quilt4.Web.Business
             {
                 if (!e.Key.StartsWith("_Env"))
                 {
-                    colors.Add(e.Key.Insert(0, "_Env"), e.Value);
+                    colors.Add(e.Key.Insert(0, "_Env").Replace(".", ""), e.Value);
                 }
                 else
                 {
