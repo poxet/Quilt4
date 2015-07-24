@@ -12,10 +12,10 @@ function updateRows(environment) {
     var rows = document.getElementsByClassName("Environment-" + environment);
 
     for (var i = 0; i < rows.length; i++) {
-        if (rows[i].parentNode.parentNode.parentNode.style.display == "none") {
-            rows[i].parentNode.parentNode.parentNode.style.display = "table-row";
+        if (rows[i].parentNode.parentNode.style.display == "none") {
+            rows[i].parentNode.parentNode.style.display = "table-row";
         } else {
-            rows[i].parentNode.parentNode.parentNode.style.display = "none";
+            rows[i].parentNode.parentNode.style.display = "none";
         }
     }
 }
