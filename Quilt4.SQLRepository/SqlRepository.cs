@@ -340,5 +340,10 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<ISession> GetArchivedSessionsForApplications(IEnumerable<Guid> applicationsIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

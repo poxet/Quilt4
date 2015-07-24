@@ -83,5 +83,6 @@ namespace Quilt4.Interface
         void DeleteSession(Guid sessionId);
         IApplicationVersion GetApplicationVersionByIssue(Guid issueId);
         IApplication GetapplicationByVersion(string versionId);
+        IEnumerable<ISession> GetArchivedSessionsForApplications(IEnumerable<Guid> applicationsIds);
     }
 }

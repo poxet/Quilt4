@@ -430,6 +430,13 @@ namespace Quilt4.MongoDBRepository
             return null;
         }
 
+        public IEnumerable<ISession> GetArchivedSessionsForApplications(IEnumerable<Guid> applicationsIds)
+        {
+            var allSessions = Database.GetCollection("SessionArchive").FindAllAs<SessionPersist>().Where(x => applicationsIds.Contains(x.ApplicationId)).ToArray();
+            var response = allSessions.Select(x => x.ToEntity()).ToArray();
+            return response;
+        }
+
         public IEnumerable<ISession> GetSessionsForApplications(IEnumerable<Guid> applicationIds)
         {
             var allSessions = Database.GetCollection("Session").FindAllAs<SessionPersist>().Where(x => applicationIds.Contains(x.ApplicationId)).ToArray();

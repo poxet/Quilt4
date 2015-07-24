@@ -147,7 +147,7 @@ namespace Quilt4.Web.Business
 
         public IEnumerable<ISession> GetArchivedSessionsForApplications(IEnumerable<Guid> applicationsIds)
         {
-            throw new NotImplementedException();
+            return _repository.GetArchivedSessionsForApplications(applicationsIds).OrderByDescending(x => x.ServerStartTime);
         }
 
         public IEnumerable<ISession> GetSessionsForUser(string userId)
