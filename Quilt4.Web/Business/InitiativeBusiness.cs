@@ -340,7 +340,7 @@ namespace Quilt4.Web.Business
                     {
                         var colorDictionary = GetColorForEnvironment(environment);
                         string value;
-                        colorDictionary.TryGetValue("_Env" + environment, out value);
+                        colorDictionary.TryGetValue(environment, out value);
                         colors.Add(environment ?? Constants.DefaultEnvironmentName, value);
                     }
                     else
@@ -396,7 +396,7 @@ namespace Quilt4.Web.Business
             {
                 if (!e.Key.StartsWith("_Env"))
                 {
-                    colors.Add(e.Key.Insert(0, "_Env").Replace(".", ""), e.Value);
+                    colors.Add(e.Key.Insert(0, "_Env"), e.Value);
                 }
                 else
                 {
@@ -413,7 +413,7 @@ namespace Quilt4.Web.Business
             {
                 if (!e.Key.StartsWith("_Env"))
                 {
-                    colors.Add(e.Key.Insert(0, "_Env").Replace(".", ""), e.Value);
+                    colors.Add(e.Key.Insert(0, "_Env"), e.Value);
                 }
                 else
                 {
