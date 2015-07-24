@@ -44,7 +44,6 @@ namespace Quilt4.Web.Controllers
                 InitiativeUniqueIdentifier = initiativeUniqueIdentifier,
                 Application = application,
                 
-                
                 Versions = applicationVersions.Select(x => new VersionViewModel
                 {
                     Checked = false,
@@ -56,10 +55,17 @@ namespace Quilt4.Web.Controllers
                     InitiativeIdentifier = initiativeUniqueIdentifier,
                     IssueTypeCount = x.IssueTypes.Count(),
                     IssueCount = x.IssueTypes.SelectMany(y => y.Issues).Count(),
+                    Environments = x.Environments
                 }).OrderByDescending(y => y.Version).ToList(),
             };
-            var environments = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(),_accountRepository.FindById(User.Identity.GetUserId()).UserName);
-            model.Environments = environments.Select(x => new EnvironmentViewModel() { Name = x.Key, Color = x.Value}).ToList();
+
+            var envs = applicationVersions.SelectMany(x => x.Environments).Distinct().ToArray();
+            var environmentColors = _initiativeBusiness.GetEnvironmentColors(User.Identity.GetUserId(), _accountRepository.FindById(User.Identity.GetUserId()).UserName).ToArray();
+
+            model.EnvironmentColors = (from environmentColor in environmentColors where envs.Any(x => x == environmentColor.Key) select new EnvironmentViewModel()
+            {
+                Name = environmentColor.Key, Color = environmentColor.Value
+            }).ToList();
 
             return model;
         }
@@ -91,7 +97,7 @@ namespace Quilt4.Web.Controllers
 
             var versions = archived ? _applicationVersionBusiness.GetArchivedApplicationVersions(app.Id).ToArray() : _applicationVersionBusiness.GetApplicationVersions(app.Id).ToArray();
 
-            //TODO: Här skall data som first, last och en lista med environments och dess färger med.
+            //TODO: Här skall data som first, last med.
             var vers = versions.Select(x =>
             {
                 var ss = sessions.Where(y => y.ApplicationVersionId == x.Id).ToArray();
@@ -101,11 +107,6 @@ namespace Quilt4.Web.Controllers
                     SessionCount = ss.Count(y => y.ApplicationVersionId == x.Id),
                     First = ss.Any() ? ss.Min(y => y.ServerStartTime).ToLocalTime().ToTimeAgo() : "N/A",
                     Last = ss.Any() ? ss.Max(y => y.ServerStartTime).ToLocalTime().ToTimeAgo() : "N/A",
-                    Environments = ss.GroupBy(y => y.Environment).Select(z => new
-                    {
-                        Name = !string.IsNullOrEmpty(z.Key) ? z.Key : Models.Constants.DefaultEnvironmentName,
-                        Color = "ffffff",//Temp value, actual color loaded with jquery later on
-                    })
                 };
             }).ToArray();
 

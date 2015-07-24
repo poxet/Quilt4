@@ -22,9 +22,7 @@ else
     @Html.ActionLink("Archive", "Archive", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
 }
 
-@*Environment Legend*@
-@*@Html.Partial("_EnvironmentLegendPartial", Model.Environments)*@
-@Html.Partial("_EnvironmentLegendPartial", new List<EnvironmentViewModel>())
+@Html.Partial("_EnvironmentLegendPartial", Model.EnvironmentColors)
 
 <script type="text/javascript" src="~/Scripts/environmentFilter.js"></script>
 
@@ -32,11 +30,6 @@ else
 
 @using (Html.BeginForm("Confirm", "Application"))
 {
-    foreach (var env in Model.Environments)
-    {
-        @(string.IsNullOrEmpty(env.Name) ? @Html.Hidden("Hidden-" + Constants.DefaultEnvironmentName, env.Color) : @Html.Hidden("Hidden-" + env.Name, env.Color))
-    }
-    
     @Html.HiddenFor(x => x.InitiativeId)
     @Html.HiddenFor(x => x.InitiativeName)
     @Html.HiddenFor(x => x.InitiativeUniqueIdentifier)
@@ -84,18 +77,18 @@ else
                 <td style="padding: 0 5px;">@Model.Versions[i].IssueCount</td>
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-First-@Model.Versions[i].VersionId"></div></td>
                 <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-Last-@Model.Versions[i].VersionId"></div></td>
-                <td style="padding: 0 5px;"><div id="Session-Environments-@Model.Versions[i].VersionId"></div>
-                    @*@foreach (var env in Model.Versions[i].Environments)
-                    @foreach (var env in Model.Versions[i].Environment)
+                <td style="padding: 0 5px;">
+                    @foreach (var env in Model.Versions[i].Environments)
                     {
-                        foreach (var environment in Model.Environments)
+                        if (string.IsNullOrEmpty(env))
                         {
-                            if (env.Equals(environment.Name))
-                            {
-                                <span class="@Html.Raw(environment.Name + "Color")" style="background-color: #@environment.Colour; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@environment.Name"></span>
-                            }
+                            <span class="Environment-@Constants.DefaultEnvironmentName" style="background-color: #@(Html.Raw(Model.EnvironmentColors.Single(x => x.Name == env).Color)); width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@Constants.DefaultEnvironmentName"></span>
                         }
-                    }*@
+                        else
+                        {
+                            <span class="Environment-@env" style="background-color: #@(Html.Raw(Model.EnvironmentColors.Single(x => x.Name == env).Color)); width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env"></span>
+                        }
+                    }
                 </td>
             </tr>
         }
@@ -110,7 +103,6 @@ else
 
 <!-- När sidan har laddats in skall ytterligare data börja laddas in. -->
 <script type="text/javascript">
-
     $(document).ready(function () {
 
         function getSessions() {
@@ -125,17 +117,6 @@ else
 
                         document.getElementById('Session-First-' + item.Id).innerHTML = item.First;
                         document.getElementById('Session-Last-' + item.Id).innerHTML = item.Last;
-
-                        var envs = '';
-                        var envName = '';
-                        $.each(item.Environments, function (j, env) {
-                            envName = env.Name;
-                            var color = document.getElementById("Hidden-" + envName).value;
-
-                            envs = envs + '<span class="Environment-' + env.Name + '" style="background-color: #' + color + '; width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="' + env.Name + '"></span>';
-                            addEnvironmentToLegend(env.Name, color);
-                        });
-                        document.getElementById('Session-Environments-' + item.Id).innerHTML = envs;
                     }
                 });
             });
