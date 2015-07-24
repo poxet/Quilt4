@@ -36,7 +36,6 @@ namespace Quilt4.Web.Business
 
             //Make sure that provided data is valid for the provided fingerprint
             var applicationVersion = _repository.GetApplicationVersion(applicationFingerprint);
-            applicationVersion = UpdateApplicationVersionsEnvironments(new List<IApplicationVersion>() { applicationVersion }).First();
 
             if (applicationVersion != null)
             {
@@ -87,7 +86,6 @@ namespace Quilt4.Web.Business
         private IApplicationVersion RegisterExistingApplicationVersionUsage(Fingerprint applicationVersionFingerprint, Guid applicationId, string environment)
         {
             var response = _repository.GetApplicationVersion(applicationVersionFingerprint);
-            response = UpdateApplicationVersionsEnvironments(new List<IApplicationVersion>() { response }).First();
 
             if (response != null)
             {
@@ -183,6 +181,7 @@ namespace Quilt4.Web.Business
             var versions = new List<IApplicationVersion>();
             foreach (var applicationVersion in applicationVersions)
             {
+                if (applicationVersion == null) continue;
                 if (applicationVersion.Environments.IsNullOrEmpty())
                 {
                     var sessions = _repository.GetSessionsForApplicationVersion(applicationVersion.Id);
