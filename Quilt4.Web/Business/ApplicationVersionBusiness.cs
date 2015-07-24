@@ -188,6 +188,7 @@ namespace Quilt4.Web.Business
                     var sessions = _repository.GetSessionsForApplicationVersion(applicationVersion.Id);
                     var environments = sessions.Select(x => x.Environment ?? "").Distinct().ToList();
                     applicationVersion.Environments = environments;
+                    _repository.UpdateApplicationVersion(applicationVersion);
                     versions.Add(applicationVersion);
                 }
                 else
