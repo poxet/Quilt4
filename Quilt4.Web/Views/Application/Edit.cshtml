@@ -1,9 +1,9 @@
 ﻿@model Quilt4.Web.Models.ApplicationPropetiesModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Application Properties";
 }
 
-<h2>Edit</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (@Html.BeginForm("Edit", "Application", FormMethod.Post))
 {
@@ -18,41 +18,9 @@
             <td>Ticket Prefix</td>
             <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
         </tr>
-        @*@foreach (var env in Model.Environments)
-        {
-            if (env.Equals("Dev"))
-            {
-                <tr>
-                    <td>Dev color</td>
-                    <td><input style="width: 30px; height: 30px;" type="color" value="@Model.DevColor" id="DevColor" name="DevColor"/></td>
-                </tr>
-            }
-            else if (env.Equals("CI"))
-            {
-                <tr>
-                    <td>CI color</td>
-                    <td><input style="width: 30px; height: 30px;" type="color" value="@Model.CiColor" id="CiColor" name="CiColor" /></td>
-                </tr>
-            }
-            else if (env.Equals("Prod"))
-            {
-                <tr>
-                    <td>Prod color</td>
-                    <td><input style="width: 30px; height: 30px;" type="color" value="@Model.ProdColor" id="ProdColor" name="ProdColor" /></td>
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td>Something went wrong</td>
-                </tr>
-            }
-        }*@
-        
         <tr>
             <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>
             <td>@Html.ActionLink("Cancel", "Details", "Application", new { id = @Model.InitiativeId, Application = @Model.ApplicationName }, null)</td>
         </tr>
     </table>
 }
-
