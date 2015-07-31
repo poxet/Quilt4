@@ -187,7 +187,7 @@ namespace Quilt4.Web.Business
                     var sessions = _repository.GetSessionsForApplicationVersion(applicationVersion.Id);
                     var environments = sessions.Select(x => x.Environment ?? "").Distinct().ToList();
                     applicationVersion.Environments = environments;
-                    _repository.UpdateApplicationVersion(applicationVersion);
+                    //_repository.UpdateApplicationVersion(applicationVersion);//TODO: Doesn't work in some initiatives with some environments? Example, Environment "Prod" don't work in florida
                     versions.Add(applicationVersion);
                 }
                 else
