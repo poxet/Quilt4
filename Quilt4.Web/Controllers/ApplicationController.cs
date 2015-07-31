@@ -209,6 +209,7 @@ namespace Quilt4.Web.Controllers
                 TicketPrefix = app.TicketPrefix,
                 InitiativeId = initiative.Id.ToString(),
                 ApplicationName = application,
+                KeepLatestVersions = app.KeepLatestVersions
             };
 
             return View(model);
@@ -222,6 +223,7 @@ namespace Quilt4.Web.Controllers
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;
+            application.KeepLatestVersions = model.KeepLatestVersions;
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {

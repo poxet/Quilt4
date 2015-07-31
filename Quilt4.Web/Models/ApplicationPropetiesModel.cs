@@ -6,5 +6,6 @@
         public string ApplicationName { get; set; }
         public string ApplicationGroupName { get; set; }
         public string TicketPrefix { get; set; }
+        public int? KeepLatestVersions { get; set; }
     }
 }

@@ -215,7 +215,7 @@ namespace Quilt4.Web.Business
 
             var applicationGroup = GetDefaultApplicationGroup(initiative);
 
-            application = new Application(Guid.NewGuid(), applicationName, DateTime.UtcNow, null);
+            application = new Application(Guid.NewGuid(), applicationName, DateTime.UtcNow, null, null);
             applicationGroup.Add(application);
 
             _repository.UpdateInitiative(initiative);

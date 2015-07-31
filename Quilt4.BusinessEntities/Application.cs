@@ -9,17 +9,19 @@ namespace Quilt4.BusinessEntities
         private readonly string _name;
         private readonly DateTime _firstRegistered;
 
-        public Application(Guid id, string name, DateTime firstRegistered, string ticketPrefix)
+        public Application(Guid id, string name, DateTime firstRegistered, string ticketPrefix, int? keepLatestVersions)
         {
             _id = id;
             _name = name;
             _firstRegistered = firstRegistered;
             TicketPrefix = ticketPrefix;
+            KeepLatestVersions = keepLatestVersions;
         }
 
         public Guid Id { get { return _id; } }
         public string Name { get { return _name; } }
         public DateTime FirstRegistered { get { return _firstRegistered; } }
         public string TicketPrefix { get; set; }
+        public int? KeepLatestVersions { get; set; }
     }
 }

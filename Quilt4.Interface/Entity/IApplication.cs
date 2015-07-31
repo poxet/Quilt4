@@ -9,5 +9,6 @@ namespace Quilt4.Interface
         string Name { get; }
         DateTime FirstRegistered { get; }
         string TicketPrefix { get; set; }
+        int? KeepLatestVersions { get; set; }
     }
 }

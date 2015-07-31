@@ -19,6 +19,12 @@
             <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
         </tr>
         <tr>
+            <td>Auto Archive</td>
+            <td>
+                @Html.TextBoxFor(x => x.KeepLatestVersions)
+            </td>
+        </tr>
+        <tr>
             <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>
             <td>@Html.ActionLink("Cancel", "Details", "Application", new { id = @Model.InitiativeId, Application = @Model.ApplicationName }, null)</td>
         </tr>

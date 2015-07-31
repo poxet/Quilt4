@@ -12,6 +12,7 @@ namespace Quilt4.MongoDBRepository.Entities
         public string Name { get; internal set; }
         public DateTime FirstRegistered { get; internal set; }
         public string TicketPrefix { get; internal set; }
+        public int? KeepLatestVersions { get; internal set; }
 
         [BsonExtraElements]
         private IDictionary<string, object> ExtraElements { get; set; }
