@@ -1,0 +1,23 @@
+﻿@model Quilt4.Web.Models.EnableArchiveModel
+@{
+    ViewBag.Title = "EnableArchive";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EnableArchive</h2>
+<p>If you enable automatic archiveing the following versions will be archived: </p>
+
+@using (Html.BeginForm())
+{
+    @Html.Hidden("ApplicationId", Model.Application)
+    @Html.Hidden("InitiativeId", Model.InitiativeId)
+    <ul>
+        @foreach (var version in Model.VersionsToArchive)
+        {
+            <li>@version.Version @Html.Hidden(version.Version, version.Id)</li>
+        }
+    </ul>
+
+    <input type="submit" value="Continue"/>
+    @Html.ActionLink("Cancel", "Edit", "Application", new { id = Model.InitiativeId, application = Model.Application }, null)
+}

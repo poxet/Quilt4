@@ -294,6 +294,7 @@
     <Compile Include="Models\Constants.cs" />
     <Compile Include="Models\DeveloperRoleViewModel.cs" />
     <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\EnableArchiveModel.cs" />
     <Compile Include="Models\EnvironmentViewModel.cs" />
     <Compile Include="Models\EventLogIndexViewModel.cs" />
     <Compile Include="Models\EventLogItemModel.cs" />
@@ -486,6 +487,7 @@
     <Content Include="Views\Shared\_InitiativeLegendPartial.cshtml" />
     <Content Include="Views\Shared\_ApplicationLegendPartial.cshtml" />
     <Content Include="Views\Shared\_VersionLegendPartial.cshtml" />
+    <Content Include="Views\Application\EnableArchive.cshtml" />
     <None Include="Web.CI.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

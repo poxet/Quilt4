@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Castle.Core.Internal;
 using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
@@ -234,7 +235,20 @@ namespace Quilt4.Web.Controllers
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;
 
-            application.KeepLatestVersions = model.AutoArchive ? model.KeepLatestVersions : null;
+            List<IApplicationVersion> versionsToArchive = null;
+
+            //application.KeepLatestVersions = model.AutoArchive ? model.KeepLatestVersions : null;
+
+            if (model.AutoArchive && model.KeepLatestVersions > 0)
+            {
+                var versions = _applicationVersionBusiness.GetApplicationVersions(application.Id).ToArray();
+                versionsToArchive = versions.OrderBy(x => x.Version).Take(versions.Count() - model.KeepLatestVersions.Value).ToList();
+
+                if (versionsToArchive.IsNullOrEmpty()) //No versions to archive, set autoarchive to true
+                {
+                    application.KeepLatestVersions = model.KeepLatestVersions;
+                }
+            }
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {
@@ -245,7 +259,15 @@ namespace Quilt4.Web.Controllers
                 else
                 {
                     _initiativeBusiness.UpdateInitiative(initiative);
-                    return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName });
+
+                    //Check if versions to archive, if yes inform user
+                    if (versionsToArchive.IsNullOrEmpty())
+                    {
+                        return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName });
+                    }
+                    
+                    //return EnableArchive(versionsToArchive);
+                    return RedirectToAction("EnableArchive", "Application", new { applicationId = application.Id, keepLatestVersions = model.KeepLatestVersions});
                 }
             }
             else
@@ -256,7 +278,47 @@ namespace Quilt4.Web.Controllers
             applicationGroup.Remove(application);
             _initiativeBusiness.UpdateInitiative(initiative);
 
-            return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName });
+            //Check if versions to archive, if yes inform user
+            if (versionsToArchive.IsNullOrEmpty())
+            {
+                return RedirectToAction("Details", "Application", new { id = model.InitiativeId, application = model.ApplicationName });
+            }
+
+            //return EnableArchive(versionsToArchive);
+            return RedirectToAction("EnableArchive", "Application", new { applicationId = application.Id, keepLatestVersions = model.KeepLatestVersions });
+        }
+
+        public ActionResult EnableArchive(string applicationId, int keepLatestVersions)
+        {
+            var versions = _applicationVersionBusiness.GetApplicationVersions(Guid.Parse(applicationId)).ToArray();
+            var versionsToArchive = versions.OrderBy(x => x.Version).Take(versions.Count() - keepLatestVersions).ToArray();
+            var model = new EnableArchiveModel()
+            {
+                VersionsToArchive = versionsToArchive,
+                Application = applicationId,
+                InitiativeId = _initiativeBusiness.GetInitiativeByApplication(Guid.Parse(applicationId)).Id.ToString()
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EnableArchive(FormCollection collection)
+        {
+            var initiativeId = collection.GetValue("InitiativeId").AttemptedValue;
+            var applicationId = collection.GetValue("ApplicationId").AttemptedValue;
+            var applicationName = _initiativeBusiness.GetInitiatives().SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications).Single(x => x.Id == Guid.Parse(applicationId)).Name;
+
+            collection.Remove("InitiativeId");
+            collection.Remove("ApplicationId");
+
+            var versionIds = (from object key in collection.Keys select collection.GetValue(key.ToString()).AttemptedValue).ToList();
+
+            foreach (var versionId in versionIds)
+            {
+                _initiativeBusiness.ArchiveApplicationVersion(versionId);
+            }
+
+            return RedirectToAction("Details", "Application", new { id = initiativeId, application = applicationName });
         }
 
         public static string GetSiteRoot()//Move this method to a better place
