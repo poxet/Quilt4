@@ -7,5 +7,6 @@
         public string ApplicationGroupName { get; set; }
         public string TicketPrefix { get; set; }
         public int? KeepLatestVersions { get; set; }
+        public bool AutoArchive { get; set; }
     }
 }

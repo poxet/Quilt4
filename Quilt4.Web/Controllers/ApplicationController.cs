@@ -209,8 +209,18 @@ namespace Quilt4.Web.Controllers
                 TicketPrefix = app.TicketPrefix,
                 InitiativeId = initiative.Id.ToString(),
                 ApplicationName = application,
-                KeepLatestVersions = app.KeepLatestVersions
             };
+
+            if (app.KeepLatestVersions == null)
+            {
+                model.AutoArchive = false;
+                model.KeepLatestVersions = 5;
+            }
+            else
+            {
+                model.AutoArchive = true;
+                model.KeepLatestVersions = app.KeepLatestVersions;
+            }
 
             return View(model);
         }
@@ -223,7 +233,8 @@ namespace Quilt4.Web.Controllers
             var applicationGroup = initiative.ApplicationGroups.Single(x => x.Applications.Any(y => y.Name == model.ApplicationName));
             var application = applicationGroup.Applications.Single(x => x.Name == model.ApplicationName);
             application.TicketPrefix = model.TicketPrefix;
-            application.KeepLatestVersions = model.KeepLatestVersions;
+
+            application.KeepLatestVersions = model.AutoArchive ? model.KeepLatestVersions : null;
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {

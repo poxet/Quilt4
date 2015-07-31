@@ -21,7 +21,8 @@
         <tr>
             <td>Auto Archive</td>
             <td>
-                @Html.TextBoxFor(x => x.KeepLatestVersions)
+                @Html.RadioButtonFor(x => x.AutoArchive, false) Off<br/>
+                @Html.RadioButtonFor(x => x.AutoArchive, true) Keep the latest @Html.TextBoxFor(x => x.KeepLatestVersions, new { @style = "width:30px;" }) versions<br/>
             </td>
         </tr>
         <tr>
