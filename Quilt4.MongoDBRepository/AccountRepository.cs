@@ -8,7 +8,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.MongoDBRepository.Membership;
-using IUser = Microsoft.AspNet.Identity.IUser;
 
 namespace Quilt4.MongoDBRepository
 {
@@ -22,8 +21,15 @@ namespace Quilt4.MongoDBRepository
             _repositoryHandler = repositoryHandler;
         }
 
-        private ApplicationSignInManager ApplicationSignInManager { get { return _repositoryHandler.GetApplicationSignInManager() as ApplicationSignInManager; } }
-        private ApplicationUserManager ApplicationUserManager { get { return _repositoryHandler.GetApplicationUserManager() as ApplicationUserManager; } }
+        private ApplicationSignInManager ApplicationSignInManager
+        {
+            get { return _repositoryHandler.GetApplicationSignInManager() as ApplicationSignInManager; }
+        }
+
+        private ApplicationUserManager ApplicationUserManager
+        {
+            get { return _repositoryHandler.GetApplicationUserManager() as ApplicationUserManager; }
+        }
 
         public async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
@@ -119,7 +125,10 @@ namespace Quilt4.MongoDBRepository
             return await ApplicationUserManager.GenerateChangePhoneNumberTokenAsync(userId, number);
         }
 
-        public IIdentityMessageService SmsService { get { return ApplicationUserManager.SmsService; } }
+        public IIdentityMessageService SmsService
+        {
+            get { return ApplicationUserManager.SmsService; }
+        }
 
         public async Task SetTwoFactorEnabledAsync(string userId, bool enabled)
         {
@@ -140,7 +149,7 @@ namespace Quilt4.MongoDBRepository
         {
             return await ApplicationUserManager.AddPasswordAsync(userId, phoneNumber);
         }
-        
+
         public async Task<IdentityResult> AddLoginAsync(string userId, UserLoginInfo login)
         {
             return await ApplicationUserManager.AddLoginAsync(userId, login);
@@ -236,7 +245,7 @@ namespace Quilt4.MongoDBRepository
         public async Task<IdentityResult> UpdateSecurityStampAsync(string userId)
         {
             return await ApplicationUserManager.UpdateSecurityStampAsync(userId);
-        } 
+        }
     }
 
     internal static class Converter2

@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using Quilt4.BusinessEntities;
 using Quilt4.Interface;
 using Quilt4.Web.Models;
+using Constants = Quilt4.Web.Models.Constants;
 
 namespace Quilt4.Web.Controllers
 {
@@ -56,7 +57,7 @@ namespace Quilt4.Web.Controllers
                     InitiativeIdentifier = initiativeUniqueIdentifier,
                     IssueTypeCount = x.IssueTypes.Count(),
                     IssueCount = x.IssueTypes.SelectMany(y => y.Issues).Count(),
-                    Environments = x.Environments
+                    Environments = x.Environments.Select(y => string.IsNullOrEmpty(y) ? Constants.DefaultEnvironmentName : y)
                 }).OrderByDescending(y => y.Version).ToList(),
             };
 
@@ -65,7 +66,8 @@ namespace Quilt4.Web.Controllers
 
             model.EnvironmentColors = (from environmentColor in environmentColors where envs.Any(x => x == environmentColor.Key) select new EnvironmentViewModel()
             {
-                Name = environmentColor.Key, Color = environmentColor.Value
+                Name = string.IsNullOrEmpty(environmentColor.Key) ? Constants.DefaultEnvironmentName : environmentColor.Key,
+                Color = environmentColor.Value
             }).ToList();
 
             return model;

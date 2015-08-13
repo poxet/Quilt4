@@ -4,6 +4,58 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+<script type="text/javascript">
+
+    var app = angular.module('detailsApp', []);
+
+
+    app.controller('detailsController', function ($scope) {
+
+        $scope.query = '';
+
+        $scope.model = @Html.ToJson(Model);
+        console.log($scope.model);
+
+
+        $scope.showAll = false;
+        $scope.checkChange = function() {
+            for(t in $scope.model.environmentColors){
+                if($scope.model.environmentColors[t].value){
+                    $scope.showAll = false;
+                    return;
+                }
+            }
+            $scope.showAll = true;
+        };
+    
+        $scope.myFunc = function(a) {
+            if($scope.showAll) { return true; }
+       
+            var sel = true;
+       
+            for(color in $scope.model.environmentColors){
+                var t = $scope.model.environmentColors[color];
+                if(t){
+                    if(a.environments.indexOf(t) == -1){
+                        
+                        sel = false;
+                    }else{
+                        return true;
+                    }
+                }           
+            }
+            return sel;
+        };
+
+    });
+
+
+
+</script>
+
+
 <ol class="breadcrumb">
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
     <li>@Html.ActionLink(Model.InitiativeName ?? Constants.DefaultInitiativeName, "Details", "Initiative", new { id = @Model.InitiativeUniqueIdentifier }, null)</li>
@@ -12,7 +64,7 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br/>
+@Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
 @if (@ViewBag.IsArchive)
 {
     @Html.ActionLink("Details", "Details", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
@@ -22,121 +74,53 @@ else
     @Html.ActionLink("Archive", "Archive", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
 }
 
-@Html.Partial("_EnvironmentLegendPartial", Model.EnvironmentColors)
+<br/>
 
-<script type="text/javascript" src="~/Scripts/environmentFilter.js"></script>
+<div ng-app="detailsApp" ng-controller="detailsController">
 
-<h3>Versions</h3>
+    <div ng-repeat="enviroment in model.environmentColors">
 
-@using (Html.BeginForm("Confirm", "Application"))
-{
-    @Html.HiddenFor(x => x.InitiativeId)
-    @Html.HiddenFor(x => x.InitiativeName)
-    @Html.HiddenFor(x => x.InitiativeUniqueIdentifier)
-    @Html.HiddenFor(x => x.Application)
+        <input type="checkbox" ng-model="enviroment.value" ng-change="checkChange()" /> {{enviroment.name}}
 
-    <table>
-        <tr style="border-bottom-color: black; border-bottom-style: solid;">
+    </div>
+    
+    <table class="table">
+
+        <tr>
             <th></th>
-            <th style="padding: 0 5px;">Version</th>
-            <th style="padding: 0 5px;">Build</th>
-            <th style="padding: 0 5px;">Machines</th>
-            <th style="padding: 0 5px;">Sessions</th>
-            <th style="padding: 0 5px;">Issue Types</th>
-            <th style="padding: 0 5px;">Issues</th>
-            <th style="padding: 0 5px;">First</th>
-            <th style="padding: 0 5px;">Last</th>
-            <th style="padding: 0 5px;">Environments</th>
+            <th>Version</th>
+            <th>Build</th>
+            <th>Machines</th>
+            <th>Sessions</th>
+            <th>Issue Types</th>
+            <th>Issues</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Environments</th>
+
         </tr>
 
-        @for (var i = 0; i < Model.Versions.Count; i++)
-        {
-            @Html.HiddenFor(x => x.Versions[i].Version)
-            @Html.HiddenFor(x => x.Versions[i].Build)
-            @Html.HiddenFor(x => x.Versions[i].ApplicationIdentifier)
-            @Html.HiddenFor(x => x.Versions[i].InitiativeIdentifier)
-            @Html.HiddenFor(x => x.Versions[i].VersionIdentifier)
-            @Html.HiddenFor(x => x.Versions[i].VersionId)
+        <tr ng-repeat="version in model.versions | filter:myFunc">
 
-            <tr style="display: table-row">
-                <td>@Html.CheckBoxFor(x => x.Versions[i].Checked)</td>
-                <td style="padding: 0 5px;">
-                    @if (ViewBag.IsArchive)
-                    {
-                        @Model.Versions[i].Version
-                    }
-                    else
-                    {
-                        @Html.ActionLink(@Model.Versions[i].Version, "Details", "Version", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application, version = @Model.Versions[i].VersionIdentifier }, null)<br/>
-                    }
-                </td>
-                <td style="padding: 0 5px;">@Model.Versions[i].Build</td>
-                <td style="padding: 0 5px;"><div id="Machine-@Model.Versions[i].VersionId" style="background-image: url('../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td style="padding: 0 5px;"><div id="Session-@Model.Versions[i].VersionId" style="background-image: url('../../../Content/Images/ajax-loader.gif'); width: 16px; height: 16px;"></div></td>
-                <td style="padding: 0 5px;">@Model.Versions[i].IssueTypeCount</td>
-                <td style="padding: 0 5px;">@Model.Versions[i].IssueCount</td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-First-@Model.Versions[i].VersionId"></div></td>
-                <td style="padding: 0 5px;" data-toggle="tooltip" data-placement="bottom" title="Loading..."><div id="Session-Last-@Model.Versions[i].VersionId"></div></td>
-                <td style="padding: 0 5px;">
-                    @foreach (var env in Model.Versions[i].Environments)
-                    {
-                        if (string.IsNullOrEmpty(env))
-                        {
-                            <span class="Environment-@Constants.DefaultEnvironmentName" style="background-color: #@(Html.Raw(Model.EnvironmentColors.Single(x => x.Name == env).Color)); width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@Constants.DefaultEnvironmentName"></span>
-                        }
-                        else
-                        {
-                            <span class="Environment-@env" style="background-color: #@(Html.Raw(Model.EnvironmentColors.Single(x => x.Name == env).Color)); width: 20px; height: 20px; display: inline-block; border: 1px solid #000000;" data-toggle="tooltip" data-placement="bottom" title="@env"></span>
-                        }
-                    }
-                </td>
-            </tr>
-        }
+            <td></td>
+            <td>{{version.version}}</td>
+            <td>{{version.build}}</td>
+            <td></td>
+            <td></td>
+            <td>{{version.issueTypeCount}}</td>
+            <td>{{version.issueCount}}</td>
+            <td></td>
+            <td></td>
+            <td ng-repeat="enviroment in version.environments">
+                {{enviroment}},
+            </td>
+
+        </tr>
+
+
+
     </table>
-    <br/>
-    <input type="submit" name="submit" id="submit" value="Delete"/>
-    if (!@ViewBag.IsArchive)
-    {
-        <input type="submit" name="submit" id="submit" value="Archive"/>
-    }
-}
 
-<!-- När sidan har laddats in skall ytterligare data börja laddas in. -->
-<script type="text/javascript">
-    $(document).ready(function () {
 
-        function getSessions() {
-            var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Sessions";
-            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application', archived: @(ViewBag.IsArchive ? @Html.Raw("true") : @Html.Raw("false")) }, function(data) {
-                $.each(data, function(i, item) {
-                    var oDiv = document.getElementById('Session-' + item.Id);
 
-                    if (oDiv != null) {
-                        oDiv.style.removeProperty("background-image");
-                        oDiv.innerHTML = item.SessionCount;
-
-                        document.getElementById('Session-First-' + item.Id).innerHTML = item.First;
-                        document.getElementById('Session-Last-' + item.Id).innerHTML = item.Last;
-                    }
-                });
-            });
-        }
-
-        function getMachines() {
-            var url = "@Html.Raw(ViewBag.SiteRoot)/Application/Machines";
-            $.getJSON(url, { id: '@Model.InitiativeUniqueIdentifier', application: '@Model.Application', archived: @(ViewBag.IsArchive ? @Html.Raw("true") : @Html.Raw("false")) }, function (data) {
-                $.each(data, function (i, item) {
-                    var oDiv = document.getElementById("Machine-" + item.Id);
-                    if (oDiv != null) {
-                        oDiv.style.removeProperty("background-image");
-                        oDiv.innerHTML = item.MachineCount;
-                    }
-                });
-            });
-        }
-
-        getSessions();
-        getMachines();
-
-    });
-</script>
+</div>
