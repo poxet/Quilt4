@@ -73,7 +73,7 @@ namespace Quilt4.Web.Business
 
         public IApplication GetApplicationByVersion(string versionId)
         {
-            var application = _repository.GetapplicationByVersion(versionId);
+            var application = _repository.GetApplicationByVersion(versionId);
 
             return application;
         }

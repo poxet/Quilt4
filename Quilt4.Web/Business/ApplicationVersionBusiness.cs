@@ -67,12 +67,29 @@ namespace Quilt4.Web.Business
                 return applicationVersion;
 
             applicationVersion = new ApplicationVersion((Fingerprint)applicationVersionFingerprint, applicationId, version, new List<IIssueType>(), null, false, false, supportToolkitNameVersion, buildTime, new List<string>(){ environment });
-            _repository.AddApplicationVersion(applicationVersion);
+            
+            AddApplicationVersion(applicationVersion);
 
             //TODO:
             //_counterBusiness.UpdateApplicationVersionCounters();
 
             return applicationVersion;
+        }
+
+        private void AddApplicationVersion(IApplicationVersion applicationVersion)
+        {
+            var application = _repository.GetApplication(applicationVersion.ApplicationId);
+            _repository.AddApplicationVersion(applicationVersion);
+
+            if (application.KeepLatestVersions == null) { return; }
+
+            var versions = GetApplicationVersions(application.Id).OrderBy(x => x.Version);
+            var versionsToArchive = versions.Take(versions.Count() - application.KeepLatestVersions.Value);
+
+            foreach (var version in versionsToArchive)
+            {
+                _repository.ArchiveApplicationVersion(version.Id);
+            }
         }
 
         public IApplicationVersion GetApplicationVersionByIssue(Guid issueId)

@@ -12,9 +12,9 @@ namespace Quilt4.Sample.Console
             {
                 System.Threading.Thread.Sleep(2000);
 
-                Configuration.ClientToken = "7EDIAJYLJDY9ZKA1KNAK1MYG9NX6RLVC"; //TODO: Enter the clientToken you have in your system here.
+                Configuration.ClientToken = "NAPLB70D2OVFZCZHL5RLBZQBRMZ3JSFI"; //TODO: Enter the clientToken you have in your system here.
                 Configuration.Target.Location = "http://localhost:54942/";
-                //Configuration.Session.Environment = "Alfa";
+                //Configuration.Session.Environment = "Alfa8";
 
                 Session.Register();
 

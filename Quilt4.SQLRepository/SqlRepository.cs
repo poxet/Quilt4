@@ -336,12 +336,17 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IApplication GetapplicationByVersion(string versionId)
+        public IApplication GetApplicationByVersion(string versionId)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<ISession> GetArchivedSessionsForApplications(IEnumerable<Guid> applicationsIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IApplication GetApplication(Guid applicationId)
         {
             throw new NotImplementedException();
         }

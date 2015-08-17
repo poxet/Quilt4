@@ -413,7 +413,7 @@ namespace Quilt4.MongoDBRepository
             return applicationVersion;
         }
 
-        public IApplication GetapplicationByVersion(string versionId)
+        public IApplication GetApplicationByVersion(string versionId)
         {
             var sessions = GetSessionsForApplicationVersion(versionId);
             
@@ -434,6 +434,17 @@ namespace Quilt4.MongoDBRepository
         {
             var allSessions = Database.GetCollection("SessionArchive").FindAllAs<SessionPersist>().Where(x => applicationsIds.Contains(x.ApplicationId)).ToArray();
             var response = allSessions.Select(x => x.ToEntity()).ToArray();
+            return response;
+        }
+
+        public IApplication GetApplication(Guid applicationId)
+        {
+            var allApplications = GetInitiatives().SelectMany(x => x.ApplicationGroups).SelectMany(x => x.Applications).ToArray();
+            IApplication response = null;
+            if (allApplications.Any(x => x.Id == applicationId))
+            {
+                response = allApplications.Single(x => x.Id == applicationId);
+            }
             return response;
         }
 
