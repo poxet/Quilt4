@@ -20,11 +20,10 @@
                     <label>Ticket Prefix</label>
                     @Html.TextBoxFor(x => x.TicketPrefix, null, new { @class = "form-control" })
                 </div>
-                <!-- TODO: Style this div properly -->
-                <div>
+                <div class="form-group">
                     <label>Auto Archive</label><br/>
                     @Html.RadioButtonFor(x => x.AutoArchive, false) Off<br />
-                    @Html.RadioButtonFor(x => x.AutoArchive, true) Keep the latest @Html.TextBoxFor(x => x.KeepLatestVersions, new { @style = "width:30px;" }) versions
+                    @Html.RadioButtonFor(x => x.AutoArchive, true) Keep the latest @Html.TextBoxFor(x => x.KeepLatestVersions, new { @class = "form-control", @style = "width: 60px; display: inline;text-align: center;" }) versions<br/>
                 </div>
             </div>
             <div class="modal-footer">
