@@ -249,6 +249,10 @@ namespace Quilt4.Web.Controllers
                     application.KeepLatestVersions = model.KeepLatestVersions;
                 }
             }
+            else
+            {
+                application.KeepLatestVersions = null;
+            }
 
             if(initiative.ApplicationGroups.Any(x => x.Name == model.ApplicationGroupName))
             {
