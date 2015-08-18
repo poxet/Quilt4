@@ -223,7 +223,7 @@ namespace Quilt4.Web.Controllers
                 model.KeepLatestVersions = app.KeepLatestVersions;
             }
 
-            return View(model);
+            return PartialView(model);
         }
 
         // POST: Application/Edit/5

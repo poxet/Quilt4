@@ -12,7 +12,13 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.ActionLink("Properties", "Edit", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br/>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="dialog">
+    </div>
+</div>
+
+<a href="#" onclick="myFunction('@Url.Action("Edit", new { id = Model.InitiativeId, application = Model.Application })')">Properties</a><br/>
+
 @if (@ViewBag.IsArchive)
 {
     @Html.ActionLink("Details", "Details", new { id = @Model.InitiativeUniqueIdentifier, application = @Model.Application }, null)<br />
@@ -100,6 +106,19 @@ else
         <input type="submit" name="submit" id="submit" value="Archive"/>
     }
 }
+
+<script type="text/javascript">
+    function myFunction(url) {
+
+        console.log(url);
+        var data = null;
+        $.get(url, function (data) {
+            $('#dialog').replaceWith(data);
+            $('#myModal').modal('show');
+        });
+
+    }
+</script>
 
 <!-- När sidan har laddats in skall ytterligare data börja laddas in. -->
 <script type="text/javascript">

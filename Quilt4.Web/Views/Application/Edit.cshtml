@@ -1,33 +1,39 @@
 ﻿@model Quilt4.Web.Models.ApplicationPropetiesModel
-@{
-    ViewBag.Title = "Application Properties";
-}
 
-<h2>@ViewBag.Title</h2>
+<div class="modal-dialog" id="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" id="applicationPropertiesModal">Application Properties</h4>
+        </div>
+        @using (@Html.BeginForm("Edit", "Application", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.InitiativeId)
+            @Html.HiddenFor(m => m.ApplicationName)
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Application Group</label>
+                    @Html.TextBoxFor(x => x.ApplicationGroupName, null, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label>Ticket Prefix</label>
+                    @Html.TextBoxFor(x => x.TicketPrefix, null, new { @class = "form-control" })
+                </div>
+                <!-- TODO: Style this div properly -->
+                <div>
+                    <label>Auto Archive</label><br/>
+                    @Html.RadioButtonFor(x => x.AutoArchive, false) Off<br />
+                    @Html.RadioButtonFor(x => x.AutoArchive, true) Keep the latest @Html.TextBoxFor(x => x.KeepLatestVersions, new { @style = "width:30px;" }) versions
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-primary" type="submit">Save changes</button>
+            </div>
+        }
+    </div>
+</div>
 
-@using (@Html.BeginForm("Edit", "Application", FormMethod.Post))
-{
-    @Html.HiddenFor(m => m.InitiativeId)
-    @Html.HiddenFor(m => m.ApplicationName)
-    <table>
-        <tr>
-            <td>Application Group</td>
-            <td>@Html.TextBoxFor(m => m.ApplicationGroupName)</td>
-        </tr>
-        <tr>
-            <td>Ticket Prefix</td>
-            <td>@Html.TextBoxFor(m => m.TicketPrefix)</td>
-        </tr>
-        <tr>
-            <td>Auto Archive</td>
-            <td>
-                @Html.RadioButtonFor(x => x.AutoArchive, false) Off<br/>
-                @Html.RadioButtonFor(x => x.AutoArchive, true) Keep the latest @Html.TextBoxFor(x => x.KeepLatestVersions, new { @style = "width:30px;" }) versions<br/>
-            </td>
-        </tr>
-        <tr>
-            <td><input style="margin: 0 25px 0 5px" type="submit" value="Save"/></td>
-            <td>@Html.ActionLink("Cancel", "Details", "Application", new { id = @Model.InitiativeId, Application = @Model.ApplicationName }, null)</td>
-        </tr>
-    </table>
-}
+
+        
