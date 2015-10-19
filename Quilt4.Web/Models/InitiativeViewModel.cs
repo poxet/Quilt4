@@ -18,7 +18,7 @@ namespace Quilt4.Web.Models
         //public string LastSession { get; set; }
         //public IEnumerable<Guid> ApplicationsIds { get; set; }
         //public IEnumerable<IApplication> Applications { get; set; }
-        public bool IsConfirmed { get; set; }
+        public bool NeedConfirmed { get; set; }
 
         public ApplicationGroup[] ApplicationGroups { get; set; }
     }

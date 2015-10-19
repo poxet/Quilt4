@@ -10,15 +10,20 @@
     <li>@Html.ActionLink("Initiative", "Index", "Initiative")</li>
     <li class="active">@Html.Raw(Model.Name ?? Constants.DefaultInitiativeName)</li>
 </ol>
-@if(Model.IsConfirmed){
+@if (Model.NeedConfirmed)
+{
+    @Html.Partial("_ConfirmEmailPartial")
+}
+else
+{
     <h2>Initiative Details</h2>
     @Html.ActionLink("Members", "Member", new { id = Model.UniqueIdentifier }, null)
     <br/>
     @Html.ActionLink("Properties", "Properties", new { id = Model.UniqueIdentifier }, null)
     if (User.Identity.Name.Equals(@Model.OwnerDeveloperName))
     {
-        <br />
-        @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)    
+        <br/>
+        @Html.ActionLink("Delete", "Delete", new { id = Model.UniqueIdentifier }, null)
     }
     <h2>ClientToken</h2>
     @Html.Raw(@Model.ClientToken)
@@ -43,15 +48,11 @@
                 Html.Raw("<h2>" + @group.Name + "</h2>");
             }
 
-            foreach (var application in group.Applications)
+            foreach (var application in @group.Applications)
             {
                 @Html.ActionLink(@application.Name, "Details", "Application", new { id = @Model.UniqueIdentifier, application = Url.Encode(@application.Name) }, null)
-                <br />
+                <br/>
             }
         }
     }
-}
-else
-{
-    @Html.Partial("_ConfirmEmailPartial")
 }

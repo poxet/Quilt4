@@ -252,16 +252,15 @@ namespace Quilt4.Web.Controllers
         {
             if (id == null) throw new ArgumentNullException("id", "No initiative id provided.");
 
-            var isConfirmed = _accountRepository.GetUser(_accountRepository.FindById(User.Identity.GetUserId()).Email).EMailConfirmed;
             var initiative = GetInitiativeViewModel(id);
 
-            if (!isConfirmed)
+            var needConfirmation = false;
+            if (_settingsBusiness.GetEmailSetting().EMailConfirmationEnabled)
             {
-                return View(new InitiativeViewModel() { IsConfirmed = isConfirmed, Name = initiative.Name});
+                needConfirmation = !_accountRepository.GetUser(_accountRepository.FindById(User.Identity.GetUserId()).Email).EMailConfirmed;
             }
-            
-            
-            initiative.IsConfirmed = isConfirmed;
+
+            initiative.NeedConfirmed = needConfirmation;
 
             return View(initiative); 
         }
