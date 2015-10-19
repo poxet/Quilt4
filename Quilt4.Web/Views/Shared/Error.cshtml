@@ -11,8 +11,15 @@
     try
     {
         var response = Issue.Register(Model.Exception, Issue.ExceptionIssueLevel.Error, true, User.Identity.Name);
-        <p>Issue Type Ticket: @Html.Raw(response.IssueTypeTicket)</p>
-        <p>Issue Instance Ticket: @Html.Raw(response.IssueInstanceTicket)</p>
+        if (response != null)
+        {
+            <p>Issue Type Ticket: @Html.Raw(response.IssueTypeTicket)</p>
+            <p>Issue Instance Ticket: @Html.Raw(response.IssueInstanceTicket)</p>
+        }
+        else
+        {
+            <p>Unable to register issue: @Html.Raw(Model.Exception) at @Html.Raw(Model.Exception)</p>
+        }
     }
     catch (Exception exception)
     {
