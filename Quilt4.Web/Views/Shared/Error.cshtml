@@ -16,10 +16,14 @@
     }
     catch (Exception exception)
     {
-        <p>Could not logg issue in quilt4net due to the following error. @Html.Raw(exception.Message)</p>
+        <p>Could not logg issue in quilt4net due to the following error. @Html.Raw(exception.Message) at @Html.Raw(exception.StackTrace)</p>
         if (exception.InnerException != null)
         {
             <p>Inner exception is: @Html.Raw(exception.InnerException.Message)</p>
         }
+
+        //Log this issue to the event log
+        var eventLogAgent = new Quilt4.Web.Agents.EventLogAgent(); //TODO: Resolve
+        eventLogAgent.WriteToEventLog(exception, System.Diagnostics.EventLogEntryType.Error);
     }
 }
