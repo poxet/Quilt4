@@ -52,6 +52,7 @@ namespace Quilt4.Web
             {
                 throw new InvalidOperationException(string.Format("The repository file {0} cannot be found.", file));
             }
+
             var assembly = Assembly.LoadFrom(file);
             container.Register(Classes.FromAssembly(assembly).InNamespace(repository).WithService.DefaultInterfaces().LifestyleSingleton());
         }

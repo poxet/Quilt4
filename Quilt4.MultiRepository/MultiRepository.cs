@@ -1,11 +1,30 @@
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security.Cookies;
 using Quilt4.Interface;
+using Quilt4.MongoDBRepository;
+using Quilt4.SQLRepository;
+using IUser = Quilt4.Interface.IUser;
 
-namespace Quilt4.SQLRepository
+namespace Quilt4.MultiRepository
 {
-    public class SqlRepository : IRepository
+    public class MultiRepository : IRepository
     {
+        private readonly List<IRepository> _repositories;
+
+        public MultiRepository()
+        {
+            _repositories = new List<IRepository>();
+            _repositories.Add(new MongoRepository());
+            _repositories.Add(new SqlRepository());
+        }
+
         public void AddInitiative(IInitiative initiative)
         {
             throw new NotImplementedException();
@@ -26,7 +45,7 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerName, string[] roleNames)
+        public IEnumerable<IInitiativeHead> GetInitiativeHeadsByDeveloper(string developerEmail, string[] roleNames)
         {
             throw new NotImplementedException();
         }
@@ -141,7 +160,7 @@ namespace Quilt4.SQLRepository
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ISession> GetSessionsForDeveloper(string developerName)
+        public IEnumerable<ISession> GetSessionsForDeveloper(string developerEmail)
         {
             throw new NotImplementedException();
         }
@@ -150,11 +169,6 @@ namespace Quilt4.SQLRepository
         {
             throw new NotImplementedException();
         }
-
-        //public IEnumerable<ISession> GetActiveSessions(int timeoutSeconds)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public void EndSession(Guid sessionId, DateTime serverEndTime)
         {
@@ -268,7 +282,15 @@ namespace Quilt4.SQLRepository
 
         public ISetting GetSetting(string name)
         {
-            return null;
+            var responses = _repositories.Select(x => x.GetSetting(name));
+            var reference = responses.First();
+
+            foreach (var response in responses)
+            {
+                //TODO: Compare with reference
+            }
+
+            return reference;
         }
 
         public IEnumerable<ISetting> GetSettings()
