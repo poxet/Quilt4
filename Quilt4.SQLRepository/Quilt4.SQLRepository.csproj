@@ -95,6 +95,7 @@
     <Compile Include="Membership\ApplicationUserManager.cs" />
     <Compile Include="Membership\ApplicationUserManagerCreatedEventArgs.cs" />
     <Compile Include="AccountRepository.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="RepositoryHandler.cs" />
     <Compile Include="Membership\EmailService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

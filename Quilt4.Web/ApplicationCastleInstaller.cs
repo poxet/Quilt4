@@ -47,14 +47,17 @@ namespace Quilt4.Web
 
         private static void RegisterRepository(IWindsorContainer container, string repository)
         {
-            var file = string.Format("{0}bin\\{1}.dll", AppDomain.CurrentDomain.BaseDirectory, repository);
-            if (!System.IO.File.Exists(file))
-            {
-                throw new InvalidOperationException(string.Format("The repository file {0} cannot be found.", file));
-            }
-
-            var assembly = Assembly.LoadFrom(file);
+            var assembly = Assembly.GetAssembly(typeof(MultiRepository.MultiRepository));
             container.Register(Classes.FromAssembly(assembly).InNamespace(repository).WithService.DefaultInterfaces().LifestyleSingleton());
+
+            //var file = string.Format("{0}bin\\{1}.dll", AppDomain.CurrentDomain.BaseDirectory, repository);
+            //if (!System.IO.File.Exists(file))
+            //{
+            //    throw new InvalidOperationException(string.Format("The repository file {0} cannot be found.", file));
+            //}
+
+            //var assembly = Assembly.LoadFrom(file);
+            //container.Register(Classes.FromAssembly(assembly).InNamespace(repository).WithService.DefaultInterfaces().LifestyleSingleton());
         }
     }
 }

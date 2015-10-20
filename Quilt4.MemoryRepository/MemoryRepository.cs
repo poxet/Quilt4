@@ -1,27 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Quilt4.Interface;
-using Quilt4.MongoDBRepository;
-using Quilt4.MultiRepository.Compare;
-using Quilt4.SQLRepository;
 
-namespace Quilt4.MultiRepository
+namespace Quilt4.MemoryRepository
 {
-    public class MultiRepository : IRepository
+    public class MemoryRepository : IRepository
     {
-        private readonly List<IRepository> _repositories;
-
-        public MultiRepository()
-        {
-            _repositories = new List<IRepository>
-            {
-                new MemoryRepository.MemoryRepository(),
-                new MongoRepository(),
-                new SqlRepository()
-            };
-        }
-
         public void AddInitiative(IInitiative initiative)
         {
             throw new NotImplementedException();
@@ -279,17 +263,7 @@ namespace Quilt4.MultiRepository
 
         public ISetting GetSetting(string name)
         {
-            var responses = _repositories.Select(x => x.GetSetting(name)).ToArray();
-            var reference = responses.First();
-
-            foreach (var response in responses)
-            {
-                var diffs = reference.Compare(response).ToArray();
-                if (diffs.Any())
-                    throw new InvalidOperationException(diffs.First().Message);
-            }
-
-            return reference;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<ISetting> GetSettings()
