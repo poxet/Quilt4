@@ -47,7 +47,8 @@ namespace Quilt4.Web
 
         private static void RegisterRepository(IWindsorContainer container, string repository)
         {
-            var assembly = Assembly.GetAssembly(typeof(MultiRepository.MultiRepository));
+            //var assembly = Assembly.GetAssembly(typeof(MultiRepository.MultiRepository));
+            var assembly = Assembly.GetAssembly(typeof(MongoDBRepository.MongoRepository));
             container.Register(Classes.FromAssembly(assembly).InNamespace(repository).WithService.DefaultInterfaces().LifestyleSingleton());
 
             //var file = string.Format("{0}bin\\{1}.dll", AppDomain.CurrentDomain.BaseDirectory, repository);
